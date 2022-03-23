@@ -20,12 +20,10 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "copy": "copyfiles -f ./node_modules/@axa-fr/react-oidc-context/dist/OidcServiceWorker.js ./public && copyfiles -f -s ./node_modules/@axa-fr/react-oidc-context/dist/OidcTrustedDomains.js ./public && copyfiles -f ./node_modules/@axa-fr/react-oidc-context/dist/OidcKeepAliveServiceWorker.json ./public",
-    "start": "GENERATE_SOURCEMAP=false react-scripts start",
-    "build": "npm run copy && react-scripts build",
+    "start": "react-scripts start",
+    "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject",
-    "prepare": "npm run copy"
+    "eject": "react-scripts eject"
   },
   "eslintConfig": {
     "extends": [
