@@ -6,7 +6,6 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@axa-fr/vanilla-oidc": "^4.5.0",
     "@emotion/react": "^11.8.2",
     "@emotion/styled": "^11.8.1",
     "@mui/icons-material": "^5.5.0",
@@ -15,6 +14,7 @@
     "@testing-library/react": "^12.1.2",
     "@testing-library/user-event": "^13.5.0",
     "axios": "^0.26.1",
+    "oidc-client-ts": "^2.0.2",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-oidc-context": "^2.1.0",
