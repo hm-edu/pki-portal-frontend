@@ -1,5 +1,8 @@
 {
-  "name": "web-client",
+  "name": "portal-frontend",
+  "author": "Florian Ritterhoff",
+  "license": "Apache-2.0 License",
+  "repository": "https://github.com/hm-edu/portal-frontend",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
