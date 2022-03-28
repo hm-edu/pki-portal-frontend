@@ -6,7 +6,7 @@ import Button from "@mui/material/Button";
 import IconButton from "@mui/material/IconButton";
 import MenuIcon from "@mui/icons-material/Menu";
 import { useAuth } from "react-oidc-context";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 export default function ButtonAppBar() {
     const auth = useAuth();
@@ -14,7 +14,14 @@ export default function ButtonAppBar() {
     React.useEffect(() => {
         // the `return` is important - addAccessTokenExpiring() returns a cleanup function
         return auth.events.addUserLoaded(() => {
-            navigation("/profile");
+            const target = sessionStorage.getItem("target");
+            if (target) {
+                sessionStorage.removeItem("target");
+                navigation(String(target));
+            } else {
+                navigation("/profile");
+            }
+
         });
     }, [auth, auth.events, navigation]);
 
@@ -29,8 +36,8 @@ export default function ButtonAppBar() {
                 <IconButton size="large" edge="start" color="inherit" aria-label="menu" sx={{ mr: 2 }}>
                     <MenuIcon />
                 </IconButton>
-                <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-                    Home
+                <Typography component="div" sx={{ flexGrow: 1 }}>
+                    <Link to="/" ><Button color="inherit">Home</Button></Link>
                 </Typography>
                 {fragment}
             </Toolbar>

@@ -1,5 +1,4 @@
-import { Alert, AlertTitle } from "@mui/material";
-import React from "react";
+import React, { ComponentType, FC, useEffect } from "react";
 import { AuthContextProps, useAuth } from "react-oidc-context";
 
 /**
@@ -7,22 +6,22 @@ import { AuthContextProps, useAuth } from "react-oidc-context";
  * @public
  */
 export function loggedIn<P extends AuthContextProps>(
-    Component: React.ComponentType<P>,
-): React.ComponentType<Omit<P, keyof AuthContextProps>> {
+    Component: ComponentType<P>,
+): ComponentType<Omit<P, keyof AuthContextProps>> {
     const displayName = `loggedIn(${Component.displayName || Component.name})`;
-    const C: React.FC<Omit<P, keyof AuthContextProps>> = (props) => {
+    const C: FC<Omit<P, keyof AuthContextProps>> = (props) => {
         const auth = useAuth();
-        
-        if (auth.isAuthenticated) {            
+
+        if (auth.isAuthenticated) {
             return <Component {...(props as P)} {...auth} />;
         } else {
-            const large = {
-                fontSize: "1.2em",
-                "& .MuiAlert-icon": {
-                    fontSize: "1.5em",
-                },
-            };
-            return <Alert severity="error" sx={large}> <AlertTitle style={{ fontSize: "1.2em" }}>Fehler!</AlertTitle> Sie sind nicht angemeldet! </Alert>;
+            useEffect(() => {
+                if (!auth.isAuthenticated && !auth.isLoading) {
+                    sessionStorage.setItem("target", window.location.pathname);
+                    void auth.signinRedirect();
+                }
+            }, [auth]);
+            return null;
         }
     };
 

@@ -7,15 +7,17 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Home from "./components/home";
 import { Container } from "@mui/material";
 import { styled } from "@mui/system";
+import Domains from "./components/domains";
 import { AuthProvider, AuthProviderProps } from "react-oidc-context";
+import { ServiceWorkerUserManager } from "./ServiceWorkerUserManager";
 
 const Offset = styled("div")(({ theme }) => {
     // @ts-expect-error Property will allways be set.
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return theme.mixins.toolbar;
 });
-function App() {
 
+function App() {
     const host = String(process.env.REACT_APP_HOST);
     const authority = String(process.env.REACT_APP_IDP);
     const oidcConfig: AuthProviderProps = {
@@ -24,6 +26,7 @@ function App() {
         redirect_uri: "https://" + host + "/oidc-callback",
         scope: "openid profile",
         loadUserInfo: true,
+        implementation: ServiceWorkerUserManager,
     };
     return <AuthProvider {...oidcConfig}>
         <BrowserRouter>
@@ -33,6 +36,7 @@ function App() {
                 <Routes>
                     <Route path='/' element={<Home />} />
                     <Route path='/profile' element={<Profile />} />
+                    <Route path='/domains' element={<Domains />} />
                     <Route path='/oidc-callback' element={<Login />} />
                 </Routes>
             </Container>
