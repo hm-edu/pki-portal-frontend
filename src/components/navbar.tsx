@@ -11,17 +11,19 @@ import { Link, useNavigate } from "react-router-dom";
 export default function ButtonAppBar() {
     const auth = useAuth();
     const navigation = useNavigate();
-    const broadcast = new BroadcastChannel("user-channel");
     React.useEffect(() => {
 
-        broadcast.onmessage = (event) => {
-            console.log("Message from SW");
-            // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access            
-            if (event.data && event.data.type === "LOGOUT") {
-                navigation("/");
-                void auth.removeUser();
-            }
-        };
+        if (window.navigator.serviceWorker) {
+            const broadcast = new BroadcastChannel("user-channel");
+            broadcast.onmessage = (event) => {
+                console.log("Message from SW");
+                // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access            
+                if (event.data && event.data.type === "LOGOUT") {
+                    navigation("/");
+                    void auth.removeUser();
+                }
+            };
+        }
 
         // the `return` is important - addAccessTokenExpiring() returns a cleanup function
         return auth.events.addUserLoaded(() => {
