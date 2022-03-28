@@ -6,12 +6,23 @@ import Button from "@mui/material/Button";
 import IconButton from "@mui/material/IconButton";
 import MenuIcon from "@mui/icons-material/Menu";
 import { useAuth } from "react-oidc-context";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 
 export default function ButtonAppBar() {
     const auth = useAuth();
     const navigation = useNavigate();
+    const broadcast = new BroadcastChannel("user-channel");
     React.useEffect(() => {
+
+        broadcast.onmessage = (event) => {
+            console.log("Message from SW");
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access            
+            if (event.data && event.data.type === "LOGOUT") {
+                navigation("/");
+                void auth.removeUser();
+            }
+        };
+
         // the `return` is important - addAccessTokenExpiring() returns a cleanup function
         return auth.events.addUserLoaded(() => {
             const target = sessionStorage.getItem("target");
@@ -27,7 +38,7 @@ export default function ButtonAppBar() {
 
     const fragment = auth.isAuthenticated ? [
         <Typography key="username" sx={{ mr: 2 }}>Willkommen {auth.user?.profile["displayName"]}</Typography>,
-        <Button color="inherit" key='logout' onClick={() => { auth.removeUser().catch((e) => console.log(e)); return; }} variant="outlined">Abmelden</Button>,
+        <Button color="inherit" key='logout' onClick={() => { navigation("/"); auth.removeUser().catch((e) => console.log(e)); return; }} variant="outlined">Abmelden</Button>,
     ] : <Button color="inherit" variant="outlined" onClick={() => { auth.signinRedirect().catch((e) => console.log(e)); return; }}>Anmelden</Button>;
 
     return (

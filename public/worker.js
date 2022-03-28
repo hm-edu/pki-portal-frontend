@@ -8,7 +8,7 @@ self.addEventListener("activate", function (event) {
     event.waitUntil(self.clients.claim());
     console.log("[SW] serviceworker ready!");
 });
-
+const broadcast = new BroadcastChannel("user-channel");
 // Hardocded checks for origins/paths to send credentials to
 const whitelistedOrigins = [
     "https://backend.my-dev.private.cc.hm.edu",
@@ -20,8 +20,12 @@ let user = null;
 // Exposed "method" for saving the token
 self.addEventListener("message", function (event) {
     if (event.data && event.data.type === "SET_TOKEN") {
+        let wasUser = user != undefined && user != null;
         user = event.data.user;
         console.log("[SW] token set!");
+        if (!user && wasUser) {
+            broadcast.postMessage({ type: "LOGOUT" });
+        }
     }
     if (event.data && event.data.type === "GET_TOKEN") {
         console.log("[SW] token get!");
