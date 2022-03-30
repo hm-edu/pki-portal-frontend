@@ -5,43 +5,19 @@ import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import IconButton from "@mui/material/IconButton";
 import MenuIcon from "@mui/icons-material/Menu";
-import { useAuth } from "react-oidc-context";
+import { useMsal, useIsAuthenticated } from "@azure/msal-react";
 import { Link, useNavigate } from "react-router-dom";
+import { SignInButton } from "./signInButton";
 
 export default function ButtonAppBar() {
-    const auth = useAuth();
+    const { instance } = useMsal();
+
+    const isAuthenticated = useIsAuthenticated();
     const navigation = useNavigate();
-    React.useEffect(() => {
 
-        if (window.navigator.serviceWorker) {
-            const broadcast = new BroadcastChannel("user-channel");
-            broadcast.onmessage = (event) => {
-                console.log("Message from SW");
-                // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access            
-                if (event.data && event.data.type === "LOGOUT") {
-                    navigation("/");
-                    void auth.removeUser();
-                }
-            };
-        }
-
-        // the `return` is important - addAccessTokenExpiring() returns a cleanup function
-        return auth.events.addUserLoaded(() => {
-            const target = sessionStorage.getItem("target");
-            if (target) {
-                sessionStorage.removeItem("target");
-                navigation(String(target));
-            } else {
-                navigation("/profile");
-            }
-
-        });
-    }, [auth, auth.events, navigation]);
-
-    const fragment = auth.isAuthenticated ? [
-        <Typography key="username" sx={{ mr: 2 }}>Willkommen {auth.user?.profile["displayName"]}</Typography>,
-        <Button color="inherit" key='logout' onClick={() => { navigation("/"); auth.removeUser().catch((e) => console.log(e)); return; }} variant="outlined">Abmelden</Button>,
-    ] : <Button color="inherit" variant="outlined" onClick={() => { auth.signinRedirect().catch((e) => console.log(e)); return; }}>Anmelden</Button>;
+    const fragment = isAuthenticated ? [        
+        <Button color="inherit" key='logout' onClick={() => { navigation("/"); instance.logoutRedirect().catch(e => console.log(e)); return; }} variant="outlined">Abmelden</Button>,
+    ] : <SignInButton />;
 
     return (
         <AppBar position="fixed">

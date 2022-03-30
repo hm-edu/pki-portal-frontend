@@ -8,8 +8,9 @@ import Home from "./components/home";
 import { Container } from "@mui/material";
 import { styled } from "@mui/system";
 import Domains from "./components/domains";
-import { AuthProvider, AuthProviderProps } from "react-oidc-context";
-import { ServiceWorkerUserManager } from "./ServiceWorkerUserManager";
+import { Configuration, PublicClientApplication } from "@azure/msal-browser";
+import { MsalProvider } from "@azure/msal-react";
+import { msalConfig } from "./auth/msal";
 
 const Offset = styled("div")(({ theme }) => {
     // @ts-expect-error Property will allways be set.
@@ -18,17 +19,8 @@ const Offset = styled("div")(({ theme }) => {
 });
 
 function App() {
-    const host = String(process.env.REACT_APP_HOST);
-    const authority = String(process.env.REACT_APP_IDP);
-    const oidcConfig: AuthProviderProps = {
-        authority: authority,
-        client_id: "portal-frontend-dev",
-        redirect_uri: "https://" + host + "/oidc-callback",
-        scope: "openid profile",
-        loadUserInfo: true,
-        implementation: ServiceWorkerUserManager,
-    };
-    return <AuthProvider {...oidcConfig}>
+    const msalInstance = new PublicClientApplication(msalConfig);
+    return <MsalProvider instance={msalInstance}>
         <BrowserRouter>
             <ButtonAppBar />
             <Offset />
@@ -41,6 +33,6 @@ function App() {
                 </Routes>
             </Container>
         </BrowserRouter>
-    </AuthProvider>;
+    </MsalProvider>;
 }
 export default App;

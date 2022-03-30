@@ -39,6 +39,10 @@ self.addEventListener("message", function (event) {
             communicationPort.postMessage({ user: null });
         }
     }
+    if (event.data && event.data.type === "PING") {
+        let communicationPort = event.ports[0];
+        communicationPort.postMessage({ msg: "PONG" });
+    }
 });
 
 // Helper function to add the auth header if the oubound request matches the whitelists

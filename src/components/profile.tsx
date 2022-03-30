@@ -1,19 +1,30 @@
+import { useMsal } from "@azure/msal-react";
 import { Box, Button } from "@mui/material";
-import React from "react";
-import type { AuthContextProps } from "react-oidc-context";
-import { loggedIn } from "../helper/loggedIn";
-class Profile extends React.Component<AuthContextProps> {
-    render() {
-        const auth: AuthContextProps = this.props;
-        return <Box>
-            <h3>Details zur Anmeldung: </h3>
+import React, { useState } from "react";
+export default function Profile() {
+    const { instance, accounts } = useMsal();
+    const [accessToken, setAccessToken] = useState("");
 
-            <pre style={{ display: "inline-block", whiteSpace: "normal", maxWidth: "100%", wordBreak: "break-all", wordWrap: "break-word" }}>
-                {JSON.stringify(auth.user, null, 2)}
-            </pre>
-            <Button variant="contained" onClick={() => { auth.signinSilent().catch((e) => console.log(e)); return; }}>Refresh</Button>
-        </Box>;
+    const name = accounts[0] && accounts[0].name;
+    const loginRequest = {
+        scopes: ["api://09a0144d-abc4-4fb4-b567-1d8495b47736/Domains.Read"],
+    };
+    function RequestAccessToken() {
+        const request = {
+            ...loginRequest,
+            account: accounts[0],
+        };
+
+        // Silently acquires an access token which is then attached to a request for Microsoft Graph data
+        instance.acquireTokenSilent(request).then((response) => setAccessToken(response.accessToken)).catch(() => {
+            void instance.acquireTokenPopup(request).then((response) => setAccessToken(response.accessToken));
+        });
     }
+    return <Box>
+        <h3>Details zur Anmeldung: {name} </h3>
+        {accessToken ?
+            <p>Access Token Acquired!</p>
+            : <Button variant="outlined" onClick={RequestAccessToken}>Request Access Token</Button>
+        }
+    </Box>;
 }
-
-export default loggedIn(Profile);
