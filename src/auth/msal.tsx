@@ -2,8 +2,8 @@ import type { Configuration } from "@azure/msal-browser";
 
 export const msalConfig: Configuration = {
     auth: {
-        clientId: String(process.env.REACT_APP_AUTHORITY),
-        authority: String(process.env.REACT_APP_CLIENT_ID), // This is a URL (e.g. https://login.microsoftonline.com/{your tenant ID})
+        clientId: String(process.env.REACT_APP_CLIENT_ID),
+        authority: String(process.env.REACT_APP_AUTHORITY), // This is a URL (e.g. https://login.microsoftonline.com/{your tenant ID})
         redirectUri: "https://" + String(process.env.REACT_APP_HOST) + "/oidc-callback",
     },
     cache: {
