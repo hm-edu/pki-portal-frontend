@@ -8,7 +8,7 @@ import Home from "./components/home";
 import { Container } from "@mui/material";
 import { styled } from "@mui/system";
 import Domains from "./components/domains";
-import { Configuration, PublicClientApplication } from "@azure/msal-browser";
+import { PublicClientApplication } from "@azure/msal-browser";
 import { MsalProvider } from "@azure/msal-react";
 import { msalConfig } from "./auth/msal";
 
