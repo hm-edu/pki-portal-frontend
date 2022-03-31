@@ -23,7 +23,9 @@ export default function Profile() {
     return <Box>
         <h3>Details zur Anmeldung: {name} </h3>
         {accessToken ?
-            <p>Access Token Acquired!</p>
+            <div><p>Access Token Acquired! </p>
+                <code>{accessToken}</code>
+            </div>
             : <Button variant="outlined" onClick={RequestAccessToken}>Request Access Token</Button>
         }
     </Box>;
