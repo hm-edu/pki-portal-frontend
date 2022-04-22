@@ -33,7 +33,7 @@
     "@testing-library/react": "^13.1.1",
     "@testing-library/user-event": "^14.1.1",
     "@types/jest": "^27.4.1",
-    "@types/node-forge": "^1.0.1",
+    "@types/node-forge": "^1.0.2",
     "babel-jest": "^27.5.1",
     "jest": "^27.5.1",
     "react-test-renderer": "^18.0.0",
