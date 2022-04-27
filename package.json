@@ -36,7 +36,7 @@
     "@types/node-forge": "^1.0.2",
     "babel-jest": "^27.5.1",
     "jest": "^27.5.1",
-    "react-test-renderer": "^18.0.0",
+    "react-test-renderer": "^18.1.0",
     "ts-jest": "^27.1.4",
     "tsdx": "^0.14.1"
   },
