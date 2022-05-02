@@ -1,7 +1,6 @@
 import "./App.css";
 import React from "react";
 import ButtonAppBar from "./components/navbar";
-import Profile from "./components/profile";
 import Login from "./components/login";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Home from "./components/home";
@@ -26,8 +25,7 @@ function App() {
             <Offset />
             <Container style={{ paddingTop: "10px" }} maxWidth="xl">
                 <Routes>
-                    <Route path='/' element={<Home />} />
-                    <Route path='/profile' element={<Profile />} />
+                    <Route path='/' element={<Home />} />                    
                     <Route path='/domains' element={<Domains />} />
                     <Route path='/oidc-callback' element={<Login />} />
                 </Routes>

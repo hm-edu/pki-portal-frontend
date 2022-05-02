@@ -20,10 +20,13 @@
     // error out if import and file system have a casing mismatch. Recommended by TS
     "forceConsistentCasingInFileNames": true,
     // ensure type imports are side-effect free by enforcing that `import type` is used
-    "importsNotUsedAsValues": "error",
+    "importsNotUsedAsValues": "preserve",
     // prevent the use features that do not work with isolated transpilation
     "isolatedModules": true,
     // transpile JSX to React.createElement
-    "jsx": "react",
-  }
+    "jsx": "react",    
+  },
+  "exclude": [
+    "src/api/**/*"
+  ]
 }
