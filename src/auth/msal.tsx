@@ -1,10 +1,11 @@
 import type { Configuration } from "@azure/msal-browser";
+import { Config } from "../config";
 
 export const msalConfig: Configuration = {
     auth: {
-        clientId: String(process.env.REACT_APP_CLIENT_ID),
-        authority: String(process.env.REACT_APP_AUTHORITY), // This is a URL (e.g. https://login.microsoftonline.com/{your tenant ID})
-        redirectUri: "https://" + String(process.env.REACT_APP_HOST) + "/oidc-callback",
+        clientId: Config.CLIENT_ID,
+        authority: Config.AUTHORITY, // This is a URL (e.g. https://login.microsoftonline.com/{your tenant ID})
+        redirectUri: `https://${Config.HOST}/oidc-callback`,
     },
     cache: {
         cacheLocation: "sessionStorage", // This configures where your cache will be stored

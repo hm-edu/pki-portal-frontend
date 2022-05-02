@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import { DomainsApi } from "../api/domains/api";
 import { ModelDomain } from "../api/domains/api";
 import { Configuration } from "../api/domains/configuration";
+import { Config } from "../config";
 
 export default function Domains() {
     const { instance, accounts, inProgress } = useMsal();
@@ -20,7 +21,7 @@ export default function Domains() {
                 if (response) {
                     console.log(response.accessToken);
                     const cfg = new Configuration({ accessToken: response.accessToken });
-                    const api = new DomainsApi(cfg, "https://domain.api.hmtest.de");
+                    const api = new DomainsApi(cfg, `https://${Config.DOMAIN_HOST}`);
                     api.domainsGet().then((response) => {
                         console.log(response);
                         setDomains(response.data);
