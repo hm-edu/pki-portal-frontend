@@ -1,9 +1,9 @@
-FROM node as build-stage
+FROM node:14 as build-stage
 
 COPY package.json /app/package.json
 COPY package-lock.json /app/package-lock.json
 WORKDIR /app
-RUN npm install 
+RUN npm ci 
 
 COPY . /app
 
