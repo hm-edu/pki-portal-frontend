@@ -1,6 +1,5 @@
-import { useAccount, useMsal, useMsalAuthentication } from "@azure/msal-react";
+import { useAccount, useMsal } from "@azure/msal-react";
 import React, { useEffect, useState } from "react";
-import { json } from "stream/consumers";
 
 import { DomainsApi } from "../api/domains/api";
 import { ModelDomain } from "../api/domains/api";
