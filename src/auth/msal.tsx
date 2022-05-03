@@ -5,7 +5,7 @@ export const msalConfig: Configuration = {
     auth: {
         clientId: Config.CLIENT_ID,
         authority: Config.AUTHORITY, // This is a URL (e.g. https://login.microsoftonline.com/{your tenant ID})
-        redirectUri: `https://${Config.HOST}/oidc-callback`,
+        redirectUri: `${Config.HOST}/oidc-callback`,
     },
     cache: {
         cacheLocation: "sessionStorage", // This configures where your cache will be stored
