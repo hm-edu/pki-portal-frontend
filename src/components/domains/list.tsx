@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { AccountInfo, IPublicClientApplication } from "@azure/msal-browser";
 import { useAccount, useIsAuthenticated, useMsal } from "@azure/msal-react";
 import { Button } from "@mui/material";
@@ -12,7 +13,6 @@ import { Config } from "../../config";
 function manageable(domain: ModelDomain, domains: ModelDomain[]) {
     for (const d of domains) {
         if (d.approved) {
-            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
             if (domain.fqdn?.endsWith("." + d.fqdn!)) {
                 return true;
             }
@@ -109,6 +109,7 @@ export default function Domains() {
                 const row = (params.row as ModelDomain);
                 const buttons = [];
                 if (!row.approved && manageable(row, domains)) {
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
                     const approve = useCallback((event: any) => {
                         // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call
                         event.preventDefault();
@@ -117,6 +118,7 @@ export default function Domains() {
                     buttons.push(<Button color="secondary" variant="outlined" onClick={approve}>Freischalten</Button>);
                 }
                 if (manageable(row, domains)) {
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
                     const remove = useCallback((event: any) => {
                         // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call
                         event.preventDefault(); removeDomain(row.id!, account!, instance, setDomains);

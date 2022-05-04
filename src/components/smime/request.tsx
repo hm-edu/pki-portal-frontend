@@ -1,8 +1,13 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable @typescript-eslint/no-non-null-assertion */
-import { Button } from "@mui/material";
+/* eslint-disable @typescript-eslint/no-explicit-any, @typescript-eslint/no-non-null-assertion */
+import { useAccount, useIsAuthenticated, useMsal } from "@azure/msal-react";
+import { Button, CircularProgress, Modal, TextField, Typography } from "@mui/material";
+import { green } from "@mui/material/colors";
+import { Box } from "@mui/system";
 import * as forge from "node-forge";
-import React from "react";
+import React, { useCallback } from "react";
+import { SMIMEApi } from "../../api/pki/api";
+import { Configuration } from "../../api/pki/configuration";
+import { Config } from "../../config";
 
 export class CSRBundle {
     constructor(public csr: string, public privateKey: string) { }
@@ -10,7 +15,7 @@ export class CSRBundle {
 
 export class CSRBuilder {
 
-    build() : Promise<CSRBundle> {
+    build(): Promise<CSRBundle> {
         return new Promise((resolve, reject) => {
             const KEY_SIZE = 4096;
             forge.pki.rsa.generateKeyPair(
@@ -74,17 +79,134 @@ export function createP12(privateKey: string, chain: string[], password: string)
 
 export default function SMIMEGenerator() {
 
-    const create = async () => {
-        const r = new CSRBuilder();
-        r.build().then(async (x) => {
-            //TODO: Call backend
-            const pubKey = "";
-            const p12 = await createP12(x.privateKey, [pubKey], "Test");
-            console.log(p12); console.log(x);
-        }).catch((y) => { console.error(y); });
+    const r = new CSRBuilder();
+    const { instance, accounts } = useMsal();
+    const isAuthenticated = useIsAuthenticated();
+    const account = useAccount(accounts[0])!;
+    const [progress, setProgress] = React.useState<JSX.Element>(<></>);
+    const [download, setDownload] = React.useState<JSX.Element>(<></>);
 
+    const [loading, setLoading] = React.useState(false);
+    const [success, setSuccess] = React.useState(false);
+
+    const buttonSx = {
+        ...(success && {
+            bgcolor: green[500],
+            "&:hover": {
+                bgcolor: green[700],
+            },
+        }), mt: 3, mb: 2,
     };
+    const style = {
+        position: "absolute",
+        top: "50%",
+        left: "50%",
+        transform: "translate(-50%, -50%)",
+        width: 400,
+        bgcolor: "background.paper",
+        border: "2px solid #000",
+        boxShadow: 24,
+        p: 4,
+    };
+    const create = useCallback(async (event: any) => {
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access,@typescript-eslint/no-unsafe-call
+        event.preventDefault();
+        if (!loading) {
+            setSuccess(false);
+            setLoading(true);
+            await instance.acquireTokenSilent({
+                scopes: ["api://9aee5c12-b8ba-42e0-a1bb-b296bb6ca978/Certificates", "email"],
+                account,
+            }).then((response) => {
+                if (response) {
+                    setProgress(<div>Generiere CSR...</div>);
 
-    // eslint-disable-next-line @typescript-eslint/no-misused-promises
-    return <div> <h1>Herzlich Willkommen</h1> <Button onClick={create}>Generiere Zertifikat</Button> </div>;
+                    return r.build().then((x) => {
+                        setProgress(<div>CSR generiert...</div>);
+                        if (account) {
+
+                            const cfg = new Configuration({ accessToken: response.accessToken });
+                            const api = new SMIMEApi(cfg, `https://${Config.PKI_HOST}`);
+                            setProgress(<div>Signiere CSR...</div>);
+                            return api.smimeCsrPost({ csr: x.csr }).then((response) => {
+                                setProgress(<div>Generiere PKCS12...</div>);
+                                return createP12(x.privateKey, [response.data], "Test").then((p12) => {
+                                    console.log(p12);
+                                    const element = document.createElement("a");
+                                    element.setAttribute("href", "data:application/x-pkcs12;base64," + p12);
+                                    element.setAttribute("download", "smime.p12");
+                                    element.style.display = "none";
+                                    document.body.appendChild(element);
+                                    element.click();
+                                    document.body.removeChild(element);
+                                    setDownload(<a href={"data:application/x-pkcs12;base64," + p12} download="smime.p12">Erneuter Download</a>);
+                                    setProgress(<div>PKCS12 generiert</div>);
+                                    setSuccess(true);
+                                    setLoading(false);
+                                }).catch((err) => {
+                                    console.log(err);
+                                });
+                            }).catch((error) => {
+                                console.error(error);
+                            });
+                        }
+                        return Promise.reject();
+                    }).catch((error) => {
+                        console.log(error);
+                    });
+                }
+                return Promise.reject(new Error("No token"));
+            }).catch((y) => { console.error(y); });
+        }
+    }, [account, instance, progress]);
+
+    if (!isAuthenticated) {
+        return <div>Please login</div>;
+    }
+
+    /* eslint-disable @typescript-eslint/no-misused-promises */
+    return <div>
+        <h1>Erstellung eines neuen SMIME Zertifikats</h1>
+        <Box component="form" onSubmit={create}
+            sx={{
+                marginTop: 8,
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+            }}>
+            <TextField required
+                label="Password"
+                type="password"
+                variant="standard" />
+            <Button type="submit" variant="contained" disabled={loading || success} sx={buttonSx}>Generiere Zertifikat {loading && (
+                <CircularProgress
+                    size={24}
+                    sx={{
+                        color: green[500],
+                        position: "absolute",
+                        top: "50%",
+                        left: "50%",
+                        marginTop: "-12px",
+                        marginLeft: "-12px",
+                    }}
+                />
+            )}</Button>
+            {download}
+        </Box>
+        <Modal
+            open={loading}
+            aria-labelledby="modal-modal-title"
+            aria-describedby="modal-modal-description"
+        >
+            <Box sx={style}>
+                <Typography id="modal-modal-title" variant="h6" component="h2">
+                    Generierung eines neuen SMIME Zertifikats
+                </Typography>
+                <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+                    {progress}
+                </Typography>
+            </Box>
+        </Modal>
+
+    </div>;
 }
