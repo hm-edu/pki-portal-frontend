@@ -21,12 +21,9 @@ export default function SslCertificates() {
                 account: account,
             }).then((response) => {
                 if (response) {
-                    console.log(response.accessToken);
                     const cfg = new Configuration({ accessToken: response.accessToken });
                     const api = new SSLApi(cfg, `https://${Config.PKI_HOST}`);
                     api.sslGet().then((response) => {
-                        console.log(response);
-
                         const data = [];
                         for (const cert of response.data) {
                             if (cert.serial) {
@@ -35,12 +32,11 @@ export default function SslCertificates() {
                                     expires: cert.expires,
                                     serial: cert.serial,
                                     notBefore: cert.notBefore,
+                                    status: cert.status,
                                     subject_alternative_names: cert.subject_alternative_names,
                                 });
                             }
-
                         }
-
                         setDomains(data);
                     }).catch((error) => {
                         console.error(error);
@@ -58,6 +54,16 @@ export default function SslCertificates() {
     const columns: GridColDef[] = [
         { field: "common_name", headerName: "Common Name", width: 280 },
         { field: "serial", headerName: "Serial Number", width: 280 },
+        {
+            field: "status", width: 150, type: "string", headerName: "Status",
+            valueGetter: (params) => {
+                if (params.value === "Unmanaged") {
+                    return "Issued";
+                }
+
+                return params.value as string;
+            },
+        },
         {
             field: "notBefore", headerName: "Gültig ab", type: "date", width: 150,
             valueGetter: ({ value }) => {

@@ -6,7 +6,7 @@ import Button from "@mui/material/Button";
 import IconButton from "@mui/material/IconButton";
 import MenuIcon from "@mui/icons-material/Menu";
 import { useMsal, useIsAuthenticated } from "@azure/msal-react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { SignInButton } from "./signInButton";
 
 export default function ButtonAppBar() {
@@ -15,9 +15,14 @@ export default function ButtonAppBar() {
     const isAuthenticated = useIsAuthenticated();
     const navigation = useNavigate();
 
-    const fragment = isAuthenticated ? [        
+    const fragment = isAuthenticated ? [
         <Button color="inherit" key='logout' onClick={() => { navigation("/"); instance.logoutRedirect().catch(e => console.log(e)); return; }} variant="outlined">Abmelden</Button>,
     ] : <SignInButton />;
+
+    const buttons = isAuthenticated ? [
+        <Button color="inherit" onClick={() => { navigation("/ssl"); }}>SSL Zertifikate</Button>,
+        <Button color="inherit" onClick={() => { navigation("/domains"); }}>Domainverwaltung</Button>,
+    ] : [];
 
     return (
         <AppBar position="fixed">
@@ -26,7 +31,8 @@ export default function ButtonAppBar() {
                     <MenuIcon />
                 </IconButton>
                 <Typography component="div" sx={{ flexGrow: 1 }}>
-                    <Link to="/" ><Button color="inherit">Home</Button></Link>
+                    <Button color="inherit" onClick={() => { navigation("/"); }}>Home</Button>
+                    {buttons}
                 </Typography>
                 {fragment}
             </Toolbar>
