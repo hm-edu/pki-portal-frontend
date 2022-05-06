@@ -1,23 +1,20 @@
 import { useAccount, useIsAuthenticated, useMsal } from "@azure/msal-react";
+import { Button } from "@mui/material";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import React, { useEffect, useState } from "react";
 
-import { PortalApisSslCertificateDetails, SSLApi } from "../../api/pki/api";
+import { PortalApisListSmimeResponseCertificateDetails, SMIMEApi } from "../../api/pki/api";
 import { Configuration } from "../../api/pki/configuration";
 import { Config } from "../../config";
 
-export default function SslCertificates() {
+export default function SmimeCertificates() {
     const isAuthenticated = useIsAuthenticated();
     const { instance, accounts } = useMsal();
     const account = useAccount(accounts[0] || {});
 
     const [pageSize, setPageSize] = React.useState<number>(15);
     const [loading, setLoading] = React.useState(true);
-    const [certificates, setCertificates] = useState([] as PortalApisSslCertificateDetails[]);
-
-    if (!isAuthenticated) {
-        return <div>Please sign in</div>;
-    }
+    const [certificates, setCertificates] = useState([] as PortalApisListSmimeResponseCertificateDetails[]);
 
     useEffect(() => {
         if (account) {
@@ -27,18 +24,15 @@ export default function SslCertificates() {
             }).then((response) => {
                 if (response) {
                     const cfg = new Configuration({ accessToken: response.accessToken });
-                    const api = new SSLApi(cfg, `https://${Config.PKI_HOST}`);
-                    api.sslGet().then((response) => {
+                    const api = new SMIMEApi(cfg, `https://${Config.PKI_HOST}`);
+                    api.smimeGet().then((response) => {
                         const data = [];
                         for (const cert of response.data) {
                             if (cert.serial) {
                                 data.push({
-                                    common_name: cert.common_name,
                                     expires: cert.expires,
                                     serial: cert.serial,
-                                    notBefore: cert.notBefore,
                                     status: cert.status,
-                                    subject_alternative_names: cert.subject_alternative_names,
                                 });
                             }
                         }
@@ -54,29 +48,14 @@ export default function SslCertificates() {
         }
     }, [account, instance]);
 
+    if (!isAuthenticated) {
+        return <div>Please sign in</div>;
+    }
+
     const columns: GridColDef[] = [
-        { field: "common_name", headerName: "Common Name", width: 280 },
         { field: "serial", headerName: "Serial Number", width: 280 },
         {
             field: "status", width: 150, type: "string", headerName: "Status",
-            valueGetter: (params) => {
-                if (params.value === "Unmanaged") {
-                    return "Issued";
-                }
-
-                return params.value as string;
-            },
-        },
-        {
-            field: "notBefore", headerName: "Gültig ab", type: "date", width: 150,
-            valueGetter: ({ value }) => {
-                /* eslint-disable @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-member-access  */
-                const mili = (value.seconds as number) * 1000;
-                if (!mili) {
-                    console.log(value);
-                }
-                return value && new Date(mili);
-            },
         },
         {
             field: "expires", headerName: "Gültig bis", type: "date", width: 150,
@@ -89,8 +68,21 @@ export default function SslCertificates() {
 
                 return value && new Date(mili);
             },
+        }, {
+            field: "action",
+            headerName: "Aktionen",
+            sortable: false,
+            filterable: false,
+            hideable: false,
+            renderCell: (params) => {
+                const row = (params.row as PortalApisListSmimeResponseCertificateDetails);
+                const buttons = [];
+                if (row.status !== "revoked") {
+                    buttons.push(<Button variant="outlined" color="secondary" key="revoke">Revoke</Button>);
+                }
+                return <>{buttons}</>;
+            },
         },
-        { field: "subject_alternative_names", headerName: "Subject Alternative Names", width: 380 },
     ];
 
     return <div><h1>Ihre Zertifikate</h1>
@@ -105,6 +97,7 @@ export default function SslCertificates() {
                     sortModel: [{ field: "notBefore", sort: "desc" }],
                 },
             }}
+
             loading={loading}
             onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
             rowsPerPageOptions={[5, 15, 25, 50, 100]}

@@ -102,6 +102,12 @@ export interface ModelDomain {
      * @memberof ModelDomain
      */
     'owner'?: string;
+    /**
+     * 
+     * @type {ModelPermissions}
+     * @memberof ModelDomain
+     */
+    'permissions'?: ModelPermissions;
 }
 /**
  * 
@@ -115,6 +121,37 @@ export interface ModelDomainRequest {
      * @memberof ModelDomainRequest
      */
     'fqdn': string;
+}
+/**
+ * 
+ * @export
+ * @interface ModelPermissions
+ */
+export interface ModelPermissions {
+    /**
+     * 
+     * @type {boolean}
+     * @memberof ModelPermissions
+     */
+    'can_approve'?: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof ModelPermissions
+     */
+    'can_delegate'?: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof ModelPermissions
+     */
+    'can_delete'?: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof ModelPermissions
+     */
+    'can_transfer'?: boolean;
 }
 /**
  * 

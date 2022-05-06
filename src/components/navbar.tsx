@@ -20,8 +20,9 @@ export default function ButtonAppBar() {
     ] : <SignInButton />;
 
     const buttons = isAuthenticated ? [
-        <Button color="inherit" onClick={() => { navigation("/ssl"); }}>SSL Zertifikate</Button>,
-        <Button color="inherit" onClick={() => { navigation("/domains"); }}>Domainverwaltung</Button>,
+        <Button key="ssl" color="inherit" onClick={() => { navigation("/ssl"); }}>SSL Zertifikate</Button>,
+        <Button key="smime" color="inherit" onClick={() => { navigation("/smime"); }}>SMIME Zertifikate</Button>,
+        <Button key="domains" color="inherit" onClick={() => { navigation("/domains"); }}>Domainverwaltung</Button>,
     ] : [];
 
     return (

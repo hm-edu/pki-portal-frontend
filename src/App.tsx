@@ -11,7 +11,8 @@ import { PublicClientApplication } from "@azure/msal-browser";
 import { MsalProvider } from "@azure/msal-react";
 import { msalConfig } from "./auth/msal";
 import SslCertificates from "./components/ssl/list";
-import SMIMEGenerator from "./components/smime/request";
+import SmimeGenerator from "./components/smime/request";
+import SmimeCertificates from "./components/smime/list";
 
 const Offset = styled("div")(({ theme }) => {
     // @ts-expect-error Property will allways be set.
@@ -30,7 +31,8 @@ function App() {
                     <Route path='/' element={<Home />} />
                     <Route path='/domains' element={<Domains />} />
                     <Route path='/ssl' element={<SslCertificates />} />
-                    <Route path='/smime/new' element={<SMIMEGenerator />} />
+                    <Route path='/smime/new' element={<SmimeGenerator />} />
+                    <Route path='/smime' element={<SmimeCertificates />} />
                     <Route path='/oidc-callback' element={<Login />} />
                 </Routes>
             </Container>
