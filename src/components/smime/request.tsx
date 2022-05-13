@@ -1,10 +1,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any, @typescript-eslint/no-non-null-assertion */
 import { useAccount, useIsAuthenticated, useMsal } from "@azure/msal-react";
-import { Button, CircularProgress, Modal, TextField, Typography } from "@mui/material";
+import { Button, Checkbox, CircularProgress, FormControlLabel, Modal, TextField, TextFieldProps, Typography } from "@mui/material";
 import { green } from "@mui/material/colors";
 import { Box } from "@mui/system";
 import * as forge from "node-forge";
-import React, { useCallback } from "react";
+import React, { useCallback, useEffect, useRef } from "react";
 import { SMIMEApi } from "../../api/pki/api";
 import { Configuration } from "../../api/pki/configuration";
 import { Config } from "../../config";
@@ -79,15 +79,17 @@ export function createP12(privateKey: string, chain: string[], password: string)
 
 export default function SMIMEGenerator() {
 
-    const r = new CSRBuilder();
+    const csr = new CSRBuilder();
     const { instance, accounts } = useMsal();
     const isAuthenticated = useIsAuthenticated();
     const account = useAccount(accounts[0])!;
     const [progress, setProgress] = React.useState<JSX.Element>(<></>);
     const [download, setDownload] = React.useState<JSX.Element>(<></>);
 
-    const [loading, setLoading] = React.useState(false);
+    const [loading, setLoading] = React.useState(true);
     const [success, setSuccess] = React.useState(false);
+    const [warning, setWarning] = React.useState(false);
+    const p12PasswordRef = useRef<TextFieldProps>(null);
 
     const buttonSx = {
         ...(success && {
@@ -121,7 +123,7 @@ export default function SMIMEGenerator() {
                 if (response) {
                     setProgress(<div>Generiere CSR...</div>);
 
-                    return r.build().then((x) => {
+                    return csr.build().then((x) => {
                         setProgress(<div>CSR generiert...</div>);
                         if (account) {
 
@@ -130,7 +132,7 @@ export default function SMIMEGenerator() {
                             setProgress(<div>Signiere CSR...</div>);
                             return api.smimeCsrPost({ csr: x.csr }).then((response) => {
                                 setProgress(<div>Generiere PKCS12...</div>);
-                                return createP12(x.privateKey, [response.data], "Test").then((p12) => {
+                                return createP12(x.privateKey, [response.data], p12PasswordRef.current?.value as string).then((p12) => {
                                     console.log(p12);
                                     const element = document.createElement("a");
                                     element.setAttribute("href", "data:application/x-pkcs12;base64," + p12);
@@ -159,6 +161,40 @@ export default function SMIMEGenerator() {
             }).catch((y) => { console.error(y); });
         }
     }, [account, instance, progress]);
+    useEffect(() => {
+        setProgress(<div>Bitte warten...</div>);
+        if (account) {
+            instance.acquireTokenSilent({
+                scopes: ["api://9aee5c12-b8ba-42e0-a1bb-b296bb6ca978/Certificates", "email"],
+                account: account,
+            }).then((response) => {
+                if (response) {
+                    const cfg = new Configuration({ accessToken: response.accessToken });
+                    const api = new SMIMEApi(cfg, `https://${Config.PKI_HOST}`);
+                    api.smimeGet().then((response) => {
+                        if (response) {
+                            let active = 0;
+                            for (const cert of response.data) {
+                                if (cert.status != "revoked") {
+                                    active++;
+                                }
+                            }
+                            if (active >= 2) {
+                                setWarning(true);
+                            }
+                        }
+
+                        setLoading(false);
+                    }).catch((error) => {
+                        setLoading(false);
+                        console.error(error);
+                    });
+                }
+            }).catch((error) => {
+                console.log(error);
+            });
+        }
+    }, [account, instance]);
 
     if (!isAuthenticated) {
         return <div>Please login</div>;
@@ -167,31 +203,41 @@ export default function SMIMEGenerator() {
     /* eslint-disable @typescript-eslint/no-misused-promises */
     return <div>
         <h1>Erstellung eines neuen SMIME Zertifikats</h1>
-        <Box component="form" onSubmit={create}
-            sx={{
-                marginTop: 8,
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-            }}>
-            <TextField required
-                label="Password"
-                type="password"
-                variant="standard" />
-            <Button type="submit" variant="contained" disabled={loading || success} sx={buttonSx}>Generiere Zertifikat {loading && (
-                <CircularProgress
-                    size={24}
-                    sx={{
-                        color: green[500],
-                        position: "absolute",
-                        top: "50%",
-                        left: "50%",
-                        marginTop: "-12px",
-                        marginLeft: "-12px",
-                    }}
-                />
-            )}</Button>
-            {download}
+        <Box sx={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+        }}>
+            <Box component="form" onSubmit={create}
+                sx={{
+                    display: "flex",
+                    maxWidth: "md",
+                    flexDirection: "column",
+                    alignItems: "left",
+                    alignSelf: "center",
+                }}>
+                {warning && <Typography>Sie haben derzeit 2 aktive SMIME Zertifikate. Durch Ausstellung eines neuen Zertifikats wird automatisch das älteste widerrufen. Sofern Sie dies nicht möchten widerrufen Sie bitte ein Zertifikat von Hand.</Typography>}
+                {warning && <FormControlLabel control={<Checkbox color="secondary" required />} label="Zertifikat automatisch widerrufen." />}
+                <TextField required
+                    label="Password"
+                    type="password"
+                    inputRef={p12PasswordRef}
+                    variant="standard" />
+                <Button type="submit" variant="contained" disabled={loading || success} sx={buttonSx}>Generiere Zertifikat {loading && (
+                    <CircularProgress
+                        size={24}
+                        sx={{
+                            color: green[500],
+                            position: "absolute",
+                            top: "50%",
+                            left: "50%",
+                            marginTop: "-12px",
+                            marginLeft: "-12px",
+                        }}
+                    />
+                )}</Button>
+                {download}
+            </Box>
         </Box>
         <Modal
             open={loading}

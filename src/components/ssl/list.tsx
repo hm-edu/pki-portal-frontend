@@ -29,20 +29,22 @@ export default function SslCertificates() {
                     const cfg = new Configuration({ accessToken: response.accessToken });
                     const api = new SSLApi(cfg, `https://${Config.PKI_HOST}`);
                     api.sslGet().then((response) => {
-                        const data = [];
-                        for (const cert of response.data) {
-                            if (cert.serial) {
-                                data.push({
-                                    common_name: cert.common_name,
-                                    expires: cert.expires,
-                                    serial: cert.serial,
-                                    notBefore: cert.notBefore,
-                                    status: cert.status,
-                                    subject_alternative_names: cert.subject_alternative_names,
-                                });
+                        if (response.data) {
+                            const data = [];
+                            for (const cert of response.data) {
+                                if (cert.serial) {
+                                    data.push({
+                                        common_name: cert.common_name,
+                                        expires: cert.expires,
+                                        serial: cert.serial,
+                                        notBefore: cert.notBefore,
+                                        status: cert.status,
+                                        subject_alternative_names: cert.subject_alternative_names,
+                                    });
+                                }
                             }
+                            setCertificates(data);
                         }
-                        setCertificates(data);
                         setLoading(false);
                     }).catch((error) => {
                         console.error(error);

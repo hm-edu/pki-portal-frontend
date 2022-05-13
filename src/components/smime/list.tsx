@@ -2,10 +2,15 @@ import { useAccount, useIsAuthenticated, useMsal } from "@azure/msal-react";
 import { Button } from "@mui/material";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 import { PortalApisListSmimeResponseCertificateDetails, SMIMEApi } from "../../api/pki/api";
 import { Configuration } from "../../api/pki/configuration";
 import { Config } from "../../config";
+
+function revoke() {
+    // Todo
+}
 
 export default function SmimeCertificates() {
     const isAuthenticated = useIsAuthenticated();
@@ -26,19 +31,22 @@ export default function SmimeCertificates() {
                     const cfg = new Configuration({ accessToken: response.accessToken });
                     const api = new SMIMEApi(cfg, `https://${Config.PKI_HOST}`);
                     api.smimeGet().then((response) => {
-                        const data = [];
-                        for (const cert of response.data) {
-                            if (cert.serial) {
-                                data.push({
-                                    expires: cert.expires,
-                                    serial: cert.serial,
-                                    status: cert.status,
-                                });
+                        if (response.data) {
+                            const data = [];
+                            for (const cert of response.data) {
+                                if (cert.serial) {
+                                    data.push({
+                                        expires: cert.expires,
+                                        serial: cert.serial,
+                                        status: cert.status,
+                                    });
+                                }
                             }
+                            setCertificates(data);
                         }
-                        setCertificates(data);
                         setLoading(false);
                     }).catch((error) => {
+                        setLoading(false);
                         console.error(error);
                     });
                 }
@@ -78,14 +86,16 @@ export default function SmimeCertificates() {
                 const row = (params.row as PortalApisListSmimeResponseCertificateDetails);
                 const buttons = [];
                 if (row.status !== "revoked") {
-                    buttons.push(<Button variant="outlined" color="secondary" key="revoke">Revoke</Button>);
+                    buttons.push(<Button variant="outlined" onClick={revoke} color="secondary" key="revoke">Revoke</Button>);
                 }
                 return <>{buttons}</>;
             },
         },
     ];
 
+    const navigation = useNavigate();
     return <div><h1>Ihre Zertifikate</h1>
+    
         <DataGrid autoHeight columns={columns}
             pageSize={pageSize}
             getRowId={(row) =>
@@ -102,5 +112,6 @@ export default function SmimeCertificates() {
             onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
             rowsPerPageOptions={[5, 15, 25, 50, 100]}
             pagination rows={certificates}></DataGrid>
+        <Button variant="contained" onClick={()=> navigation("/smime/new")}>Neues Zertifikat beziehen</Button>
     </div>;
 }
