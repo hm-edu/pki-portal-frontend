@@ -124,14 +124,14 @@ export default function SMIMEGenerator() {
                     setProgress(<div>Generiere CSR...</div>);
 
                     return csr.build().then((x) => {
-                        setProgress(<div>CSR generiert...</div>);
+                        setProgress(<p>CSR generiert...</p>);
                         if (account) {
 
                             const cfg = new Configuration({ accessToken: response.accessToken });
                             const api = new SMIMEApi(cfg, `https://${Config.PKI_HOST}`);
-                            setProgress(<div>Signiere CSR...</div>);
+                            setProgress(<p>Signiere CSR...</p>);
                             return api.smimeCsrPost({ csr: x.csr }).then((response) => {
-                                setProgress(<div>Generiere PKCS12...</div>);
+                                setProgress(<p>Generiere PKCS12...</p>);
                                 return createP12(x.privateKey, [response.data], p12PasswordRef.current?.value as string).then((p12) => {
                                     console.log(p12);
                                     const element = document.createElement("a");
@@ -142,7 +142,7 @@ export default function SMIMEGenerator() {
                                     element.click();
                                     document.body.removeChild(element);
                                     setDownload(<a href={"data:application/x-pkcs12;base64," + p12} download="smime.p12">Erneuter Download</a>);
-                                    setProgress(<div>PKCS12 generiert</div>);
+                                    setProgress(<p>PKCS12 generiert</p>);
                                     setSuccess(true);
                                     setLoading(false);
                                 }).catch((err) => {
@@ -162,7 +162,7 @@ export default function SMIMEGenerator() {
         }
     }, [account, instance, progress]);
     useEffect(() => {
-        setProgress(<div>Bitte warten...</div>);
+        setProgress(<p>Bitte warten...</p>);
         if (account) {
             instance.acquireTokenSilent({
                 scopes: ["api://9aee5c12-b8ba-42e0-a1bb-b296bb6ca978/Certificates", "email"],
