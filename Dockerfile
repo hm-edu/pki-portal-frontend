@@ -7,7 +7,7 @@ RUN npm ci
 
 COPY . /app
 
-RUN npm run build
+RUN GENERATE_SOURCEMAP=false npm run build
 FROM nginx:1.21.6-alpine
 
 COPY ./nginx/nginx.conf /etc/nginx/conf.d/default.conf
