@@ -83,7 +83,7 @@ export default function SMIMEGenerator() {
     const { instance, accounts } = useMsal();
     const isAuthenticated = useIsAuthenticated();
     const account = useAccount(accounts[0])!;
-    const [progress, setProgress] = React.useState<JSX.Element>(<></>);
+    const [progress, setProgress] = React.useState<string>("");
     const [download, setDownload] = React.useState<JSX.Element>(<></>);
 
     const [loading, setLoading] = React.useState(true);
@@ -117,21 +117,21 @@ export default function SMIMEGenerator() {
             setSuccess(false);
             setLoading(true);
             await instance.acquireTokenSilent({
-                scopes: ["api://9aee5c12-b8ba-42e0-a1bb-b296bb6ca978/Certificates", "email"],
+                scopes: ["api://1d9e1166-1c48-4cb2-a65e-21fa9dd384c7/Certificates", "email"],
                 account,
             }).then((response) => {
                 if (response) {
-                    setProgress(<div>Generiere CSR...</div>);
+                    setProgress("Generiere CSR...");
 
                     return csr.build().then((x) => {
-                        setProgress(<p>CSR generiert...</p>);
+                        setProgress("CSR generiert...");
                         if (account) {
 
                             const cfg = new Configuration({ accessToken: response.accessToken });
                             const api = new SMIMEApi(cfg, `https://${Config.PKI_HOST}`);
-                            setProgress(<p>Signiere CSR...</p>);
+                            setProgress("Signiere CSR...");
                             return api.smimeCsrPost({ csr: x.csr }).then((response) => {
-                                setProgress(<p>Generiere PKCS12...</p>);
+                                setProgress("Generiere PKCS12...");
                                 return createP12(x.privateKey, [response.data], p12PasswordRef.current?.value as string).then((p12) => {
                                     console.log(p12);
                                     const element = document.createElement("a");
@@ -142,7 +142,7 @@ export default function SMIMEGenerator() {
                                     element.click();
                                     document.body.removeChild(element);
                                     setDownload(<a href={"data:application/x-pkcs12;base64," + p12} download="smime.p12">Erneuter Download</a>);
-                                    setProgress(<p>PKCS12 generiert</p>);
+                                    setProgress("PKCS12 generiert");
                                     setSuccess(true);
                                     setLoading(false);
                                 }).catch((err) => {
@@ -162,10 +162,10 @@ export default function SMIMEGenerator() {
         }
     }, [account, instance, progress]);
     useEffect(() => {
-        setProgress(<p>Bitte warten...</p>);
+        setProgress("Bitte warten...");
         if (account) {
             instance.acquireTokenSilent({
-                scopes: ["api://9aee5c12-b8ba-42e0-a1bb-b296bb6ca978/Certificates", "email"],
+                scopes: ["api://1d9e1166-1c48-4cb2-a65e-21fa9dd384c7/Certificates", "email"],
                 account: account,
             }).then((response) => {
                 if (response) {
@@ -248,7 +248,18 @@ export default function SMIMEGenerator() {
                 <Typography id="modal-modal-title" variant="h6" component="h2">
                     Generierung eines neuen SMIME Zertifikats
                 </Typography>
-                <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+                <Box sx={{ padding: 2 }}>
+                    <CircularProgress
+                        size={24}
+                        sx={{
+                            color: green[500],
+                            position: "absolute",
+                            left: "50%",
+                            marginLeft: "-12px",
+                        }}
+                    />
+                </Box>
+                <Typography id="modal-modal-description" sx={{ mt: "24px" }}>
                     {progress}
                 </Typography>
             </Box>

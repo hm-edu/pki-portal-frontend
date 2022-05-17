@@ -13,6 +13,7 @@ import { msalConfig } from "./auth/msal";
 import SslCertificates from "./components/ssl/list";
 import SmimeGenerator from "./components/smime/request";
 import SmimeCertificates from "./components/smime/list";
+import EABTokens from "./components/eab/list";
 
 const Offset = styled("div")(({ theme }) => {
     // @ts-expect-error Property will allways be set.
@@ -31,6 +32,7 @@ function App() {
                     <Route path='/' element={<Home />} />
                     <Route path='/domains' element={<Domains />} />
                     <Route path='/ssl' element={<SslCertificates />} />
+                    <Route path='/eab' element={<EABTokens />} />
                     <Route path='/smime/new' element={<SmimeGenerator />} />
                     <Route path='/smime' element={<SmimeCertificates />} />
                     <Route path='/oidc-callback' element={<Login />} />

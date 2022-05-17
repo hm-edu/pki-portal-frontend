@@ -114,6 +114,12 @@ export interface PortalApisSslCertificateDetails {
      * @type {TimestamppbTimestamp}
      * @memberof PortalApisSslCertificateDetails
      */
+    'created'?: TimestamppbTimestamp;
+    /**
+     * 
+     * @type {TimestamppbTimestamp}
+     * @memberof PortalApisSslCertificateDetails
+     */
     'expires'?: TimestamppbTimestamp;
     /**
      * 
@@ -121,6 +127,12 @@ export interface PortalApisSslCertificateDetails {
      * @memberof PortalApisSslCertificateDetails
      */
     'id'?: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof PortalApisSslCertificateDetails
+     */
+    'issued_by'?: string;
     /**
      * 
      * @type {TimestamppbTimestamp}

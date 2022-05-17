@@ -163,7 +163,6 @@ export default function Domains() {
         <Box component="form" onSubmit={create}
             sx={{
                 maxWidth: "300px",
-                marginTop: 8,
                 display: "flex",
                 flexDirection: "column",
             }}>
@@ -172,7 +171,7 @@ export default function Domains() {
                 inputRef={newDomain}
                 variant="standard" />
 
-            <Button type="submit" variant="contained" sx={{ mt: 2 }} >Erstelle Domain</Button>
+            <Button type="submit" variant="contained" sx={{ mt: 1 }} >Erstelle Domain</Button>
         </Box>
     </div>;
 }

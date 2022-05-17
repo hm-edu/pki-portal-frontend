@@ -7,4 +7,5 @@ export class Config {
     static HOST: string = envSettings.HOST as string;
     static DOMAIN_HOST: string = envSettings.DOMAIN_HOST as string;
     static PKI_HOST: string = envSettings.PKI_HOST as string;
+    static EAB_HOST: string = envSettings.EAB_HOST as string;
 }

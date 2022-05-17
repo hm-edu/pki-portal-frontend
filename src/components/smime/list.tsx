@@ -1,3 +1,4 @@
+import { AccountInfo, AuthenticationResult, IPublicClientApplication } from "@azure/msal-browser";
 import { useAccount, useIsAuthenticated, useMsal } from "@azure/msal-react";
 import { Button } from "@mui/material";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
@@ -8,6 +9,20 @@ import { PortalApisListSmimeResponseCertificateDetails, SMIMEApi } from "../../a
 import { Configuration } from "../../api/pki/configuration";
 import { Config } from "../../config";
 
+export function authorizeSmime(account: AccountInfo, instance: IPublicClientApplication, handler: (response: AuthenticationResult) => void) {
+    instance.acquireTokenSilent({
+        scopes: ["api://1d9e1166-1c48-4cb2-a65e-21fa9dd384c7/Certificates", "email"],
+        account: account,
+    }).then(handler).catch((error) => {
+        console.log(error);
+        instance.acquireTokenPopup({
+            scopes: ["api://1d9e1166-1c48-4cb2-a65e-21fa9dd384c7/Certificates", "email"],
+            account: account,
+        }).then(handler).catch((error) => {
+            console.log(error);
+        });
+    });
+}
 function revoke() {
     // Todo
 }
@@ -23,10 +38,7 @@ export default function SmimeCertificates() {
 
     useEffect(() => {
         if (account) {
-            instance.acquireTokenSilent({
-                scopes: ["api://9aee5c12-b8ba-42e0-a1bb-b296bb6ca978/Certificates", "email"],
-                account: account,
-            }).then((response) => {
+            authorizeSmime(account, instance, (response: AuthenticationResult) => {
                 if (response) {
                     const cfg = new Configuration({ accessToken: response.accessToken });
                     const api = new SMIMEApi(cfg, `https://${Config.PKI_HOST}`);
@@ -50,8 +62,6 @@ export default function SmimeCertificates() {
                         console.error(error);
                     });
                 }
-            }).catch((error) => {
-                console.log(error);
             });
         }
     }, [account, instance]);
@@ -95,7 +105,7 @@ export default function SmimeCertificates() {
 
     const navigation = useNavigate();
     return <div><h1>Ihre Zertifikate</h1>
-    
+
         <DataGrid autoHeight columns={columns}
             pageSize={pageSize}
             getRowId={(row) =>
@@ -112,6 +122,6 @@ export default function SmimeCertificates() {
             onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
             rowsPerPageOptions={[5, 15, 25, 50, 100]}
             pagination rows={certificates}></DataGrid>
-        <Button variant="contained" onClick={()=> navigation("/smime/new")}>Neues Zertifikat beziehen</Button>
+        <Button variant="contained" sx={{ mt: 1 }} onClick={() => navigation("/smime/new")}>Neues Zertifikat beziehen</Button>
     </div>;
 }
