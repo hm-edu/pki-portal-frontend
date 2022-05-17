@@ -31,13 +31,13 @@ export default function SmimeCertificates() {
     const isAuthenticated = useIsAuthenticated();
     const { instance, accounts } = useMsal();
     const account = useAccount(accounts[0] || {});
-
+    const navigation = useNavigate();
     const [pageSize, setPageSize] = React.useState<number>(15);
     const [loading, setLoading] = React.useState(true);
     const [certificates, setCertificates] = useState([] as PortalApisListSmimeResponseCertificateDetails[]);
 
     useEffect(() => {
-        if (account) {
+        if (isAuthenticated && account) {
             authorizeSmime(account, instance, (response: AuthenticationResult) => {
                 if (response) {
                     const cfg = new Configuration({ accessToken: response.accessToken });
@@ -103,7 +103,6 @@ export default function SmimeCertificates() {
         },
     ];
 
-    const navigation = useNavigate();
     return <div><h1>Ihre Zertifikate</h1>
 
         <DataGrid autoHeight columns={columns}

@@ -29,12 +29,8 @@ export default function SslCertificates() {
     const [loading, setLoading] = React.useState(true);
     const [certificates, setCertificates] = useState([] as PortalApisSslCertificateDetails[]);
 
-    if (!isAuthenticated) {
-        return <div>Please sign in</div>;
-    }
-
     useEffect(() => {
-        if (account) {
+        if (isAuthenticated && account) {
             authorizeSsl(account, instance, (response: AuthenticationResult) => {
                 const cfg = new Configuration({ accessToken: response.accessToken });
                 const api = new SSLApi(cfg, `https://${Config.PKI_HOST}`);
@@ -66,6 +62,9 @@ export default function SslCertificates() {
         }
     }, [account, instance]);
 
+    if (!isAuthenticated) {
+        return <div>Please sign in</div>;
+    }
     const columns: GridColDef[] = [
         { field: "common_name", headerName: "Common Name", width: 280 },
         { field: "serial", headerName: "Serial Number", width: 280 },

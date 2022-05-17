@@ -72,15 +72,16 @@ export default function EABTokens() {
     const { instance, accounts } = useMsal();
     const account = useAccount(accounts[0] || {});
 
-    if (!isAuthenticated) {
-        return <div>Please sign in</div>;
-    }
     const [pageSize, setPageSize] = React.useState<number>(15);
     const [tokens, setTokens] = useState([] as ModelsEAB[]);
     const [loading, setLoading] = useState(true);
     const [selected, setSelected] = useState<GridRowId[]>();
 
-    useEffect(() => { if (account) { loadTokens(account, instance, (tokens: ModelsEAB[]) => { setTokens(tokens); setLoading(false); }); } }, [account, instance]);
+    useEffect(() => {
+        if (isAuthenticated && account) {
+            loadTokens(account, instance, (tokens: ModelsEAB[]) => { setTokens(tokens); setLoading(false); });
+        }
+    }, [account, instance]);
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const create = useCallback((event: any) => {
         event.preventDefault();
@@ -113,6 +114,11 @@ export default function EABTokens() {
             },
         },
     ];
+    
+    if (!isAuthenticated) {
+        return <div>Please sign in</div>;
+    }
+
     const selection = function () {
         if (selected && selected.length > 0) {
             return <Box sx={{ px: 1, py: 1 }}>

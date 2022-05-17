@@ -95,16 +95,18 @@ export default function Domains() {
     const { instance, accounts } = useMsal();
     const account = useAccount(accounts[0] || {});
 
-    if (!isAuthenticated) {
-        return <div>Please sign in</div>;
-    }
     const [pageSize, setPageSize] = React.useState<number>(15);
     const [domains, setDomains] = useState([] as ModelDomain[]);
     const [loading, setLoading] = useState(true);
 
     const newDomain = useRef<TextFieldProps>(null);
 
-    useEffect(() => { if (account) { loadDomains(account, instance, (domains: ModelDomain[]) => { setDomains(domains); setLoading(false); }); } }, [account, instance]);
+    useEffect(() => {
+        if (isAuthenticated && account) {
+            loadDomains(account, instance, (domains: ModelDomain[]) => { setDomains(domains); setLoading(false); });
+        }
+    }, [account, instance]);
+    
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const create = useCallback((event: any) => {
         event.preventDefault();
@@ -112,6 +114,10 @@ export default function Domains() {
             createDomain(newDomain.current?.value as string, account, instance, setDomains);
         }
     }, [account, instance]);
+
+    if (!isAuthenticated) {
+        return <div>Please sign in</div>;
+    }
 
     const columns: GridColDef[] = [
         { field: "fqdn", headerName: "FQDN", width: 280 },
