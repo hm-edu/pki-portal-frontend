@@ -43,7 +43,7 @@ export default function SslCertificates() {
                                     common_name: cert.common_name,
                                     expires: cert.expires,
                                     serial: cert.serial,
-                                    notBefore: cert.notBefore,
+                                    not_before: cert.not_before,
                                     status: cert.status,
                                     subject_alternative_names: cert.subject_alternative_names,
                                     created: cert.created,
@@ -96,7 +96,7 @@ export default function SslCertificates() {
             },
         },
         {
-            field: "notBefore", headerName: "Gültig ab", type: "date", width: 150,
+            field: "not_before", headerName: "Gültig ab", type: "date", width: 150,
             valueGetter: ({ value }) => {
                 /* eslint-disable @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-member-access  */
                 const mili = (value.seconds as number) * 1000;
@@ -130,7 +130,7 @@ export default function SslCertificates() {
             }
             initialState={{
                 sorting: {
-                    sortModel: [{ field: "notBefore", sort: "desc" }],
+                    sortModel: [{ field: "created", sort: "desc" }],
                 },
             }}
             loading={loading}

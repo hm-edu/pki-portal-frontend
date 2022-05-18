@@ -93,7 +93,11 @@ export default function EABTokens() {
     const columns: GridColDef[] = [
         { field: "id", headerName: "ID", width: 280 },
         { field: "key_bytes", headerName: "HMAC", width: 280 },
-        { field: "bound_at", headerName: "Bereits verwendet?", type: "date", width: 280 }, {
+        {
+            field: "bound_at", headerName: "Bereits verwendet?", type: "boolean", width: 150,
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+            valueGetter: ({ value }) => { return value != undefined; },
+        }, {
             field: "action",
             headerName: "Aktionen",
             sortable: false,
@@ -114,13 +118,14 @@ export default function EABTokens() {
             },
         },
     ];
-    
+
     if (!isAuthenticated) {
         return <div>Please sign in</div>;
     }
 
     const selection = function () {
         if (selected && selected.length > 0) {
+            const token = tokens.find((token) => token.id === selected.at(0));
             return <Box sx={{ px: 1, py: 1 }}>
                 <table>
                     <tbody>
@@ -136,8 +141,9 @@ export default function EABTokens() {
                                 r.setEnd(e.currentTarget, 1);
                                 document.getSelection()?.removeAllRanges();
                                 document.getSelection()?.addRange(r);
-                            }}>{tokens.find((token) => token.id === selected.at(0))!.key_bytes}</span></td>
+                            }}>{token!.key_bytes}</span></td>
                         </tr>
+                        <tr><td><b>ACME Account verknüpft am:</b></td><td>{token?.bound_at}</td></tr>
                     </tbody>
                 </table>
             </Box >;

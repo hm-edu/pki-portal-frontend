@@ -138,7 +138,7 @@ export interface PortalApisSslCertificateDetails {
      * @type {TimestamppbTimestamp}
      * @memberof PortalApisSslCertificateDetails
      */
-    'notBefore'?: TimestamppbTimestamp;
+    'not_before'?: TimestamppbTimestamp;
     /**
      * 
      * @type {string}
