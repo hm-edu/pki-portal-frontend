@@ -105,3 +105,7 @@ dist
 
 build/**
 src/api/**/git_push.sh
+**.wasm
+**/.idea
+wasm/wasm_exec.js
+wasm/wasm_exec.html
