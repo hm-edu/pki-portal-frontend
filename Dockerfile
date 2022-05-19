@@ -1,4 +1,4 @@
-FROM golang:1.18.1 as wasm-builder
+FROM golang:1.18.2 as wasm-builder
 
 COPY wasm /app
 WORKDIR /app
