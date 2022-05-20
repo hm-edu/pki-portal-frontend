@@ -1,4 +1,4 @@
-import { AccountInfo, AuthenticationResult, IPublicClientApplication } from "@azure/msal-browser";
+import { AuthenticationResult } from "@azure/msal-browser";
 import { useAccount, useIsAuthenticated, useMsal } from "@azure/msal-react";
 import { Button } from "@mui/material";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
@@ -7,22 +7,9 @@ import { useNavigate } from "react-router-dom";
 
 import { PortalApisListSmimeResponseCertificateDetails, SMIMEApi } from "../../api/pki/api";
 import { Configuration } from "../../api/pki/configuration";
+import { authorize } from "../../auth/api";
 import { Config } from "../../config";
 
-export function authorizeSmime(account: AccountInfo, instance: IPublicClientApplication, handler: (response: AuthenticationResult) => void) {
-    instance.acquireTokenSilent({
-        scopes: ["api://1d9e1166-1c48-4cb2-a65e-21fa9dd384c7/Certificates", "email"],
-        account: account,
-    }).then(handler).catch((error) => {
-        console.log(error);
-        instance.acquireTokenPopup({
-            scopes: ["api://1d9e1166-1c48-4cb2-a65e-21fa9dd384c7/Certificates", "email"],
-            account: account,
-        }).then(handler).catch((error) => {
-            console.log(error);
-        });
-    });
-}
 function revoke() {
     // Todo
 }
@@ -38,7 +25,7 @@ export default function SmimeCertificates() {
 
     useEffect(() => {
         if (isAuthenticated && account) {
-            authorizeSmime(account, instance, (response: AuthenticationResult) => {
+            authorize(account, instance, ["api://1d9e1166-1c48-4cb2-a65e-21fa9dd384c7/Certificates", "email"], (response: AuthenticationResult) => {
                 if (response) {
                     const cfg = new Configuration({ accessToken: response.accessToken });
                     const api = new SMIMEApi(cfg, `https://${Config.PKI_HOST}`);
@@ -62,7 +49,7 @@ export default function SmimeCertificates() {
                         console.error(error);
                     });
                 }
-            });
+            }, (_) => { setLoading(false); });
         }
     }, [account, instance]);
 

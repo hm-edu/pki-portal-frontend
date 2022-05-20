@@ -11,22 +11,10 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import { EABApi, ModelsEAB } from "../../api/eab/api";
 import { Configuration } from "../../api/eab/configuration";
 import { Config } from "../../config";
-function authorize(account: AccountInfo, instance: IPublicClientApplication, handler: (response: AuthenticationResult) => void) {
-    instance.acquireTokenSilent({
-        scopes: ["api://1d9e1166-1c48-4cb2-a65e-21fa9dd384c7/EAB", "email"],
-        account: account,
-    }).then(handler).catch((error) => {
-        console.log(error);
-        instance.acquireTokenPopup({
-            scopes: ["api://1d9e1166-1c48-4cb2-a65e-21fa9dd384c7/EAB", "email"],
-            account: account,
-        }).then(handler).catch((error) => {
-            console.log(error);
-        });
-    });
-}
+import { authorize } from "../../auth/api";
+
 function removeEAB(id: string, account: AccountInfo, instance: IPublicClientApplication, setTokens: (domains: ModelsEAB[]) => void) {
-    authorize(account, instance, (response: AuthenticationResult) => {
+    authorize(account, instance, ["api://1d9e1166-1c48-4cb2-a65e-21fa9dd384c7/EAB", "email"], (response: AuthenticationResult) => {
         if (response) {
             const cfg = new Configuration({ accessToken: response.accessToken });
             const api = new EABApi(cfg, `https://${Config.EAB_HOST}`);
@@ -36,11 +24,11 @@ function removeEAB(id: string, account: AccountInfo, instance: IPublicClientAppl
                 console.log(error);
             });
         }
-    });
+    }, (_) => { return; });
 }
 
 function loadTokens(account: AccountInfo, instance: IPublicClientApplication, setTokens: (domains: ModelsEAB[]) => void) {
-    authorize(account, instance, (response: AuthenticationResult) => {
+    authorize(account, instance, ["api://1d9e1166-1c48-4cb2-a65e-21fa9dd384c7/EAB", "email"], (response: AuthenticationResult) => {
         if (response) {
             const cfg = new Configuration({ accessToken: response.accessToken });
             const api = new EABApi(cfg, `https://${Config.EAB_HOST}`);
@@ -50,11 +38,11 @@ function loadTokens(account: AccountInfo, instance: IPublicClientApplication, se
                 console.error(error);
             });
         }
-    });
+    }, (_) => { return; });
 }
 
 function createEABToken(account: AccountInfo, instance: IPublicClientApplication, setTokens: (domains: ModelsEAB[]) => void) {
-    authorize(account, instance, (response: AuthenticationResult) => {
+    authorize(account, instance, ["api://1d9e1166-1c48-4cb2-a65e-21fa9dd384c7/EAB", "email"], (response: AuthenticationResult) => {
         if (response) {
             const cfg = new Configuration({ accessToken: response.accessToken });
             const api = new EABApi(cfg, `https://${Config.EAB_HOST}`);
@@ -64,7 +52,7 @@ function createEABToken(account: AccountInfo, instance: IPublicClientApplication
                 console.log(error);
             });
         }
-    });
+    }, (_) => { return; });
 }
 
 export default function EABTokens() {

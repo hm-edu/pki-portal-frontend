@@ -7,6 +7,7 @@ import * as forge from "node-forge";
 import React, { useCallback, useEffect, useRef } from "react";
 import { SMIMEApi } from "../../api/pki/api";
 import { Configuration } from "../../api/pki/configuration";
+import { authorize } from "../../auth/api";
 import { Config } from "../../config";
 
 export class CSRBundle {
@@ -110,23 +111,18 @@ export default function SMIMEGenerator() {
         boxShadow: 24,
         p: 4,
     };
-    const create = useCallback(async (event: any) => {
+    const create = useCallback((event: any) => {
         // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access,@typescript-eslint/no-unsafe-call
         event.preventDefault();
         if (!loading) {
             setSuccess(false);
             setLoading(true);
-            await instance.acquireTokenSilent({
-                scopes: ["api://1d9e1166-1c48-4cb2-a65e-21fa9dd384c7/Certificates", "email"],
-                account,
-            }).then((response) => {
+            authorize(account, instance, ["api://1d9e1166-1c48-4cb2-a65e-21fa9dd384c7/Certificates", "email"], (response) => {
                 if (response) {
                     setProgress("Generiere CSR...");
-
-                    return csr.build().then((x) => {
+                    csr.build().then((x) => {
                         setProgress("CSR generiert...");
                         if (account) {
-
                             const cfg = new Configuration({ accessToken: response.accessToken });
                             const api = new SMIMEApi(cfg, `https://${Config.PKI_HOST}`);
                             setProgress("Signiere CSR...");
@@ -151,23 +147,20 @@ export default function SMIMEGenerator() {
                             }).catch((error) => {
                                 console.error(error);
                             });
+
                         }
-                        return Promise.reject();
+                        return Promise.resolve();
                     }).catch((error) => {
                         console.log(error);
                     });
                 }
-                return Promise.reject(new Error("No token"));
-            }).catch((y) => { console.error(y); });
+            }, (_) => { setLoading(false); });
         }
-    }, [account, instance, progress]);
+    }, [account, instance, progress, loading]);
     useEffect(() => {
         setProgress("Bitte warten...");
         if (account) {
-            instance.acquireTokenSilent({
-                scopes: ["api://1d9e1166-1c48-4cb2-a65e-21fa9dd384c7/Certificates", "email"],
-                account: account,
-            }).then((response) => {
+            authorize(account, instance, ["api://1d9e1166-1c48-4cb2-a65e-21fa9dd384c7/Certificates", "email"], (response) => {
                 if (response) {
                     const cfg = new Configuration({ accessToken: response.accessToken });
                     const api = new SMIMEApi(cfg, `https://${Config.PKI_HOST}`);
@@ -190,9 +183,7 @@ export default function SMIMEGenerator() {
                         console.error(error);
                     });
                 }
-            }).catch((error) => {
-                console.log(error);
-            });
+            }, (_) => { setLoading(false); });
         }
     }, [account, instance]);
 

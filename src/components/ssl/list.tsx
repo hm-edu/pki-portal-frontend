@@ -1,25 +1,13 @@
-import { AccountInfo, AuthenticationResult, IPublicClientApplication } from "@azure/msal-browser";
+import { AuthenticationResult } from "@azure/msal-browser";
 import { useAccount, useIsAuthenticated, useMsal } from "@azure/msal-react";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import React, { useEffect, useState } from "react";
 
 import { PortalApisSslCertificateDetails, SSLApi } from "../../api/pki/api";
 import { Configuration } from "../../api/pki/configuration";
+import { authorize } from "../../auth/api";
 import { Config } from "../../config";
-export function authorizeSsl(account: AccountInfo, instance: IPublicClientApplication, handler: (response: AuthenticationResult) => void) {
-    instance.acquireTokenSilent({
-        scopes: ["api://1d9e1166-1c48-4cb2-a65e-21fa9dd384c7/Certificates", "email"],
-        account: account,
-    }).then(handler).catch((error) => {
-        console.log(error);
-        instance.acquireTokenPopup({
-            scopes: ["api://1d9e1166-1c48-4cb2-a65e-21fa9dd384c7/Certificates", "email"],
-            account: account,
-        }).then(handler).catch((error) => {
-            console.log(error);
-        });
-    });
-}
+
 export default function SslCertificates() {
     const isAuthenticated = useIsAuthenticated();
     const { instance, accounts } = useMsal();
@@ -28,10 +16,11 @@ export default function SslCertificates() {
     const [pageSize, setPageSize] = React.useState<number>(15);
     const [loading, setLoading] = React.useState(true);
     const [certificates, setCertificates] = useState([] as PortalApisSslCertificateDetails[]);
+    const [error, setError] = useState<undefined | boolean>(undefined);
 
     useEffect(() => {
         if (isAuthenticated && account) {
-            authorizeSsl(account, instance, (response: AuthenticationResult) => {
+            authorize(account, instance, ["api://1d9e1166-1c48-4cb2-a65e-21fa9dd384c7/Certificates", "email"], (response: AuthenticationResult) => {
                 const cfg = new Configuration({ accessToken: response.accessToken });
                 const api = new SSLApi(cfg, `https://${Config.PKI_HOST}`);
                 api.sslGet().then((response) => {
@@ -57,7 +46,7 @@ export default function SslCertificates() {
                 }).catch((error) => {
                     console.error(error);
                 });
-            });
+            }, (error) => { setError(true); });
 
         }
     }, [account, instance]);
@@ -134,6 +123,7 @@ export default function SslCertificates() {
                 },
             }}
             loading={loading}
+            error={error}
             onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
             rowsPerPageOptions={[5, 15, 25, 50, 100]}
             pagination rows={certificates}></DataGrid>
