@@ -1,15 +1,16 @@
 import "./App.css";
+
 import React from "react";
-import ButtonAppBar from "./components/navbar";
-import Login from "./components/login";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import Home from "./components/home";
+import { MsalProvider } from "@azure/msal-react";
+import { IPublicClientApplication } from "@azure/msal-browser";
 import { Container } from "@mui/material";
 import { styled } from "@mui/system";
+
+import ButtonAppBar from "./components/navbar";
+import Login from "./components/login";
+import Home from "./components/home";
 import Domains from "./components/domains/list";
-import { PublicClientApplication } from "@azure/msal-browser";
-import { MsalProvider } from "@azure/msal-react";
-import { msalConfig } from "./auth/msal";
 import SslCertificates from "./components/ssl/list";
 import SmimeGenerator from "./components/smime/request";
 import SmimeCertificates from "./components/smime/list";
@@ -20,10 +21,12 @@ const Offset = styled("div")(({ theme }) => {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return theme.mixins.toolbar;
 });
-
-function App() {
-    const msalInstance = new PublicClientApplication(msalConfig);
-    return <MsalProvider instance={msalInstance}>
+interface AppProperties {
+    instance: IPublicClientApplication;
+}
+function App(props: AppProperties) {
+    const instance = props.instance;
+    return <MsalProvider instance={instance}>
         <BrowserRouter>
             <ButtonAppBar />
             <Offset />

@@ -1,4 +1,4 @@
-import type { Configuration } from "@azure/msal-browser";
+import { Configuration, PublicClientApplication } from "@azure/msal-browser";
 import { Config } from "../config";
 
 export const msalConfig: Configuration = {
@@ -12,3 +12,5 @@ export const msalConfig: Configuration = {
         storeAuthStateInCookie: false, // Set this to "true" if you are having issues on IE11 or Edge
     },
 };
+
+export const msalInstance = new PublicClientApplication(msalConfig);

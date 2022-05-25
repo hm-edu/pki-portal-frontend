@@ -123,6 +123,7 @@ export default function Domains() {
         }
     }, [account, instance]);
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const delegate = useCallback((event: any) => {
         event.preventDefault();
         if (account && delegationDomain) {
@@ -166,6 +167,7 @@ export default function Domains() {
                 }, [account, instance]);
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 const openDelegation = useCallback((event: any) => {
+                    event.preventDefault();
                     setDelegation(true);
                     setDelegationDomain(row);
                 }, [delegation]);

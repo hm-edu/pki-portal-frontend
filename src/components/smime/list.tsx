@@ -49,7 +49,7 @@ export default function SmimeCertificates() {
                         console.error(error);
                     });
                 }
-            }, (_) => { setLoading(false); });
+            }, () => { setLoading(false); });
         }
     }, [account, instance]);
 

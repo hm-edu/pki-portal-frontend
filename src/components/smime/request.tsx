@@ -154,7 +154,7 @@ export default function SMIMEGenerator() {
                         console.log(error);
                     });
                 }
-            }, (_) => { setLoading(false); });
+            }, () => { setLoading(false); });
         }
     }, [account, instance, progress, loading]);
     useEffect(() => {
@@ -183,7 +183,7 @@ export default function SMIMEGenerator() {
                         console.error(error);
                     });
                 }
-            }, (_) => { setLoading(false); });
+            }, () => { setLoading(false); });
         }
     }, [account, instance]);
 
