@@ -194,19 +194,8 @@ export default function SMIMEGenerator() {
     /* eslint-disable @typescript-eslint/no-misused-promises */
     return <div>
         <h1>Erstellung eines neuen SMIME Zertifikats</h1>
-        <Box sx={{
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-        }}>
-            <Box component="form" onSubmit={create}
-                sx={{
-                    display: "flex",
-                    maxWidth: "md",
-                    flexDirection: "column",
-                    alignItems: "left",
-                    alignSelf: "center",
-                }}>
+        <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+            <Box component="form" onSubmit={create} sx={{ display: "flex", maxWidth: "md", flexDirection: "column", alignItems: "left", alignSelf: "center" }}>
                 {warning && <Typography>Sie haben derzeit 2 aktive SMIME Zertifikate. Durch Ausstellung eines neuen Zertifikats wird automatisch das älteste widerrufen. Sofern Sie dies nicht möchten widerrufen Sie bitte ein Zertifikat von Hand.</Typography>}
                 {warning && <FormControlLabel control={<Checkbox color="secondary" required />} label="Zertifikat automatisch widerrufen." />}
                 <TextField required
@@ -215,40 +204,18 @@ export default function SMIMEGenerator() {
                     inputRef={p12PasswordRef}
                     variant="standard" />
                 <Button type="submit" variant="contained" disabled={loading || success} sx={buttonSx}>Generiere Zertifikat {loading && (
-                    <CircularProgress
-                        size={24}
-                        sx={{
-                            color: green[500],
-                            position: "absolute",
-                            top: "50%",
-                            left: "50%",
-                            marginTop: "-12px",
-                            marginLeft: "-12px",
-                        }}
-                    />
+                    <CircularProgress size={24} sx={{ color: green[500], position: "absolute", top: "50%", left: "50%", marginTop: "-12px", marginLeft: "-12px" }} />
                 )}</Button>
                 {download}
             </Box>
         </Box>
-        <Modal
-            open={loading}
-            aria-labelledby="modal-modal-title"
-            aria-describedby="modal-modal-description"
-        >
+        <Modal open={loading} aria-labelledby="modal-modal-title" aria-describedby="modal-modal-description">
             <Box sx={style}>
                 <Typography id="modal-modal-title" variant="h6" component="h2">
                     Generierung eines neuen SMIME Zertifikats
                 </Typography>
                 <Box sx={{ padding: 2 }}>
-                    <CircularProgress
-                        size={24}
-                        sx={{
-                            color: green[500],
-                            position: "absolute",
-                            left: "50%",
-                            marginLeft: "-12px",
-                        }}
-                    />
+                    <CircularProgress size={24} sx={{ color: green[500], position: "absolute", left: "50%", marginLeft: "-12px" }} />
                 </Box>
                 <Typography id="modal-modal-description" sx={{ mt: "24px" }}>
                     {progress}

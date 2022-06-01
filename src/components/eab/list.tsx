@@ -24,7 +24,7 @@ function removeEAB(id: string, account: AccountInfo, instance: IPublicClientAppl
                 console.log(error);
             });
         }
-    }, (_) => { return; });
+    }, () => { return; });
 }
 
 function loadTokens(account: AccountInfo, instance: IPublicClientApplication, setTokens: (domains: ModelsEAB[]) => void) {
@@ -38,7 +38,7 @@ function loadTokens(account: AccountInfo, instance: IPublicClientApplication, se
                 console.error(error);
             });
         }
-    }, (_) => { return; });
+    }, () => { return; });
 }
 
 function createEABToken(account: AccountInfo, instance: IPublicClientApplication, setTokens: (domains: ModelsEAB[]) => void) {
@@ -52,7 +52,7 @@ function createEABToken(account: AccountInfo, instance: IPublicClientApplication
                 console.log(error);
             });
         }
-    }, (_) => { return; });
+    }, () => { return; });
 }
 
 export default function EABTokens() {
@@ -102,7 +102,7 @@ export default function EABTokens() {
                     setSelected([]);
                     removeEAB(row.id!, account!, instance, setTokens);
                 }, [account, instance, selected]);
-                return <Button color="secondary" sx={{ px: 1, mx: 1 }} variant="outlined" onClick={remove}><DeleteIcon /> Löschen</Button>;
+                return <Button color="warning" sx={{ px: 1, mx: 1 }} variant="contained" onClick={remove}><DeleteIcon /> Löschen</Button>;
             },
         },
     ];
@@ -153,11 +153,7 @@ export default function EABTokens() {
             pagination rows={tokens} />
         {selection()}
         <Box component="form" onSubmit={create}
-            sx={{
-                maxWidth: "300px",
-                display: "flex",
-                flexDirection: "column",
-            }}>
+            sx={{ maxWidth: "300px", display: "flex", flexDirection: "column" }}>
             <Button type="submit" variant="contained" sx={{ mt: 1 }} >Erstelle neuen Token</Button>
         </Box>
     </div>;

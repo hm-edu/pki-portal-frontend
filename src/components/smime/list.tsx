@@ -5,14 +5,11 @@ import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
+import DeleteIcon from "@mui/icons-material/Delete";
 import { PortalApisListSmimeResponseCertificateDetails, SMIMEApi } from "../../api/pki/api";
 import { Configuration } from "../../api/pki/configuration";
 import { authorize } from "../../auth/api";
 import { Config } from "../../config";
-
-function revoke() {
-    // Todo
-}
 
 export default function SmimeCertificates() {
     const isAuthenticated = useIsAuthenticated();
@@ -23,7 +20,22 @@ export default function SmimeCertificates() {
     const [loading, setLoading] = React.useState(true);
     const [certificates, setCertificates] = useState([] as PortalApisListSmimeResponseCertificateDetails[]);
 
-    useEffect(() => {
+    function revoke(item: PortalApisListSmimeResponseCertificateDetails) {
+        if (isAuthenticated && account) {
+            authorize(account, instance, ["api://1d9e1166-1c48-4cb2-a65e-21fa9dd384c7/Certificates", "email"], (response: AuthenticationResult) => {
+                if (response && item.serial) {
+                    const cfg = new Configuration({ accessToken: response.accessToken });
+                    const api = new SMIMEApi(cfg, `https://${Config.PKI_HOST}`);
+                    api.smimeRevokePost({ serial: item.serial, reason: "" }).then(() => {
+                        return;
+                    }).catch(() => {
+                        return;
+                    });
+                }
+            }, () => { return; });
+        }
+    }
+    function load() {
         if (isAuthenticated && account) {
             authorize(account, instance, ["api://1d9e1166-1c48-4cb2-a65e-21fa9dd384c7/Certificates", "email"], (response: AuthenticationResult) => {
                 if (response) {
@@ -51,6 +63,11 @@ export default function SmimeCertificates() {
                 }
             }, () => { setLoading(false); });
         }
+
+    }
+
+    useEffect(() => {
+        load();
     }, [account, instance]);
 
     if (!isAuthenticated) {
@@ -79,13 +96,13 @@ export default function SmimeCertificates() {
             sortable: false,
             filterable: false,
             hideable: false,
+            flex: 1,
             renderCell: (params) => {
                 const row = (params.row as PortalApisListSmimeResponseCertificateDetails);
-                const buttons = [];
                 if (row.status !== "revoked") {
-                    buttons.push(<Button variant="outlined" onClick={revoke} color="secondary" key="revoke">Revoke</Button>);
+                    return <Button variant="contained" onClick={() => revoke(row)} sx={{ px: 1, mx: 1 }} color="warning" key="revoke"><DeleteIcon /> Revoke</Button>;
                 }
-                return <>{buttons}</>;
+                return <></>;
             },
         },
     ];

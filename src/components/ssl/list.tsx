@@ -1,7 +1,9 @@
 import { AuthenticationResult } from "@azure/msal-browser";
 import { useAccount, useIsAuthenticated, useMsal } from "@azure/msal-react";
+import { Button } from "@mui/material";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 import { PortalApisSslCertificateDetails, SSLApi } from "../../api/pki/api";
 import { Configuration } from "../../api/pki/configuration";
@@ -12,6 +14,7 @@ export default function SslCertificates() {
     const isAuthenticated = useIsAuthenticated();
     const { instance, accounts } = useMsal();
     const account = useAccount(accounts[0] || {});
+    const navigation = useNavigate();
 
     const [pageSize, setPageSize] = React.useState<number>(15);
     const [loading, setLoading] = React.useState(true);
@@ -46,7 +49,7 @@ export default function SslCertificates() {
                 }).catch((error) => {
                     console.error(error);
                 });
-            }, (error) => { setError(true); });
+            }, () => { setError(true); });
 
         }
     }, [account, instance]);
@@ -127,5 +130,6 @@ export default function SslCertificates() {
             onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
             rowsPerPageOptions={[5, 15, 25, 50, 100]}
             pagination rows={certificates}></DataGrid>
+        <Button variant="contained" sx={{ mt: 1 }} onClick={() => navigation("/ssl/new")}>Neues Zertifikat beziehen</Button>
     </div>;
 }
