@@ -150,6 +150,12 @@ export interface PortalApisSslCertificateDetails {
      * @type {string}
      * @memberof PortalApisSslCertificateDetails
      */
+    'source'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof PortalApisSslCertificateDetails
+     */
     'status'?: string;
     /**
      * 
@@ -433,6 +439,46 @@ export class SMIMEApi extends BaseAPI {
 export const SSLApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
         /**
+         * This endpoint handles a provided CSR. The validity of the CSR is checked and passed to the sectigo server.
+         * @summary SSL CSR Endpoint
+         * @param {ModelCsrRequest} modelCsrRequest The CSR
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        sslCsrPost: async (modelCsrRequest: ModelCsrRequest, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'modelCsrRequest' is not null or undefined
+            assertParamExists('sslCsrPost', 'modelCsrRequest', modelCsrRequest)
+            const localVarPath = `/ssl/csr`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication API required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(modelCsrRequest, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
          * 
          * @summary SSL List Endpoint
          * @param {*} [options] Override http request option.
@@ -517,6 +563,17 @@ export const SSLApiFp = function(configuration?: Configuration) {
     const localVarAxiosParamCreator = SSLApiAxiosParamCreator(configuration)
     return {
         /**
+         * This endpoint handles a provided CSR. The validity of the CSR is checked and passed to the sectigo server.
+         * @summary SSL CSR Endpoint
+         * @param {ModelCsrRequest} modelCsrRequest The CSR
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async sslCsrPost(modelCsrRequest: ModelCsrRequest, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<string>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.sslCsrPost(modelCsrRequest, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
          * 
          * @summary SSL List Endpoint
          * @param {*} [options] Override http request option.
@@ -548,6 +605,16 @@ export const SSLApiFactory = function (configuration?: Configuration, basePath?:
     const localVarFp = SSLApiFp(configuration)
     return {
         /**
+         * This endpoint handles a provided CSR. The validity of the CSR is checked and passed to the sectigo server.
+         * @summary SSL CSR Endpoint
+         * @param {ModelCsrRequest} modelCsrRequest The CSR
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        sslCsrPost(modelCsrRequest: ModelCsrRequest, options?: any): AxiosPromise<string> {
+            return localVarFp.sslCsrPost(modelCsrRequest, options).then((request) => request(axios, basePath));
+        },
+        /**
          * 
          * @summary SSL List Endpoint
          * @param {*} [options] Override http request option.
@@ -576,6 +643,18 @@ export const SSLApiFactory = function (configuration?: Configuration, basePath?:
  * @extends {BaseAPI}
  */
 export class SSLApi extends BaseAPI {
+    /**
+     * This endpoint handles a provided CSR. The validity of the CSR is checked and passed to the sectigo server.
+     * @summary SSL CSR Endpoint
+     * @param {ModelCsrRequest} modelCsrRequest The CSR
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof SSLApi
+     */
+    public sslCsrPost(modelCsrRequest: ModelCsrRequest, options?: AxiosRequestConfig) {
+        return SSLApiFp(this.configuration).sslCsrPost(modelCsrRequest, options).then((request) => request(this.axios, this.basePath));
+    }
+
     /**
      * 
      * @summary SSL List Endpoint

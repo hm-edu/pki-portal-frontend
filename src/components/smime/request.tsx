@@ -129,7 +129,6 @@ export default function SMIMEGenerator() {
                             return api.smimeCsrPost({ csr: x.csr }).then((response) => {
                                 setProgress("Generiere PKCS12...");
                                 return createP12(x.privateKey, [response.data], p12PasswordRef.current?.value as string).then((p12) => {
-                                    console.log(p12);
                                     const element = document.createElement("a");
                                     element.setAttribute("href", "data:application/x-pkcs12;base64," + p12);
                                     element.setAttribute("download", "smime.p12");

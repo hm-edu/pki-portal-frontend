@@ -6,12 +6,13 @@ import { useAccount, useIsAuthenticated, useMsal } from "@azure/msal-react";
 import { Box, Button } from "@mui/material";
 import { DataGrid, GridColDef, GridRowId } from "@mui/x-data-grid";
 import React, { useCallback, useEffect, useState } from "react";
-
+import "./list.css";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { EABApi, ModelsEAB } from "../../api/eab/api";
 import { Configuration } from "../../api/eab/configuration";
 import { Config } from "../../config";
 import { authorize } from "../../auth/api";
+import Moment from "react-moment";
 
 function removeEAB(id: string, account: AccountInfo, instance: IPublicClientApplication, setTokens: (domains: ModelsEAB[]) => void) {
     authorize(account, instance, ["api://1d9e1166-1c48-4cb2-a65e-21fa9dd384c7/EAB", "email"], (response: AuthenticationResult) => {
@@ -119,19 +120,28 @@ export default function EABTokens() {
                     <tbody>
                         <tr>
                             <td><b>EAB-ID</b></td>
-                            <td>{selected.at(0)}</td>
-                        </tr>
-                        <tr>
-                            <td><b>HMAC-Key</b></td>
-                            <td><span onDoubleClick={(e) => {
+                            <td><code onDoubleClick={(e) => {
                                 const r = new Range();
                                 r.setStart(e.currentTarget, 0);
                                 r.setEnd(e.currentTarget, 1);
                                 document.getSelection()?.removeAllRanges();
                                 document.getSelection()?.addRange(r);
-                            }}>{token!.key_bytes}</span></td>
+                            }}>{token!.id}</code></td>
                         </tr>
-                        <tr><td><b>ACME Account verknüpft am:</b></td><td>{token?.bound_at}</td></tr>
+                        <tr>
+                            <td><b>HMAC-Key</b></td>
+                            <td>{token?.key_bytes && <code onDoubleClick={(e) => {
+                                const r = new Range();
+                                r.setStart(e.currentTarget, 0);
+                                r.setEnd(e.currentTarget, 1);
+                                document.getSelection()?.removeAllRanges();
+                                document.getSelection()?.addRange(r);
+                            }}>{token.key_bytes}</code>}</td>
+                        </tr>
+                        <tr>
+                            <td><b>ACME Account verknüpft am:</b></td>
+                            <td>{token?.bound_at && <Moment format="DD.MM.YYYY HH:mm">{token?.bound_at}</Moment>}</td>
+                        </tr>
                     </tbody>
                 </table>
             </Box >;
@@ -140,7 +150,7 @@ export default function EABTokens() {
         }
     };
 
-    return <div><h1>Ihre EAB Tokens</h1>
+    return <Box sx={{ display: "flex", flexDirection: "column", height: "100%" }}><h1>Ihre EAB Tokens</h1>
         <DataGrid autoHeight columns={columns}
             pageSize={pageSize}
             loading={loading}
@@ -156,5 +166,5 @@ export default function EABTokens() {
             sx={{ maxWidth: "300px", display: "flex", flexDirection: "column" }}>
             <Button type="submit" variant="contained" sx={{ mt: 1 }} >Erstelle neuen Token</Button>
         </Box>
-    </div>;
+    </Box>;
 }

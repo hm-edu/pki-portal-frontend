@@ -1,4 +1,4 @@
-import "./App.css";
+import "./App.scss";
 
 import React from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
@@ -6,6 +6,7 @@ import { MsalProvider } from "@azure/msal-react";
 import { IPublicClientApplication } from "@azure/msal-browser";
 import { Container } from "@mui/material";
 import { styled } from "@mui/system";
+import "@fontsource/fira-mono";
 
 import ButtonAppBar from "./components/navbar";
 import Login from "./components/login";
@@ -31,7 +32,7 @@ function App(props: AppProperties) {
         <BrowserRouter>
             <ButtonAppBar />
             <Offset />
-            <Container style={{ paddingTop: "10px" }} maxWidth="xl" >
+            <Container sx={{ paddingTop: "10px", paddingBottom: "10px" }} maxWidth="xl" >
                 <Routes>
                     <Route path='/' element={<Home />} />
                     <Route path='/domains' element={<Domains />} />

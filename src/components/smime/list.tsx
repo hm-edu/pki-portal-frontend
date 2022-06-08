@@ -1,6 +1,6 @@
 import { AuthenticationResult } from "@azure/msal-browser";
 import { useAccount, useIsAuthenticated, useMsal } from "@azure/msal-react";
-import { Button } from "@mui/material";
+import { Box, Button } from "@mui/material";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -107,9 +107,8 @@ export default function SmimeCertificates() {
         },
     ];
 
-    return <div><h1>Ihre Zertifikate</h1>
-
-        <DataGrid autoHeight columns={columns}
+    return <Box sx={{ display: "flex", flexDirection: "column", height: "100%" }}><h1>Ihre Zertifikate</h1>
+        <DataGrid columns={columns}
             pageSize={pageSize}
             getRowId={(row) =>
                 // eslint-disable-next-line @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-member-access  
@@ -126,5 +125,5 @@ export default function SmimeCertificates() {
             rowsPerPageOptions={[5, 15, 25, 50, 100]}
             pagination rows={certificates}></DataGrid>
         <Button variant="contained" sx={{ mt: 1 }} onClick={() => navigation("/smime/new")}>Neues Zertifikat beziehen</Button>
-    </div>;
+    </Box>;
 }

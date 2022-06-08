@@ -164,8 +164,8 @@ export default function Domains() {
             setDelegationDomain(undefined);
         }} />;
     }
-    return <div><h1>Ihre Domains</h1>
-        <DataGrid autoHeight columns={columns}
+    return <Box sx={{ display: "flex", flexDirection: "column", height: "100%" }}><h1>Ihre Domains</h1>
+        <DataGrid columns={columns}
             pageSize={pageSize}
             loading={loading}
             error={error}
@@ -187,5 +187,5 @@ export default function Domains() {
             <Button type="submit" variant="contained" sx={{ mt: 1 }} >Erstelle Domain</Button>
         </Box>
         {delegationModal}
-    </div>;
+    </Box>;
 }
