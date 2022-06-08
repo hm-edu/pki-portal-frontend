@@ -35,7 +35,7 @@
     "@testing-library/user-event": "^14.2.0",
     "@types/jest": "^28.1.1",
     "@types/node-forge": "^1.0.2",
-    "babel-jest": "^28.1.0",
+    "babel-jest": "^28.1.1",
     "jest": "^28.1.0",
     "react-test-renderer": "^18.1.0",
     "ts-jest": "^28.0.4",
