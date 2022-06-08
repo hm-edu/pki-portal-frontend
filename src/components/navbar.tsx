@@ -5,19 +5,21 @@ import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import IconButton from "@mui/material/IconButton";
 import MenuIcon from "@mui/icons-material/Menu";
-import { useMsal, useIsAuthenticated } from "@azure/msal-react";
+import { useMsal, useIsAuthenticated, useAccount } from "@azure/msal-react";
 import { useNavigate } from "react-router-dom";
 import { SignInButton } from "./signInButton";
+import { Tooltip } from "@mui/material";
 
 export default function ButtonAppBar() {
-    const { instance } = useMsal();
+    const { instance, accounts } = useMsal();
+    const account = useAccount(accounts[0] || {});
 
     const isAuthenticated = useIsAuthenticated();
     const navigation = useNavigate();
 
-    const fragment = isAuthenticated ? [
-        <Button color="inherit" key='logout' onClick={() => { navigation("/"); instance.logoutRedirect().catch(e => console.log(e)); return; }} variant="outlined">Abmelden</Button>,
-    ] : <SignInButton />;
+    const fragment = (isAuthenticated && account) ? <> <Tooltip title={account?.username} arrow><Typography sx={{ paddingRight: "10px" }}>{account?.name}</Typography></Tooltip>
+        <Button color="inherit" key='logout' onClick={() => { navigation("/"); instance.logoutRedirect().catch(e => console.log(e)); return; }} variant="outlined">Abmelden</Button>
+    </> : <SignInButton />;
 
     const buttons = isAuthenticated ? [
         <Button key="ssl" color="inherit" onClick={() => { navigation("/ssl"); }}>SSL Zertifikate</Button>,
