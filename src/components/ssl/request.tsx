@@ -80,7 +80,7 @@ export default function SslGenerator() {
                         setProgress("Signiere CSR...\n(Dieser Schritt kann bis zu 5 Minuten dauern!)");
                         const cfg = new PKIConfig({ accessToken: response.accessToken });
                         const api = new SSLApi(cfg, `https://${Config.PKI_HOST}`);
-                        api.sslCsrPost({ csr: result.csr }, { timeout: 600 }).then((response) => {
+                        api.sslCsrPost({ csr: result.csr }).then((response) => {
                             const element = document.createElement("a");
                             element.setAttribute("href", "data:application/x-pem-file;base64," + Buffer.from(response.data).toString("base64"));
                             element.setAttribute("download", "public.pem");
