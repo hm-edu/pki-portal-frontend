@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any, @typescript-eslint/no-non-null-assertion */
 import { useAccount, useIsAuthenticated, useMsal } from "@azure/msal-react";
-import { Button, Checkbox, CircularProgress, FormControlLabel, Modal, TextField, TextFieldProps, Typography } from "@mui/material";
+import { FileDownload } from "@mui/icons-material";
+import { Alert, Button, Checkbox, CircularProgress, FormControlLabel, Modal, TextField, TextFieldProps, Typography } from "@mui/material";
 import { green } from "@mui/material/colors";
 import { Box } from "@mui/system";
 import * as forge from "node-forge";
@@ -90,7 +91,9 @@ export default function SMIMEGenerator() {
     const [loading, setLoading] = React.useState(true);
     const [success, setSuccess] = React.useState(false);
     const [warning, setWarning] = React.useState(false);
+    const [validation, setValidation] = React.useState<string | undefined>(undefined);
     const p12PasswordRef = useRef<TextFieldProps>(null);
+    const p12PasswordConfirmRef = useRef<TextFieldProps>(null);
 
     const buttonSx = {
         ...(success && {
@@ -136,7 +139,7 @@ export default function SMIMEGenerator() {
                                     document.body.appendChild(element);
                                     element.click();
                                     document.body.removeChild(element);
-                                    setDownload(<a href={"data:application/x-pkcs12;base64," + p12} download="smime.p12">Erneuter Download</a>);
+                                    setDownload(<Button variant="contained" startIcon={<FileDownload />} download="smime.p12" href={"data:application/x-pkcs12;base64," + p12}>Erneuter Download</Button>);
                                     setProgress("PKCS12 generiert");
                                     setSuccess(true);
                                     setLoading(false);
@@ -186,6 +189,14 @@ export default function SMIMEGenerator() {
         }
     }, [account, instance]);
 
+    const validate = useCallback(() => {
+        if (p12PasswordRef.current?.value != p12PasswordConfirmRef.current?.value) {
+            setValidation("Die eingegebenen Passwörter stimmen nicht überein.")
+        } else {
+            setValidation(undefined);
+        }
+    }, [p12PasswordConfirmRef, p12PasswordRef])
+
     if (!isAuthenticated) {
         return <div>Please login</div>;
     }
@@ -194,15 +205,21 @@ export default function SMIMEGenerator() {
     return <div>
         <h1>Erstellung eines neuen SMIME Zertifikats</h1>
         <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
-            <Box component="form" onSubmit={create} sx={{ display: "flex", maxWidth: "md", flexDirection: "column", alignItems: "left", alignSelf: "center" }}>
+            <Box component="form" onSubmit={create} sx={{ display: "flex", width: "md", flexDirection: "column", alignItems: "left", alignSelf: "center" }}>
                 {warning && <Typography>Sie haben derzeit 2 aktive SMIME Zertifikate. Durch Ausstellung eines neuen Zertifikats wird automatisch das älteste widerrufen. Sofern Sie dies nicht möchten widerrufen Sie bitte ein Zertifikat von Hand.</Typography>}
                 {warning && <FormControlLabel control={<Checkbox color="secondary" required />} label="Zertifikat automatisch widerrufen." />}
                 <TextField required
-                    label="Password"
+                    label="PKCS12 Password"
                     type="password"
                     inputRef={p12PasswordRef}
                     variant="standard" />
-                <Button type="submit" variant="contained" disabled={loading || success} sx={buttonSx}>Generiere Zertifikat {loading && (
+                <TextField required
+                    label="PKCS12 Passwort Bestätigung"
+                    type="password"
+                    inputRef={p12PasswordConfirmRef}
+                    variant="standard" />
+                <Alert variant="filled" hidden={validation == undefined} severity="warning">{validation}</Alert>
+                <Button type="submit" variant="contained" disabled={(loading || success) || (validation != undefined)} sx={buttonSx}>Generiere Zertifikat {loading && (
                     <CircularProgress size={24} sx={{ color: green[500], position: "absolute", top: "50%", left: "50%", marginTop: "-12px", marginLeft: "-12px" }} />
                 )}</Button>
                 {download}
