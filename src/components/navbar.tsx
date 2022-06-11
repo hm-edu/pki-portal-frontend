@@ -9,6 +9,7 @@ import { useMsal, useIsAuthenticated, useAccount } from "@azure/msal-react";
 import { useNavigate } from "react-router-dom";
 import { SignInButton } from "./signInButton";
 import { Tooltip } from "@mui/material";
+import { Link as RouterLink } from 'react-router-dom';
 
 export default function ButtonAppBar() {
     const { instance, accounts } = useMsal();
@@ -22,10 +23,10 @@ export default function ButtonAppBar() {
     </> : <SignInButton />;
 
     const buttons = isAuthenticated ? [
-        <Button key="ssl" color="inherit" href="/ssl">SSL Zertifikate</Button>,
-        <Button key="smime" color="inherit" href="/smime">SMIME Zertifikate</Button>,
-        <Button key="domains" color="inherit" href="/domains">Domainverwaltung</Button>,
-        <Button key="eab" color="inherit" href="/eab">EAB Tokens</Button>,
+        <Button key="ssl" color="inherit" component={RouterLink} to="/ssl">SSL Zertifikate</Button>,
+        <Button key="smime" color="inherit" component={RouterLink} to="/smime">SMIME Zertifikate</Button>,
+        <Button key="domains" color="inherit" component={RouterLink} to="/domains">Domainverwaltung</Button>,
+        <Button key="eab" color="inherit" component={RouterLink} to="/eab">EAB Tokens</Button>,
     ] : [];
 
     return (
@@ -35,7 +36,7 @@ export default function ButtonAppBar() {
                     <MenuIcon />
                 </IconButton>
                 <Typography component="div" sx={{ flexGrow: 1 }}>
-                    <Button color="inherit" onClick={() => { navigation("/"); }}>Home</Button>
+                    <Button color="inherit" component={RouterLink} to="/">Home</Button>
                     {buttons}
                 </Typography>
                 {fragment}
