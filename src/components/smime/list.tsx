@@ -3,7 +3,6 @@ import { useAccount, useIsAuthenticated, useMsal } from "@azure/msal-react";
 import { Box, Button } from "@mui/material";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 
 import DeleteIcon from "@mui/icons-material/Delete";
 import { PortalApisListSmimeResponseCertificateDetails, SMIMEApi } from "../../api/pki/api";
@@ -15,7 +14,7 @@ export default function SmimeCertificates() {
     const isAuthenticated = useIsAuthenticated();
     const { instance, accounts } = useMsal();
     const account = useAccount(accounts[0] || {});
-    const navigation = useNavigate();
+    
     const [pageSize, setPageSize] = React.useState<number>(15);
     const [loading, setLoading] = React.useState(true);
     const [certificates, setCertificates] = useState([] as PortalApisListSmimeResponseCertificateDetails[]);
@@ -124,6 +123,6 @@ export default function SmimeCertificates() {
             onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
             rowsPerPageOptions={[5, 15, 25, 50, 100]}
             pagination rows={certificates}></DataGrid>
-        <Button variant="contained" sx={{ mt: 1 }} onClick={() => navigation("/smime/new")}>Neues Zertifikat beziehen</Button>
+        <Button variant="contained" sx={{ mt: 1 }} href="/smime/new">Neues Zertifikat beziehen</Button>
     </Box>;
 }

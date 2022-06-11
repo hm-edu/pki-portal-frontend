@@ -101,7 +101,7 @@ export default function SMIMEGenerator() {
             "&:hover": {
                 bgcolor: green[700],
             },
-        }), mt: 3, mb: 2,
+        }), mb: 2,
     };
     const style = {
         position: "absolute",

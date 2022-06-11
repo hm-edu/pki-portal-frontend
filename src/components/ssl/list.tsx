@@ -4,7 +4,6 @@ import { Box, Button } from "@mui/material";
 import { DataGrid, GridColDef, GridRowId } from "@mui/x-data-grid";
 import React, { useEffect, useState } from "react";
 import Moment from "react-moment";
-import { useNavigate } from "react-router-dom";
 
 import { PortalApisSslCertificateDetails, SSLApi } from "../../api/pki/api";
 import { Configuration } from "../../api/pki/configuration";
@@ -15,7 +14,6 @@ export default function SslCertificates() {
     const isAuthenticated = useIsAuthenticated();
     const { instance, accounts } = useMsal();
     const account = useAccount(accounts[0] || {});
-    const navigation = useNavigate();
 
     const [pageSize, setPageSize] = React.useState<number>(15);
     const [loading, setLoading] = React.useState(true);
@@ -185,7 +183,7 @@ export default function SslCertificates() {
             pagination rows={certificates}></DataGrid>
         {selection()}
 
-        <Button variant="contained" sx={{ mt: 1 }} onClick={() => navigation("/ssl/new")}>Neues Zertifikat beziehen</Button>
+        <Button variant="contained" sx={{ mt: 1 }} href="/ssl/new">Neues Zertifikat beziehen</Button>
 
     </Box>;
 }
