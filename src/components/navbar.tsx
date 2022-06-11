@@ -9,7 +9,7 @@ import { useMsal, useIsAuthenticated, useAccount } from "@azure/msal-react";
 import { useNavigate } from "react-router-dom";
 import { SignInButton } from "./signInButton";
 import { Tooltip } from "@mui/material";
-import { Link as RouterLink } from 'react-router-dom';
+import { Link as RouterLink } from "react-router-dom";
 
 export default function ButtonAppBar() {
     const { instance, accounts } = useMsal();
