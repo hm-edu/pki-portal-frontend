@@ -205,7 +205,7 @@ export default function SMIMEGenerator() {
     return <div>
         <h1>Erstellung eines neuen SMIME Zertifikats</h1>
         <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
-            <Box component="form" onSubmit={create} sx={{ display: "flex", width: "md", flexDirection: "column", alignItems: "left", alignSelf: "center" }}>
+            <Box component="form" onSubmit={create} sx={{ display: "flex", width: "md", flexDirection: "column", alignItems: "left", gap: "10px", alignSelf: "center" }}>
                 {warning && <Typography>Sie haben derzeit 2 aktive SMIME Zertifikate. Durch Ausstellung eines neuen Zertifikats wird automatisch das älteste widerrufen. Sofern Sie dies nicht möchten widerrufen Sie bitte ein Zertifikat von Hand.</Typography>}
                 {warning && <FormControlLabel control={<Checkbox color="secondary" required />} label="Zertifikat automatisch widerrufen." />}
                 <TextField required
@@ -218,7 +218,7 @@ export default function SMIMEGenerator() {
                     type="password"
                     inputRef={p12PasswordConfirmRef}
                     variant="standard" onChange={validate} />
-                <Alert variant="filled" hidden={validation == undefined} severity="warning">{validation}</Alert>
+                {validation && <Alert variant="filled" severity="warning">{validation}</Alert>}
                 <Button type="submit" variant="contained" disabled={(loading || success) || (validation != undefined)} sx={buttonSx}>Generiere Zertifikat {loading && (
                     <CircularProgress size={24} sx={{ color: green[500], position: "absolute", top: "50%", left: "50%", marginTop: "-12px", marginLeft: "-12px" }} />
                 )}</Button>
