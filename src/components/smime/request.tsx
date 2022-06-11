@@ -191,11 +191,11 @@ export default function SMIMEGenerator() {
 
     const validate = useCallback(() => {
         if (p12PasswordRef.current?.value != p12PasswordConfirmRef.current?.value) {
-            setValidation("Die eingegebenen Passwörter stimmen nicht überein.")
+            setValidation("Die eingegebenen Passwörter stimmen nicht überein.");
         } else {
             setValidation(undefined);
         }
-    }, [p12PasswordConfirmRef, p12PasswordRef])
+    }, [p12PasswordConfirmRef, p12PasswordRef]);
 
     if (!isAuthenticated) {
         return <div>Please login</div>;
@@ -212,12 +212,12 @@ export default function SMIMEGenerator() {
                     label="PKCS12 Password"
                     type="password"
                     inputRef={p12PasswordRef}
-                    variant="standard" />
+                    variant="standard" onChange={validate} />
                 <TextField required
                     label="PKCS12 Passwort Bestätigung"
                     type="password"
                     inputRef={p12PasswordConfirmRef}
-                    variant="standard" />
+                    variant="standard" onChange={validate} />
                 <Alert variant="filled" hidden={validation == undefined} severity="warning">{validation}</Alert>
                 <Button type="submit" variant="contained" disabled={(loading || success) || (validation != undefined)} sx={buttonSx}>Generiere Zertifikat {loading && (
                     <CircularProgress size={24} sx={{ color: green[500], position: "absolute", top: "50%", left: "50%", marginTop: "-12px", marginLeft: "-12px" }} />
