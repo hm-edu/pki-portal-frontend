@@ -8,7 +8,7 @@
   "dependencies": {
     "@azure/msal-browser": "^2.25.0",
     "@azure/msal-react": "^1.4.1",
-    "@emotion/react": "^11.9.0",
+    "@emotion/react": "^11.9.3",
     "@emotion/styled": "^11.8.1",
     "@fontsource/fira-mono": "^4.5.8",
     "@fontsource/roboto": "^4.5.7",
