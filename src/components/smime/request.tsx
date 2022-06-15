@@ -189,6 +189,9 @@ export default function SMIMEGenerator() {
     }, [account, instance]);
 
     const validate = useCallback(() => {
+        if (p12PasswordRef.current?.value == "") {
+            setValidation("Bitte geben Sie ein Passwort für das PKCS12-Datei an.");
+        }
         if (p12PasswordRef.current?.value != p12PasswordConfirmRef.current?.value) {
             setValidation("Die eingegebenen Passwörter stimmen nicht überein.");
         } else {
@@ -199,22 +202,23 @@ export default function SMIMEGenerator() {
     if (!isAuthenticated) {
         return <div>Please login</div>;
     }
-
     /* eslint-disable @typescript-eslint/no-misused-promises */
     return <div>
         <h1>Erstellung eines neuen SMIME Zertifikats</h1>
-        <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
-            <Box component="form" onSubmit={create} sx={{ display: "flex", width: "md", flexDirection: "column", alignItems: "left", gap: "10px", alignSelf: "center" }}>
+        <Box sx={{ display: "flex", flexDirection: "column", width: "md", alignItems: "center" }}>
+            <Box component="form" onSubmit={create} sx={{ display: "flex", width: "100%", flexDirection: "column", alignItems: "left", gap: "10px", alignSelf: "center" }}>
                 {warning && <Typography>Sie haben derzeit 2 aktive SMIME Zertifikate. Durch Ausstellung eines neuen Zertifikats wird automatisch das älteste widerrufen. Sofern Sie dies nicht möchten widerrufen Sie bitte ein Zertifikat von Hand.</Typography>}
                 {warning && <FormControlLabel control={<Checkbox color="secondary" required />} label="Zertifikat automatisch widerrufen." />}
                 <TextField required
                     label="PKCS12 Password"
                     type="password"
                     inputRef={p12PasswordRef}
+                    fullWidth                    
                     variant="standard" onChange={validate} />
                 <TextField required
                     label="PKCS12 Passwort Bestätigung"
                     type="password"
+                    fullWidth
                     inputRef={p12PasswordConfirmRef}
                     variant="standard" onChange={validate} />
                 {validation && <Alert variant="filled" severity="warning">{validation}</Alert>}
