@@ -15,7 +15,7 @@ import Domains from "./components/domains/list";
 import SslCertificates from "./components/ssl/list";
 import SmimeGenerator from "./components/smime/request";
 import SmimeCertificates from "./components/smime/list";
-import EABTokens from "./components/eab/list";
+import { EabTokens } from "./components/eab/list";
 import SslGenerator from "./components/ssl/request";
 
 const Offset = styled("div")(({ theme }) => {
@@ -38,7 +38,7 @@ function App(props: AppProperties) {
                     <Route path='/domains' element={<Domains />} />
                     <Route path='/ssl' element={<SslCertificates />} />
                     <Route path='/ssl/new' element={<SslGenerator />} />
-                    <Route path='/eab' element={<EABTokens />} />
+                    <Route path='/eab' element={<EabTokens />} />
                     <Route path='/smime/new' element={<SmimeGenerator />} />
                     <Route path='/smime' element={<SmimeCertificates />} />
                     <Route path='/oidc-callback' element={<Login />} />
