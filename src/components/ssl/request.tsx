@@ -1,10 +1,10 @@
-/* eslint-disable @typescript-eslint/no-explicit-any, @typescript-eslint/no-non-null-assertion */
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { useAccount, useIsAuthenticated, useMsal } from "@azure/msal-react";
 import { Button, CircularProgress, List, ListItem, ListItemText, Modal, Typography } from "@mui/material";
 import { green } from "@mui/material/colors";
 import { Box } from "@mui/system";
 import { DataGrid, GridRowId } from "@mui/x-data-grid";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { FormEvent, useCallback, useEffect, useState } from "react";
 import { DomainsApi, ModelDomain } from "../../api/domains/api";
 import { Configuration } from "../../api/domains/configuration";
 import { SSLApi } from "../../api/pki/api";
@@ -14,12 +14,80 @@ import { Config } from "../../config";
 import "./request.scss";
 import { Buffer } from "buffer";
 import { FileDownload } from "@mui/icons-material";
-declare global {
-    export interface Window {
-        generateCSR: (sans: string, type: string, handler: (err: string, key: string, csr: string) => void) => void;
-    }
+import * as pkijs from "pkijs";
+
+export class CSRBundle {
+    constructor(public csr: string, public privateKey: string) { }
 }
 
+class CsrBuilder {
+
+    async build(type: "ecdsa" | "rsa", fqdns: string[]): Promise<CSRBundle> {
+        const pkcs10 = new pkijs.CertificationRequest();
+        const crypto = pkijs.getCrypto(true);
+
+        const altNames = new pkijs.GeneralNames({
+            names: fqdns.map(fqdn => new pkijs.GeneralName({
+                type: 2,
+                value: fqdn,
+            })),
+        });
+
+        pkcs10.attributes = [];
+        let algorithm: pkijs.CryptoEngineAlgorithmParams;
+        switch (type) {
+            case "ecdsa":
+                algorithm = pkijs.getAlgorithmParameters("ECDSA", "generateKey");
+                (algorithm.algorithm as EcKeyAlgorithm).namedCurve = "P-256";
+                break;
+            case "rsa":
+                algorithm = pkijs.getAlgorithmParameters("RSASSA-PKCS1-v1_5", "generateKey");
+                (algorithm.algorithm as RsaKeyAlgorithm).modulusLength = 4096;
+                break;
+        }
+
+        const { privateKey, publicKey } = await crypto.generateKey(algorithm.algorithm as Algorithm, true, algorithm.usages) as Required<CryptoKeyPair>;
+        await pkcs10.subjectPublicKeyInfo.importKey(publicKey);
+
+        pkcs10.attributes.push(new pkijs.Attribute({
+            type: "1.2.840.113549.1.9.14",
+            values: [(new pkijs.Extensions({
+                extensions: [
+                    new pkijs.Extension({
+                        extnID: "2.5.29.17",
+                        critical: false,
+                        extnValue: altNames.toSchema().toBER(false),
+                    }),
+                ],
+            })).toSchema()],
+        }));
+
+        // Signing final PKCS#10 request
+        await pkcs10.sign(privateKey, "sha-256");
+
+        return { csr: this.convertBinaryToPem(pkcs10.toSchema().toBER(false), "CERTIFICATE REQUEST"), privateKey: this.convertBinaryToPem(await crypto.exportKey("pkcs8", privateKey), "PRIVATE KEY") };
+    }
+
+    arrayBufferToBase64String(arrayBuffer: ArrayBuffer): string {
+        return Buffer.from(arrayBuffer).toString("base64");
+    }
+
+    convertBinaryToPem(binaryData: ArrayBuffer, label: string) {
+        const base64Cert = this.arrayBufferToBase64String(binaryData);
+        let pemCert = "-----BEGIN " + label + "-----\r\n";
+        let nextIndex = 0;
+        while (nextIndex < base64Cert.length) {
+            if (nextIndex + 64 <= base64Cert.length) {
+                pemCert += base64Cert.substring(nextIndex, nextIndex + 64) + "\r\n";
+            } else {
+                pemCert += base64Cert.substring(nextIndex) + "\r\n";
+            }
+            nextIndex += 64;
+        }
+        pemCert += "-----END " + label + "-----\r\n";
+        return pemCert;
+    }
+}
 export interface KeyPair {
     private: string;
     public: string | undefined;
@@ -59,23 +127,16 @@ export default function SslGenerator() {
     const [selected, setSelected] = useState<GridRowId[]>();
     const [pageSize, setPageSize] = React.useState<number>(15);
 
-    const create = useCallback((event: any) => {
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access,@typescript-eslint/no-unsafe-call
+    const create = useCallback((event: FormEvent<Element>) => {
         event.preventDefault();
         if (!loading && selected) {
             authorize(account, instance, ["api://1d9e1166-1c48-4cb2-a65e-21fa9dd384c7/Certificates", "email"], (response) => {
                 if (response) {
-                    const fqdns = JSON.stringify(domains.filter(x => selected.includes(x.id!)).sort((a, b) => a.fqdn!.localeCompare(b.fqdn!)).map((domain) => domain.fqdn!));
-                    new Promise<{ key: string; csr: string }>((resolve, reject) => {
-                        window.generateCSR(fqdns, "ecdsa", (err, key, csr) => {
-                            if (err) {
-                                reject(err);
-                            } else {
-                                resolve({ key, csr });
-                            }
-                        });
-                    }).then((result) => {
-                        setKeyPair({ private: result.key, public: undefined });
+                    const fqdns = domains.filter(x => selected.includes(x.id!)).sort((a, b) => a.fqdn!.localeCompare(b.fqdn!)).map((domain) => domain.fqdn!);
+
+                    const csr = new CsrBuilder();
+                    csr.build("ecdsa", fqdns).then((result) => {
+                        setKeyPair({ private: result.privateKey, public: undefined });
                         setProcessing(true);
                         setProgress("Signiere CSR...\n(Dieser Schritt kann bis zu 5 Minuten dauern!)");
                         const cfg = new PKIConfig({ accessToken: response.accessToken });
@@ -89,13 +150,13 @@ export default function SslGenerator() {
                             element.click();
                             document.body.removeChild(element);
 
-                            element.setAttribute("href", "data:application/x-pem-file;base64," + Buffer.from(result.key).toString("base64"));
+                            element.setAttribute("href", "data:application/x-pem-file;base64," + Buffer.from(result.privateKey).toString("base64"));
                             element.setAttribute("download", "private.pem");
                             element.style.display = "none";
                             document.body.appendChild(element);
                             element.click();
                             document.body.removeChild(element);
-                            setKeyPair({ private: result.key, public: response.data });
+                            setKeyPair({ private: result.privateKey, public: response.data });
                             setSuccess(true);
                             setLoading(false);
                             setProcessing(false);
