@@ -1,12 +1,9 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable @typescript-eslint/no-unsafe-call */
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { AccountInfo, AuthenticationResult, IPublicClientApplication } from "@azure/msal-browser";
 import { useAccount, useIsAuthenticated, useMsal } from "@azure/msal-react";
 import { Box, Button, TextField, TextFieldProps } from "@mui/material";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, { FormEvent, useCallback, useEffect, useRef, useState } from "react";
 
 import DeleteIcon from "@mui/icons-material/Delete";
 import { DomainsApi } from "../../api/domains/api";
@@ -99,7 +96,7 @@ export default function Domains() {
         }
     }, [account, instance]);
 
-    const create = useCallback((event: any) => {
+    const create = useCallback((event: FormEvent<Element>) => {
         event.preventDefault();
         if (account) {
             createDomain(newDomain.current?.value as string, account, instance, setDomains, setError);
@@ -127,20 +124,20 @@ export default function Domains() {
                 const row = (params.row as ModelDomain);
                 const buttons = [];
 
-                const approve = useCallback((event: any) => {
+                const approve = useCallback((event: FormEvent<Element>) => {
                     event.preventDefault();
                     approveDomain(row.id!, account!, instance, setDomains, setError);
                 }, [account, instance]);
-                const remove = useCallback((event: any) => {
+                const remove = useCallback((event: FormEvent<Element>) => {
                     event.preventDefault();
                     removeDomain(row.id!, account!, instance, setDomains, setError);
                 }, [account, instance]);
-                const openDelegation = useCallback((event: any) => {
+                const openDelegation = useCallback((event: FormEvent<Element>) => {
                     event.preventDefault();
                     setDelegation(true);
                     setDelegationDomain(row);
                 }, [delegation]);
-                const transfer = useCallback((event: any) => {
+                const transfer = useCallback((event: FormEvent<Element>) => {
                     event.preventDefault();
                 }, [account, instance]);
                 buttons.push(<Button color="success" disabled={!row.permissions?.can_approve} sx={{ px: 1, mx: 1 }} variant="contained" onClick={approve}>Freischalten</Button>);

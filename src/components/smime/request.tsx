@@ -5,7 +5,7 @@ import { Alert, Button, Checkbox, CircularProgress, FormControlLabel, Modal, Tex
 import { green } from "@mui/material/colors";
 import { Box } from "@mui/system";
 import * as forge from "node-forge";
-import React, { useCallback, useEffect, useRef } from "react";
+import React, { FormEvent, useCallback, useEffect, useRef } from "react";
 import { SMIMEApi } from "../../api/pki/api";
 import { Configuration } from "../../api/pki/configuration";
 import { authorize } from "../../auth/api";
@@ -15,7 +15,7 @@ export class CSRBundle {
     constructor(public csr: string, public privateKey: string) { }
 }
 
-export class CSRBuilder {
+class CSRBuilder {
 
     build(): Promise<CSRBundle> {
         return new Promise((resolve, reject) => {
@@ -114,8 +114,7 @@ export default function SMIMEGenerator() {
         boxShadow: 24,
         p: 4,
     };
-    const create = useCallback((event: any) => {
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access,@typescript-eslint/no-unsafe-call
+    const create = useCallback((event: FormEvent<Element>) => {
         event.preventDefault();
         if (!loading) {
             setSuccess(false);

@@ -1,11 +1,9 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import { AccountInfo, IPublicClientApplication, AuthenticationResult } from "@azure/msal-browser";
 import { useMsal, useAccount } from "@azure/msal-react";
 import { Modal, Typography, Button, TextField, TextFieldProps } from "@mui/material";
 import { Box } from "@mui/system";
 import { DataGrid } from "@mui/x-data-grid";
-import React, { useCallback, useRef, useState } from "react";
+import React, { FormEvent, useCallback, useRef, useState } from "react";
 import { ModelDomain, DomainsApi } from "../../api/domains/api";
 import { Configuration } from "../../api/domains/configuration";
 import { authorize } from "../../auth/api";
@@ -63,8 +61,7 @@ export default function Delegation(props: { delegationDomain: ModelDomain; onClo
     const account = useAccount(accounts[0] || {});
     const [delegation, setDelegation] = useState(true);
 
-    const delegate = useCallback((event: any) => {
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+    const delegate = useCallback((event: FormEvent<Element>) => {
         event.preventDefault();
         if (account && delegationDomain && delegationDomain.id) {
             addDelegation(delegationDomain.id, newDelegation.current?.value as string, account, instance, setDelegationDomain, () => { return; });
@@ -90,8 +87,7 @@ export default function Delegation(props: { delegationDomain: ModelDomain; onClo
                         flex: 1,
                         renderCell: (params) => {
                             const row = (params.row);
-                            const remove = useCallback((event: any) => {
-                                // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+                            const remove = useCallback((event: FormEvent<Element>) => {
                                 event.preventDefault();
                                 if (account && delegationDomain && row && delegationDomain.id && row.id) {
                                     removeDelegation(delegationDomain.id, row.id, account, instance, setDelegationDomain, () => { return; });
