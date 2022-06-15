@@ -47,6 +47,12 @@ jobs:
         uses: docker/metadata-action@v4
         with:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          tags: |
+            type=schedule
+            type=ref,event=branch
+            type=ref,event=tag
+            type=ref,event=pr
+            type=raw,value={{branch}}-{{sha}}-{{date 'X'}}
       - name: Build and push
         uses: docker/build-push-action@v3
         with:
