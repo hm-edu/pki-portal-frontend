@@ -43,7 +43,7 @@
     "babel-jest": "^28.1.1",
     "identity-obj-proxy": "^3.0.0",
     "jest": "^28.1.1",
-    "react-test-renderer": "^18.1.0",
+    "react-test-renderer": "^18.2.0",
     "ts-jest": "^28.0.5",
     "tsdx": "^0.14.1"
   },
