@@ -153,7 +153,7 @@ export default function Domains() {
 
     let delegationModal;
     if (delegationDomain) {
-        delegationModal = <Delegation delegationDomain={delegationDomain} onClose={(domain: ModelDomain) => {            
+        delegationModal = <Delegation delegationDomain={delegationDomain} onClose={(domain: ModelDomain) => {
             const updated: ModelDomain[] = [...domains];
             updated[updated.findIndex((x) => x.id == delegationDomain.id)].delegations = domain.delegations;
             setDomains(updated);
@@ -162,7 +162,13 @@ export default function Domains() {
         }} />;
     }
     return <Box sx={{ display: "flex", flexDirection: "column", height: "100%" }}><h1>Ihre Domains</h1>
-        <DataGrid columns={columns}
+        <DataGrid
+            initialState={{
+                sorting: {
+                    sortModel: [{ field: "fqdn", sort: "asc" }],
+                },
+            }}
+            columns={columns}
             pageSize={pageSize}
             loading={loading}
             error={error}
