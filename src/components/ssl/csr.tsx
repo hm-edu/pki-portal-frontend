@@ -1,4 +1,5 @@
 import * as pkijs from "pkijs";
+import { Buffer } from "buffer";
 
 export class CSRBundle {
     constructor(public csr: string, public privateKey: string) { }
