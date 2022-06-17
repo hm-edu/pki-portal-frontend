@@ -27,7 +27,7 @@ export class CsrBuilder {
                 break;
             case "rsa":
                 algorithm = pkijs.getAlgorithmParameters("RSASSA-PKCS1-v1_5", "generateKey");
-                (algorithm.algorithm as RsaKeyAlgorithm).modulusLength = 4096;
+                (algorithm.algorithm as RsaKeyAlgorithm).modulusLength = 3072;
                 break;
         }
 
