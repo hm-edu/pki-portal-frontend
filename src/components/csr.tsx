@@ -7,17 +7,9 @@ export class CSRBundle {
 
 export class CsrBuilder {
 
-    async build(type: "ecdsa" | "rsa", fqdns: string[]): Promise<CSRBundle> {
+    async build(type: "ecdsa" | "rsa", fqdns?: string[], strength?: string | number): Promise<CSRBundle> {
         const pkcs10 = new pkijs.CertificationRequest();
         const crypto = pkijs.getCrypto(true);
-
-        const altNames = new pkijs.GeneralNames({
-            names: fqdns.map(fqdn => new pkijs.GeneralName({
-                type: 2,
-                value: fqdn,
-            })),
-        });
-
         pkcs10.attributes = [];
         let algorithm: pkijs.CryptoEngineAlgorithmParams;
         switch (type) {
@@ -27,25 +19,37 @@ export class CsrBuilder {
                 break;
             case "rsa":
                 algorithm = pkijs.getAlgorithmParameters("RSASSA-PKCS1-v1_5", "generateKey");
-                (algorithm.algorithm as RsaKeyAlgorithm).modulusLength = 3072;
+                if (strength && typeof strength === "number") {
+                    (algorithm.algorithm as RsaKeyAlgorithm).modulusLength = strength;
+                } else {
+                    (algorithm.algorithm as RsaKeyAlgorithm).modulusLength = 3072;
+                }
                 break;
         }
 
         const { privateKey, publicKey } = await crypto.generateKey(algorithm.algorithm as Algorithm, true, algorithm.usages) as Required<CryptoKeyPair>;
         await pkcs10.subjectPublicKeyInfo.importKey(publicKey);
 
-        pkcs10.attributes.push(new pkijs.Attribute({
-            type: "1.2.840.113549.1.9.14",
-            values: [(new pkijs.Extensions({
-                extensions: [
-                    new pkijs.Extension({
-                        extnID: "2.5.29.17",
-                        critical: false,
-                        extnValue: altNames.toSchema().toBER(false),
-                    }),
-                ],
-            })).toSchema()],
-        }));
+        if (fqdns) {
+            const altNames = new pkijs.GeneralNames({
+                names: fqdns.map(fqdn => new pkijs.GeneralName({
+                    type: 2,
+                    value: fqdn,
+                })),
+            });
+            pkcs10.attributes.push(new pkijs.Attribute({
+                type: "1.2.840.113549.1.9.14",
+                values: [(new pkijs.Extensions({
+                    extensions: [
+                        new pkijs.Extension({
+                            extnID: "2.5.29.17",
+                            critical: false,
+                            extnValue: altNames.toSchema().toBER(false),
+                        }),
+                    ],
+                })).toSchema()],
+            }));
+        }
 
         // Signing final PKCS#10 request
         await pkcs10.sign(privateKey, "sha-256");

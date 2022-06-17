@@ -14,7 +14,7 @@ import { Config } from "../../config";
 import "./request.scss";
 import { Buffer } from "buffer";
 import { FileDownload } from "@mui/icons-material";
-import { CsrBuilder, KeyPair } from "./csr";
+import { CsrBuilder, KeyPair } from "../csr";
 
 interface SwitchProps {
     checked: boolean;

@@ -10,59 +10,11 @@ import { SMIMEApi } from "../../api/pki/api";
 import { Configuration } from "../../api/pki/configuration";
 import { authorize } from "../../auth/api";
 import { Config } from "../../config";
-
-export class CSRBundle {
-    constructor(public csr: string, public privateKey: string) { }
-}
-
-class CSRBuilder {
-
-    build(): Promise<CSRBundle> {
-        return new Promise((resolve, reject) => {
-            const KEY_SIZE = 4096;
-            forge.pki.rsa.generateKeyPair(
-                { bits: KEY_SIZE, workers: -1 },
-                (err, keys) => {
-                    if (err) {
-                        reject(err);
-                    } else {
-                        try {
-                            const csr = this.createCSR(keys);
-                            const pkcs10PEM = forge.pki.certificationRequestToPem(csr);
-                            const privateKey = forge.pki.privateKeyToPem(keys.privateKey);
-                            resolve(new CSRBundle(pkcs10PEM, privateKey));
-                        } catch (err) {
-                            reject(err);
-                        }
-                    }
-                },
-            );
-        });
-    }
-
-    createCSR(keys: forge.pki.rsa.KeyPair) {
-        const csr = forge.pki.createCertificationRequest();
-        csr.publicKey = keys.publicKey;
-        // sign certification request
-        csr.sign(keys.privateKey, forge.md.sha256.create());
-        return csr;
-    }
-}
-
-export function checkPEM(pem: string) {
-    const pattern = /^-----BEGIN [ A-Z]+-----\r?\n([A-Za-z0-9+/]{64}\r?\n)*[A-Za-z0-9+/]{0,64}={0,3}\r?\n-----END [ A-Z]+-----\r?\n$/;
-
-    if (!pem.match(pattern)) {
-        return false;
-    }
-    return true;
-}
-
-export function createP12(privateKey: string, chain: string[], password: string): Promise<string> {
+import { CsrBuilder } from "../csr";
+function createP12(privateKey: string, chain: string[], password: string): Promise<string> {
     return new Promise((resolve, reject) => {
         const encodedChain = [];
         for (const cert of chain) {
-            checkPEM(cert);
             encodedChain.push(forge.pki.certificateFromPem(cert));
         }
 
@@ -70,7 +22,7 @@ export function createP12(privateKey: string, chain: string[], password: string)
         if (!encodedPrivateKey || !encodedChain || !password) {
             reject();
         }
-        const p12Asn1 = forge.pkcs12.toPkcs12Asn1(encodedPrivateKey, encodedChain, password);
+        const p12Asn1 = forge.pkcs12.toPkcs12Asn1(encodedPrivateKey, encodedChain, password, { algorithm: "3des" });
 
         // base64-encode p12
         const p12Der = forge.asn1.toDer(p12Asn1).getBytes();
@@ -81,7 +33,7 @@ export function createP12(privateKey: string, chain: string[], password: string)
 
 export default function SMIMEGenerator() {
 
-    const csr = new CSRBuilder();
+    const csr = new CsrBuilder();
     const { instance, accounts } = useMsal();
     const isAuthenticated = useIsAuthenticated();
     const account = useAccount(accounts[0])!;
@@ -122,7 +74,7 @@ export default function SMIMEGenerator() {
             authorize(account, instance, ["api://1d9e1166-1c48-4cb2-a65e-21fa9dd384c7/Certificates", "email"], (response) => {
                 if (response) {
                     setProgress("Generiere CSR...");
-                    csr.build().then((x) => {
+                    csr.build("rsa", undefined, 4096).then((x) => {
                         setProgress("CSR generiert...");
                         if (account) {
                             const cfg = new Configuration({ accessToken: response.accessToken });
@@ -213,7 +165,7 @@ export default function SMIMEGenerator() {
                     label="PKCS12 Password"
                     type="password"
                     inputRef={p12PasswordRef}
-                    fullWidth                    
+                    fullWidth
                     variant="standard" onChange={validate} />
                 <TextField required
                     label="PKCS12 Passwort Bestätigung"
