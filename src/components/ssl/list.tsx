@@ -1,10 +1,11 @@
 import { AuthenticationResult } from "@azure/msal-browser";
 import { useAccount, useIsAuthenticated, useMsal } from "@azure/msal-react";
-import { Box, Button } from "@mui/material";
+import { Box, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, TextField, TextFieldProps } from "@mui/material";
 import { DataGrid, GridColDef, GridRowId } from "@mui/x-data-grid";
-import React, { useEffect, useState } from "react";
+import React, { FormEvent, useEffect, useRef, useState } from "react";
 import Moment from "react-moment";
 
+import DeleteIcon from "@mui/icons-material/Delete";
 import { PortalApisSslCertificateDetails, SSLApi } from "../../api/pki/api";
 import { Configuration } from "../../api/pki/configuration";
 import { authorize } from "../../auth/api";
@@ -17,11 +18,40 @@ export default function SslCertificates() {
 
     const [pageSize, setPageSize] = React.useState<number>(15);
     const [loading, setLoading] = React.useState(true);
+    const reason = useRef<TextFieldProps>(null);
+    const [open, setOpen] = React.useState(false);
     const [certificates, setCertificates] = useState([] as PortalApisSslCertificateDetails[]);
     const [selected, setSelected] = useState<GridRowId[]>();
     const [error, setError] = useState<undefined | boolean>(undefined);
 
-    useEffect(() => {
+    const handleClose = () => {
+        setSelected(undefined);
+        setOpen(false);
+    };
+
+    function revoke() {
+        const item = selected;
+        if (isAuthenticated && account && item) {
+            authorize(account, instance, ["api://1d9e1166-1c48-4cb2-a65e-21fa9dd384c7/Certificates", "email"], (response: AuthenticationResult) => {
+                if (response && item) {
+                    const cert = certificates.find((cert) => cert.serial === selected.at(0));
+                    if (cert?.serial) {
+                        const cfg = new Configuration({ accessToken: response.accessToken });
+                        const api = new SSLApi(cfg, `https://${Config.PKI_HOST}`);
+                        api.sslRevokePost({ serial: cert?.serial, reason: (reason.current?.value as string) }).then(() => {
+                            load();
+                            setSelected(undefined);
+                            setOpen(false);
+                        }).catch(() => {
+                            return;
+                        });
+                    }
+                }
+            }, () => { return; });
+        }
+    }
+
+    function load() {
         if (isAuthenticated && account) {
             authorize(account, instance, ["api://1d9e1166-1c48-4cb2-a65e-21fa9dd384c7/Certificates", "email"], (response: AuthenticationResult) => {
                 const cfg = new Configuration({ accessToken: response.accessToken });
@@ -53,6 +83,9 @@ export default function SslCertificates() {
             }, () => { setError(true); });
 
         }
+    }
+    useEffect(() => {
+        load();
     }, [account, instance]);
 
     if (!isAuthenticated) {
@@ -105,7 +138,24 @@ export default function SslCertificates() {
                 return value && new Date(mili);
             },
         },
-        { field: "subject_alternative_names", headerName: "Subject Alternative Names",flex: 1 },
+        { field: "subject_alternative_names", headerName: "Subject Alternative Names", flex: 1 }, {
+            field: "action",
+            headerName: "Aktionen",
+            sortable: false,
+            filterable: false,
+            hideable: false,
+            flex: 1,
+            renderCell: (params) => {
+
+                const row = (params.row as PortalApisSslCertificateDetails);
+
+                return <Button variant="contained" disabled={row.status == "Revoked"} onClick={(event: FormEvent<Element>) => {
+                    event.preventDefault();
+                    setSelected([params.id]);
+                    setOpen(true);
+                }} sx={{ px: 1, mx: 1 }} color="warning" key="revoke"><DeleteIcon /> Widerrufen</Button>;
+            },
+        },
     ];
 
     const selection = function () {
@@ -182,7 +232,29 @@ export default function SslCertificates() {
             rowsPerPageOptions={[5, 15, 25, 50, 100]}
             pagination rows={certificates}></DataGrid>
         {selection()}
+        <Dialog open={open} onClose={handleClose}>
+            <DialogTitle>SSL Zertifikat widerrufen</DialogTitle>
+            <DialogContent>
+                <DialogContentText>
+                    Sie möchten das SSL Zertifikat mit Seriennummer {selected && certificates.find((cert) => cert.serial === selected.at(0))?.serial}  widerrufen.
 
+                    Bitte geben Sie einen Grund ein.
+                </DialogContentText>
+                <TextField
+                    inputRef={reason}
+                    autoFocus
+                    margin="dense"
+                    id="reason"
+                    label="Grund"
+                    fullWidth
+                    variant="standard"
+                />
+            </DialogContent>
+            <DialogActions>
+                <Button variant="contained" onClick={handleClose}>Abbrechen</Button>
+                <Button variant="contained" color="warning" onClick={() => revoke()}>Widerrufen</Button>
+            </DialogActions>
+        </Dialog>
         <Button variant="contained" sx={{ mt: 1 }} href="/ssl/new">Neues Zertifikat beziehen</Button>
 
     </Box>;
