@@ -11,11 +11,22 @@ import "./list.css";
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import Moment from "react-moment";
+import AutoFixHighIcon from "@mui/icons-material/AutoFixHigh";
 import { RecommendedConfigurationsComponent } from "./configuration";
+import TableRow from "@mui/material/TableRow";
+import TableBody from "@mui/material/TableBody";
+import Table from "@mui/material/Table";
+import TableCell from "@mui/material/TableCell";
+import Typography from "@mui/material/Typography";
 
 class EabInternal extends React.Component<WithMsalProps, { pageSize: number; tokens: ModelsEAB[]; selected: GridSelectionModel; loading: boolean; recommendations: boolean }> {
     static contextType = MsalContext;
     context!: React.ContextType<typeof MsalContext>;
+    
+    tdStyle = {
+        padding: "0px",
+        height: "36px",
+    };
 
     private removeEAB(id: string) {
         const msalInstance = this.props.msalContext.instance;
@@ -121,26 +132,29 @@ class EabInternal extends React.Component<WithMsalProps, { pageSize: number; tok
                 document.getSelection()?.removeAllRanges();
                 document.getSelection()?.addRange(r);
             };
-            return <Box sx={{ px: 1, py: 1 }}>
-                <table>
-                    <tbody>
-                        <tr>
-                            <td><b>EAB-ID</b></td>
-                            <td><code onDoubleClick={selectionHandler}>{token?.id}</code></td>
-                        </tr>
-                        <tr>
-                            <td><b>HMAC-Key</b></td>
-                            <td>{token?.key_bytes && <code onDoubleClick={selectionHandler}>{token.key_bytes}</code>}</td>
-                        </tr>
-                        <tr>
-                            <td><b>ACME Account verknüpft am:</b></td>
-                            <td>{token?.bound_at && <Moment format="DD.MM.YYYY HH:mm">{token?.bound_at}</Moment>}</td>
-                        </tr>
-                        <tr>
-                            <td colSpan={2}><Button variant="contained" onClick={() => this.setState({ recommendations: true })}>Konfigurationsempfehlungen</Button></td>
-                        </tr>
-                    </tbody>
-                </table>
+            return <Box sx={{ px: 0, py: 1 }}>
+                <Typography variant="h6" component="h2">
+                    Details
+                </Typography>
+                <Table size="small" aria-label="a dense table">
+                    <TableBody>
+                        <TableRow>
+                            <TableCell sx={{ width: "200px", ...this.tdStyle }} ><b>EAB-ID</b></TableCell>
+                            <TableCell sx={this.tdStyle} ><code onDoubleClick={selectionHandler}>{token?.id}</code></TableCell>
+                        </TableRow>
+                        <TableRow>
+                            <TableCell sx={{ width: "200px", ...this.tdStyle }} ><b>HMAC-Key</b></TableCell >
+                            <TableCell sx={this.tdStyle} >{token?.key_bytes && <code onDoubleClick={selectionHandler}>{token.key_bytes}</code>}</TableCell >
+                        </TableRow>
+                        <TableRow>
+                            <TableCell sx={{ width: "200px", ...this.tdStyle }}><b>ACME Account verknüpft am:</b></TableCell >
+                            <TableCell sx={this.tdStyle} >{token?.bound_at && <Moment format="DD.MM.YYYY HH:mm">{token?.bound_at}</Moment>}</TableCell >
+                        </TableRow>
+                        <TableRow>
+                            <TableCell sx={this.tdStyle} colSpan={2}><Button sx={{ width: "100%" }} startIcon={<AutoFixHighIcon />} color="success" variant="contained" onClick={() => this.setState({ recommendations: true })}>Konfigurationsempfehlungen</Button></TableCell >
+                        </TableRow>
+                    </TableBody>
+                </Table>
                 {this.state.recommendations && <RecommendedConfigurationsComponent onClose={() => this.setState({ recommendations: false })} token={token} />}
             </Box >;
         } else {
@@ -168,7 +182,7 @@ class EabInternal extends React.Component<WithMsalProps, { pageSize: number; tok
                 rowsPerPageOptions={[5, 15, 25, 50, 100]}
                 pagination rows={this.state.tokens} />
             {this.selection()}
-            <Box component="form" sx={{ maxWidth: "300px", display: "flex", flexDirection: "column" }} onSubmit={(e: FormEvent<Element>) => {
+            <Box component="form" sx={{ maxWidth: "100%", display: "flex", flexDirection: "column" }} onSubmit={(e: FormEvent<Element>) => {
                 e.preventDefault();
                 this.createEABToken();
             }}>
