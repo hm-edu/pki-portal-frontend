@@ -54,10 +54,10 @@ export interface ModelsEAB {
     'id'?: string;
     /**
      * 
-     * @type {Array<number>}
+     * @type {string}
      * @memberof ModelsEAB
      */
-    'key_bytes'?: Array<number>;
+    'key_bytes'?: string;
 }
 
 /**

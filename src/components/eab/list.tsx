@@ -11,8 +11,9 @@ import "./list.css";
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import Moment from "react-moment";
+import { RecommendedConfigurationsComponent } from "./configuration";
 
-class EabInternal extends React.Component<WithMsalProps, { pageSize: number; tokens: ModelsEAB[]; selected: GridSelectionModel; loading: boolean }> {
+class EabInternal extends React.Component<WithMsalProps, { pageSize: number; tokens: ModelsEAB[]; selected: GridSelectionModel; loading: boolean; recommendations: boolean }> {
     static contextType = MsalContext;
     context!: React.ContextType<typeof MsalContext>;
 
@@ -99,6 +100,7 @@ class EabInternal extends React.Component<WithMsalProps, { pageSize: number; tok
             tokens: [],
             selected: [],
             loading: true,
+            recommendations: false,
         };
     }
 
@@ -134,8 +136,12 @@ class EabInternal extends React.Component<WithMsalProps, { pageSize: number; tok
                             <td><b>ACME Account verknüpft am:</b></td>
                             <td>{token?.bound_at && <Moment format="DD.MM.YYYY HH:mm">{token?.bound_at}</Moment>}</td>
                         </tr>
+                        <tr>
+                            <td colSpan={2}><Button variant="contained" onClick={() => this.setState({ recommendations: true })}>Konfigurationsempfehlungen</Button></td>
+                        </tr>
                     </tbody>
                 </table>
+                {this.state.recommendations && <RecommendedConfigurationsComponent onClose={() => this.setState({ recommendations: false })} token={token} />}
             </Box >;
         } else {
             return undefined;

@@ -145,6 +145,7 @@ export default function SslCertificates() {
             filterable: false,
             hideable: false,
             flex: 1,
+            minWidth: 270,
             renderCell: (params) => {
 
                 const row = (params.row as PortalApisSslCertificateDetails);
