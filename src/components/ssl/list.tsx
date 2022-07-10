@@ -123,7 +123,7 @@ export default function SslCertificates() {
             },
         },
         {
-            field: "not_before", headerName: "Gültig ab", type: "date", width: 150,
+            field: "not_before", headerName: "Gültig ab", type: "date", width: 100,
             valueGetter: ({ value }) => {
                 /* eslint-disable @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-member-access  */
                 const mili = (value.seconds as number) * 1000;
@@ -131,7 +131,7 @@ export default function SslCertificates() {
             },
         },
         {
-            field: "expires", headerName: "Gültig bis", type: "date", width: 150,
+            field: "expires", headerName: "Gültig bis", type: "date", width: 100,
             valueGetter: ({ value }) => {
                 /* eslint-disable @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-member-access  */
                 const mili = (value.seconds as number) * 1000;
