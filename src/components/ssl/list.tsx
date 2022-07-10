@@ -93,7 +93,7 @@ export default function SslCertificates() {
     }
     const columns: GridColDef[] = [
 
-        { field: "common_name", headerName: "Common Name", width: 280 },
+        { field: "common_name", headerName: "Common Name", width: 250 },
         { field: "serial", headerName: "Serial Number", width: 280 },
         {
             field: "status", width: 100, type: "string", headerName: "Status",
@@ -138,14 +138,17 @@ export default function SslCertificates() {
                 return value && new Date(mili);
             },
         },
-        { field: "subject_alternative_names", headerName: "Subject Alternative Names", flex: 1 }, {
+        {
+            field: "subject_alternative_names", headerName: "Subject Alternative Names", flex: 1,
+            minWidth: 250,
+        }, {
             field: "action",
             headerName: "Aktionen",
             sortable: false,
             filterable: false,
             hideable: false,
             flex: 1,
-            minWidth: 270,
+            minWidth: 250,
             renderCell: (params) => {
 
                 const row = (params.row as PortalApisSslCertificateDetails);
