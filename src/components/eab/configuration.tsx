@@ -3,7 +3,7 @@ import React from "react";
 import { ModelsEAB } from "../../api/eab/api";
 import "./list.css";
 import Box from "@mui/material/Box";
-import { Modal, Typography } from "@mui/material";
+import { Alert, Modal, Typography } from "@mui/material";
 
 export class RecommendedConfigurationsComponent extends React.Component<{ token: ModelsEAB | undefined; onClose: () => void }> {
 
@@ -58,7 +58,8 @@ export class RecommendedConfigurationsComponent extends React.Component<{ token:
                 <Typography id="modal-modal-title" variant="h6" component="h2">
                     Empfohlene Konfigurationen
                 </Typography>
-                <Box sx={{ height: 600 }}>
+                <Box sx={{ height: 600 }}>                    
+                    {this.props.token?.key_bytes == undefined && <Alert severity="warning">Account bereits registriert!</Alert>}
                     Regeistrierung acme.sh
                     <pre>
                         <code style={{ width: "100%" }}>
