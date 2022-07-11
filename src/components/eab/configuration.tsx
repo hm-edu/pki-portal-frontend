@@ -32,7 +32,7 @@ export class RecommendedConfigurationsComponent extends React.Component<{ token:
     render() {
         const id = this.props.token?.id ? this.props.token?.id : "";
         const key_bytes = this.props.token?.key_bytes ? this.props.token?.key_bytes : "";
-        
+
         const register_acme_sh = `acme.sh --register-account \\
     --server https://acme.hmtest.de/acme/acme/directory \\
     --email noreply@hmtest.de \\
@@ -58,8 +58,8 @@ export class RecommendedConfigurationsComponent extends React.Component<{ token:
                 <Typography id="modal-modal-title" variant="h6" component="h2">
                     Empfohlene Konfigurationen
                 </Typography>
-                <Box sx={{ height: 600 }}>                    
-                    {this.props.token?.key_bytes == undefined && <Alert severity="warning">Account bereits registriert!</Alert>}
+                <Box sx={{ height: 600 }}>
+                    {(this.props.token?.key_bytes == undefined || this.props.token.key_bytes == "" || this.props.token.bound_at) && <Alert severity="warning">Account bereits registriert!</Alert>}
                     Regeistrierung acme.sh
                     <pre>
                         <code style={{ width: "100%" }}>
