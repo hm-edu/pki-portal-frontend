@@ -58,7 +58,7 @@ export class RecommendedConfigurationsComponent extends React.Component<{ token:
                 <Typography id="modal-modal-title" variant="h6" component="h2">
                     Empfohlene Konfigurationen
                 </Typography>
-                <Box sx={{ height: 600 }}>
+                <Box sx={{ height: 680 }}>
                     {(this.props.token?.key_bytes == undefined || this.props.token.key_bytes == "" || this.props.token.bound_at) && <Alert severity="warning">Account bereits registriert!</Alert>}
                     Regeistrierung acme.sh
                     <pre>
