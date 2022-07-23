@@ -14,6 +14,7 @@ import { Config } from "../../config";
 import "./request.scss";
 import { Buffer } from "buffer";
 import { FileDownload } from "@mui/icons-material";
+import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import { CsrBuilder, KeyPair } from "../csr";
 
 interface SwitchProps {
@@ -146,8 +147,9 @@ export default function SslGenerator() {
         </Box>;
     } else if (keypair && keypair.public && !processing) {
         publicKeyElement = <>
-            <Button variant="contained" startIcon={<FileDownload />} download="public.pem" href={"data:application/x-pem-file;base64," + Buffer.from(keypair.public).toString("base64")}>Herunterladen</Button>
+            <Button color="inherit" variant="outlined" startIcon={<FileDownload />} download="public.pem" href={"data:application/x-pem-file;base64," + Buffer.from(keypair.public).toString("base64")}>Herunterladen</Button>
             <code style={{ overflow: "auto", overflowX: "scroll", whiteSpace: "pre-wrap" }}>{keypair.public}</code>
+            <Button color="inherit" variant="outlined" startIcon={<ContentCopyIcon />} onClick={() => { void navigator.clipboard.writeText(keypair.public!); }} >In die Zwischenablage</Button>
         </>;
     } else {
         publicKeyElement = <></>;
@@ -161,6 +163,10 @@ export default function SslGenerator() {
     ];
 
     let body: JSX.Element | undefined = undefined;
+
+    if (!isAuthenticated) {
+        return <div>Please login</div>;
+    }
 
     if (!success && !processing) {
         body = <Box sx={{ width: "100%", display: "flex", height: "100%", flexDirection: "column", alignItems: "left", alignSelf: "center" }}>
@@ -202,7 +208,7 @@ export default function SslGenerator() {
                     <Typography>ECDSA</Typography>
                 </Stack></Box>
 
-            <Button type="submit" variant="contained" disabled={loading || processing || success} sx={buttonSx}>Generiere Zertifikat {loading && (
+            <Button type="submit" color="inherit" variant="outlined" disabled={loading || processing || success} sx={buttonSx}>Generiere Zertifikat {loading && (
                 <CircularProgress size={24} sx={{ color: green[500], position: "absolute", top: "50%", left: "50%", marginTop: "-12px", marginLeft: "-12px" }} />
             )}</Button>
         </Box>;
@@ -210,8 +216,9 @@ export default function SslGenerator() {
         body = <Box sx={{ minWidth: 0, maxWidth: "100%", maxHeight: "100%", minHeight: 0, display: "flex", gap: "10px", flexDirection: "row" }}>
             <Box sx={columnStyle}>
                 <Typography variant="h6">Privater Schlüssel:</Typography>
-                <Button variant="contained" startIcon={<FileDownload />} download="private.pem" href={"data:application/x-pem-file;base64," + Buffer.from(keypair!.private).toString("base64")}>Herunterladen</Button>
+                <Button color="inherit" variant="outlined" startIcon={<FileDownload />} download="private.pem" href={"data:application/x-pem-file;base64," + Buffer.from(keypair!.private).toString("base64")}>Herunterladen</Button>
                 <code style={{ overflow: "auto", overflowX: "scroll", whiteSpace: "pre-wrap" }}>{keypair?.private}</code>
+                <Button color="inherit" variant="outlined" startIcon={<ContentCopyIcon />} onClick={() => { void navigator.clipboard.writeText(keypair!.private); }} >In die Zwischenablage</Button>
             </Box>
             <Box sx={columnStyle}>
                 <Typography variant="h6">
@@ -222,9 +229,6 @@ export default function SslGenerator() {
         </Box>;
     }
 
-    if (!isAuthenticated) {
-        return <div>Please login</div>;
-    }
     /* eslint-disable @typescript-eslint/no-misused-promises */
     return <Box sx={{ width: "100%", display: "flex", height: "100%", flexDirection: "column", alignItems: "left", alignSelf: "center" }}>
         <Box component="form" onSubmit={create} sx={{ width: "100%", display: "flex", height: "100%", flexDirection: "column", alignItems: "left", alignSelf: "center" }}>

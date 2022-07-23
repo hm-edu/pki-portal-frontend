@@ -1,6 +1,6 @@
 import { AuthenticationResult } from "@azure/msal-browser";
 import { useAccount, useIsAuthenticated, useMsal } from "@azure/msal-react";
-import { Box, Button } from "@mui/material";
+import { Box, Button, LinearProgress } from "@mui/material";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import React, { useEffect, useRef, useState } from "react";
 
@@ -119,10 +119,10 @@ export default function SmimeCertificates() {
             renderCell: (params) => {
                 const row = (params.row as PortalApisListSmimeResponseCertificateDetails);
                 if (row.status !== "revoked") {
-                    return <Button variant="contained" onClick={() => {
+                    return <Button variant="outlined" onClick={() => {
                         setSelection(row);
                         handleClickOpen();
-                    }} sx={{ px: 1, mx: 1 }} color="warning" key="revoke"><DeleteIcon /> Widerrufen</Button>;
+                    }} sx={{ px: 1, mx: 1 }} color="warning" startIcon={<DeleteIcon />} key="revoke">Widerrufen</Button>;
                 }
                 return <></>;
             },
@@ -141,7 +141,10 @@ export default function SmimeCertificates() {
                     sortModel: [{ field: "notBefore", sort: "desc" }],
                 },
             }}
-
+            components={{
+                LoadingOverlay: LinearProgress,
+            }}
+            componentsProps={{ loadingOverlay: { color: "inherit" } }}
             loading={loading}
             onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
             rowsPerPageOptions={[5, 15, 25, 50, 100]}
@@ -165,10 +168,10 @@ export default function SmimeCertificates() {
                 />
             </DialogContent>
             <DialogActions>
-                <Button variant="contained" onClick={handleClose}>Abbrechen</Button>
-                <Button variant="contained" color="warning" onClick={() => revoke()}>Widerrufen</Button>
+                <Button color="inherit" variant="outlined" onClick={handleClose}>Abbrechen</Button>
+                <Button variant="outlined" color="warning" onClick={() => revoke()}>Widerrufen</Button>
             </DialogActions>
         </Dialog>
-        <Button variant="contained" sx={{ mt: 1 }} href="/smime/new">Neues Zertifikat beziehen</Button>
+        <Button color="inherit" variant="outlined" sx={{ mt: 1 }} href="/smime/new">Neues Zertifikat beziehen</Button>
     </Box>;
 }

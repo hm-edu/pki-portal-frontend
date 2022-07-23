@@ -93,14 +93,14 @@ export default function Delegation(props: { delegationDomain: ModelDomain; onClo
                                     removeDelegation(delegationDomain.id, row.id, account, instance, setDelegationDomain, () => { return; });
                                 }
                             }, [account, instance]);
-                            return <Button color="warning" variant="contained" onClick={remove}><DeleteIcon /> Löschen</Button>;
+                            return <Button color="warning" variant="outlined" startIcon={<DeleteIcon />} onClick={remove}> Löschen</Button>;
                         },
                     },
                 ]} rows={rows} />
             </Box>
             <Box component="form" onSubmit={delegate} sx={{ maxWidth: "300px", display: "flex", flexDirection: "column" }}>
                 <TextField required label="Nutzer" inputRef={newDelegation} variant="standard" />
-                <Button type="submit" variant="contained" sx={{ mt: 1 }} >Füge Delegation hinzu</Button>
+                <Button type="submit" color="inherit" variant="outlined" sx={{ mt: 1 }} >Füge Delegation hinzu</Button>
             </Box>
 
         </Box>

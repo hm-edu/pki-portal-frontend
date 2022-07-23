@@ -9,7 +9,7 @@ import "@fontsource/roboto/700.css";
 const theme: Theme = createTheme({
     palette: {
         primary: {
-            main: "#C6C6C6",
+            main: "#FFFFFF",
         },
         secondary: {
             main: "#FC5555",
@@ -17,7 +17,9 @@ const theme: Theme = createTheme({
         error: {
             main: red.A400,
         },
-    },
+    }, shape: {
+        borderRadius: 0,
+    }, 
 });
 
 export default theme;

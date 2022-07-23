@@ -1,6 +1,6 @@
 import { AuthenticationResult } from "@azure/msal-browser";
 import { useAccount, useIsAuthenticated, useMsal } from "@azure/msal-react";
-import { Box, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, TextField, TextFieldProps } from "@mui/material";
+import { Box, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, LinearProgress, TextField, TextFieldProps } from "@mui/material";
 import { DataGrid, GridColDef, GridRowId } from "@mui/x-data-grid";
 import React, { FormEvent, useEffect, useRef, useState } from "react";
 import Moment from "react-moment";
@@ -153,11 +153,11 @@ export default function SslCertificates() {
 
                 const row = (params.row as PortalApisSslCertificateDetails);
 
-                return <Button variant="contained" disabled={row.status == "Revoked"} onClick={(event: FormEvent<Element>) => {
+                return <Button variant="outlined" disabled={row.status == "Revoked"} onClick={(event: FormEvent<Element>) => {
                     event.preventDefault();
                     setSelected([params.id]);
                     setOpen(true);
-                }} sx={{ px: 1, mx: 1 }} color="warning" key="revoke"><DeleteIcon /> Widerrufen</Button>;
+                }} sx={{ px: 1, mx: 1 }} color="warning" startIcon={<DeleteIcon />} key="revoke"> Widerrufen</Button>;
             },
         },
     ];
@@ -230,6 +230,10 @@ export default function SslCertificates() {
                 setSelected(event);
             }}
             selectionModel={selected}
+            components={{
+                LoadingOverlay: LinearProgress,
+            }}
+            componentsProps={{ loadingOverlay: { color: "inherit" } }}
             loading={loading}
             error={error}
             onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
@@ -255,11 +259,11 @@ export default function SslCertificates() {
                 />
             </DialogContent>
             <DialogActions>
-                <Button variant="contained" onClick={handleClose}>Abbrechen</Button>
-                <Button variant="contained" color="warning" onClick={() => revoke()}>Widerrufen</Button>
+                <Button variant="outlined" color="inherit" onClick={handleClose}>Abbrechen</Button>
+                <Button variant="outlined" color="warning" onClick={() => revoke()}>Widerrufen</Button>
             </DialogActions>
         </Dialog>
-        <Button variant="contained" sx={{ mt: 1 }} href="/ssl/new">Neues Zertifikat beziehen</Button>
+        <Button color="inherit" variant="outlined" sx={{ mt: 1 }} href="/ssl/new">Neues Zertifikat beziehen</Button>
 
     </Box>;
 }

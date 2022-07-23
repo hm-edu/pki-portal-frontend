@@ -18,6 +18,7 @@ import TableBody from "@mui/material/TableBody";
 import Table from "@mui/material/Table";
 import TableCell from "@mui/material/TableCell";
 import Typography from "@mui/material/Typography";
+import LinearProgress from "@mui/material/LinearProgress";
 
 class EabInternal extends React.Component<WithMsalProps, { pageSize: number; tokens: ModelsEAB[]; selected: GridSelectionModel; loading: boolean; recommendations: boolean }> {
     static contextType = MsalContext;
@@ -98,7 +99,7 @@ class EabInternal extends React.Component<WithMsalProps, { pageSize: number; tok
                     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
                     this.removeEAB(row.id!);
                 };
-                return <Button color="warning" sx={{ px: 1, mx: 1 }} variant="contained" onClick={remove}><DeleteIcon /> Löschen</Button>;
+                return <Button color="warning" sx={{ px: 1, mx: 1 }} variant="outlined" startIcon={<DeleteIcon/>} onClick={remove}>Löschen</Button>;
             },
         },
     ];
@@ -173,6 +174,10 @@ class EabInternal extends React.Component<WithMsalProps, { pageSize: number; tok
                     },
                 }}
                 pageSize={this.state.pageSize}
+                components={{
+                    LoadingOverlay: LinearProgress,
+                }}
+                componentsProps={{ loadingOverlay: { color: "inherit" } }}
                 loading={this.state.loading}
                 onSelectionModelChange={(event) => {
                     this.setState({ selected: event });

@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { AccountInfo, AuthenticationResult, IPublicClientApplication } from "@azure/msal-browser";
 import { useAccount, useIsAuthenticated, useMsal } from "@azure/msal-react";
-import { Box, Button, TextField, TextFieldProps } from "@mui/material";
+import { Box, Button, LinearProgress, TextField, TextFieldProps } from "@mui/material";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import React, { FormEvent, useCallback, useEffect, useRef, useState } from "react";
 
@@ -140,10 +140,10 @@ export default function Domains() {
                 const transfer = useCallback((event: FormEvent<Element>) => {
                     event.preventDefault();
                 }, [account, instance]);
-                buttons.push(<Button color="success" disabled={!row.permissions?.can_approve} sx={{ px: 1, mx: 1 }} variant="contained" onClick={approve}>Freischalten</Button>);
-                buttons.push(<Button color="warning" disabled={!row.permissions?.can_delete} sx={{ px: 1, mx: 1 }} variant="contained" onClick={remove}><DeleteIcon /> Löschen</Button>);
-                buttons.push(<Button color="primary" disabled={!row.permissions?.can_delegate} sx={{ px: 1, mx: 1 }} variant="contained" onClick={openDelegation}>Delegationen bearbeiten</Button>);
-                buttons.push(<Button color="primary" disabled={!row.permissions?.can_transfer} sx={{ px: 1, mx: 1 }} variant="contained" onClick={transfer}>Zuständigkeit übertragen</Button>);
+                buttons.push(<Button color="success" disabled={!row.permissions?.can_approve} sx={{ px: 1, mx: 1 }} variant="outlined" onClick={approve}>Freischalten</Button>);
+                buttons.push(<Button color="warning" disabled={!row.permissions?.can_delete} sx={{ px: 1, mx: 1 }} variant="outlined" onClick={remove}><DeleteIcon /> Löschen</Button>);
+                buttons.push(<Button color="inherit" disabled={!row.permissions?.can_delegate} sx={{ px: 1, mx: 1 }} variant="outlined" onClick={openDelegation}>Delegationen bearbeiten</Button>);
+                buttons.push(<Button color="inherit" disabled={!row.permissions?.can_transfer} sx={{ px: 1, mx: 1 }} variant="outlined" onClick={transfer}>Zuständigkeit übertragen</Button>);
 
                 return <Box sx={{ display: "flex" }}>{buttons}</Box>;
 
@@ -170,6 +170,10 @@ export default function Domains() {
             }}
             columns={columns}
             pageSize={pageSize}
+            components={{
+                LoadingOverlay: LinearProgress,
+            }}
+            componentsProps={{ loadingOverlay: { color: "inherit" } }}
             loading={loading}
             error={error}
             onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
