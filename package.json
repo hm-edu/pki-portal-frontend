@@ -7,7 +7,7 @@
   "private": true,
   "dependencies": {
     "@azure/msal-browser": "^2.28.0",
-    "@azure/msal-react": "^1.4.4",
+    "@azure/msal-react": "^1.4.5",
     "@emotion/react": "^11.10.0",
     "@emotion/styled": "^11.10.0",
     "@fontsource/fira-mono": "^4.5.8",
