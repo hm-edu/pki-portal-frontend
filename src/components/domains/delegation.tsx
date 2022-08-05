@@ -1,7 +1,6 @@
 import { AccountInfo, IPublicClientApplication, AuthenticationResult } from "@azure/msal-browser";
 import { useMsal, useAccount } from "@azure/msal-react";
-import { Modal, Typography, Button, TextField, TextFieldProps } from "@mui/material";
-import { Box } from "@mui/system";
+
 import { DataGrid } from "@mui/x-data-grid";
 import React, { FormEvent, useCallback, useRef, useState } from "react";
 import { ModelDomain, DomainsApi } from "../../api/domains/api";
@@ -9,6 +8,11 @@ import { Configuration } from "../../api/domains/configuration";
 import { authorize } from "../../auth/api";
 import { Config } from "../../config";
 import DeleteIcon from "@mui/icons-material/Delete";
+import TextField, { TextFieldProps } from "@mui/material/TextField";
+import Typography from "@mui/material/Typography";
+import Modal from "@mui/material/Modal";
+import Button from "@mui/material/Button";
+import Box from "@mui/material/Box";
 
 function removeDelegation(id: number, delegation: number, account: AccountInfo, instance: IPublicClientApplication, setDomain: (domains: ModelDomain) => void, setError: (error: boolean) => void) {
     authorize(account, instance, ["api://1d9e1166-1c48-4cb2-a65e-21fa9dd384c7/Domains", "email"], (response: AuthenticationResult) => {

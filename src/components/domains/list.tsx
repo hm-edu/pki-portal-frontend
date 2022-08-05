@@ -1,7 +1,9 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { AccountInfo, AuthenticationResult, IPublicClientApplication } from "@azure/msal-browser";
 import { useAccount, useIsAuthenticated, useMsal } from "@azure/msal-react";
-import { Box, Button, LinearProgress, TextField, TextFieldProps } from "@mui/material";
+import TextField, { TextFieldProps } from "@mui/material/TextField";
+import Button from "@mui/material/Button";
+import Box from "@mui/material/Box";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import React, { FormEvent, useCallback, useEffect, useRef, useState } from "react";
 
@@ -12,6 +14,7 @@ import { Configuration } from "../../api/domains/configuration";
 import { Config } from "../../config";
 import { authorize } from "../../auth/api";
 import Delegation from "./delegation";
+import LinearProgress from "@mui/material/LinearProgress";
 
 function removeDomain(id: number, account: AccountInfo, instance: IPublicClientApplication, setDomains: (domains: ModelDomain[]) => void, setError: (error: boolean) => void) {
     authorize(account, instance, ["api://1d9e1166-1c48-4cb2-a65e-21fa9dd384c7/Domains", "email"], (response: AuthenticationResult) => {

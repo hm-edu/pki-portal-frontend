@@ -1,16 +1,24 @@
 /* eslint-disable @typescript-eslint/no-explicit-any, @typescript-eslint/no-non-null-assertion */
 import { useAccount, useIsAuthenticated, useMsal } from "@azure/msal-react";
 import { FileDownload } from "@mui/icons-material";
-import { Alert, Button, Checkbox, CircularProgress, FormControlLabel, Modal, TextField, TextFieldProps, Typography } from "@mui/material";
+import TextField, { TextFieldProps } from "@mui/material/TextField";
+import Typography from "@mui/material/Typography";
+import Modal from "@mui/material/Modal";
+import Button from "@mui/material/Button";
+import Box from "@mui/material/Box";
 import { green } from "@mui/material/colors";
-import { Box } from "@mui/system";
 import * as forge from "node-forge";
 import React, { FormEvent, useCallback, useEffect, useRef } from "react";
 import { SMIMEApi } from "../../api/pki/api";
 import { Configuration } from "../../api/pki/configuration";
 import { authorize } from "../../auth/api";
 import { Config } from "../../config";
+import { modalTheme } from "../../theme";
 import { CsrBuilder } from "../csr";
+import CircularProgress from "@mui/material/CircularProgress";
+import Alert from "@mui/material/Alert";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import Checkbox from "@mui/material/Checkbox";
 function createP12(privateKey: string, chain: string[], password: string): Promise<string> {
     return new Promise((resolve, reject) => {
         const encodedChain = [];
@@ -54,17 +62,6 @@ export default function SMIMEGenerator() {
                 bgcolor: green[700],
             },
         }), mb: 2,
-    };
-    const style = {
-        position: "absolute",
-        top: "50%",
-        left: "50%",
-        transform: "translate(-50%, -50%)",
-        width: 400,
-        bgcolor: "background.paper",
-        border: "2px solid #000",
-        boxShadow: 24,
-        p: 4,
     };
     const create = useCallback((event: FormEvent<Element>) => {
         event.preventDefault();
@@ -159,29 +156,19 @@ export default function SMIMEGenerator() {
         <h1>Erstellung eines neuen SMIME Zertifikats</h1>
         <Box sx={{ display: "flex", flexDirection: "column", width: "md", alignItems: "center" }}>
             <Box component="form" onSubmit={create} sx={{ display: "flex", width: "100%", flexDirection: "column", alignItems: "left", gap: "10px", alignSelf: "center" }}>
-                {warning && <Typography>Sie haben derzeit 2 aktive SMIME Zertifikate. Durch Ausstellung eines neuen Zertifikats wird automatisch das älteste widerrufen. Sofern Sie dies nicht möchten widerrufen Sie bitte ein Zertifikat von Hand.</Typography>}
+                {warning && <Typography>Sie haben derzeit 2 aktive SMIME Zertifikate. Durch Ausstellung eines neuen Zertifikats wird automatisch das ältere dieser beiden Zertifikate widerrufen. Sofern Sie dies nicht möchten widerrufen Sie bitte ein Zertifikat von Hand.</Typography>}
                 {warning && <FormControlLabel control={<Checkbox color="secondary" required />} label="Zertifikat automatisch widerrufen." />}
-                <TextField required
-                    label="PKCS12 Password"
-                    type="password"
-                    inputRef={p12PasswordRef}
-                    fullWidth
-                    variant="standard" onChange={validate} />
-                <TextField required
-                    label="PKCS12 Passwort Bestätigung"
-                    type="password"
-                    fullWidth
-                    inputRef={p12PasswordConfirmRef}
-                    variant="standard" onChange={validate} />
+                <TextField required label="PKCS12 Password" type="password" inputRef={p12PasswordRef} fullWidth variant="standard" onChange={validate} />
+                <TextField required label="PKCS12 Passwort Bestätigung" type="password" fullWidth inputRef={p12PasswordConfirmRef} variant="standard" onChange={validate} />
                 {validation && <Alert variant="filled" severity="warning">{validation}</Alert>}
-                <Button type="submit" variant="contained" disabled={(loading || success) || (validation != undefined)} sx={buttonSx}>Generiere Zertifikat {loading && (
+                <Button type="submit" variant="outlined" color="inherit" disabled={(loading || success) || (validation != undefined)} sx={buttonSx}>Generiere Zertifikat {loading && (
                     <CircularProgress size={24} sx={{ color: green[500], position: "absolute", top: "50%", left: "50%", marginTop: "-12px", marginLeft: "-12px" }} />
                 )}</Button>
                 {download}
             </Box>
         </Box>
         <Modal open={loading} aria-labelledby="modal-modal-title" aria-describedby="modal-modal-description">
-            <Box sx={style}>
+            <Box sx={modalTheme}>
                 <Typography id="modal-modal-title" variant="h6" component="h2">
                     Generierung eines neuen SMIME Zertifikats
                 </Typography>

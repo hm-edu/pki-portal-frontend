@@ -2,24 +2,16 @@ import { MsalContext } from "@azure/msal-react";
 import React from "react";
 import { ModelsEAB } from "../../api/eab/api";
 import "./list.css";
+import Typography from "@mui/material/Typography";
+import Modal from "@mui/material/Modal";
 import Box from "@mui/material/Box";
-import { Alert, Modal, Typography } from "@mui/material";
+import { modalTheme } from "../../theme";
+import Alert from "@mui/material/Alert";
 
 export class RecommendedConfigurationsComponent extends React.Component<{ token: ModelsEAB | undefined; onClose: () => void }> {
 
     static contextType = MsalContext;
     context!: React.ContextType<typeof MsalContext>;
-    static style = {
-        position: "absolute",
-        top: "50%",
-        left: "50%",
-        transform: "translate(-50%, -50%)",
-        width: 1000,
-        bgcolor: "background.paper",
-        border: "2px solid #000",
-        boxShadow: 24,
-        p: 4,
-    };
 
     // eslint-disable-next-line @typescript-eslint/ban-types
     constructor(props: { token: ModelsEAB | undefined; onClose: () => void }) {
@@ -54,7 +46,7 @@ export class RecommendedConfigurationsComponent extends React.Component<{ token:
     --domain dummy.hmtest.de `;
 
         return <Modal open={this.props.token != undefined} onClose={() => { this.props.onClose(); }} aria-labelledby="modal-modal-title" aria-describedby="modal-modal-description" >
-            <Box sx={RecommendedConfigurationsComponent.style}>
+            <Box sx={modalTheme}>
                 <Typography id="modal-modal-title" variant="h6" component="h2">
                     Empfohlene Konfigurationen
                 </Typography>
@@ -62,21 +54,15 @@ export class RecommendedConfigurationsComponent extends React.Component<{ token:
                     {(this.props.token?.key_bytes == undefined || this.props.token.key_bytes == "" || this.props.token.bound_at) && <Alert severity="warning">Account bereits registriert!</Alert>}
                     Regeistrierung acme.sh
                     <pre>
-                        <code style={{ width: "100%" }}>
-                            {register_acme_sh}
-                        </code>
+                        <code style={{ width: "100%" }}> {register_acme_sh} </code>
                     </pre>
                     Zertifikatzbezug acme.sh
                     <pre>
-                        <code style={{ width: "100%" }}>
-                            {issue_acme_sh}
-                        </code>
+                        <code style={{ width: "100%" }}> {issue_acme_sh} </code>
                     </pre>
                     Zertifikatzbezug certbot
                     <pre>
-                        <code style={{ width: "100%" }}>
-                            {certbot}
-                        </code>
+                        <code style={{ width: "100%" }}> {certbot} </code>
                     </pre>
                 </Box>
             </Box>

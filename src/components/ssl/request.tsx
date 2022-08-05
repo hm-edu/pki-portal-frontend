@@ -1,8 +1,10 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { useAccount, useIsAuthenticated, useMsal } from "@azure/msal-react";
-import { Button, CircularProgress, List, ListItem, ListItemText, Modal, Stack, Switch, Typography } from "@mui/material";
+import Typography from "@mui/material/Typography";
+import Modal from "@mui/material/Modal";
+import Button from "@mui/material/Button";
+import Box from "@mui/material/Box";
 import { green } from "@mui/material/colors";
-import { Box } from "@mui/system";
 import { DataGrid, GridRowId } from "@mui/x-data-grid";
 import React, { FormEvent, useCallback, useEffect, useState, useRef } from "react";
 import { DomainsApi, ModelDomain } from "../../api/domains/api";
@@ -16,10 +18,27 @@ import { Buffer } from "buffer";
 import { FileDownload } from "@mui/icons-material";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import { CsrBuilder, KeyPair } from "../csr";
+import { modalTheme } from "../../theme";
+import Stack from "@mui/material/Stack";
+import ListItem from "@mui/material/ListItem";
+import CircularProgress from "@mui/material/CircularProgress";
+import List from "@mui/material/List";
+import ListItemText from "@mui/material/ListItemText";
+import Switch from "@mui/material/Switch";
 
 interface SwitchProps {
     checked: boolean;
 }
+const columnStyle = {
+    flex: "auto",
+    minWidth: "49%",
+    maxWidth: "100%",
+    display: "flex",
+    height: "100%",
+    gap: "5px",
+    flexDirection: "column",
+    alignContent: "flex-start",
+};
 
 export default function SslGenerator() {
 
@@ -27,56 +46,34 @@ export default function SslGenerator() {
     const isAuthenticated = useIsAuthenticated();
     const account = useAccount(accounts[0])!;
     const [progress, setProgress] = React.useState<JSX.Element>(<></>);
-
-    const [loading, setLoading] = React.useState(true);
-    const [processing, setProcessing] = React.useState(false);
-    const [success, setSuccess] = React.useState(false);
+    const [loadingDomains, setLoadingDomains] = React.useState(true);
+    const [generateKey, setGenerateKey] = React.useState(false);
+    const [generatedKey, setGeneratedKey] = React.useState(false);
     const [keypair, setKeyPair] = React.useState<KeyPair>();
     const [domains, setDomains] = React.useState<ModelDomain[]>([]);
-    const switchRef = useRef<SwitchProps>(null);
+    const [selected, setSelected] = useState<GridRowId[]>();
+    const [pageSize, setPageSize] = React.useState<number>(15);
+
     const buttonSx = {
-        ...(success && {
+        ...(generatedKey && {
             bgcolor: green[500],
             "&:hover": {
                 bgcolor: green[700],
             },
         }), mt: 3, mb: 2,
     };
-    const style = {
-        position: "absolute",
-        top: "50%",
-        left: "50%",
-        transform: "translate(-50%, -50%)",
-        width: 400,
-        bgcolor: "background.paper",
-        border: "2px solid #000",
-        boxShadow: 24,
-        p: 4,
-    };
-    const columnStyle = {
-        flex: "auto",
-        minWidth: "49%",
-        maxWidth: "100%",
-        display: "flex",
-        height: "100%",
-        gap: "5px",
-        flexDirection: "column",
-        alignContent: "flex-start",
-    };
-
-    const [selected, setSelected] = useState<GridRowId[]>();
-    const [pageSize, setPageSize] = React.useState<number>(15);
+    const switchRef = useRef<SwitchProps>(null);
 
     const create = useCallback((event: FormEvent<Element>) => {
         event.preventDefault();
-        if (!loading && selected) {
+        if (!loadingDomains && selected) {
             authorize(account, instance, ["api://1d9e1166-1c48-4cb2-a65e-21fa9dd384c7/Certificates", "email"], (response) => {
                 if (response) {
                     const fqdns = domains.filter(x => selected.includes(x.id!)).sort((a, b) => a.fqdn!.localeCompare(b.fqdn!)).map((domain) => domain.fqdn!);
                     const csr = new CsrBuilder();
                     csr.build(switchRef.current?.checked ? "ecdsa" : "rsa", fqdns).then((result) => {
                         setKeyPair({ private: result.privateKey, public: undefined });
-                        setProcessing(true);
+                        setGenerateKey(true);
                         setProgress(<><Typography>Signiere CSR...</Typography><Typography>(Dieser Schritt kann bis zu 5 Minuten dauern!)</Typography></>);
                         const cfg = new PKIConfig({ accessToken: response.accessToken });
                         const api = new SSLApi(cfg, `https://${Config.PKI_HOST}`);
@@ -96,26 +93,26 @@ export default function SslGenerator() {
                             element.click();
                             document.body.removeChild(element);
                             setKeyPair({ private: result.privateKey, public: response.data });
-                            setSuccess(true);
-                            setLoading(false);
-                            setProcessing(false);
+                            setGeneratedKey(true);
+                            setLoadingDomains(false);
+                            setGenerateKey(false);
                         }).catch((err) => {
                             console.error(err);
                             setProgress(<></>);
-                            setProcessing(false);
-                            setLoading(false);
+                            setGenerateKey(false);
+                            setLoadingDomains(false);
                         });
                     }).catch((err) => {
                         console.error(err);
                         setProgress(<></>);
-                        setProcessing(false);
-                        setLoading(false);
+                        setGenerateKey(false);
+                        setLoadingDomains(false);
                     });
                 }
 
-            }, () => { setLoading(false); });
+            }, () => { setLoadingDomains(false); });
         }
-    }, [account, instance, progress, loading, selected]);
+    }, [account, instance, progress, loadingDomains, selected]);
 
     useEffect(() => {
         setProgress(<Typography>Bitte warten...</Typography>);
@@ -126,34 +123,14 @@ export default function SslGenerator() {
                     const api = new DomainsApi(cfg, `https://${Config.DOMAIN_HOST}`);
                     api.domainsGet().then((response) => {
                         setDomains(response.data.filter(x => x.approved));
-                        setLoading(false);
+                        setLoadingDomains(false);
                     }).catch(() => {
-                        setLoading(false);
+                        setLoadingDomains(false);
                     });
                 }
-            }, () => { setLoading(false); });
+            }, () => { setLoadingDomains(false); });
         }
     }, [account, instance]);
-
-    let publicKeyElement: JSX.Element;
-    if (processing) {
-        publicKeyElement = <Box>
-            <Box sx={{ padding: 2 }}>
-                <CircularProgress size={24} sx={{ color: green[500], position: "relative", left: "50%", marginLeft: "-12px" }} />
-            </Box>
-            <Box id="modal-modal-description">
-                {progress}
-            </Box>
-        </Box>;
-    } else if (keypair && keypair.public && !processing) {
-        publicKeyElement = <>
-            <Button color="inherit" variant="outlined" startIcon={<FileDownload />} download="public.pem" href={"data:application/x-pem-file;base64," + Buffer.from(keypair.public).toString("base64")}>Herunterladen</Button>
-            <code style={{ overflow: "auto", overflowX: "scroll", whiteSpace: "pre-wrap" }}>{keypair.public}</code>
-            <Button color="inherit" variant="outlined" startIcon={<ContentCopyIcon />} onClick={() => { void navigator.clipboard.writeText(keypair.public!); }} >In die Zwischenablage</Button>
-        </>;
-    } else {
-        publicKeyElement = <></>;
-    }
 
     const columns = [
         {
@@ -168,7 +145,21 @@ export default function SslGenerator() {
         return <div>Please login</div>;
     }
 
-    if (!success && !processing) {
+    let publicKeyElement: JSX.Element = <></>;
+    if (generateKey) {
+        publicKeyElement = <Box>
+            <Box sx={{ padding: 2 }}>
+                <CircularProgress size={24} sx={{ color: green[500], position: "relative", left: "50%", marginLeft: "-12px" }} />
+            </Box>
+            <Box id="modal-modal-description">
+                {progress}
+            </Box>
+        </Box>;
+    } else if (keypair && keypair.public && !generateKey) {
+        publicKeyElement = keySegment(keypair.public, "public.pem", "Öffentlicher Schlüssel");
+    }
+
+    if (!generatedKey && !generateKey) {
         body = <Box sx={{ width: "100%", display: "flex", height: "100%", flexDirection: "column", alignItems: "left", alignSelf: "center" }}>
             <Box sx={{ width: "100%", height: "100%", display: "flex", gap: "10px", flexDirection: "row" }}>
                 <Box sx={{ flex: "auto", minWidth: "49%", maxWidth: "100%", display: "flex", height: "100%", flexDirection: "column" }}>
@@ -179,13 +170,11 @@ export default function SslGenerator() {
                                 sortModel: [{ field: "fqdn", sort: "asc" }],
                             },
                         }}
-                        pageSize={pageSize}
-                        selectionModel={selected}
+                        pageSize={pageSize} selectionModel={selected}
                         onSelectionModelChange={(event) => {
                             setSelected(event);
                         }}
-                        loading={loading}
-                        density="compact"
+                        loading={loadingDomains} density="compact"
                         onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
                         rowsPerPageOptions={[5, 15, 25, 50, 100]}
                         pagination checkboxSelection rows={domains}></DataGrid>
@@ -208,18 +197,13 @@ export default function SslGenerator() {
                     <Typography>ECDSA</Typography>
                 </Stack></Box>
 
-            <Button type="submit" color="inherit" variant="outlined" disabled={loading || processing || success} sx={buttonSx}>Generiere Zertifikat {loading && (
+            <Button type="submit" color="inherit" variant="outlined" disabled={loadingDomains || generateKey || generatedKey} sx={buttonSx}>Generiere Zertifikat {loadingDomains && (
                 <CircularProgress size={24} sx={{ color: green[500], position: "absolute", top: "50%", left: "50%", marginTop: "-12px", marginLeft: "-12px" }} />
             )}</Button>
         </Box>;
-    } else if (success || processing) {
+    } else if (generatedKey || generateKey && keypair?.private) {
         body = <Box sx={{ minWidth: 0, maxWidth: "100%", maxHeight: "100%", minHeight: 0, display: "flex", gap: "10px", flexDirection: "row" }}>
-            <Box sx={columnStyle}>
-                <Typography variant="h6">Privater Schlüssel:</Typography>
-                <Button color="inherit" variant="outlined" startIcon={<FileDownload />} download="private.pem" href={"data:application/x-pem-file;base64," + Buffer.from(keypair!.private).toString("base64")}>Herunterladen</Button>
-                <code style={{ overflow: "auto", overflowX: "scroll", whiteSpace: "pre-wrap" }}>{keypair?.private}</code>
-                <Button color="inherit" variant="outlined" startIcon={<ContentCopyIcon />} onClick={() => { void navigator.clipboard.writeText(keypair!.private); }} >In die Zwischenablage</Button>
-            </Box>
+            {keySegment(keypair!.private, "private.pem", "Privater Schlüssel")}
             <Box sx={columnStyle}>
                 <Typography variant="h6">
                     Öffentlicher Schlüssel:
@@ -235,8 +219,8 @@ export default function SslGenerator() {
             <h1>Erstellung eines neuen SSL Zertifikats</h1>
             {body}
         </Box>
-        <Modal open={loading} aria-labelledby="modal-modal-title" aria-describedby="modal-modal-description">
-            <Box sx={style}>
+        <Modal open={loadingDomains} aria-labelledby="modal-modal-title" aria-describedby="modal-modal-description">
+            <Box sx={modalTheme}>
                 <Typography id="modal-modal-title" variant="h6" component="h2">
                     Generierung eines neuen SSL Zertifikats
                 </Typography>
@@ -250,4 +234,13 @@ export default function SslGenerator() {
         </Modal>
     </Box >;
 
+}
+
+function keySegment(segment: string, fileName: string, label: string) {
+    return <Box sx={columnStyle}>
+        <Typography variant="h6">{label}</Typography>
+        <Button color="inherit" variant="outlined" startIcon={<FileDownload />} download={fileName} href={"data:application/x-pem-file;base64," + Buffer.from(segment).toString("base64")}>Herunterladen</Button>
+        <code style={{ overflow: "auto", overflowX: "scroll", whiteSpace: "pre-wrap" }}>{segment}</code>
+        <Button color="inherit" variant="outlined" startIcon={<ContentCopyIcon />} onClick={() => { void navigator.clipboard.writeText(segment); }}>In die Zwischenablage kopieren</Button>
+    </Box>;
 }

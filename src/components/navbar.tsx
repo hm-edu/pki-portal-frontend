@@ -1,15 +1,15 @@
 import * as React from "react";
 import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
-import Typography from "@mui/material/Typography";
-import Button from "@mui/material/Button";
 import IconButton from "@mui/material/IconButton";
 import MenuIcon from "@mui/icons-material/Menu";
 import { useMsal, useIsAuthenticated, useAccount } from "@azure/msal-react";
 import { useNavigate } from "react-router-dom";
 import { SignInButton } from "./signInButton";
-import { Tooltip } from "@mui/material";
+import Button from "@mui/material/Button";
 import { Link as RouterLink } from "react-router-dom";
+import Tooltip from "@mui/material/Tooltip";
+import Typography from "@mui/material/Typography";
 
 export default function ButtonAppBar() {
     const { instance, accounts } = useMsal();

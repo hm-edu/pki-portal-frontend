@@ -1,7 +1,7 @@
 import React from "react";
 import { useMsal } from "@azure/msal-react";
 import type { IPublicClientApplication } from "@azure/msal-browser";
-import { Button } from "@mui/material";
+;
 
 // Add scopes here for ID token to be used at Microsoft identity platform endpoints.
 const loginRequest = {

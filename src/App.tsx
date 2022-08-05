@@ -4,7 +4,7 @@ import React from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { MsalProvider } from "@azure/msal-react";
 import { IPublicClientApplication } from "@azure/msal-browser";
-import { Container } from "@mui/material";
+
 import { styled } from "@mui/system";
 import "@fontsource/fira-mono";
 
@@ -17,6 +17,7 @@ import SmimeGenerator from "./components/smime/request";
 import SmimeCertificates from "./components/smime/list";
 import { EabTokens } from "./components/eab/list";
 import SslGenerator from "./components/ssl/request";
+import Container from "@mui/material/Container";
 
 const Offset = styled("div")(({ theme }) => {
     // @ts-expect-error Property will allways be set.
