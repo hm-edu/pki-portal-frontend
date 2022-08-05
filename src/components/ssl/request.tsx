@@ -1,11 +1,20 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-import { useAccount, useIsAuthenticated, useMsal } from "@azure/msal-react";
 import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import { green } from "@mui/material/colors";
 import { DataGrid, GridRowId } from "@mui/x-data-grid";
+import { FileDownload } from "@mui/icons-material";
+import ContentCopyIcon from "@mui/icons-material/ContentCopy";
+import Stack from "@mui/material/Stack";
+import ListItem from "@mui/material/ListItem";
+import CircularProgress from "@mui/material/CircularProgress";
+import List from "@mui/material/List";
+import ListItemText from "@mui/material/ListItemText";
+import Switch from "@mui/material/Switch";
+
+import { useAccount, useIsAuthenticated, useMsal } from "@azure/msal-react";
 import React, { FormEvent, useCallback, useEffect, useState, useRef } from "react";
 import { DomainsApi, ModelDomain } from "../../api/domains/api";
 import { Configuration } from "../../api/domains/configuration";
@@ -15,16 +24,8 @@ import { authorize } from "../../auth/api";
 import { Config } from "../../config";
 import "./request.scss";
 import { Buffer } from "buffer";
-import { FileDownload } from "@mui/icons-material";
-import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import { CsrBuilder, KeyPair } from "../csr";
 import { modalTheme } from "../../theme";
-import Stack from "@mui/material/Stack";
-import ListItem from "@mui/material/ListItem";
-import CircularProgress from "@mui/material/CircularProgress";
-import List from "@mui/material/List";
-import ListItemText from "@mui/material/ListItemText";
-import Switch from "@mui/material/Switch";
 
 interface SwitchProps {
     checked: boolean;

@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-explicit-any, @typescript-eslint/no-non-null-assertion */
-import { useAccount, useIsAuthenticated, useMsal } from "@azure/msal-react";
 import { FileDownload } from "@mui/icons-material";
 import TextField, { TextFieldProps } from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
@@ -7,6 +6,12 @@ import Modal from "@mui/material/Modal";
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import { green } from "@mui/material/colors";
+import CircularProgress from "@mui/material/CircularProgress";
+import Alert from "@mui/material/Alert";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import Checkbox from "@mui/material/Checkbox";
+
+import { useAccount, useIsAuthenticated, useMsal } from "@azure/msal-react";
 import * as forge from "node-forge";
 import React, { FormEvent, useCallback, useEffect, useRef } from "react";
 import { SMIMEApi } from "../../api/pki/api";
@@ -15,10 +20,7 @@ import { authorize } from "../../auth/api";
 import { Config } from "../../config";
 import { modalTheme } from "../../theme";
 import { CsrBuilder } from "../csr";
-import CircularProgress from "@mui/material/CircularProgress";
-import Alert from "@mui/material/Alert";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Checkbox from "@mui/material/Checkbox";
+
 function createP12(privateKey: string, chain: string[], password: string): Promise<string> {
     return new Promise((resolve, reject) => {
         const encodedChain = [];

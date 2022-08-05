@@ -1,24 +1,25 @@
-import { AuthenticationResult } from "@azure/msal-browser";
-import { MsalContext, withMsal, WithMsalProps } from "@azure/msal-react";
-import { DataGrid, GridColDef, GridSelectionModel } from "@mui/x-data-grid";
-import React, { FormEvent } from "react";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { EABApi, ModelsEAB } from "../../api/eab/api";
-import { Configuration } from "../../api/eab/configuration";
-import { authorize } from "../../auth/api";
-import { Config } from "../../config";
-import "./list.css";
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import Moment from "react-moment";
 import AutoFixHighIcon from "@mui/icons-material/AutoFixHigh";
-import { RecommendedConfigurationsComponent } from "./configuration";
 import TableRow from "@mui/material/TableRow";
 import TableBody from "@mui/material/TableBody";
 import Table from "@mui/material/Table";
 import TableCell from "@mui/material/TableCell";
 import Typography from "@mui/material/Typography";
 import LinearProgress from "@mui/material/LinearProgress";
+
+import { AuthenticationResult } from "@azure/msal-browser";
+import { MsalContext, withMsal, WithMsalProps } from "@azure/msal-react";
+import { DataGrid, GridColDef, GridSelectionModel } from "@mui/x-data-grid";
+import React, { FormEvent } from "react";
+import { EABApi, ModelsEAB } from "../../api/eab/api";
+import { Configuration } from "../../api/eab/configuration";
+import { authorize } from "../../auth/api";
+import { Config } from "../../config";
+import "./list.scss";
+import { RecommendedConfigurationsComponent } from "./configuration";
 
 class EabInternal extends React.Component<WithMsalProps, { pageSize: number; tokens: ModelsEAB[]; selected: GridSelectionModel; loading: boolean; recommendations: boolean }> {
     static contextType = MsalContext;

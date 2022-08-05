@@ -1,22 +1,23 @@
-import { AuthenticationResult } from "@azure/msal-browser";
-import { useAccount, useIsAuthenticated, useMsal } from "@azure/msal-react";
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
-import { DataGrid, GridColDef } from "@mui/x-data-grid";
-import React, { useEffect, useRef, useState } from "react";
-
-import DeleteIcon from "@mui/icons-material/Delete";
-import { PortalApisListSmimeResponseCertificateDetails, SMIMEApi } from "../../api/pki/api";
-import { Configuration } from "../../api/pki/configuration";
-import { authorize } from "../../auth/api";
-import { Config } from "../../config";
 import TextField, { TextFieldProps } from "@mui/material/TextField";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
+import DeleteIcon from "@mui/icons-material/Delete";
 import LinearProgress from "@mui/material/LinearProgress";
+
+import { AuthenticationResult } from "@azure/msal-browser";
+import { useAccount, useIsAuthenticated, useMsal } from "@azure/msal-react";
+import { DataGrid, GridColDef } from "@mui/x-data-grid";
+import React, { useEffect, useRef, useState } from "react";
+
+import { PortalApisListSmimeResponseCertificateDetails, SMIMEApi } from "../../api/pki/api";
+import { Configuration } from "../../api/pki/configuration";
+import { authorize } from "../../auth/api";
+import { Config } from "../../config";
 
 export default function SmimeCertificates() {
     const isAuthenticated = useIsAuthenticated();
