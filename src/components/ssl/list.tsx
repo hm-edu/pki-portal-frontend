@@ -9,6 +9,7 @@ import DialogTitle from "@mui/material/DialogTitle";
 import DialogActions from "@mui/material/DialogActions";
 import LinearProgress from "@mui/material/LinearProgress";
 import DeleteIcon from "@mui/icons-material/Delete";
+import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 
 import { AuthenticationResult } from "@azure/msal-browser";
 import { useAccount, useIsAuthenticated, useMsal } from "@azure/msal-react";
@@ -25,10 +26,10 @@ export default function SslCertificates() {
     const { instance, accounts } = useMsal();
     const account = useAccount(accounts[0] || {});
 
-    const [pageSize, setPageSize] = React.useState<number>(15);
-    const [loading, setLoading] = React.useState(true);
+    const [pageSize, setPageSize] = useState<number>(15);
+    const [loading, setLoading] = useState(true);
     const reason = useRef<TextFieldProps>(null);
-    const [open, setOpen] = React.useState(false);
+    const [open, setOpen] = useState(false);
     const [certificates, setCertificates] = useState([] as PortalApisSslCertificateDetails[]);
     const [selected, setSelected] = useState<GridRowId[]>();
     const [error, setError] = useState<undefined | boolean>(undefined);
@@ -272,7 +273,7 @@ export default function SslCertificates() {
                 <Button variant="outlined" color="warning" onClick={() => revoke()}>Widerrufen</Button>
             </DialogActions>
         </Dialog>
-        <Button color="inherit" variant="outlined" sx={{ mt: 1 }} href="/ssl/new">Neues Zertifikat beziehen</Button>
+        <Button variant="contained" color="success" startIcon={<AddCircleOutlineIcon />} sx={{ mt: 1 }} href="/ssl/new">Neues Zertifikat beziehen</Button>
 
     </Box>;
 }

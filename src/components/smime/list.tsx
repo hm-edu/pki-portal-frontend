@@ -8,6 +8,7 @@ import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import DeleteIcon from "@mui/icons-material/Delete";
 import LinearProgress from "@mui/material/LinearProgress";
+import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 
 import { AuthenticationResult } from "@azure/msal-browser";
 import { useAccount, useIsAuthenticated, useMsal } from "@azure/msal-react";
@@ -23,11 +24,11 @@ export default function SmimeCertificates() {
     const isAuthenticated = useIsAuthenticated();
     const { instance, accounts } = useMsal();
     const account = useAccount(accounts[0] || {});
-    const [open, setOpen] = React.useState(false);
+    const [open, setOpen] = useState(false);
     const reason = useRef<TextFieldProps>(null);
-    const [pageSize, setPageSize] = React.useState<number>(15);
-    const [loading, setLoading] = React.useState(true);
-    const [selection, setSelection] = React.useState<PortalApisListSmimeResponseCertificateDetails | undefined>(undefined);
+    const [pageSize, setPageSize] = useState<number>(15);
+    const [loading, setLoading] = useState(true);
+    const [selection, setSelection] = useState<PortalApisListSmimeResponseCertificateDetails | undefined>(undefined);
     const [certificates, setCertificates] = useState([] as PortalApisListSmimeResponseCertificateDetails[]);
 
     function revoke() {
@@ -172,9 +173,9 @@ export default function SmimeCertificates() {
             </DialogContent>
             <DialogActions>
                 <Button color="inherit" variant="outlined" onClick={handleClose}>Abbrechen</Button>
-                <Button variant="outlined" color="warning" onClick={() => revoke()}>Widerrufen</Button>
+                <Button color="warning" variant="outlined" onClick={() => revoke()}>Widerrufen</Button>
             </DialogActions>
         </Dialog>
-        <Button color="inherit" variant="outlined" sx={{ mt: 1 }} href="/smime/new">Neues Zertifikat beziehen</Button>
+        <Button variant="contained" color="success" startIcon={<AddCircleOutlineIcon />} sx={{ mt: 1 }} href="/smime/new">Neues Zertifikat beziehen</Button>
     </Box>;
 }

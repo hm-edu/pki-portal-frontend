@@ -5,6 +5,7 @@ import "@fontsource/roboto/400.css";
 import "@fontsource/roboto/500.css";
 import "@fontsource/roboto/700.css";
 import { checkboxClasses } from "@mui/material/Checkbox";
+import { deDE } from "@mui/x-data-grid";
 
 // A custom theme for this app
 const theme: Theme = createTheme({
@@ -50,7 +51,7 @@ const theme: Theme = createTheme({
             },
         },
     },
-});
+}, deDE);
 
 export const modalTheme = {
     position: "absolute",

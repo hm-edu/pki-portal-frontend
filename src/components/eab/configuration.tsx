@@ -48,7 +48,7 @@ export class RecommendedConfigurationsComponent extends React.Component<{ token:
     --domain dummy.hmtest.de `;
 
         return <Modal open={this.props.token != undefined} onClose={() => { this.props.onClose(); }} aria-labelledby="modal-modal-title" aria-describedby="modal-modal-description" >
-            <Box sx={modalTheme}>
+            <Box sx={{ ...modalTheme, width: 1000 }}>
                 <Typography id="modal-modal-title" variant="h6" component="h2">
                     Empfohlene Konfigurationen
                 </Typography>
@@ -68,6 +68,6 @@ export class RecommendedConfigurationsComponent extends React.Component<{ token:
                     </pre>
                 </Box>
             </Box>
-        </Modal>;
+        </Modal >;
     }
 }

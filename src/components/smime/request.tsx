@@ -13,7 +13,7 @@ import Checkbox from "@mui/material/Checkbox";
 
 import { useAccount, useIsAuthenticated, useMsal } from "@azure/msal-react";
 import * as forge from "node-forge";
-import React, { FormEvent, useCallback, useEffect, useRef } from "react";
+import React, { FormEvent, useCallback, useEffect, useRef, useState } from "react";
 import { SMIMEApi } from "../../api/pki/api";
 import { Configuration } from "../../api/pki/configuration";
 import { authorize } from "../../auth/api";
@@ -47,13 +47,13 @@ export default function SMIMEGenerator() {
     const { instance, accounts } = useMsal();
     const isAuthenticated = useIsAuthenticated();
     const account = useAccount(accounts[0])!;
-    const [progress, setProgress] = React.useState<string>("");
-    const [download, setDownload] = React.useState<JSX.Element>(<></>);
+    const [progress, setProgress] = useState<string>("");
+    const [download, setDownload] = useState<JSX.Element>(<></>);
 
-    const [loading, setLoading] = React.useState(true);
-    const [success, setSuccess] = React.useState(false);
-    const [warning, setWarning] = React.useState(false);
-    const [validation, setValidation] = React.useState<string | undefined>(undefined);
+    const [loading, setLoading] = useState(true);
+    const [success, setSuccess] = useState(false);
+    const [warning, setWarning] = useState(false);
+    const [validation, setValidation] = useState<string | undefined>(undefined);
     const p12PasswordRef = useRef<TextFieldProps>(null);
     const p12PasswordConfirmRef = useRef<TextFieldProps>(null);
 

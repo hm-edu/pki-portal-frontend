@@ -9,7 +9,7 @@ import Table from "@mui/material/Table";
 import TableCell from "@mui/material/TableCell";
 import Typography from "@mui/material/Typography";
 import LinearProgress from "@mui/material/LinearProgress";
-
+import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import { AuthenticationResult } from "@azure/msal-browser";
 import { MsalContext, withMsal, WithMsalProps } from "@azure/msal-react";
 import { DataGrid, GridColDef, GridSelectionModel } from "@mui/x-data-grid";
@@ -24,7 +24,7 @@ import { RecommendedConfigurationsComponent } from "./configuration";
 class EabInternal extends React.Component<WithMsalProps, { pageSize: number; tokens: ModelsEAB[]; selected: GridSelectionModel; loading: boolean; recommendations: boolean }> {
     static contextType = MsalContext;
     context!: React.ContextType<typeof MsalContext>;
-    
+
     tdStyle = {
         padding: "0px",
         height: "36px",
@@ -100,7 +100,7 @@ class EabInternal extends React.Component<WithMsalProps, { pageSize: number; tok
                     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
                     this.removeEAB(row.id!);
                 };
-                return <Button color="warning" sx={{ px: 1, mx: 1 }} variant="outlined" startIcon={<DeleteIcon/>} onClick={remove}>Löschen</Button>;
+                return <Button color="warning" sx={{ px: 1, mx: 1 }} variant="outlined" startIcon={<DeleteIcon />} onClick={remove}>Löschen</Button>;
             },
         },
     ];
@@ -192,7 +192,7 @@ class EabInternal extends React.Component<WithMsalProps, { pageSize: number; tok
                 e.preventDefault();
                 this.createEABToken();
             }}>
-                <Button type="submit" variant="contained" sx={{ mt: 1 }} >Erstelle neuen Token</Button>
+                <Button type="submit" variant="contained" color="success" startIcon={<AddCircleOutlineIcon />} sx={{ mt: 1 }} >Erstelle neuen Token</Button>
             </Box>
         </Box>;
     }

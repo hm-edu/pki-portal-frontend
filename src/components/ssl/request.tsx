@@ -46,14 +46,14 @@ export default function SslGenerator() {
     const { instance, accounts } = useMsal();
     const isAuthenticated = useIsAuthenticated();
     const account = useAccount(accounts[0])!;
-    const [progress, setProgress] = React.useState<JSX.Element>(<></>);
-    const [loadingDomains, setLoadingDomains] = React.useState(true);
-    const [generateKey, setGenerateKey] = React.useState(false);
-    const [generatedKey, setGeneratedKey] = React.useState(false);
-    const [keypair, setKeyPair] = React.useState<KeyPair>();
-    const [domains, setDomains] = React.useState<ModelDomain[]>([]);
+    const [progress, setProgress] = useState<JSX.Element>(<></>);
+    const [loadingDomains, setLoadingDomains] = useState(true);
+    const [generateKey, setGenerateKey] = useState(false);
+    const [generatedKey, setGeneratedKey] = useState(false);
+    const [keypair, setKeyPair] = useState<KeyPair>();
+    const [domains, setDomains] = useState<ModelDomain[]>([]);
     const [selected, setSelected] = useState<GridRowId[]>();
-    const [pageSize, setPageSize] = React.useState<number>(15);
+    const [pageSize, setPageSize] = useState<number>(15);
 
     const buttonSx = {
         ...(generatedKey && {
