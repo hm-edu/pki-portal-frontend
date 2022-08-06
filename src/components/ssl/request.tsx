@@ -206,9 +206,6 @@ export default function SslGenerator() {
         body = <Box sx={{ minWidth: 0, maxWidth: "100%", maxHeight: "100%", minHeight: 0, display: "flex", gap: "10px", flexDirection: "row" }}>
             {keySegment(keypair!.private, "private.pem", "Privater Schlüssel")}
             <Box sx={columnStyle}>
-                <Typography variant="h6">
-                    Öffentlicher Schlüssel:
-                </Typography>
                 {publicKeyElement}
             </Box>
         </Box>;
