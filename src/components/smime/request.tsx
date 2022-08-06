@@ -158,7 +158,7 @@ export default function SMIMEGenerator() {
         <h1>Erstellung eines neuen SMIME Zertifikats</h1>
         <Box sx={{ display: "flex", flexDirection: "column", width: "md", alignItems: "center" }}>
             <Box component="form" onSubmit={create} sx={{ display: "flex", width: "100%", flexDirection: "column", alignItems: "left", gap: "10px", alignSelf: "center" }}>
-                {warning && <Typography>Sie haben derzeit 2 aktive SMIME Zertifikate. Durch Ausstellung eines neuen Zertifikats wird automatisch das ältere dieser beiden Zertifikate widerrufen. Sofern Sie dies nicht möchten widerrufen Sie bitte ein Zertifikat von Hand.</Typography>}
+                {warning && <Alert severity="warning">Sie haben derzeit 2 aktive SMIME Zertifikate. Durch Ausstellung eines neuen Zertifikats wird automatisch das ältere dieser beiden Zertifikate widerrufen. Sofern Sie dies nicht möchten widerrufen Sie bitte ein Zertifikat von Hand.</Alert>}
                 {warning && <FormControlLabel control={<Checkbox color="secondary" required />} label="Zertifikat automatisch widerrufen." />}
                 <TextField required label="PKCS12 Password" type="password" inputRef={p12PasswordRef} fullWidth variant="standard" onChange={validate} />
                 <TextField required label="PKCS12 Passwort Bestätigung" type="password" fullWidth inputRef={p12PasswordConfirmRef} variant="standard" onChange={validate} />

@@ -26,6 +26,7 @@ import "./request.scss";
 import { Buffer } from "buffer";
 import { CsrBuilder, KeyPair } from "../csr";
 import { modalTheme } from "../../theme";
+import Alert from "@mui/material/Alert";
 
 interface SwitchProps {
     checked: boolean;
@@ -48,6 +49,7 @@ export default function SslGenerator() {
     const account = useAccount(accounts[0])!;
     const [progress, setProgress] = useState<JSX.Element>(<></>);
     const [loadingDomains, setLoadingDomains] = useState(true);
+    const [error, setError] = useState(false);
     const [generateKey, setGenerateKey] = useState(false);
     const [generatedKey, setGeneratedKey] = useState(false);
     const [keypair, setKeyPair] = useState<KeyPair>();
@@ -97,15 +99,19 @@ export default function SslGenerator() {
                             setGeneratedKey(true);
                             setLoadingDomains(false);
                             setGenerateKey(false);
-                        }).catch((err) => {
-                            console.error(err);
-                            setProgress(<></>);
+                        }).catch(() => {
+                            setProgress(<>
+                                Es ist ein unbekannter Fehler bei der Erstellung des Zertifikats aufgetreten. Bitte versuchen Sie es erneut oder wenden sich an den IT-Support
+                            </>);
+                            setError(true);
                             setGenerateKey(false);
                             setLoadingDomains(false);
                         });
-                    }).catch((err) => {
-                        console.error(err);
-                        setProgress(<></>);
+                    }).catch(() => {
+                        setProgress(<>
+                            Es ist ein unbekannter Fehler bei der Erstellung des Zertifikats aufgetreten. Bitte versuchen Sie es erneut oder wenden sich an den IT-Support
+                        </>);
+                        setError(true);
                         setGenerateKey(false);
                         setLoadingDomains(false);
                     });
@@ -160,7 +166,7 @@ export default function SslGenerator() {
         publicKeyElement = keySegment(keypair.public, "public.pem", "Öffentlicher Schlüssel");
     }
 
-    if (!generatedKey && !generateKey) {
+    if (!generatedKey && !generateKey && !error) {
         body = <Box sx={{ width: "100%", display: "flex", height: "100%", flexDirection: "column", alignItems: "left", alignSelf: "center" }}>
             <Box sx={{ width: "100%", height: "100%", display: "flex", gap: "10px", flexDirection: "row" }}>
                 <Box sx={{ flex: "auto", minWidth: "49%", maxWidth: "100%", display: "flex", height: "100%", flexDirection: "column" }}>
@@ -201,6 +207,10 @@ export default function SslGenerator() {
             <Button type="submit" color="inherit" variant="outlined" disabled={loadingDomains || generateKey || generatedKey} sx={buttonSx}>Generiere Zertifikat {loadingDomains && (
                 <CircularProgress size={24} sx={{ color: green[500], position: "absolute", top: "50%", left: "50%", marginTop: "-12px", marginLeft: "-12px" }} />
             )}</Button>
+        </Box>;
+    } else if (error) {
+        body = <Box sx={{ minWidth: 0, maxWidth: "100%", maxHeight: "100%", minHeight: 0, display: "flex", gap: "10px", flexDirection: "row" }}>
+            <Alert severity="error">{progress}</Alert>
         </Box>;
     } else if (generatedKey || generateKey && keypair?.private) {
         body = <Box sx={{ minWidth: 0, maxWidth: "100%", maxHeight: "100%", minHeight: 0, display: "flex", gap: "10px", flexDirection: "row" }}>

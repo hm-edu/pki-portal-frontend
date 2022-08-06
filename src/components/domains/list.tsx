@@ -25,7 +25,6 @@ import { Configuration } from "../../api/domains/configuration";
 import { Config } from "../../config";
 import { authorize } from "../../auth/api";
 import Delegation from "./delegation";
-import { Typography } from "@mui/material";
 
 function removeDomain(id: number, account: AccountInfo, instance: IPublicClientApplication, setDomains: (domains: ModelDomain[]) => void, setError: (error: boolean) => void) {
     return new Promise(function (resolve, reject) {
