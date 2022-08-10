@@ -14,19 +14,18 @@ import List from "@mui/material/List";
 import ListItemText from "@mui/material/ListItemText";
 import Switch from "@mui/material/Switch";
 
-import { useAccount, useIsAuthenticated, useMsal } from "@azure/msal-react";
 import React, { FormEvent, useCallback, useEffect, useState, useRef } from "react";
 import { DomainsApi, ModelDomain } from "../../api/domains/api";
 import { Configuration } from "../../api/domains/configuration";
 import { SSLApi } from "../../api/pki/api";
 import { Configuration as PKIConfig } from "../../api/pki/configuration";
-import { authorize } from "../../auth/api";
 import { Config } from "../../config";
 import "./request.scss";
 import { Buffer } from "buffer";
 import { CsrBuilder, KeyPair } from "../csr";
 import { modalTheme } from "../../theme";
 import Alert from "@mui/material/Alert";
+import { useAuth } from "react-oidc-context";
 
 interface SwitchProps {
     checked: boolean;
@@ -44,9 +43,6 @@ const columnStyle = {
 
 export default function SslGenerator() {
 
-    const { instance, accounts } = useMsal();
-    const isAuthenticated = useIsAuthenticated();
-    const account = useAccount(accounts[0])!;
     const [progress, setProgress] = useState<JSX.Element>(<></>);
     const [loadingDomains, setLoadingDomains] = useState(true);
     const [error, setError] = useState(false);
@@ -67,77 +63,71 @@ export default function SslGenerator() {
     };
     const switchRef = useRef<SwitchProps>(null);
 
+    const auth = useAuth();
+
     const create = useCallback((event: FormEvent<Element>) => {
         event.preventDefault();
-        if (!loadingDomains && selected) {
-            authorize(account, instance, ["api://1d9e1166-1c48-4cb2-a65e-21fa9dd384c7/Certificates", "email"], (response) => {
-                if (response) {
-                    const fqdns = domains.filter(x => selected.includes(x.id!)).sort((a, b) => a.fqdn!.localeCompare(b.fqdn!)).map((domain) => domain.fqdn!);
-                    const csr = new CsrBuilder();
-                    csr.build(switchRef.current?.checked ? "ecdsa" : "rsa", fqdns).then((result) => {
-                        setKeyPair({ private: result.privateKey, public: undefined });
-                        setGenerateKey(true);
-                        setProgress(<><Typography>Signiere CSR...</Typography><Typography>(Dieser Schritt kann bis zu 5 Minuten dauern!)</Typography></>);
-                        const cfg = new PKIConfig({ accessToken: response.accessToken });
-                        const api = new SSLApi(cfg, `https://${Config.PKI_HOST}`);
-                        api.sslCsrPost({ csr: result.csr }).then((response) => {
-                            const element = document.createElement("a");
-                            element.setAttribute("href", "data:application/x-pem-file;base64," + Buffer.from(response.data).toString("base64"));
-                            element.setAttribute("download", "public.pem");
-                            element.style.display = "none";
-                            document.body.appendChild(element);
-                            element.click();
-                            document.body.removeChild(element);
+        if (!loadingDomains && selected && auth.isAuthenticated && auth.user?.access_token) {            
+            const fqdns = domains.filter(x => selected.includes(x.id!)).sort((a, b) => a.fqdn!.localeCompare(b.fqdn!)).map((domain) => domain.fqdn!);
+            const csr = new CsrBuilder();
+            csr.build(switchRef.current?.checked ? "ecdsa" : "rsa", fqdns).then((result) => {
+                setKeyPair({ private: result.privateKey, public: undefined });
+                setGenerateKey(true);
+                setProgress(<><Typography>Signiere CSR...</Typography><Typography>(Dieser Schritt kann bis zu 5 Minuten dauern!)</Typography></>);
+                const cfg = new PKIConfig({ accessToken: auth.user!.access_token });
+                const api = new SSLApi(cfg, `${Config.PKI_HOST}`);
+                api.sslCsrPost({ csr: result.csr }).then((response) => {
+                    const element = document.createElement("a");
+                    element.setAttribute("href", "data:application/x-pem-file;base64," + Buffer.from(response.data).toString("base64"));
+                    element.setAttribute("download", "public.pem");
+                    element.style.display = "none";
+                    document.body.appendChild(element);
+                    element.click();
+                    document.body.removeChild(element);
 
-                            element.setAttribute("href", "data:application/x-pem-file;base64," + Buffer.from(result.privateKey).toString("base64"));
-                            element.setAttribute("download", "private.pem");
-                            element.style.display = "none";
-                            document.body.appendChild(element);
-                            element.click();
-                            document.body.removeChild(element);
-                            setKeyPair({ private: result.privateKey, public: response.data });
-                            setGeneratedKey(true);
-                            setLoadingDomains(false);
-                            setGenerateKey(false);
-                        }).catch(() => {
-                            setProgress(<>
-                                Es ist ein unbekannter Fehler bei der Erstellung des Zertifikats aufgetreten. Bitte versuchen Sie es erneut oder wenden sich an den IT-Support
-                            </>);
-                            setError(true);
-                            setGenerateKey(false);
-                            setLoadingDomains(false);
-                        });
-                    }).catch(() => {
-                        setProgress(<>
-                            Es ist ein unbekannter Fehler bei der Erstellung des Zertifikats aufgetreten. Bitte versuchen Sie es erneut oder wenden sich an den IT-Support
-                        </>);
-                        setError(true);
-                        setGenerateKey(false);
-                        setLoadingDomains(false);
-                    });
-                }
-
-            }, () => { setLoadingDomains(false); });
+                    element.setAttribute("href", "data:application/x-pem-file;base64," + Buffer.from(result.privateKey).toString("base64"));
+                    element.setAttribute("download", "private.pem");
+                    element.style.display = "none";
+                    document.body.appendChild(element);
+                    element.click();
+                    document.body.removeChild(element);
+                    setKeyPair({ private: result.privateKey, public: response.data });
+                    setGeneratedKey(true);
+                    setLoadingDomains(false);
+                    setGenerateKey(false);
+                }).catch(() => {
+                    setProgress(<>
+                        Es ist ein unbekannter Fehler bei der Erstellung des Zertifikats aufgetreten. Bitte versuchen Sie es erneut oder wenden sich an den IT-Support
+                    </>);
+                    setError(true);
+                    setGenerateKey(false);
+                    setLoadingDomains(false);
+                });
+            }).catch(() => {
+                setProgress(<>
+                    Es ist ein unbekannter Fehler bei der Erstellung des Zertifikats aufgetreten. Bitte versuchen Sie es erneut oder wenden sich an den IT-Support
+                </>);
+                setError(true);
+                setGenerateKey(false);
+                setLoadingDomains(false);
+            });
         }
-    }, [account, instance, progress, loadingDomains, selected]);
+
+    }, [auth]);
 
     useEffect(() => {
         setProgress(<Typography>Bitte warten...</Typography>);
-        if (account) {
-            authorize(account, instance, ["api://1d9e1166-1c48-4cb2-a65e-21fa9dd384c7/Domains", "email"], (response) => {
-                if (response) {
-                    const cfg = new Configuration({ accessToken: response.accessToken });
-                    const api = new DomainsApi(cfg, `https://${Config.DOMAIN_HOST}`);
-                    api.domainsGet().then((response) => {
-                        setDomains(response.data.filter(x => x.approved));
-                        setLoadingDomains(false);
-                    }).catch(() => {
-                        setLoadingDomains(false);
-                    });
-                }
-            }, () => { setLoadingDomains(false); });
+        if (auth.isAuthenticated && auth.user?.access_token) {           
+            const cfg = new Configuration({ accessToken: auth.user.access_token });
+            const api = new DomainsApi(cfg, `${Config.DOMAIN_HOST}`);
+            api.domainsGet().then((response) => {
+                setDomains(response.data.filter(x => x.approved));
+                setLoadingDomains(false);
+            }).catch(() => {
+                setLoadingDomains(false);
+            });
         }
-    }, [account, instance]);
+    }, [auth]);
 
     const columns = [
         {
@@ -148,7 +138,7 @@ export default function SslGenerator() {
 
     let body: JSX.Element | undefined = undefined;
 
-    if (!isAuthenticated) {
+    if (!auth.isAuthenticated) {
         return <div>Please login</div>;
     }
 

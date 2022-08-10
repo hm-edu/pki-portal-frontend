@@ -7,23 +7,20 @@ import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
 
 import * as React from "react";
-import { useMsal, useIsAuthenticated, useAccount } from "@azure/msal-react";
 import { useNavigate } from "react-router-dom";
 import { SignInButton } from "./signInButton";
 import { Link as RouterLink } from "react-router-dom";
+import { useAuth } from "react-oidc-context";
 
 export default function ButtonAppBar() {
-    const { instance, accounts } = useMsal();
-    const account = useAccount(accounts[0] || {});
-
-    const isAuthenticated = useIsAuthenticated();
+    const auth = useAuth();
     const navigation = useNavigate();
 
-    const fragment = (isAuthenticated && account) ? <> <Tooltip title={account?.username} arrow><Typography sx={{ paddingRight: "10px" }}>{account?.name}</Typography></Tooltip>
-        <Button color="inherit" key='logout' onClick={() => { navigation("/"); instance.logoutRedirect().catch(e => console.log(e)); return; }} variant="outlined">Abmelden</Button>
+    const fragment = (auth.isAuthenticated) ? <> <Tooltip title={auth.user?.profile["sub"] as string} arrow><Typography sx={{ paddingRight: "10px" }}>{auth.user?.profile["name"] as string}</Typography></Tooltip>
+        <Button color="inherit" key='logout' onClick={() => { navigation("/"); auth.signoutRedirect().then(() => auth.removeUser()).catch((e) => console.log(e)); }} variant="outlined">Abmelden</Button>
     </> : <SignInButton />;
 
-    const buttons = isAuthenticated ? [
+    const buttons = auth.isAuthenticated ? [
         <Button key="ssl" color="inherit" component={RouterLink} to="/ssl">SSL Zertifikate</Button>,
         <Button key="smime" color="inherit" component={RouterLink} to="/smime">SMIME Zertifikate</Button>,
         <Button key="domains" color="inherit" component={RouterLink} to="/domains">Domainverwaltung</Button>,

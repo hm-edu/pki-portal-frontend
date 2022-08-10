@@ -11,15 +11,14 @@ import Alert from "@mui/material/Alert";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
 
-import { useAccount, useIsAuthenticated, useMsal } from "@azure/msal-react";
 import * as forge from "node-forge";
 import React, { FormEvent, useCallback, useEffect, useRef, useState } from "react";
 import { SMIMEApi } from "../../api/pki/api";
 import { Configuration } from "../../api/pki/configuration";
-import { authorize } from "../../auth/api";
 import { Config } from "../../config";
 import { modalTheme } from "../../theme";
 import { CsrBuilder } from "../csr";
+import { useAuth } from "react-oidc-context";
 
 function createP12(privateKey: string, chain: string[], password: string): Promise<string> {
     return new Promise((resolve, reject) => {
@@ -44,9 +43,7 @@ function createP12(privateKey: string, chain: string[], password: string): Promi
 export default function SMIMEGenerator() {
 
     const csr = new CsrBuilder();
-    const { instance, accounts } = useMsal();
-    const isAuthenticated = useIsAuthenticated();
-    const account = useAccount(accounts[0])!;
+    const auth = useAuth();
     const [progress, setProgress] = useState<string>("");
     const [download, setDownload] = useState<JSX.Element>(<></>);
 
@@ -70,74 +67,66 @@ export default function SMIMEGenerator() {
         if (!loading) {
             setSuccess(false);
             setLoading(true);
-            authorize(account, instance, ["api://1d9e1166-1c48-4cb2-a65e-21fa9dd384c7/Certificates", "email"], (response) => {
-                if (response) {
-                    setProgress("Generiere CSR...");
-                    csr.build("rsa", undefined, 4096).then((x) => {
-                        setProgress("CSR generiert...");
-                        if (account) {
-                            const cfg = new Configuration({ accessToken: response.accessToken });
-                            const api = new SMIMEApi(cfg, `https://${Config.PKI_HOST}`);
-                            setProgress("Signiere CSR...");
-                            return api.smimeCsrPost({ csr: x.csr }).then((response) => {
-                                setProgress("Generiere PKCS12...");
-                                return createP12(x.privateKey, [response.data], p12PasswordRef.current?.value as string).then((p12) => {
-                                    const element = document.createElement("a");
-                                    element.setAttribute("href", "data:application/x-pkcs12;base64," + p12);
-                                    element.setAttribute("download", "smime.p12");
-                                    element.style.display = "none";
-                                    document.body.appendChild(element);
-                                    element.click();
-                                    document.body.removeChild(element);
-                                    setDownload(<Button variant="contained" startIcon={<FileDownload />} download="smime.p12" href={"data:application/x-pkcs12;base64," + p12}>Erneuter Download</Button>);
-                                    setProgress("PKCS12 generiert");
-                                    setSuccess(true);
-                                    setLoading(false);
-                                }).catch((err) => {
-                                    console.log(err);
-                                });
-                            }).catch((error) => {
-                                console.error(error);
-                            });
-
-                        }
-                        return Promise.resolve();
+            setProgress("Generiere CSR...");
+            csr.build("rsa", undefined, 3072).then((x) => {
+                setProgress("CSR generiert...");
+                if (auth.isAuthenticated) {
+                    const cfg = new Configuration({ accessToken: auth.user?.access_token });
+                    const api = new SMIMEApi(cfg, `${Config.PKI_HOST}`);
+                    setProgress("Signiere CSR...");
+                    return api.smimeCsrPost({ csr: x.csr }).then((response) => {
+                        setProgress("Generiere PKCS12...");
+                        return createP12(x.privateKey, [response.data], p12PasswordRef.current?.value as string).then((p12) => {
+                            const element = document.createElement("a");
+                            element.setAttribute("href", "data:application/x-pkcs12;base64," + p12);
+                            element.setAttribute("download", "smime.p12");
+                            element.style.display = "none";
+                            document.body.appendChild(element);
+                            element.click();
+                            document.body.removeChild(element);
+                            setDownload(<Button variant="contained" startIcon={<FileDownload />} download="smime.p12" href={"data:application/x-pkcs12;base64," + p12}>Erneuter Download</Button>);
+                            setProgress("PKCS12 generiert");
+                            setSuccess(true);
+                            setLoading(false);
+                        }).catch((err) => {
+                            console.log(err);
+                        });
                     }).catch((error) => {
-                        console.log(error);
-                    });
-                }
-            }, () => { setLoading(false); });
-        }
-    }, [account, instance, progress, loading]);
-    useEffect(() => {
-        setProgress("Bitte warten...");
-        if (account) {
-            authorize(account, instance, ["api://1d9e1166-1c48-4cb2-a65e-21fa9dd384c7/Certificates", "email"], (response) => {
-                if (response) {
-                    const cfg = new Configuration({ accessToken: response.accessToken });
-                    const api = new SMIMEApi(cfg, `https://${Config.PKI_HOST}`);
-                    api.smimeGet().then((response) => {
-                        if (response) {
-                            let active = 0;
-                            for (const cert of response.data) {
-                                if (cert.status != "revoked") {
-                                    active++;
-                                }
-                            }
-                            if (active >= 2) {
-                                setWarning(true);
-                            }
-                        }
-
-                        setLoading(false);
-                    }).catch((error) => {
-                        setLoading(false);
                         console.error(error);
                     });
+
                 }
-            }, () => { setLoading(false); });
+                return Promise.resolve();
+            }).catch((error) => {
+                console.log(error);
+            });
         }
-    }, [account, instance]);
+    }, [auth, progress, loading]);
+    useEffect(() => {
+        setProgress("Bitte warten...");
+
+        const cfg = new Configuration({ accessToken: auth.user?.access_token });
+        const api = new SMIMEApi(cfg, `${Config.PKI_HOST}`);
+        api.smimeGet().then((response) => {
+            if (response) {
+                let active = 0;
+                for (const cert of response.data) {
+                    if (cert.status != "revoked") {
+                        active++;
+                    }
+                }
+                if (active >= 2) {
+                    setWarning(true);
+                }
+            }
+
+            setLoading(false);
+        }).catch((error) => {
+            setLoading(false);
+            console.error(error);
+        });
+
+    }, [auth]);
 
     const validate = useCallback(() => {
         if (p12PasswordRef.current?.value == "") {
@@ -150,7 +139,7 @@ export default function SMIMEGenerator() {
         }
     }, [p12PasswordConfirmRef, p12PasswordRef]);
 
-    if (!isAuthenticated) {
+    if (!auth.isAuthenticated) {
         return <div>Please login</div>;
     }
     /* eslint-disable @typescript-eslint/no-misused-promises */

@@ -1,35 +1,37 @@
 import "./App.scss";
-
 import React from "react";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
-import { MsalProvider } from "@azure/msal-react";
-import { IPublicClientApplication } from "@azure/msal-browser";
-
-import { styled } from "@mui/system";
-import "@fontsource/fira-mono";
 
 import ButtonAppBar from "./components/navbar";
 import Login from "./components/login";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Home from "./components/home";
+import { Container } from "@mui/material";
+import "@fontsource/fira-mono";
+import { styled } from "@mui/system";
+import { AuthProvider, AuthProviderProps } from "react-oidc-context";
 import Domains from "./components/domains/list";
 import SslCertificates from "./components/ssl/list";
 import SmimeGenerator from "./components/smime/request";
 import SmimeCertificates from "./components/smime/list";
 import { EabTokens } from "./components/eab/list";
 import SslGenerator from "./components/ssl/request";
-import Container from "@mui/material/Container";
+import { Config } from "./config";
 
 const Offset = styled("div")(({ theme }) => {
     // @ts-expect-error Property will allways be set.
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return theme.mixins.toolbar;
 });
-interface AppProperties {
-    instance: IPublicClientApplication;
-}
-function App(props: AppProperties) {
-    const instance = props.instance;
-    return <MsalProvider instance={instance}>
+
+function App() {
+    const oidcConfig: AuthProviderProps = {
+        authority: Config.AUTHORITY,
+        client_id: Config.CLIENT_ID,
+        redirect_uri: Config.HOST + "/oidc-callback",
+        scope: "openid profile Certificates email EAB Domains",
+        loadUserInfo: true,
+    };
+    return <AuthProvider {...oidcConfig}>
         <BrowserRouter>
             <ButtonAppBar />
             <Offset />
@@ -46,6 +48,6 @@ function App(props: AppProperties) {
                 </Routes>
             </Container>
         </BrowserRouter>
-    </MsalProvider>;
+    </AuthProvider>;
 }
 export default App;

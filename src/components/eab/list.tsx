@@ -10,20 +10,18 @@ import TableCell from "@mui/material/TableCell";
 import Typography from "@mui/material/Typography";
 import LinearProgress from "@mui/material/LinearProgress";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
-import { AuthenticationResult } from "@azure/msal-browser";
-import { MsalContext, withMsal, WithMsalProps } from "@azure/msal-react";
 import { DataGrid, GridColDef, GridSelectionModel } from "@mui/x-data-grid";
 import React, { FormEvent } from "react";
 import { EABApi, ModelsEAB } from "../../api/eab/api";
 import { Configuration } from "../../api/eab/configuration";
-import { authorize } from "../../auth/api";
 import { Config } from "../../config";
 import "./list.scss";
 import { RecommendedConfigurationsComponent } from "./configuration";
+import { AuthContext, AuthContextProps, withAuth } from "react-oidc-context";
 
-class EabInternal extends React.Component<WithMsalProps, { pageSize: number; tokens: ModelsEAB[]; selected: GridSelectionModel; loading: boolean; recommendations: boolean }> {
-    static contextType = MsalContext;
-    context!: React.ContextType<typeof MsalContext>;
+class EabInternal extends React.Component<AuthContextProps, { pageSize: number; tokens: ModelsEAB[]; selected: GridSelectionModel; loading: boolean; recommendations: boolean }> {
+    static contextType = AuthContext;
+    context!: React.ContextType<typeof AuthContext>;
 
     tdStyle = {
         padding: "0px",
@@ -31,52 +29,35 @@ class EabInternal extends React.Component<WithMsalProps, { pageSize: number; tok
     };
 
     private removeEAB(id: string) {
-        const msalInstance = this.props.msalContext.instance;
-        const account = this.props.msalContext.accounts[0];
-        authorize(account, msalInstance, ["api://1d9e1166-1c48-4cb2-a65e-21fa9dd384c7/EAB", "email"], (response: AuthenticationResult) => {
-            if (response) {
-                const cfg = new Configuration({ accessToken: response.accessToken });
-                const api = new EABApi(cfg, `https://${Config.EAB_HOST}`);
-                api.eabIdDelete(id).then(() => {
-                    this.loadTokens();
-                }).catch((error) => {
-                    console.log(error);
-                });
-            }
-        }, () => { return; });
+        const cfg = new Configuration({ accessToken: this.props.user?.access_token });
+        const api = new EABApi(cfg, `${Config.EAB_HOST}`);
+        api.eabIdDelete(id).then(() => {
+            this.loadTokens();
+        }).catch((error) => {
+            console.log(error);
+        });
     }
 
     private loadTokens() {
-        const msalInstance = this.props.msalContext.instance;
-        const account = this.props.msalContext.accounts[0];
-        authorize(account, msalInstance, ["api://1d9e1166-1c48-4cb2-a65e-21fa9dd384c7/EAB", "email"], (response: AuthenticationResult) => {
-            if (response) {
-                const cfg = new Configuration({ accessToken: response.accessToken });
-                const api = new EABApi(cfg, `https://${Config.EAB_HOST}`);
-                api.eabGet().then((response) => {
-                    this.setState({ tokens: (response.data), loading: false });
-                }).catch((error) => {
-                    console.error(error);
-                });
-            }
-        }, () => { return; });
+        const cfg = new Configuration({ accessToken: this.props.user?.access_token });
+        const api = new EABApi(cfg, `${Config.EAB_HOST}`);
+        api.eabGet().then((response) => {
+            this.setState({ tokens: (response.data), loading: false });
+        }).catch((error) => {
+            console.error(error);
+        });
     }
 
     private createEABToken() {
-        const msalInstance = this.props.msalContext.instance;
-        const account = this.props.msalContext.accounts[0];
-        authorize(account, msalInstance, ["api://1d9e1166-1c48-4cb2-a65e-21fa9dd384c7/EAB", "email"], (response: AuthenticationResult) => {
-            if (response) {
-                const cfg = new Configuration({ accessToken: response.accessToken });
-                const api = new EABApi(cfg, `https://${Config.EAB_HOST}`);
-                api.eabPost().then(() => {
-                    this.loadTokens();
-                }).catch((error) => {
-                    console.log(error);
-                });
-            }
-        }, () => { return; });
+        const cfg = new Configuration({ accessToken: this.props.user?.access_token });
+        const api = new EABApi(cfg, `${Config.EAB_HOST}`);
+        api.eabPost().then(() => {
+            this.loadTokens();
+        }).catch((error) => {
+            console.log(error);
+        });
     }
+
     columns: GridColDef[] = [
         { field: "id", headerName: "ID", width: 280 },
         { field: "key_bytes", headerName: "HMAC", width: 280 },
@@ -106,7 +87,7 @@ class EabInternal extends React.Component<WithMsalProps, { pageSize: number; tok
     ];
 
     // eslint-disable-next-line @typescript-eslint/ban-types
-    constructor(props: WithMsalProps | Readonly<WithMsalProps>) {
+    constructor(props: AuthContextProps | Readonly<AuthContextProps>) {
         super(props);
         this.state = {
             pageSize: 15,
@@ -118,7 +99,7 @@ class EabInternal extends React.Component<WithMsalProps, { pageSize: number; tok
     }
 
     componentDidMount() {
-        const isAuthenticated = this.props.msalContext.accounts.length > 0;
+        const isAuthenticated = this.props.isAuthenticated;
         if (isAuthenticated) {
             this.loadTokens();
         }
@@ -198,4 +179,4 @@ class EabInternal extends React.Component<WithMsalProps, { pageSize: number; tok
     }
 }
 
-export const EabTokens = withMsal(EabInternal);
+export const EabTokens = withAuth(EabInternal);

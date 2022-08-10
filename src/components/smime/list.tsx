@@ -10,20 +10,16 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import LinearProgress from "@mui/material/LinearProgress";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 
-import { AuthenticationResult } from "@azure/msal-browser";
-import { useAccount, useIsAuthenticated, useMsal } from "@azure/msal-react";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import React, { useEffect, useRef, useState } from "react";
 
 import { PortalApisListSmimeResponseCertificateDetails, SMIMEApi } from "../../api/pki/api";
 import { Configuration } from "../../api/pki/configuration";
-import { authorize } from "../../auth/api";
 import { Config } from "../../config";
+import { useAuth } from "react-oidc-context";
 
 export default function SmimeCertificates() {
-    const isAuthenticated = useIsAuthenticated();
-    const { instance, accounts } = useMsal();
-    const account = useAccount(accounts[0] || {});
+    const auth = useAuth();
     const [open, setOpen] = useState(false);
     const reason = useRef<TextFieldProps>(null);
     const [pageSize, setPageSize] = useState<number>(15);
@@ -33,56 +29,51 @@ export default function SmimeCertificates() {
 
     function revoke() {
         const item = selection;
-        if (isAuthenticated && account && item) {
-            authorize(account, instance, ["api://1d9e1166-1c48-4cb2-a65e-21fa9dd384c7/Certificates", "email"], (response: AuthenticationResult) => {
-                if (response && item.serial) {
-                    const cfg = new Configuration({ accessToken: response.accessToken });
-                    const api = new SMIMEApi(cfg, `https://${Config.PKI_HOST}`);
-                    api.smimeRevokePost({ serial: item.serial, reason: (reason.current?.value as string) }).then(() => {
-                        load();
-                        setSelection(undefined);
-                        setOpen(false);
-                    }).catch(() => {
-                        return;
-                    });
-                }
-            }, () => { return; });
+        if (auth.isAuthenticated && auth.user) {
+            if (item && item.serial) {
+                const cfg = new Configuration({ accessToken: auth.user.access_token });
+                const api = new SMIMEApi(cfg, `${Config.PKI_HOST}`);
+                api.smimeRevokePost({ serial: item.serial, reason: (reason.current?.value as string) }).then(() => {
+                    load();
+                    setSelection(undefined);
+                    setOpen(false);
+                }).catch(() => {
+                    return;
+                });
+            }
         }
     }
     function load() {
-        if (isAuthenticated && account) {
-            authorize(account, instance, ["api://1d9e1166-1c48-4cb2-a65e-21fa9dd384c7/Certificates", "email"], (response: AuthenticationResult) => {
-                if (response) {
-                    const cfg = new Configuration({ accessToken: response.accessToken });
-                    const api = new SMIMEApi(cfg, `https://${Config.PKI_HOST}`);
-                    api.smimeGet().then((response) => {
-                        if (response.data) {
-                            const data = [];
-                            for (const cert of response.data) {
-                                if (cert.serial) {
-                                    data.push({
-                                        expires: cert.expires,
-                                        serial: cert.serial,
-                                        status: cert.status,
-                                    });
-                                }
-                            }
-                            setCertificates(data);
+        if (auth.isAuthenticated && auth.user) {
+            const cfg = new Configuration({ accessToken: auth.user.access_token });
+            const api = new SMIMEApi(cfg, `${Config.PKI_HOST}`);
+            api.smimeGet().then((response) => {
+                if (response.data) {
+                    const data = [];
+                    for (const cert of response.data) {
+                        if (cert.serial) {
+                            data.push({
+                                expires: cert.expires,
+                                serial: cert.serial,
+                                status: cert.status,
+                            });
                         }
-                        setLoading(false);
-                    }).catch((error) => {
-                        setLoading(false);
-                        console.error(error);
-                    });
+                    }
+                    setCertificates(data);
                 }
-            }, () => { setLoading(false); });
+                setLoading(false);
+            }).catch((error) => {
+                setLoading(false);
+                console.error(error);
+            });
+
         }
 
     }
 
     useEffect(() => {
         load();
-    }, [account, instance]);
+    }, [auth]);
 
     const handleClickOpen = () => {
         setOpen(true);
@@ -93,7 +84,7 @@ export default function SmimeCertificates() {
         setOpen(false);
     };
 
-    if (!isAuthenticated) {
+    if (!auth.isAuthenticated) {
         return <div>Please sign in</div>;
     }
 

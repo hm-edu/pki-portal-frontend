@@ -11,21 +11,16 @@ import LinearProgress from "@mui/material/LinearProgress";
 import DeleteIcon from "@mui/icons-material/Delete";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 
-import { AuthenticationResult } from "@azure/msal-browser";
-import { useAccount, useIsAuthenticated, useMsal } from "@azure/msal-react";
 import React, { FormEvent, useEffect, useRef, useState } from "react";
 import Moment from "react-moment";
 
 import { PortalApisSslCertificateDetails, SSLApi } from "../../api/pki/api";
 import { Configuration } from "../../api/pki/configuration";
-import { authorize } from "../../auth/api";
 import { Config } from "../../config";
+import { useAuth } from "react-oidc-context";
 
 export default function SslCertificates() {
-    const isAuthenticated = useIsAuthenticated();
-    const { instance, accounts } = useMsal();
-    const account = useAccount(accounts[0] || {});
-
+    const auth = useAuth();
     const [pageSize, setPageSize] = useState<number>(15);
     const [loading, setLoading] = useState(true);
     const reason = useRef<TextFieldProps>(null);
@@ -41,64 +36,59 @@ export default function SslCertificates() {
 
     function revoke() {
         const item = selected;
-        if (isAuthenticated && account && item) {
-            authorize(account, instance, ["api://1d9e1166-1c48-4cb2-a65e-21fa9dd384c7/Certificates", "email"], (response: AuthenticationResult) => {
-                if (response && item) {
-                    const cert = certificates.find((cert) => cert.serial === selected.at(0));
-                    if (cert?.serial) {
-                        const cfg = new Configuration({ accessToken: response.accessToken });
-                        const api = new SSLApi(cfg, `https://${Config.PKI_HOST}`);
-                        api.sslRevokePost({ serial: cert?.serial, reason: (reason.current?.value as string) }).then(() => {
-                            load();
-                            setSelected(undefined);
-                            setOpen(false);
-                        }).catch(() => {
-                            return;
-                        });
-                    }
-                }
-            }, () => { return; });
+        if (auth.isAuthenticated && auth.user && item) {
+            const cert = certificates.find((cert) => cert.serial === selected.at(0));
+            if (cert?.serial) {
+                const cfg = new Configuration({ accessToken: auth.user.access_token });
+                const api = new SSLApi(cfg, `${Config.PKI_HOST}`);
+                api.sslRevokePost({ serial: cert?.serial, reason: (reason.current?.value as string) }).then(() => {
+                    load();
+                    setSelected(undefined);
+                    setOpen(false);
+                }).catch(() => {
+                    setError(true);
+                    return;
+                });
+            }
         }
     }
 
     function load() {
-        if (isAuthenticated && account) {
-            authorize(account, instance, ["api://1d9e1166-1c48-4cb2-a65e-21fa9dd384c7/Certificates", "email"], (response: AuthenticationResult) => {
-                const cfg = new Configuration({ accessToken: response.accessToken });
-                const api = new SSLApi(cfg, `https://${Config.PKI_HOST}`);
-                api.sslGet().then((response) => {
-                    if (response.data) {
-                        const data = [];
-                        for (const cert of response.data) {
-                            if (cert.serial) {
-                                data.push({
-                                    common_name: cert.common_name,
-                                    expires: cert.expires,
-                                    serial: cert.serial,
-                                    not_before: cert.not_before,
-                                    status: cert.status,
-                                    subject_alternative_names: cert.subject_alternative_names,
-                                    created: cert.created,
-                                    source: cert.source,
-                                    issued_by: cert.issued_by,
-                                });
-                            }
+        if (auth.isAuthenticated && auth.user) {
+            const cfg = new Configuration({ accessToken: auth.user.access_token });
+            const api = new SSLApi(cfg, `${Config.PKI_HOST}`);
+            api.sslGet().then((response) => {
+                if (response.data) {
+                    const data = [];
+                    for (const cert of response.data) {
+                        if (cert.serial) {
+                            data.push({
+                                common_name: cert.common_name,
+                                expires: cert.expires,
+                                serial: cert.serial,
+                                not_before: cert.not_before,
+                                status: cert.status,
+                                subject_alternative_names: cert.subject_alternative_names,
+                                created: cert.created,
+                                source: cert.source,
+                                issued_by: cert.issued_by,
+                            });
                         }
-                        setCertificates(data);
                     }
-                    setLoading(false);
-                }).catch((error) => {
-                    console.error(error);
-                });
-            }, () => { setError(true); });
+                    setCertificates(data);
+                }
+                setLoading(false);
+            }).catch(() => {
+                setError(true);
+            });
 
         }
     }
     useEffect(() => {
         load();
-    }, [account, instance]);
+    }, [auth.isAuthenticated]);
 
-    if (!isAuthenticated) {
+    if (!auth.isAuthenticated) {
         return <div>Please sign in</div>;
     }
     const columns: GridColDef[] = [

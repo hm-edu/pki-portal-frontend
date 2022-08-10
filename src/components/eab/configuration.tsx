@@ -3,7 +3,6 @@ import Modal from "@mui/material/Modal";
 import Box from "@mui/material/Box";
 import Alert from "@mui/material/Alert";
 
-import { MsalContext } from "@azure/msal-react";
 import React from "react";
 import { ModelsEAB } from "../../api/eab/api";
 
@@ -11,9 +10,6 @@ import { modalTheme } from "../../theme";
 
 import "./list.scss";
 export class RecommendedConfigurationsComponent extends React.Component<{ token: ModelsEAB | undefined; onClose: () => void }> {
-
-    static contextType = MsalContext;
-    context!: React.ContextType<typeof MsalContext>;
 
     // eslint-disable-next-line @typescript-eslint/ban-types
     constructor(props: { token: ModelsEAB | undefined; onClose: () => void }) {

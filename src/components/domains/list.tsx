@@ -15,94 +15,17 @@ import CircularProgress from "@mui/material/CircularProgress";
 import Alert from "@mui/material/Alert";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 
-import { AccountInfo, AuthenticationResult, IPublicClientApplication } from "@azure/msal-browser";
-import { useAccount, useIsAuthenticated, useMsal } from "@azure/msal-react";
 import React, { FormEvent, useCallback, useEffect, useRef, useState } from "react";
 
 import { DomainsApi } from "../../api/domains/api";
 import { ModelDomain } from "../../api/domains/api";
 import { Configuration } from "../../api/domains/configuration";
 import { Config } from "../../config";
-import { authorize } from "../../auth/api";
 import Delegation from "./delegation";
-
-function removeDomain(id: number, account: AccountInfo, instance: IPublicClientApplication, setDomains: (domains: ModelDomain[]) => void, setError: (error: boolean) => void) {
-    return new Promise(function (resolve, reject) {
-        authorize(account, instance, ["api://1d9e1166-1c48-4cb2-a65e-21fa9dd384c7/Domains", "email"], (response: AuthenticationResult) => {
-            if (response) {
-                const cfg = new Configuration({ accessToken: response.accessToken });
-                const api = new DomainsApi(cfg, `https://${Config.DOMAIN_HOST}`);
-                api.domainsIdDelete(id).then(() => {
-                    loadDomains(account, instance, setDomains, setError);
-                    resolve(undefined);
-                }).catch(() => {
-                    setError(true);
-                    reject(undefined);
-                });
-            }
-        }, () => {
-            setError(true);
-            reject(undefined);
-        });
-    });
-}
-function approveDomain(id: number, account: AccountInfo, instance: IPublicClientApplication, setDomains: (domains: ModelDomain[]) => void, setError: (error: boolean) => void) {
-    authorize(account, instance, ["api://1d9e1166-1c48-4cb2-a65e-21fa9dd384c7/Domains", "email"], (response: AuthenticationResult) => {
-        if (response) {
-            const cfg = new Configuration({ accessToken: response.accessToken });
-            const api = new DomainsApi(cfg, `https://${Config.DOMAIN_HOST}`);
-            api.domainsIdApprovePost(id).then(() => {
-                loadDomains(account, instance, setDomains, setError);
-            }).catch(() => {
-                setError(true);
-            });
-        }
-    }, () => {
-        setError(true);
-    });
-}
-
-function loadDomains(account: AccountInfo, instance: IPublicClientApplication, setDomains: (domains: ModelDomain[]) => void, setError: (error: boolean) => void) {
-    authorize(account, instance, ["api://1d9e1166-1c48-4cb2-a65e-21fa9dd384c7/Domains", "email"], (response: AuthenticationResult) => {
-        if (response) {
-            const cfg = new Configuration({ accessToken: response.accessToken });
-            const api = new DomainsApi(cfg, `https://${Config.DOMAIN_HOST}`);
-            api.domainsGet().then((response) => {
-                setDomains(response.data);
-            }).catch(() => {
-                setError(true);
-            });
-        }
-    }, () => {
-        setError(true);
-    });
-}
-
-function createDomain(domain: string, account: AccountInfo, instance: IPublicClientApplication, setDomains: (domains: ModelDomain[]) => void, setError: (error: boolean) => void): Promise<boolean> {
-    return new Promise(function (resolve, reject) {
-        authorize(account, instance, ["api://1d9e1166-1c48-4cb2-a65e-21fa9dd384c7/Domains", "email"], (response: AuthenticationResult) => {
-            if (response) {
-                const cfg = new Configuration({ accessToken: response.accessToken });
-                const api = new DomainsApi(cfg, `https://${Config.DOMAIN_HOST}`);
-                api.domainsPost({ fqdn: domain }).then(() => {
-                    loadDomains(account, instance, setDomains, setError);
-                    resolve(true);
-                }).catch((error) => {
-                    reject(error);
-                });
-            }
-        }, (err) => {
-            setError(true);
-            reject(err);
-        });
-    });
-}
+import { useAuth } from "react-oidc-context";
 
 export default function Domains() {
-    const isAuthenticated = useIsAuthenticated();
-    const { instance, accounts } = useMsal();
-    const account = useAccount(accounts[0] || {});
-
+    const auth = useAuth();
     const [pageSize, setPageSize] = useState<number>(15);
     const [domains, setDomains] = useState([] as ModelDomain[]);
     const [loading, setLoading] = useState(true);
@@ -122,22 +45,72 @@ export default function Domains() {
     };
 
     useEffect(() => {
-        if (isAuthenticated && account) {
-            loadDomains(account, instance, (domains: ModelDomain[]) => { setDomains(domains); setLoading(false); }, () => { setError(true); setLoading(false); });
+        if (auth.isAuthenticated && auth.user) {
+            loadDomains((domains: ModelDomain[]) => { setDomains(domains); setLoading(false); }, () => { setError(true); setLoading(false); });
         }
-    }, [account, instance]);
+    }, [auth]);
 
     const create = useCallback((event: FormEvent<Element>) => {
         event.preventDefault();
-        if (account && newDomain.current) {
-            void createDomain(newDomain.current.value as string, account, instance, setDomains, setError).then(() => newDomain.current!.value = "");
+        if (auth.isAuthenticated && newDomain.current) {
+            void createDomain(newDomain.current.value as string, setDomains, setError).then(() => newDomain.current!.value = "");
         }
-    }, [account, instance]);
+    }, [auth]);
 
-    if (!isAuthenticated) {
+    if (!auth.isAuthenticated) {
         return <div>Please sign in</div>;
     }
 
+    function removeDomain(id: number, setDomains: (domains: ModelDomain[]) => void, setError: (error: boolean) => void) {
+        return new Promise(function (resolve, reject) {    
+            const cfg = new Configuration({ accessToken: auth.user?.access_token });
+            const api = new DomainsApi(cfg, `${Config.DOMAIN_HOST}`);
+            api.domainsIdDelete(id).then(() => {
+                loadDomains(setDomains, setError);
+                resolve(undefined);
+            }).catch(() => {
+                setError(true);
+                reject(undefined);
+            });
+    
+        });
+    }
+    function approveDomain(id: number, setDomains: (domains: ModelDomain[]) => void, setError: (error: boolean) => void) {    
+        const cfg = new Configuration({ accessToken: auth.user?.access_token });
+        const api = new DomainsApi(cfg, `${Config.DOMAIN_HOST}`);
+        api.domainsIdApprovePost(id).then(() => {
+            loadDomains(setDomains, setError);
+        }).catch(() => {
+            setError(true);
+        });
+    
+    }
+    
+    function loadDomains(setDomains: (domains: ModelDomain[]) => void, setError: (error: boolean) => void) {
+    
+        const cfg = new Configuration({ accessToken: auth.user?.access_token });
+        const api = new DomainsApi(cfg, `${Config.DOMAIN_HOST}`);
+        api.domainsGet().then((response) => {
+            setDomains(response.data);
+        }).catch(() => {
+            setError(true);
+        });
+    
+    }
+    
+    function createDomain(domain: string, setDomains: (domains: ModelDomain[]) => void, setError: (error: boolean) => void): Promise<boolean> {
+        return new Promise(function (resolve, reject) {    
+            const cfg = new Configuration({ accessToken: auth.user?.access_token });
+            const api = new DomainsApi(cfg, `${Config.DOMAIN_HOST}`);
+            api.domainsPost({ fqdn: domain }).then(() => {
+                loadDomains(setDomains, setError);
+                resolve(true);
+            }).catch((error) => {
+                reject(error);
+            });
+    
+        });
+    }
     const columns: GridColDef[] = [
         { field: "fqdn", headerName: "FQDN", width: 280 },
         { field: "owner", headerName: "Inhaber", width: 280 },
@@ -155,13 +128,13 @@ export default function Domains() {
 
                 const approve = useCallback((event: FormEvent<Element>) => {
                     event.preventDefault();
-                    approveDomain(row.id!, account!, instance, setDomains, setError);
-                }, [account, instance]);
+                    approveDomain(row.id!, setDomains, setError);
+                }, [auth]);
                 const remove = useCallback((event: FormEvent<Element>) => {
                     event.preventDefault();
                     setOpen(true);
                     setSelected(row);
-                }, [account, instance]);
+                }, [auth]);
                 const openDelegation = useCallback((event: FormEvent<Element>) => {
                     event.preventDefault();
                     setDelegation(true);
@@ -169,7 +142,7 @@ export default function Domains() {
                 }, [delegation]);
                 const transfer = useCallback((event: FormEvent<Element>) => {
                     event.preventDefault();
-                }, [account, instance]);
+                }, [auth]);
                 buttons.push(<Button color="success" disabled={!row.permissions?.can_approve} sx={{ px: 1, mx: 1 }} variant="outlined" onClick={approve}>Freischalten</Button>);
                 buttons.push(<Button color="warning" disabled={!row.permissions?.can_delete} sx={{ px: 1, mx: 1 }} variant="outlined" onClick={remove} startIcon={<DeleteIcon />}>Löschen</Button>);
                 buttons.push(<Button color="inherit" disabled={!row.permissions?.can_delegate} sx={{ px: 1, mx: 1 }} variant="outlined" onClick={openDelegation}>Delegationen bearbeiten</Button>);
@@ -208,7 +181,7 @@ export default function Domains() {
                 <Button variant="outlined" color="warning" disabled={deleting} onClick={() => {
                     setDeleting(true);
 
-                    void removeDomain(selected.id!, account!, instance, setDomains, setError).then(() => {
+                    void removeDomain(selected.id!, setDomains, setError).then(() => {
                         setDeleting(false);
                         handleDeleteClose();
                     });
