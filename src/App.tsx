@@ -3,7 +3,7 @@ import React from "react";
 
 import ButtonAppBar from "./components/navbar";
 import Login from "./components/login";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { Route, Routes, useNavigate } from "react-router-dom";
 import Home from "./components/home";
 import { Container } from "@mui/material";
 import "@fontsource/fira-mono";
@@ -24,30 +24,32 @@ const Offset = styled("div")(({ theme }) => {
 });
 
 function App() {
+    const navigation = useNavigate();
     const oidcConfig: AuthProviderProps = {
         authority: Config.AUTHORITY,
         client_id: Config.CLIENT_ID,
         redirect_uri: Config.HOST + "/oidc-callback",
         scope: "openid profile Certificates email EAB Domains",
         loadUserInfo: true,
+        onSigninCallback: () => {
+            navigation(sessionStorage.getItem("redirect") || "/");
+        },
     };
     return <AuthProvider {...oidcConfig}>
-        <BrowserRouter>
-            <ButtonAppBar />
-            <Offset />
-            <Container sx={{ paddingTop: "10px", paddingBottom: "10px" }} maxWidth="xl" >
-                <Routes>
-                    <Route path='/' element={<Home />} />
-                    <Route path='/domains' element={<Domains />} />
-                    <Route path='/ssl' element={<SslCertificates />} />
-                    <Route path='/ssl/new' element={<SslGenerator />} />
-                    <Route path='/eab' element={<EabTokens />} />
-                    <Route path='/smime/new' element={<SmimeGenerator />} />
-                    <Route path='/smime' element={<SmimeCertificates />} />
-                    <Route path='/oidc-callback' element={<Login />} />
-                </Routes>
-            </Container>
-        </BrowserRouter>
+        <ButtonAppBar />
+        <Offset />
+        <Container sx={{ paddingTop: "10px", paddingBottom: "10px" }} maxWidth="xl" >
+            <Routes>
+                <Route path='/' element={<Home />} />
+                <Route path='/domains' element={<Domains />} />
+                <Route path='/ssl' element={<SslCertificates />} />
+                <Route path='/ssl/new' element={<SslGenerator />} />
+                <Route path='/eab' element={<EabTokens />} />
+                <Route path='/smime/new' element={<SmimeGenerator />} />
+                <Route path='/smime' element={<SmimeCertificates />} />
+                <Route path='/oidc-callback' element={<Login />} />
+            </Routes>
+        </Container>
     </AuthProvider>;
 }
 export default App;

@@ -9,6 +9,12 @@ export const SignInButton = () => {
     const auth = useAuth();
 
     return (
-        <Button color="inherit" variant="outlined" onClick={() => { auth.signinRedirect({ extraQueryParams: { resource: "https://api.hmtest.de" } }).catch((e) => console.log(e)); return;}}> Anmelden</Button >
+        <Button color="inherit" variant="outlined"
+            onClick={() => {
+                sessionStorage.setItem("redirect", window.location.pathname);
+                auth.signinPopup({ extraQueryParams: { resource: "https://api.hmtest.de" } }).catch((e) => console.log(e)); return;
+            }}>
+            Anmelden
+        </Button >
     );
 };

@@ -16,8 +16,18 @@ export default function ButtonAppBar() {
     const auth = useAuth();
     const navigation = useNavigate();
 
-    const fragment = (auth.isAuthenticated) ? <> <Tooltip title={auth.user?.profile["sub"] as string} arrow><Typography sx={{ paddingRight: "10px" }}>{auth.user?.profile["name"] as string}</Typography></Tooltip>
-        <Button color="inherit" key='logout' onClick={() => { navigation("/"); auth.signoutRedirect().then(() => auth.removeUser()).catch((e) => console.log(e)); }} variant="outlined">Abmelden</Button>
+    const userFragment = (auth.isAuthenticated) ? <>
+        <Tooltip title={auth.user?.profile["sub"] as string} arrow><Typography sx={{ paddingRight: "10px" }}>{auth.user?.profile["name"] as string}</Typography></Tooltip>
+        <Button color="inherit" key='logout'
+            onClick={() => {
+                navigation("/");
+                auth.signoutPopup()
+                    .then(() => auth.removeUser())
+                    .catch((e) => console.log(e));
+            }}
+            variant="outlined">
+            Abmelden
+        </Button>
     </> : <SignInButton />;
 
     const buttons = auth.isAuthenticated ? [
@@ -37,7 +47,7 @@ export default function ButtonAppBar() {
                     <Button color="inherit" component={RouterLink} to="/">Home</Button>
                     {buttons}
                 </Typography>
-                {fragment}
+                {userFragment}
             </Toolbar>
         </AppBar>
     );
