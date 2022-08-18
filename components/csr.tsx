@@ -77,7 +77,3 @@ export class CsrBuilder {
         return pemCert;
     }
 }
-export interface KeyPair {
-    private: string;
-    public: string | undefined;
-}

@@ -16,7 +16,6 @@ import { SMIMEApi } from "../../api/pki/api";
 import { Configuration } from "../../api/pki/configuration";
 import { AuthProps, Config } from "../../components/config";
 import { modalTheme } from "../../components/theme";
-import { CsrBuilder } from "../../components/csr";
 import { IncomingMessage, ServerResponse } from "http";
 import { unstable_getServerSession } from "next-auth";
 import { NextApiRequestCookies } from "next/dist/server/api-utils";
@@ -48,7 +47,6 @@ export default SMIMEGenerator;
 
 export function SMIMEGenerator({ session }: { session: AuthProps | null }) {
 
-    const csr = new CsrBuilder();
     const [progress, setProgress] = useState<string>("");
     const [download, setDownload] = useState<JSX.Element>(<></>);
 
@@ -73,6 +71,8 @@ export function SMIMEGenerator({ session }: { session: AuthProps | null }) {
             setSuccess(false);
             setLoading(true);
             setProgress("Generiere CSR...");
+            const CsrBuilder = (await import("../../components/csr")).CsrBuilder;
+            const csr = new CsrBuilder();
             csr.build("rsa", undefined, 3072).then((x) => {
                 setProgress("CSR generiert...");
                 if (session) {

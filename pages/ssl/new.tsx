@@ -22,7 +22,7 @@ import { SSLApi } from "../../api/pki/api";
 import { Configuration as PKIConfig } from "../../api/pki/configuration";
 import { AuthProps, Config } from "../../components/config";
 import { Buffer } from "buffer";
-import { CsrBuilder, KeyPair } from "../../components/csr";
+import { KeyPair } from "../../components/keypair";
 import { modalTheme } from "../../components/theme";
 import { IncomingMessage, ServerResponse } from "http";
 import { unstable_getServerSession } from "next-auth";
@@ -34,7 +34,7 @@ export function SslGenerator({ session }: { session: AuthProps | null }) {
     interface SwitchProps {
         checked: boolean;
     }
-    
+
     const columnStyle = {
         flex: "auto",
         minWidth: "49%",
@@ -75,56 +75,9 @@ export function SslGenerator({ session }: { session: AuthProps | null }) {
         </Box>;
     }
 
-    const create: FormEventHandler<HTMLFormElement> = (event: FormEvent) => {
-
+    const createHandler: FormEventHandler<HTMLFormElement> = (event: FormEvent) => {
         event.preventDefault();
-
-        setProgress(<Typography>Erstelle privaten Schüssel</Typography>);
-        if (!loadingDomains && selected && session?.accessToken) {
-            const fqdns = domains.filter(x => selected.includes(x.id!)).sort((a, b) => a.fqdn!.localeCompare(b.fqdn!)).map((domain) => domain.fqdn!);
-            const csr = new CsrBuilder();
-            csr.build(switchRef.current?.checked ? "ecdsa" : "rsa", fqdns).then((result) => {
-                setKeyPair({ private: result.privateKey, public: undefined });
-                setGenerateKey(true);
-                setProgress(<><Typography>Signiere CSR...</Typography><Typography>(Dieser Schritt kann bis zu 5 Minuten dauern!)</Typography></>);
-                const cfg = new PKIConfig({ accessToken: session.accessToken });
-                const api = new SSLApi(cfg, `${Config.PKI_HOST}`);
-                api.sslCsrPost({ csr: result.csr }).then((response) => {
-                    const element = document.createElement("a");
-                    element.setAttribute("href", "data:application/x-pem-file;base64," + Buffer.from(response.data).toString("base64"));
-                    element.setAttribute("download", "public.pem");
-                    element.style.display = "none";
-                    document.body.appendChild(element);
-                    element.click();
-                    document.body.removeChild(element);
-
-                    element.setAttribute("href", "data:application/x-pem-file;base64," + Buffer.from(result.privateKey).toString("base64"));
-                    element.setAttribute("download", "private.pem");
-                    element.style.display = "none";
-                    document.body.appendChild(element);
-                    element.click();
-                    document.body.removeChild(element);
-                    setKeyPair({ private: result.privateKey, public: response.data });
-                    setGeneratedKey(true);
-                    setLoadingDomains(false);
-                    setGenerateKey(false);
-                }).catch(() => {
-                    setProgress(<>
-                        Es ist ein unbekannter Fehler bei der Erstellung des Zertifikats aufgetreten. Bitte versuchen Sie es erneut oder wenden sich an den IT-Support
-                    </>);
-                    setError(true);
-                    setGenerateKey(false);
-                    setLoadingDomains(false);
-                });
-            }).catch(() => {
-                setProgress(<>
-                    Es ist ein unbekannter Fehler bei der Erstellung des Zertifikats aufgetreten. Bitte versuchen Sie es erneut oder wenden sich an den IT-Support
-                </>);
-                setError(true);
-                setGenerateKey(false);
-                setLoadingDomains(false);
-            });
-        }
+        void create();
     };
 
     useEffect(() => {
@@ -225,7 +178,7 @@ export function SslGenerator({ session }: { session: AuthProps | null }) {
 
     /* eslint-disable @typescript-eslint/no-misused-promises */
     return <Box sx={{ width: "100%", display: "flex", height: "100%", flexDirection: "column", alignItems: "left", alignSelf: "center" }}>
-        <Box component="form" onSubmit={create} sx={{ width: "100%", display: "flex", height: "100%", flexDirection: "column", alignItems: "left", alignSelf: "center" }}>
+        <Box component="form" onSubmit={createHandler} sx={{ width: "100%", display: "flex", height: "100%", flexDirection: "column", alignItems: "left", alignSelf: "center" }}>
             <h1>Erstellung eines neuen SSL Zertifikats</h1>
             {body}
         </Box>
@@ -244,6 +197,55 @@ export function SslGenerator({ session }: { session: AuthProps | null }) {
         </Modal>
     </Box >;
 
+    async function create() {
+        setProgress(<Typography>Erstelle privaten Schüssel</Typography>);
+        if (!loadingDomains && selected && session?.accessToken) {
+            const fqdns = domains.filter(x => selected.includes(x.id!)).sort((a, b) => a.fqdn!.localeCompare(b.fqdn!)).map((domain) => domain.fqdn!);
+            const CsrBuilder = (await import("../../components/csr")).CsrBuilder;
+            const csr = new CsrBuilder();
+            csr.build(switchRef.current?.checked ? "ecdsa" : "rsa", fqdns).then((result) => {
+                setKeyPair({ private: result.privateKey, public: undefined });
+                setGenerateKey(true);
+                setProgress(<><Typography>Signiere CSR...</Typography><Typography>(Dieser Schritt kann bis zu 5 Minuten dauern!)</Typography></>);
+                const cfg = new PKIConfig({ accessToken: session.accessToken });
+                const api = new SSLApi(cfg, `${Config.PKI_HOST}`);
+                api.sslCsrPost({ csr: result.csr }).then((response) => {
+                    const element = document.createElement("a");
+                    element.setAttribute("href", "data:application/x-pem-file;base64," + Buffer.from(response.data).toString("base64"));
+                    element.setAttribute("download", "public.pem");
+                    element.style.display = "none";
+                    document.body.appendChild(element);
+                    element.click();
+                    document.body.removeChild(element);
+
+                    element.setAttribute("href", "data:application/x-pem-file;base64," + Buffer.from(result.privateKey).toString("base64"));
+                    element.setAttribute("download", "private.pem");
+                    element.style.display = "none";
+                    document.body.appendChild(element);
+                    element.click();
+                    document.body.removeChild(element);
+                    setKeyPair({ private: result.privateKey, public: response.data });
+                    setGeneratedKey(true);
+                    setLoadingDomains(false);
+                    setGenerateKey(false);
+                }).catch(() => {
+                    setProgress(<>
+                        Es ist ein unbekannter Fehler bei der Erstellung des Zertifikats aufgetreten. Bitte versuchen Sie es erneut oder wenden sich an den IT-Support
+                    </>);
+                    setError(true);
+                    setGenerateKey(false);
+                    setLoadingDomains(false);
+                });
+            }).catch(() => {
+                setProgress(<>
+                    Es ist ein unbekannter Fehler bei der Erstellung des Zertifikats aufgetreten. Bitte versuchen Sie es erneut oder wenden sich an den IT-Support
+                </>);
+                setError(true);
+                setGenerateKey(false);
+                setLoadingDomains(false);
+            });
+        }
+    }
 }
 
 export default SslGenerator;
