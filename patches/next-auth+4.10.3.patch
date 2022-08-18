@@ -1,0 +1,38 @@
+diff --git a/node_modules/next-auth/core/lib/oauth/client.js b/node_modules/next-auth/core/lib/oauth/client.js
+index 77161bd..19d0a4e 100644
+--- a/node_modules/next-auth/core/lib/oauth/client.js
++++ b/node_modules/next-auth/core/lib/oauth/client.js
+@@ -16,9 +16,9 @@ async function openidClient(options) {
+     issuer = await _openidClient.Issuer.discover(provider.wellKnown);
+   } else {
+     var _provider$authorizati, _provider$authorizati2, _provider$token$url, _provider$token, _provider$userinfo$ur, _provider$userinfo;
+-
++    var metadata = typeof provider.issuer === "object" ? { ... provider.issuer}  : {issuer: provider.issuer};
+     issuer = new _openidClient.Issuer({
+-      issuer: provider.issuer,
++      ...metadata,
+       authorization_endpoint: (_provider$authorizati = (_provider$authorizati2 = provider.authorization) === null || _provider$authorizati2 === void 0 ? void 0 : _provider$authorizati2.url) !== null && _provider$authorizati !== void 0 ? _provider$authorizati : provider.authorization,
+       token_endpoint: (_provider$token$url = (_provider$token = provider.token) === null || _provider$token === void 0 ? void 0 : _provider$token.url) !== null && _provider$token$url !== void 0 ? _provider$token$url : provider.token,
+       userinfo_endpoint: (_provider$userinfo$ur = (_provider$userinfo = provider.userinfo) === null || _provider$userinfo === void 0 ? void 0 : _provider$userinfo.url) !== null && _provider$userinfo$ur !== void 0 ? _provider$userinfo$ur : provider.userinfo
+diff --git a/node_modules/next-auth/providers/oauth.d.ts b/node_modules/next-auth/providers/oauth.d.ts
+index 495f8e3..4b1bb59 100644
+--- a/node_modules/next-auth/providers/oauth.d.ts
++++ b/node_modules/next-auth/providers/oauth.d.ts
+@@ -53,7 +53,7 @@ export declare type TokenEndpointHandler = EndpointHandler<UrlParams, {
+ export declare type UserinfoEndpointHandler = EndpointHandler<UrlParams, {
+     tokens: TokenSet;
+ }, Profile>;
+-export interface OAuthConfig<P> extends CommonProviderOptions, PartialIssuer {
++export interface OAuthConfig<P> extends CommonProviderOptions {
+     /**
+      * OpenID Connect (OIDC) compliant providers can configure
+      * this instead of `authorize`/`token`/`userinfo` options
+@@ -95,7 +95,7 @@ export interface OAuthConfig<P> extends CommonProviderOptions, PartialIssuer {
+      */
+     idToken?: boolean;
+     region?: string;
+-    issuer?: string;
++    issuer?: string | IssuerMetadata;
+     /** Read more at: https://github.com/panva/node-openid-client/tree/main/docs#customizing-http-requests */
+     httpOptions?: HttpOptions;
+     /**

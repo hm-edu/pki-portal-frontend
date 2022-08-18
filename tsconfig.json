@@ -1,15 +1,22 @@
 {
-  "include": ["src", "types"],
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx"
+  ],
   "compilerOptions": {
     "target": "ES2019",
     "module": "ESNext",
     "moduleResolution": "node",
-    "lib": ["ES2019", "DOM", "DOM.Iterable"],
+    "lib": [
+      "ES2019",
+      "DOM",
+      "DOM.Iterable"
+    ],
     "incremental": true,
     "tsBuildInfoFile": "tsconfig.tsbuildinfo",
     "allowSyntheticDefaultImports": true,
     // match output dir to input dir. e.g. dist/index instead of dist/src/index
-    "rootDir": "./src",
     "outDir": "./lib",
     // stricter type-checking for stronger correctness. Recommended by TS
     "strict": true,
@@ -24,9 +31,12 @@
     // prevent the use features that do not work with isolated transpilation
     "isolatedModules": true,
     // transpile JSX to React.createElement
-    "jsx": "react",    
+    "jsx": "preserve",
+    "allowJs": true,
+    "noEmit": true,
+    "resolveJsonModule": true
   },
   "exclude": [
-    "src/api/**/*"
+    "api/**/*",
   ]
 }

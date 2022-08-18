@@ -9,7 +9,8 @@ parserOptions:
   sourceType: module
 extends:
   - eslint:recommended
-  - plugin:testing-library/dom
+  - plugin:testing-library/dom  
+  - 'plugin:@next/next/recommended'
 settings:
   "import/resolver":
     "node": 
