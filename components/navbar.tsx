@@ -17,7 +17,7 @@ export default function ButtonAppBar() {
     const [userFragment, setFragment] = useState(<></>);
 
     useEffect(() => {
-        setFragment(session ? <> <Tooltip title={session.user?.email as string} arrow><Typography sx={{ paddingRight: "10px" }}>{session.user?.name as string}</Typography></Tooltip>
+        setFragment((session && session.user) ? <> <Tooltip title={session.user?.email as string} arrow><Typography sx={{ paddingRight: "10px" }}>{session.user?.name as string}</Typography></Tooltip>
             <Button color="inherit" key='logout'
                 onClick={() => {
                     void signOut({ callbackUrl: "https://idp.hmtest.de/idp/profile/Logout" });
