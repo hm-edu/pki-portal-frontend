@@ -16,15 +16,16 @@ export default function ButtonAppBar() {
 
     const [userFragment, setFragment] = useState(<></>);
 
-    console.log(session);
-    setFragment((session && session.user) ? <> <Tooltip title={session.user?.email as string} arrow><Typography sx={{ paddingRight: "10px" }}>{session.user?.name as string}</Typography></Tooltip>
-        <Button color="inherit" key='logout'
-            onClick={() => {
-                void signOut({ callbackUrl: "https://idp.hmtest.de/idp/profile/Logout" });
-            }}
-            variant="outlined">
-            Abmelden
-        </Button></> : <SignInButton />);
+    useEffect(() => {
+        setFragment(session ? <> <Tooltip title={session.user?.email as string ?? ""} arrow><Typography sx={{ paddingRight: "10px" }}>{session.user?.name as string ?? ""}</Typography></Tooltip>
+            <Button color="inherit" key='logout'
+                onClick={() => {
+                    void signOut({ callbackUrl: "https://idp.hmtest.de/idp/profile/Logout" });
+                }}
+                variant="outlined">
+                Abmelden
+            </Button></> : <SignInButton />);
+    }, [session]);
 
     const buttons = session ? [
         <Link key="ssl" href="/ssl" prefetch={false}><Button key="ssl" color="inherit">SSL Zertifikate</Button></Link>,
