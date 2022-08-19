@@ -25,7 +25,7 @@ export default function ButtonAppBar() {
                 variant="outlined">
                 Abmelden
             </Button></> : <SignInButton />);
-    }, [session]);
+    }, [session, session?.user]);
 
     const buttons = session ? [
         <Link key="ssl" href="/ssl" prefetch={false}><Button key="ssl" color="inherit">SSL Zertifikate</Button></Link>,
