@@ -1,7 +1,7 @@
 import { red } from "@mui/material/colors";
 import { createTheme, Theme } from "@mui/material/styles";
 import { checkboxClasses } from "@mui/material/Checkbox";
-import { deDE } from "@mui/x-data-grid/locales";
+import { deDE } from "@mui/x-data-grid";
 
 // A custom theme for this app
 const theme: Theme = createTheme({

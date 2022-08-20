@@ -16,10 +16,8 @@ import { EABApi, ModelsEAB } from "../../api/eab/api";
 import { Configuration } from "../../api/eab/configuration";
 import { AuthProps, Config } from "../../components/config";
 import { RecommendedConfigurationsComponent } from "../../components/configuration";
-import { unstable_getServerSession } from "next-auth";
-import { authOptions } from "../api/auth/[...nextauth]";
-import { IncomingMessage, ServerResponse } from "http";
-import { NextApiRequestCookies } from "next/dist/server/api-utils";
+import { getServerSideProps } from "../../components/auth";
+import { deDE } from "@mui/x-data-grid";
 
 class EabTokens extends React.Component<{ session: AuthProps | null }, { pageSize: number; tokens: ModelsEAB[]; selected: GridSelectionModel; loading: boolean; recommendations: boolean; error: string | boolean | undefined }> {
 
@@ -166,7 +164,7 @@ class EabTokens extends React.Component<{ session: AuthProps | null }, { pageSiz
                 onSelectionModelChange={(event) => {
                     this.setState({ selected: event });
                 }}
-                localeText={{ errorOverlayDefaultLabel: typeof this.state.error === "string" ? this.state.error : "Ein unerwarteter Fehler ist aufgetreten." }}
+                localeText={{ errorOverlayDefaultLabel: typeof this.state.error === "string" ? this.state.error : "Ein unerwarteter Fehler ist aufgetreten.", ...deDE.components.MuiDataGrid.defaultProps.localeText }}
                 error={this.state.error}
                 selectionModel={this.state.selected}
                 onPageSizeChange={(newPageSize) => this.setState({ pageSize: newPageSize })}
@@ -183,14 +181,6 @@ class EabTokens extends React.Component<{ session: AuthProps | null }, { pageSiz
     }
 }
 
-export async function getServerSideProps(context: { req: IncomingMessage & { cookies: NextApiRequestCookies }; res: ServerResponse }): Promise<{ props: { session: AuthProps | null } }> {
-    const session = await unstable_getServerSession(context.req, context.res, authOptions);
-    const data = session?.accessToken ? { accessToken: session.accessToken } : null;
-    return {
-        props: {
-            session: data,
-        },
-    };
-}
+export { getServerSideProps };
 
 export default EabTokens;

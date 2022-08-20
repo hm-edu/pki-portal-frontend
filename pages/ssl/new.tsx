@@ -24,10 +24,7 @@ import { AuthProps, Config } from "../../components/config";
 import { Buffer } from "buffer";
 import { KeyPair } from "../../components/keypair";
 import { modalTheme } from "../../components/theme";
-import { IncomingMessage, ServerResponse } from "http";
-import { unstable_getServerSession } from "next-auth";
-import { NextApiRequestCookies } from "next/dist/server/api-utils";
-import { authOptions } from "../api/auth/[...nextauth]";
+import { getServerSideProps } from "../../components/auth";
 
 export function SslGenerator({ session }: { session: AuthProps | null }) {
 
@@ -109,7 +106,8 @@ export function SslGenerator({ session }: { session: AuthProps | null }) {
 
     let publicKeyElement: JSX.Element = <></>;
     if (generateKey) {
-        publicKeyElement = <Box>
+        publicKeyElement = <Box sx={columnStyle}>
+            <Typography variant="h6">Öffentlicher Schlüssel</Typography>
             <Box sx={{ padding: 2 }}>
                 <CircularProgress size={24} sx={{ color: green[500], position: "relative", left: "50%", marginLeft: "-12px" }} />
             </Box>
@@ -165,8 +163,8 @@ export function SslGenerator({ session }: { session: AuthProps | null }) {
         </Box>;
     } else if (error) {
         body = <Box sx={{ minWidth: 0, maxWidth: "100%", maxHeight: "100%", minHeight: 0, display: "flex", gap: "10px", flexDirection: "row" }}>
-            <Alert severity="error">{progress}</Alert>
-        </Box>;
+            <Alert sx={{ width: "100%" }} severity="error">{progress}</Alert>
+        </Box >;
     } else if (generatedKey || generateKey && keypair?.private) {
         body = <Box sx={{ minWidth: 0, maxWidth: "100%", maxHeight: "100%", minHeight: 0, display: "flex", gap: "10px", flexDirection: "row" }}>
             {keySegment(keypair!.private, "private.pem", "Privater Schlüssel")}
@@ -250,12 +248,4 @@ export function SslGenerator({ session }: { session: AuthProps | null }) {
 
 export default SslGenerator;
 
-export async function getServerSideProps(context: { req: IncomingMessage & { cookies: NextApiRequestCookies }; res: ServerResponse }): Promise<{ props: { session: AuthProps | null } }> {
-    const session = await unstable_getServerSession(context.req, context.res, authOptions);
-    const data = session?.accessToken ? { accessToken: session.accessToken } : null;
-    return {
-        props: {
-            session: data,
-        },
-    };
-}
+export { getServerSideProps };

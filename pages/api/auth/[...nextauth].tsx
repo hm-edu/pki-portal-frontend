@@ -14,7 +14,7 @@ export const authOptions: NextAuthOptions =
             id: "oidc",
             name: "oidc",
             type: "oauth",
-            checks: ["state"],
+            checks: ["pkce"],
             clientId: "portal-frontend-dev",
             clientSecret: process.env.AUTH_CLIENT_SECRET ?? "this_too_should_be_ch4ng3d",
             issuer: {

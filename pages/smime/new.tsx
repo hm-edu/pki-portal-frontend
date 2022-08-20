@@ -16,14 +16,11 @@ import { SMIMEApi } from "../../api/pki/api";
 import { Configuration } from "../../api/pki/configuration";
 import { AuthProps, Config } from "../../components/config";
 import { modalTheme } from "../../components/theme";
-import { IncomingMessage, ServerResponse } from "http";
-import { unstable_getServerSession } from "next-auth";
-import { NextApiRequestCookies } from "next/dist/server/api-utils";
-import { authOptions } from "../api/auth/[...nextauth]";
+import { getServerSideProps } from "../../components/auth";
 
 async function createP12(privateKey: string, chain: string[], password: string): Promise<string> {
-    
-    const forge = (await import ("node-forge")).default;
+
+    const forge = (await import("node-forge")).default;
     return await new Promise((resolve, reject) => {
         const encodedChain = [];
         for (const cert of chain) {
@@ -53,6 +50,7 @@ export function SMIMEGenerator({ session }: { session: AuthProps | null }) {
     const [loading, setLoading] = useState(true);
     const [success, setSuccess] = useState(false);
     const [warning, setWarning] = useState(false);
+    const [error, setError] = useState("");
     const [validation, setValidation] = useState<string | undefined>(undefined);
     const p12PasswordRef = useRef<TextFieldProps>(null);
     const p12PasswordConfirmRef = useRef<TextFieldProps>(null);
@@ -130,6 +128,9 @@ export function SMIMEGenerator({ session }: { session: AuthProps | null }) {
                 setLoading(false);
                 console.error(error);
             });
+        } else {
+            setLoading(false);
+            setError("Sie sind nicht angemeldet!");
         }
     }, [session]);
 
@@ -147,7 +148,7 @@ export function SMIMEGenerator({ session }: { session: AuthProps | null }) {
     /* eslint-disable @typescript-eslint/no-misused-promises */
     return <div>
         <h1>Erstellung eines neuen SMIME Zertifikats</h1>
-        <Box sx={{ display: "flex", flexDirection: "column", width: "md", alignItems: "center" }}>
+        {!error && <Box sx={{ display: "flex", flexDirection: "column", width: "md", alignItems: "center" }}>
             <Box component="form" onSubmit={create} sx={{ display: "flex", width: "100%", flexDirection: "column", alignItems: "left", gap: "10px", alignSelf: "center" }}>
                 {warning && <Alert severity="warning">Sie haben derzeit 2 aktive SMIME Zertifikate. Durch Ausstellung eines neuen Zertifikats wird automatisch das ältere dieser beiden Zertifikate widerrufen. Sofern Sie dies nicht möchten widerrufen Sie bitte ein Zertifikat von Hand.</Alert>}
                 {warning && <FormControlLabel control={<Checkbox color="secondary" required />} label="Zertifikat automatisch widerrufen." />}
@@ -159,7 +160,8 @@ export function SMIMEGenerator({ session }: { session: AuthProps | null }) {
                 )}</Button>
                 {download}
             </Box>
-        </Box>
+        </Box>}
+        {error && <Alert sx={{ width: "100%" }} severity="error">{error}</Alert>}
         <Modal open={loading} aria-labelledby="modal-modal-title" aria-describedby="modal-modal-description">
             <Box sx={modalTheme}>
                 <Typography id="modal-modal-title" variant="h6" component="h2">
@@ -176,12 +178,5 @@ export function SMIMEGenerator({ session }: { session: AuthProps | null }) {
 
     </div>;
 }
-export async function getServerSideProps(context: { req: IncomingMessage & { cookies: NextApiRequestCookies }; res: ServerResponse }): Promise<{ props: { session: AuthProps | null } }> {
-    const session = await unstable_getServerSession(context.req, context.res, authOptions);
-    const data = session?.accessToken ? { accessToken: session.accessToken } : null;
-    return {
-        props: {
-            session: data,
-        },
-    };
-}
+
+export { getServerSideProps };

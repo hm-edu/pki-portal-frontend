@@ -1,7 +1,7 @@
 import TextField, { TextFieldProps } from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
-import { DataGrid, GridColDef, GridRowId } from "@mui/x-data-grid";
+import { DataGrid, deDE, GridColDef, GridRowId } from "@mui/x-data-grid";
 import Dialog from "@mui/material/Dialog";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
@@ -17,10 +17,7 @@ import Moment from "react-moment";
 import { PortalApisSslCertificateDetails, SSLApi } from "../../api/pki/api";
 import { Configuration } from "../../api/pki/configuration";
 import { AuthProps, Config } from "../../components/config";
-import { IncomingMessage, ServerResponse } from "http";
-import { unstable_getServerSession } from "next-auth";
-import { NextApiRequestCookies } from "next/dist/server/api-utils";
-import { authOptions } from "../api/auth/[...nextauth]";
+import { getServerSideProps } from "../../components/auth";
 
 export default SslCertificates;
 
@@ -237,7 +234,7 @@ export function SslCertificates({ session }: { session: AuthProps | null }) {
             components={{
                 LoadingOverlay: LinearProgress,
             }}
-            localeText={{ errorOverlayDefaultLabel: typeof error === "string" ? error : "Ein unerwarteter Fehler ist aufgetreten." }}
+            localeText={{ errorOverlayDefaultLabel: typeof error === "string" ? error : "Ein unerwarteter Fehler ist aufgetreten." , ...deDE.components.MuiDataGrid.defaultProps.localeText }}
             componentsProps={{ loadingOverlay: { color: "inherit" } }}
             loading={loading}
             error={error}
@@ -274,12 +271,4 @@ export function SslCertificates({ session }: { session: AuthProps | null }) {
     </Box>;
 }
 
-export async function getServerSideProps(context: { req: IncomingMessage & { cookies: NextApiRequestCookies }; res: ServerResponse }): Promise<{ props: { session: AuthProps | null } }> {
-    const session = await unstable_getServerSession(context.req, context.res, authOptions);
-    const data = session?.accessToken ? { accessToken: session.accessToken } : null;
-    return {
-        props: {
-            session: data,
-        },
-    };
-}
+export { getServerSideProps };

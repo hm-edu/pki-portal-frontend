@@ -10,16 +10,13 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import LinearProgress from "@mui/material/LinearProgress";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 
-import { DataGrid, GridColDef } from "@mui/x-data-grid";
+import { DataGrid, deDE, GridColDef } from "@mui/x-data-grid";
 import React, { useEffect, useRef, useState } from "react";
 
 import { PortalApisListSmimeResponseCertificateDetails, SMIMEApi } from "../../api/pki/api";
 import { Configuration } from "../../api/pki/configuration";
 import { AuthProps, Config } from "../../components/config";
-import { unstable_getServerSession } from "next-auth";
-import { IncomingMessage, ServerResponse } from "http";
-import { NextApiRequestCookies } from "next/dist/server/api-utils";
-import { authOptions } from "../api/auth/[...nextauth]";
+import { getServerSideProps } from "../../components/auth";
 
 export default SmimeCertificates;
 
@@ -144,7 +141,7 @@ export function SmimeCertificates({ session }: { session: AuthProps | null }) {
             }}
             componentsProps={{ loadingOverlay: { color: "inherit" } }}
             loading={loading}
-            localeText={{ errorOverlayDefaultLabel: typeof error === "string" ? error : "Ein unerwarteter Fehler ist aufgetreten." }}
+            localeText={{ errorOverlayDefaultLabel: typeof error === "string" ? error : "Ein unerwarteter Fehler ist aufgetreten.", ...deDE.components.MuiDataGrid.defaultProps.localeText }}
             error={error}
             onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
             rowsPerPageOptions={[5, 15, 25, 50, 100]}
@@ -176,12 +173,4 @@ export function SmimeCertificates({ session }: { session: AuthProps | null }) {
     </Box>;
 }
 
-export async function getServerSideProps(context: { req: IncomingMessage & { cookies: NextApiRequestCookies }; res: ServerResponse }): Promise<{ props: { session: AuthProps | null } }> {
-    const session = await unstable_getServerSession(context.req, context.res, authOptions);
-    const data = session?.accessToken ? { accessToken: session.accessToken } : null;
-    return {
-        props: {
-            session: data,
-        },
-    };
-}
+export { getServerSideProps };

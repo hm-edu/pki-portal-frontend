@@ -14,6 +14,7 @@ import { green } from "@mui/material/colors";
 import CircularProgress from "@mui/material/CircularProgress";
 import Alert from "@mui/material/Alert";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
+import { deDE } from "@mui/x-data-grid";
 
 import React, { FormEvent, useEffect, useRef, useState } from "react";
 
@@ -22,10 +23,7 @@ import { ModelDomain } from "../../api/domains/api";
 import { Configuration } from "../../api/domains/configuration";
 import { AuthProps, Config } from "../../components/config";
 import Delegation from "../../components/delegation";
-import { IncomingMessage, ServerResponse } from "http";
-import { unstable_getServerSession } from "next-auth";
-import { NextApiRequestCookies } from "next/dist/server/api-utils";
-import { authOptions } from "../api/auth/[...nextauth]";
+import { getServerSideProps } from "../../components/auth";
 
 export default Domains;
 
@@ -204,7 +202,7 @@ export function Domains({ session }: { session: AuthProps | null }) {
             }}
             componentsProps={{ loadingOverlay: { color: "inherit" } }}
             loading={loading}
-            localeText={{ errorOverlayDefaultLabel: typeof error === "string" ? error : "Ein unerwarteter Fehler ist aufgetreten." }}
+            localeText={{ errorOverlayDefaultLabel: typeof error === "string" ? error : "Ein unerwarteter Fehler ist aufgetreten.", ...deDE.components.MuiDataGrid.defaultProps.localeText }}
             error={error}
             onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
             rowsPerPageOptions={[5, 15, 25, 50, 100]}
@@ -226,12 +224,4 @@ export function Domains({ session }: { session: AuthProps | null }) {
     </Box>;
 }
 
-export async function getServerSideProps(context: { req: IncomingMessage & { cookies: NextApiRequestCookies }; res: ServerResponse }): Promise<{ props: { session: AuthProps | null } }> {
-    const session = await unstable_getServerSession(context.req, context.res, authOptions);
-    const data = session?.accessToken ? { accessToken: session.accessToken } : null;
-    return {
-        props: {
-            session: data,
-        },
-    };
-}
+export { getServerSideProps };
