@@ -8,7 +8,7 @@ import CssBaseline from "@mui/material/CssBaseline";
 import { ThemeProvider } from "@mui/material/styles";
 import Container from "@mui/material/Container";
 import ButtonAppBar from "../components/navbar";
-import theme from "../components/theme";
+import { theme } from "../components/theme";
 import { styled } from "@mui/material/styles";
 import { Session } from "next-auth";
 import { NextComponentType, NextPageContext } from "next";

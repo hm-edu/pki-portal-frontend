@@ -24,6 +24,7 @@ import { Configuration } from "../../api/domains/configuration";
 import { AuthProps, Config } from "../../components/config";
 import Delegation from "../../components/delegation";
 import { getServerSideProps } from "../../components/auth";
+import { dataGridStyle } from "../../components/theme";
 
 export default Domains;
 
@@ -195,6 +196,7 @@ export function Domains({ session }: { session: AuthProps | null }) {
                     sortModel: [{ field: "fqdn", sort: "asc" }],
                 },
             }}
+            sx={dataGridStyle}
             columns={columns}
             pageSize={pageSize}
             components={{
@@ -202,7 +204,7 @@ export function Domains({ session }: { session: AuthProps | null }) {
             }}
             componentsProps={{ loadingOverlay: { color: "inherit" } }}
             loading={loading}
-            localeText={{ errorOverlayDefaultLabel: typeof error === "string" ? error : "Ein unerwarteter Fehler ist aufgetreten.", ...deDE.components.MuiDataGrid.defaultProps.localeText }}
+            localeText={{ ...deDE.components.MuiDataGrid.defaultProps.localeText, errorOverlayDefaultLabel: typeof error === "string" ? error : "Ein unerwarteter Fehler ist aufgetreten." }}
             error={error}
             onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
             rowsPerPageOptions={[5, 15, 25, 50, 100]}

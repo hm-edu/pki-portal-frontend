@@ -18,6 +18,7 @@ import { AuthProps, Config } from "../../components/config";
 import { RecommendedConfigurationsComponent } from "../../components/configuration";
 import { getServerSideProps } from "../../components/auth";
 import { deDE } from "@mui/x-data-grid";
+import { dataGridStyle } from "../../components/theme";
 
 class EabTokens extends React.Component<{ session: AuthProps | null }, { pageSize: number; tokens: ModelsEAB[]; selected: GridSelectionModel; loading: boolean; recommendations: boolean; error: string | boolean | undefined }> {
 
@@ -97,7 +98,7 @@ class EabTokens extends React.Component<{ session: AuthProps | null }, { pageSiz
         };
     }
 
-    componentDidMount() {        
+    componentDidMount() {
         if (this.props.session) {
             this.loadTokens();
         } else {
@@ -148,6 +149,7 @@ class EabTokens extends React.Component<{ session: AuthProps | null }, { pageSiz
     render() {
         return <Box sx={{ display: "flex", flexDirection: "column", height: "100%" }}><h1>Ihre EAB Tokens</h1>
             <DataGrid autoHeight columns={this.columns}
+                sx={dataGridStyle}
                 initialState={{
                     columns: {
                         columnVisibilityModel: {
@@ -156,15 +158,11 @@ class EabTokens extends React.Component<{ session: AuthProps | null }, { pageSiz
                     },
                 }}
                 pageSize={this.state.pageSize}
-                components={{
-                    LoadingOverlay: LinearProgress,
-                }}
+                components={{ LoadingOverlay: LinearProgress }}
                 componentsProps={{ loadingOverlay: { color: "inherit" } }}
                 loading={this.state.loading}
-                onSelectionModelChange={(event) => {
-                    this.setState({ selected: event });
-                }}
-                localeText={{ errorOverlayDefaultLabel: typeof this.state.error === "string" ? this.state.error : "Ein unerwarteter Fehler ist aufgetreten.", ...deDE.components.MuiDataGrid.defaultProps.localeText }}
+                onSelectionModelChange={(event) => { this.setState({ selected: event }); }}
+                localeText={{ ...deDE.components.MuiDataGrid.defaultProps.localeText, errorOverlayDefaultLabel: typeof this.state.error === "string" ? this.state.error : "Ein unerwarteter Fehler ist aufgetreten." }}
                 error={this.state.error}
                 selectionModel={this.state.selected}
                 onPageSizeChange={(newPageSize) => this.setState({ pageSize: newPageSize })}

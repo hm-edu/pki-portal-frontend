@@ -4,7 +4,7 @@ import { checkboxClasses } from "@mui/material/Checkbox";
 import { deDE } from "@mui/x-data-grid";
 
 // A custom theme for this app
-const theme: Theme = createTheme({
+export const theme: Theme = createTheme({
     palette: {
         primary: {
             main: "#FFFFFF",
@@ -37,7 +37,7 @@ const theme: Theme = createTheme({
                 },
             },
         },
-        
+
         MuiInput: {
             styleOverrides: {
                 "root": {
@@ -50,6 +50,12 @@ const theme: Theme = createTheme({
     },
 }, deDE);
 
+export const dataGridStyle = {
+    "& .MuiDataGrid-cell:focus": { outline: "none" },
+    "& .MuiDataGrid-row.Mui-selected": { background: "#C6C6C6" },
+    "& .MuiDataGrid-row.Mui-selected:hover": { background: "#C6C6C6" },
+};
+
 export const modalTheme = {
     position: "absolute",
     top: "50%",
@@ -61,4 +67,3 @@ export const modalTheme = {
     boxShadow: 24,
     p: 4,
 };
-export default theme;

@@ -23,7 +23,7 @@ import { Configuration as PKIConfig } from "../../api/pki/configuration";
 import { AuthProps, Config } from "../../components/config";
 import { Buffer } from "buffer";
 import { KeyPair } from "../../components/keypair";
-import { modalTheme } from "../../components/theme";
+import { dataGridStyle, modalTheme } from "../../components/theme";
 import { getServerSideProps } from "../../components/auth";
 
 export function SslGenerator({ session }: { session: AuthProps | null }) {
@@ -125,15 +125,14 @@ export function SslGenerator({ session }: { session: AuthProps | null }) {
                 <Box sx={{ flex: "auto", minWidth: "49%", maxWidth: "100%", display: "flex", height: "100%", flexDirection: "column" }}>
                     <Typography variant="h6">Ihre Domains:</Typography>
                     <DataGrid columns={columns}
+                        sx={dataGridStyle}
                         initialState={{
                             sorting: {
                                 sortModel: [{ field: "fqdn", sort: "asc" }],
                             },
                         }}
                         pageSize={pageSize} selectionModel={selected}
-                        onSelectionModelChange={(event) => {
-                            setSelected(event);
-                        }}
+                        onSelectionModelChange={(event) => { setSelected(event); }}
                         loading={loadingDomains} density="compact"
                         onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
                         rowsPerPageOptions={[5, 15, 25, 50, 100]}

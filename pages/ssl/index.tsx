@@ -18,6 +18,7 @@ import { PortalApisSslCertificateDetails, SSLApi } from "../../api/pki/api";
 import { Configuration } from "../../api/pki/configuration";
 import { AuthProps, Config } from "../../components/config";
 import { getServerSideProps } from "../../components/auth";
+import { dataGridStyle } from "../../components/theme";
 
 export default SslCertificates;
 
@@ -85,9 +86,9 @@ export function SslCertificates({ session }: { session: AuthProps | null }) {
         } else {
             setLoading(false);
             setError("Bitte melden Sie sich an!");
-        }        
+        }
     }
-    
+
     useEffect(() => {
         load();
     }, [session]);
@@ -106,12 +107,8 @@ export function SslCertificates({ session }: { session: AuthProps | null }) {
                 return params.value as string;
             },
         },
-        {
-            field: "issued_by", headerName: "Angefordert durch", width: 150,
-        },
-        {
-            field: "source", headerName: "Quelle", width: 150,
-        },
+        { field: "issued_by", headerName: "Angefordert durch", width: 150 },
+        { field: "source", headerName: "Quelle", width: 150 },
         {
             field: "created", headerName: "Erstellt", type: "dateTime", width: 150,
             valueGetter: ({ value }) => {
@@ -212,6 +209,7 @@ export function SslCertificates({ session }: { session: AuthProps | null }) {
     return <Box sx={{ display: "flex", flexDirection: "column", height: "100%" }}><h1>Ihre Zertifikate</h1>
         <DataGrid columns={columns}
             pageSize={pageSize}
+            sx={dataGridStyle}
             getRowId={(row) =>
                 // eslint-disable-next-line @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-member-access  
                 row.serial
@@ -227,20 +225,15 @@ export function SslCertificates({ session }: { session: AuthProps | null }) {
                     sortModel: [{ field: "created", sort: "desc" }],
                 },
             }}
-            onSelectionModelChange={(event) => {
-                setSelected(event);
-            }}
+            onSelectionModelChange={(event) => { setSelected(event); }}
             selectionModel={selected}
-            components={{
-                LoadingOverlay: LinearProgress,
-            }}
-            localeText={{ errorOverlayDefaultLabel: typeof error === "string" ? error : "Ein unerwarteter Fehler ist aufgetreten." , ...deDE.components.MuiDataGrid.defaultProps.localeText }}
+            components={{ LoadingOverlay: LinearProgress }}
+            localeText={{ ...deDE.components.MuiDataGrid.defaultProps.localeText, errorOverlayDefaultLabel: typeof error === "string" ? error : "Ein unerwarteter Fehler ist aufgetreten." }}
             componentsProps={{ loadingOverlay: { color: "inherit" } }}
             loading={loading}
             error={error}
             onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
             rowsPerPageOptions={[5, 15, 25, 50, 100]}
-            
             pagination rows={certificates}></DataGrid>
         {selection()}
         <Dialog open={open} onClose={handleClose}>

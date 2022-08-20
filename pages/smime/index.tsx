@@ -17,6 +17,7 @@ import { PortalApisListSmimeResponseCertificateDetails, SMIMEApi } from "../../a
 import { Configuration } from "../../api/pki/configuration";
 import { AuthProps, Config } from "../../components/config";
 import { getServerSideProps } from "../../components/auth";
+import { dataGridStyle } from "../../components/theme";
 
 export default SmimeCertificates;
 
@@ -126,6 +127,7 @@ export function SmimeCertificates({ session }: { session: AuthProps | null }) {
 
     return <Box sx={{ display: "flex", flexDirection: "column", height: "100%" }}><h1>Ihre Zertifikate</h1>
         <DataGrid columns={columns}
+            sx={dataGridStyle}
             pageSize={pageSize}
             getRowId={(row) =>
                 // eslint-disable-next-line @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-member-access  
@@ -136,12 +138,10 @@ export function SmimeCertificates({ session }: { session: AuthProps | null }) {
                     sortModel: [{ field: "notBefore", sort: "desc" }],
                 },
             }}
-            components={{
-                LoadingOverlay: LinearProgress,
-            }}
+            components={{ LoadingOverlay: LinearProgress }}
             componentsProps={{ loadingOverlay: { color: "inherit" } }}
             loading={loading}
-            localeText={{ errorOverlayDefaultLabel: typeof error === "string" ? error : "Ein unerwarteter Fehler ist aufgetreten.", ...deDE.components.MuiDataGrid.defaultProps.localeText }}
+            localeText={{ ...deDE.components.MuiDataGrid.defaultProps.localeText, errorOverlayDefaultLabel: typeof error === "string" ? error : "Ein unerwarteter Fehler ist aufgetreten." }}
             error={error}
             onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
             rowsPerPageOptions={[5, 15, 25, 50, 100]}
