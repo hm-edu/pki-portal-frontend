@@ -18,7 +18,7 @@ export default function ButtonAppBar() {
     const [userFragment, setFragment] = useState(<></>);
 
     useEffect(() => {
-        if (session && session.user.name && session.user.email) {
+        if (session && session.user && session.user.name && session.user.email) {
             setFragment(<>
                 <Tooltip title={session.user?.email} arrow>
                     <Typography sx={{ paddingRight: "10px" }}>{ session.user?.name }</Typography>
