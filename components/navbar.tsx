@@ -18,14 +18,21 @@ export default function ButtonAppBar() {
     const [userFragment, setFragment] = useState(<></>);
 
     useEffect(() => {
-        setFragment(session ? <> <Tooltip title={session.user?.email as string ?? ""} arrow><Typography sx={{ paddingRight: "10px" }}>{session.user?.name as string ?? ""}</Typography></Tooltip>
-            <Button color="inherit" key='logout'
-                onClick={() => {
-                    void signOut({ callbackUrl: idp + "/idp/profile/Logout" });
-                }}
-                variant="outlined">
-                Abmelden
-            </Button></> : <SignInButton />);
+        if (session && session.user.name && session.user.email) {
+            setFragment(<>
+                <Tooltip title={session.user?.email} arrow>
+                    <Typography sx={{ paddingRight: "10px" }}>{ session.user?.name }</Typography>
+                </Tooltip>
+                <Button color="inherit" key='logout'
+                    onClick={() => {
+                        void signOut({ callbackUrl: idp + "/idp/profile/Logout" });
+                    }}
+                    variant="outlined">
+                    Abmelden
+                </Button></>);
+        } else {
+            setFragment(<SignInButton />);
+        }
     }, [session]);
 
     const buttons = session ? [
