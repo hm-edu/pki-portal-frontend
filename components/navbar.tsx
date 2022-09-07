@@ -14,7 +14,7 @@ import jwt_decode from "jwt-decode";
 
 export default function ButtonAppBar({ idp }: { idp: string }) {
     const { data: session } = useSession();
-
+    console.log(idp);
     const [userFragment, setFragment] = useState(<></>);
     useEffect(() => {
         if (session) {
