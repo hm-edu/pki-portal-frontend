@@ -17,6 +17,7 @@ export default function ButtonAppBar({ idp }: { idp: string }) {
     const [userFragment, setFragment] = useState(<></>);
     useEffect(() => {
         if (session) {
+            console.log(session);
             setFragment(<>
                 <Tooltip title={session.user?.email ? session.user?.email : ""} arrow>
                     <Typography sx={{ paddingRight: "10px" }}>{session.user?.name ? session.user?.name : ""}</Typography>
@@ -31,7 +32,7 @@ export default function ButtonAppBar({ idp }: { idp: string }) {
         } else {
             setFragment(<SignInButton />);
         }
-    }, [session]);
+    }, [session, session?.user, session?.user?.email, session?.user?.name]);
 
     const buttons = session ? [
         <Link key="ssl" href="/ssl" prefetch={false}><Button key="ssl" color="inherit">SSL Zertifikate</Button></Link>,
