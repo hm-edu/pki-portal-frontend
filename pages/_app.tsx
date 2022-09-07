@@ -14,20 +14,19 @@ import { Session } from "next-auth";
 import { NextComponentType, NextPageContext } from "next";
 import { Router } from "next/router";
 import Head from "next/head";
-import { IDP } from "../components/config";
+import App, { AppContext } from "next/app";
 
 const Offset = styled("div")(({ theme }) => {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return theme.mixins.toolbar;
 });
-function MyApp({ Component, pageProps: { ...pageProps } }: { pageProps: { session: Session } } & {
+function MyApp({ Component, pageProps: { ...pageProps } }: { pageProps: { session: Session; idp: string } } & {
     Component: NextComponentType<NextPageContext, unknown, Record<string, unknown>>;
     router: Router;
     __N_SSG?: boolean;
     __N_SSP?: boolean;
     __N_RSC?: boolean;
 }) {
-    console.log(process.env);
     return <SessionProvider session={pageProps.session} >
         <Head>
             <title>HM Portal</title>
@@ -35,7 +34,7 @@ function MyApp({ Component, pageProps: { ...pageProps } }: { pageProps: { sessio
         <ThemeProvider theme={theme}>
             {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
             <CssBaseline />
-            <ButtonAppBar idp={IDP} />
+            <ButtonAppBar idp={pageProps.idp} />
 
             <Offset />
             <Container sx={{ paddingTop: "10px", paddingBottom: "10px" }} maxWidth="xl" >
@@ -44,5 +43,12 @@ function MyApp({ Component, pageProps: { ...pageProps } }: { pageProps: { sessio
         </ThemeProvider>
     </SessionProvider >;
 }
+
+MyApp.getInitialProps = async (appContext: AppContext) => {
+    const appProps = await App.getInitialProps(appContext);
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+    appProps.pageProps.idp = process.env.AUTH_IDP ?? "https://idp.hmtest.de";
+    return { ...appProps };
+};
 
 export default MyApp;
