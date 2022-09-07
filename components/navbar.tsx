@@ -10,18 +10,16 @@ import React, { useEffect, useState } from "react";
 import { SignInButton } from "./signInButton";
 import Link from "next/link";
 import { signOut, useSession } from "next-auth/react";
-import { Config } from "./config";
 
-export default function ButtonAppBar() {
+export default function ButtonAppBar({ idp }: { idp: string }) {
     const { data: session } = useSession();
-    const idp = Config.IDP;
-    const [userFragment, setFragment] = useState(<></>);
 
+    const [userFragment, setFragment] = useState(<></>);
     useEffect(() => {
         if (session && session.user && session.user.name && session.user.email) {
             setFragment(<>
                 <Tooltip title={session.user?.email} arrow>
-                    <Typography sx={{ paddingRight: "10px" }}>{ session.user?.name }</Typography>
+                    <Typography sx={{ paddingRight: "10px" }}>{session.user?.name}</Typography>
                 </Tooltip>
                 <Button color="inherit" key='logout'
                     onClick={() => {

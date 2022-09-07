@@ -14,6 +14,7 @@ import { Session } from "next-auth";
 import { NextComponentType, NextPageContext } from "next";
 import { Router } from "next/router";
 import Head from "next/head";
+import { IDP } from "../components/config";
 
 const Offset = styled("div")(({ theme }) => {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
@@ -33,7 +34,7 @@ function MyApp({ Component, pageProps: { ...pageProps } }: { pageProps: { sessio
         <ThemeProvider theme={theme}>
             {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
             <CssBaseline />
-            <ButtonAppBar />
+            <ButtonAppBar idp={IDP} />
 
             <Offset />
             <Container sx={{ paddingTop: "10px", paddingBottom: "10px" }} maxWidth="xl" >
