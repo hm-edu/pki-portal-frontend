@@ -17,7 +17,7 @@
     "@fontsource/roboto": "^4.5.8",
     "@mui/icons-material": "^5.10.3",
     "@mui/material": "^5.10.3",
-    "@mui/system": "^5.10.3",
+    "@mui/system": "^5.10.4",
     "@mui/x-data-grid": "^5.17.1",
     "@types/node-forge": "^1.0.4",
     "axios": "^0.27.2",
