@@ -11,4 +11,8 @@ export const IDP = process.env.AUTH_IDP ?? "https://idp.hmtest.de";
 
 export interface AuthProps {
     accessToken: string;
+    user: {
+        name: string;
+        email: string;
+    };
 }

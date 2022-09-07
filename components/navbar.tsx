@@ -10,6 +10,7 @@ import React, { useEffect, useState } from "react";
 import { SignInButton } from "./signInButton";
 import Link from "next/link";
 import { signOut, useSession } from "next-auth/react";
+import jwt_decode from "jwt-decode";
 
 export default function ButtonAppBar({ idp }: { idp: string }) {
     const { data: session } = useSession();
@@ -17,7 +18,9 @@ export default function ButtonAppBar({ idp }: { idp: string }) {
     const [userFragment, setFragment] = useState(<></>);
     useEffect(() => {
         if (session) {
-            console.log(session);
+            if (session.accessToken && !session.user) {
+                session.user = jwt_decode(session.accessToken);
+            }
             setFragment(<>
                 <Tooltip title={session.user?.email ? session.user?.email : ""} arrow>
                     <Typography sx={{ paddingRight: "10px" }}>{session.user?.name ? session.user?.name : ""}</Typography>
