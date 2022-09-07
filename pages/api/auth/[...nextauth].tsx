@@ -15,7 +15,7 @@ export const authOptions: NextAuthOptions =
             name: "oidc",
             type: "oauth",
             checks: ["pkce"],
-            clientId: "portal-frontend-dev",
+            clientId: process.env.AUTH_CLIENT_ID ?? "portal-frontend-dev",
             clientSecret: process.env.AUTH_CLIENT_SECRET ?? "this_too_should_be_ch4ng3d",
             issuer: {
                 jwks_uri: `${idp}/idp/profile/oidc/keyset`,
