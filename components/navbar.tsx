@@ -10,6 +10,7 @@ import React, { useEffect, useState } from "react";
 import { SignInButton } from "./signInButton";
 import Link from "next/link";
 import { signOut, useSession } from "next-auth/react";
+import { idp } from "../pages/api/auth/[...nextauth]";
 
 export default function ButtonAppBar() {
     const { data: session } = useSession();
@@ -20,7 +21,7 @@ export default function ButtonAppBar() {
         setFragment(session ? <> <Tooltip title={session.user?.email as string ?? ""} arrow><Typography sx={{ paddingRight: "10px" }}>{session.user?.name as string ?? ""}</Typography></Tooltip>
             <Button color="inherit" key='logout'
                 onClick={() => {
-                    void signOut({ callbackUrl: "https://idp.hmtest.de/idp/profile/Logout" });
+                    void signOut({ callbackUrl: idp + "/idp/profile/Logout" });
                 }}
                 variant="outlined">
                 Abmelden

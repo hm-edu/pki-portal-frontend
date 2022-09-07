@@ -4,7 +4,7 @@ import jwt_decode from "jwt-decode";
 import { JWT } from "next-auth/jwt";
 import { OAuthConfig } from "next-auth/providers";
 
-const idp = process.env.AUTH_IDP ?? "https://idp.hmtest.de";
+export const idp = process.env.AUTH_IDP ?? "https://idp.hmtest.de";
 
 export const authOptions: NextAuthOptions =
 {
@@ -24,7 +24,7 @@ export const authOptions: NextAuthOptions =
             token: `${idp}/idp/profile/oidc/token`,
             authorization: {
                 url: `${idp}/idp/profile/oidc/authorize`,
-                params: { scope: "openid profile email offline_access Certificates EAB Domains ", resource: "https://api.hmtest.de" },
+                params: { scope: "openid profile email offline_access Certificates EAB Domains", resource: "https://api.hmtest.de" },
             },
             userinfo: `${idp}/idp/profile/oidc/userinfo`,
             profile(_profile, tokens) {
