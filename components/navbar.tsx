@@ -16,10 +16,10 @@ export default function ButtonAppBar({ idp }: { idp: string }) {
 
     const [userFragment, setFragment] = useState(<></>);
     useEffect(() => {
-        if (session && session.user && session.user.name && session.user.email) {
+        if (session) {
             setFragment(<>
-                <Tooltip title={session.user?.email} arrow>
-                    <Typography sx={{ paddingRight: "10px" }}>{session.user?.name}</Typography>
+                <Tooltip title={session.user?.email ? session.user?.email : ""} arrow>
+                    <Typography sx={{ paddingRight: "10px" }}>{session.user?.name ? session.user?.name : ""}</Typography>
                 </Tooltip>
                 <Button color="inherit" key='logout'
                     onClick={() => {
