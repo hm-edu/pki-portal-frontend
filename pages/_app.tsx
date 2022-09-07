@@ -27,6 +27,7 @@ function MyApp({ Component, pageProps: { ...pageProps } }: { pageProps: { sessio
     __N_SSP?: boolean;
     __N_RSC?: boolean;
 }) {
+    console.log(process.env);
     return <SessionProvider session={pageProps.session} >
         <Head>
             <title>HM Portal</title>
