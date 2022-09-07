@@ -14,14 +14,14 @@ import { Config } from "./config";
 
 export default function ButtonAppBar() {
     const { data: session } = useSession();
-
+    const idp = Config.IDP;
     const [userFragment, setFragment] = useState(<></>);
 
     useEffect(() => {
         setFragment(session ? <> <Tooltip title={session.user?.email as string ?? ""} arrow><Typography sx={{ paddingRight: "10px" }}>{session.user?.name as string ?? ""}</Typography></Tooltip>
             <Button color="inherit" key='logout'
                 onClick={() => {
-                    void signOut({ callbackUrl: Config.IDP + "/idp/profile/Logout" });
+                    void signOut({ callbackUrl: idp + "/idp/profile/Logout" });
                 }}
                 variant="outlined">
                 Abmelden
