@@ -3,9 +3,8 @@ import NextAuth, { NextAuthOptions } from "next-auth";
 import jwt_decode from "jwt-decode";
 import { JWT } from "next-auth/jwt";
 import { OAuthConfig } from "next-auth/providers";
-import { IDP } from "../../../components/config";
 
-const idp = IDP;
+const idp = process.env.AUTH_IDP ?? "https://idp.hmtest.de";
 
 export const authOptions: NextAuthOptions =
 {

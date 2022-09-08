@@ -7,8 +7,6 @@ export class Config {
         process.env.EAB_HOST ?? "https://eab.api.hmtest.de";
 }
 
-export const IDP = process.env.AUTH_IDP ?? "https://idp.hmtest.de";
-
 export interface AuthProps {
     accessToken: string;
     user: {

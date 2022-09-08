@@ -65,9 +65,9 @@ export function SmimeCertificates({ session }: { session: AuthProps | null }) {
                     setCertificates(data);
                 }
                 setLoading(false);
-            }).catch((error) => {
+            }).catch(() => {
                 setLoading(false);
-                console.error(error);
+                setError("Es ist ein unbekannter Fehler aufgetreten.");
             });
         } else {
             setLoading(false);
