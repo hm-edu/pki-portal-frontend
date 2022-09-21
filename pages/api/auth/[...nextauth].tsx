@@ -8,6 +8,11 @@ const idp = process.env.AUTH_IDP ?? "https://idp.hmtest.de";
 
 export const authOptions: NextAuthOptions =
 {
+    pages: {
+        signIn: "/auth/signin",
+        signOut: "/auth/signout",
+        error: "/auth/error",
+    },
     secret: process.env.AUTH_SECRET ?? "this_too_should_be_ch4ng3d",
     providers: [
         {

@@ -2,6 +2,7 @@ import { red } from "@mui/material/colors";
 import { createTheme, Theme } from "@mui/material/styles";
 import { checkboxClasses } from "@mui/material/Checkbox";
 import { deDE } from "@mui/x-data-grid";
+import { withRouter } from "next/router";
 
 // A custom theme for this app
 export const theme: Theme = createTheme({
@@ -37,7 +38,18 @@ export const theme: Theme = createTheme({
                 },
             },
         },
-
+        MuiButton: {
+            styleOverrides: {
+                "root": ({ ownerState }) => ({
+                    ":hover": {
+                        ...(ownerState.color === "inherit" && ownerState.variant === "outlined" && {
+                            backgroundColor: "#3E46D9",
+                            color: "#FFFFFF",
+                        }),
+                    },
+                }),
+            },
+        },
         MuiInput: {
             styleOverrides: {
                 "root": {
