@@ -11,11 +11,21 @@ import { SignInButton } from "./signInButton";
 import Link from "next/link";
 import { signOut, useSession } from "next-auth/react";
 import jwt_decode from "jwt-decode";
+import getConfig from "next/config";
 
-export default function ButtonAppBar({ idp }: { idp: string }) {
+export default function ButtonAppBar() {
     const { data: session } = useSession();
     const [userFragment, setFragment] = useState(<></>);
-    
+    const { publicRuntimeConfig } = getConfig();
+    const logout = <Button color="inherit" key='logout'
+        onClick={() => {
+            console.log(publicRuntimeConfig);
+            // eslint-disable-next-line @typescript-eslint/restrict-plus-operands, @typescript-eslint/no-unsafe-member-access            
+            void signOut({ callbackUrl: publicRuntimeConfig.idp + "/idp/profile/Logout" });
+        }}
+        variant="outlined">
+        Abmelden
+    </Button>;
     useEffect(() => {
         if (session) {
             if (session.accessToken && !session.user) {
@@ -24,15 +34,7 @@ export default function ButtonAppBar({ idp }: { idp: string }) {
             setFragment(<>
                 <Tooltip title={session.user?.email ? session.user?.email : ""} arrow>
                     <Typography sx={{ paddingRight: "10px" }}>{session.user?.name ? session.user?.name : ""}</Typography>
-                </Tooltip>
-                <Button color="inherit" key='logout'
-                    onClick={() => {
-                        console.log("idp " + idp);
-                        void signOut({ callbackUrl: idp + "/idp/profile/Logout" });
-                    }}
-                    variant="outlined">
-                    Abmelden
-                </Button></>);
+                </Tooltip>{logout}</>);
         } else {
             setFragment(<SignInButton />);
         }

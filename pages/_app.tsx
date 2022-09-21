@@ -14,6 +14,7 @@ import { Session } from "next-auth";
 import { NextComponentType, NextPageContext } from "next";
 import { Router } from "next/router";
 import Head from "next/head";
+import App, { AppContext } from "next/app";
 
 const Offset = styled("div")(({ theme }) => {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
@@ -26,9 +27,7 @@ function MyApp({ Component, pageProps: { ...pageProps } }: { pageProps: { sessio
     __N_SSP?: boolean;
     __N_RSC?: boolean;
 }) {
-    const env_var = "NEXT_PUBLIC_AUTH_IDP"
-    const idp = process.env[env_var] ?? "https://idp.hmtest.de";
-    
+
     return <SessionProvider session={pageProps.session} >
         <Head>
             <title>HM Portal</title>
@@ -36,7 +35,7 @@ function MyApp({ Component, pageProps: { ...pageProps } }: { pageProps: { sessio
         <ThemeProvider theme={theme}>
             {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
             <CssBaseline />
-            <ButtonAppBar idp={idp} />
+            <ButtonAppBar />
 
             <Offset />
             <Container sx={{ paddingTop: "10px", paddingBottom: "10px" }} maxWidth="xl" >
@@ -45,5 +44,11 @@ function MyApp({ Component, pageProps: { ...pageProps } }: { pageProps: { sessio
         </ThemeProvider>
     </SessionProvider >;
 }
+
+MyApp.getInitialProps = async (appContext: AppContext) => {
+    // calls page's `getInitialProps` and fills `appProps.pageProps`
+    const appProps = await App.getInitialProps(appContext);
+    return { ...appProps };
+};
 
 export default MyApp;

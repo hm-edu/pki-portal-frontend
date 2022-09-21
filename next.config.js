@@ -10,4 +10,9 @@ const nextConfig = {
     output: "standalone",
 };
 
-module.exports = withBundleAnalyzer(nextConfig);
+module.exports = {
+    ...withBundleAnalyzer(nextConfig),
+    publicRuntimeConfig: {
+        idp: process.env.AUTH_IDP,
+    },
+};
