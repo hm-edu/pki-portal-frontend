@@ -4,7 +4,7 @@ import jwt_decode from "jwt-decode";
 import { JWT } from "next-auth/jwt";
 import { OAuthConfig } from "next-auth/providers";
 
-const idp = process.env.AUTH_IDP ?? "https://idp.hmtest.de";
+const idp = process.env.NEXT_PUBLIC_AUTH_IDP ?? "https://idp.hmtest.de";
 
 export const authOptions: NextAuthOptions =
 {
@@ -101,7 +101,6 @@ async function refreshAccessToken(token: JWT): Promise<JWT> {
         if (!response.ok) {
             throw refreshedTokens;
         }
-
         return {
             ...token,
             accessToken: refreshedTokens.access_token,
