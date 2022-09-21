@@ -28,6 +28,7 @@ function MyApp({ Component, pageProps: { ...pageProps } }: { pageProps: { sessio
 }) {
     const idp = process.env["NEXT_PUBLIC_AUTH_IDP"] ?? "https://idp.hmtest.de";
     
+    console.log("idp" + idp);
     return <SessionProvider session={pageProps.session} >
         <Head>
             <title>HM Portal</title>
