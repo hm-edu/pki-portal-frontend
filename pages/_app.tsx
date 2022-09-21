@@ -26,9 +26,9 @@ function MyApp({ Component, pageProps: { ...pageProps } }: { pageProps: { sessio
     __N_SSP?: boolean;
     __N_RSC?: boolean;
 }) {
-    const idp = process.env["NEXT_PUBLIC_AUTH_IDP"] ?? "https://idp.hmtest.de";
+    const env_var = "NEXT_PUBLIC_AUTH_IDP"
+    const idp = process.env[env_var] ?? "https://idp.hmtest.de";
     
-    console.log("idp" + idp);
     return <SessionProvider session={pageProps.session} >
         <Head>
             <title>HM Portal</title>

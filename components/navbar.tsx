@@ -16,8 +16,6 @@ export default function ButtonAppBar({ idp }: { idp: string }) {
     const { data: session } = useSession();
     const [userFragment, setFragment] = useState(<></>);
     
-    console.log("idp" + idp);
-    
     useEffect(() => {
         if (session) {
             if (session.accessToken && !session.user) {
@@ -29,7 +27,7 @@ export default function ButtonAppBar({ idp }: { idp: string }) {
                 </Tooltip>
                 <Button color="inherit" key='logout'
                     onClick={() => {
-                        console.log("idp" + idp);
+                        console.log("idp " + idp);
                         void signOut({ callbackUrl: idp + "/idp/profile/Logout" });
                     }}
                     variant="outlined">
