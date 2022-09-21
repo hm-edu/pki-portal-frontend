@@ -20,14 +20,14 @@ const Offset = styled("div")(({ theme }) => {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return theme.mixins.toolbar;
 });
-function MyApp({ Component, pageProps: { ...pageProps } }: { pageProps: { session: Session } } & {
+function MyApp({ Component, pageProps: { ...pageProps } }: { pageProps: { session: Session; idp: string } } & {
     Component: NextComponentType<NextPageContext, unknown, Record<string, unknown>>;
     router: Router;
     __N_SSG?: boolean;
     __N_SSP?: boolean;
     __N_RSC?: boolean;
 }) {
-
+    const idp = pageProps.idp;
     return <SessionProvider session={pageProps.session} >
         <Head>
             <title>HM Portal</title>
@@ -35,7 +35,7 @@ function MyApp({ Component, pageProps: { ...pageProps } }: { pageProps: { sessio
         <ThemeProvider theme={theme}>
             {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
             <CssBaseline />
-            <ButtonAppBar />
+            <ButtonAppBar idp={idp} />
 
             <Offset />
             <Container sx={{ paddingTop: "10px", paddingBottom: "10px" }} maxWidth="xl" >
@@ -48,6 +48,8 @@ function MyApp({ Component, pageProps: { ...pageProps } }: { pageProps: { sessio
 MyApp.getInitialProps = async (appContext: AppContext) => {
     // calls page's `getInitialProps` and fills `appProps.pageProps`
     const appProps = await App.getInitialProps(appContext);
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+    appProps.pageProps.idp = process.env.AUTH_IDP;
     return { ...appProps };
 };
 

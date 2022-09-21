@@ -11,17 +11,14 @@ import { SignInButton } from "./signInButton";
 import Link from "next/link";
 import { signOut, useSession } from "next-auth/react";
 import jwt_decode from "jwt-decode";
-import getConfig from "next/config";
 
-export default function ButtonAppBar() {
+export default function ButtonAppBar({ idp }: { idp: string }) {
     const { data: session } = useSession();
     const [userFragment, setFragment] = useState(<></>);
-    const { publicRuntimeConfig } = getConfig();
     const logout = <Button color="inherit" key='logout'
         onClick={() => {
-            console.log(publicRuntimeConfig);
             // eslint-disable-next-line @typescript-eslint/restrict-plus-operands, @typescript-eslint/no-unsafe-member-access            
-            void signOut({ callbackUrl: publicRuntimeConfig.idp + "/idp/profile/Logout" });
+            void signOut({ callbackUrl: idp + "/idp/profile/Logout" });
         }}
         variant="outlined">
         Abmelden
