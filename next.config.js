@@ -1,5 +1,5 @@
 /** @type {import('next').NextConfig} */
-
+const idp = "AUTH_IDP";
 const withBundleAnalyzer = require("@next/bundle-analyzer")({
     enabled: process.env.ANALYZE === "true",
 });
@@ -13,6 +13,6 @@ const nextConfig = {
 module.exports = {
     ...withBundleAnalyzer(nextConfig),
     publicRuntimeConfig: {
-        idp: process.env.AUTH_IDP,
+        idp: process.env[idp],
     },
 };
