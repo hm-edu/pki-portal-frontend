@@ -157,7 +157,7 @@ export function Domains({ session, nonce }: { session: AuthProps | null; nonce: 
 
     let delegationModal;
     if (delegationDomain) {
-        delegationModal = <Delegation delegationDomain={delegationDomain} onClose={(domain: ModelDomain) => {
+        delegationModal = <Delegation delegationDomain={delegationDomain} nonce={nonce} onClose={(domain: ModelDomain) => {
             const updated: ModelDomain[] = [...domains];
             updated[updated.findIndex((x) => x.id == delegationDomain.id)].delegations = domain.delegations;
             setDomains(updated);
