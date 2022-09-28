@@ -14,13 +14,13 @@ import { DataGrid, GridColDef, GridSelectionModel } from "@mui/x-data-grid";
 import React, { FormEvent } from "react";
 import { EABApi, ModelsEAB } from "../../api/eab/api";
 import { Configuration } from "../../api/eab/configuration";
-import { AuthProps, Config } from "../../components/config";
-import { RecommendedConfigurationsComponent } from "../../components/configuration";
-import { getServerSideProps } from "../../components/auth";
+import { AuthProps, Config } from "../../src/config";
+import { RecommendedConfigurationsComponent } from "../../src/configuration";
+import { getServerSideProps } from "../../src/auth";
 import { deDE } from "@mui/x-data-grid";
-import { dataGridStyle } from "../../components/theme";
+import { dataGridStyle } from "../../src/theme";
 
-class EabTokens extends React.Component<{ session: AuthProps | null }, { pageSize: number; tokens: ModelsEAB[]; selected: GridSelectionModel; loading: boolean; recommendations: boolean; error: string | boolean | undefined }> {
+class EabTokens extends React.Component<{ session: AuthProps | null; nonce: string }, { pageSize: number; tokens: ModelsEAB[]; selected: GridSelectionModel; loading: boolean; recommendations: boolean; error: string | boolean | undefined }> {
 
     tdStyle = {
         padding: "0px",
@@ -86,7 +86,7 @@ class EabTokens extends React.Component<{ session: AuthProps | null }, { pageSiz
     ];
 
     // eslint-disable-next-line @typescript-eslint/ban-types
-    constructor(props: { session: AuthProps | null }) {
+    constructor(props: { session: AuthProps | null; nonce: string }) {
         super(props);
         this.state = {
             pageSize: 15,
@@ -157,6 +157,7 @@ class EabTokens extends React.Component<{ session: AuthProps | null }, { pageSiz
                         },
                     },
                 }}
+                nonce={this.props.nonce}
                 pageSize={this.state.pageSize}
                 components={{ LoadingOverlay: LinearProgress }}
                 componentsProps={{ loadingOverlay: { color: "inherit" } }}

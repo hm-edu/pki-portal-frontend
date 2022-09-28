@@ -1,19 +1,15 @@
 /** @type {import('next').NextConfig} */
-const withBundleAnalyzer = require("@next/bundle-analyzer")({
-    enabled: process.env.ANALYZE === "true",
-});
-
 const nextConfig = {
     reactStrictMode: true,
     swcMinify: true,
+    productionBrowserSourceMaps: true,
     output: "standalone",
 };
 
 module.exports = {
-    ...withBundleAnalyzer(nextConfig),
+    ...nextConfig,
     webpack: (config, { webpack, isServer }) => {
         const envs = {};
-
         Object.keys(process.env).forEach((env) => {
             if (env.startsWith("NEXT_PUBLIC_")) {
                 envs[env] = process.env[env];

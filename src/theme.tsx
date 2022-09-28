@@ -2,7 +2,7 @@ import { red } from "@mui/material/colors";
 import { createTheme, Theme } from "@mui/material/styles";
 import { checkboxClasses } from "@mui/material/Checkbox";
 import { deDE } from "@mui/x-data-grid";
-import { withRouter } from "next/router";
+import createCache from "@emotion/cache";
 
 // A custom theme for this app
 export const theme: Theme = createTheme({
@@ -45,6 +45,7 @@ export const theme: Theme = createTheme({
                         ...(ownerState.color === "inherit" && ownerState.variant === "outlined" && {
                             backgroundColor: "#3E46D9",
                             color: "#FFFFFF",
+                            borderColor: "#FFFFFF",
                         }),
                     },
                 }),
@@ -79,3 +80,18 @@ export const modalTheme = {
     boxShadow: 24,
     p: 4,
 };
+
+const isBrowser = typeof document !== "undefined";
+
+// On the client side, Create a meta tag at the top of the <head> and set it as insertionPoint.
+// This assures that MUI styles are loaded first.
+// It allows developers to easily override MUI styles with other styling solutions, like CSS modules.
+export function createEmotionCache() {
+    let insertionPoint;
+    if (isBrowser) {
+        const emotionInsertionPoint = document.querySelector("meta[name=\"emotion-insertion-point\"]") as HTMLElement;
+        insertionPoint = emotionInsertionPoint ?? undefined;
+    }
+
+    return createCache({ key: "mui-style", insertionPoint });
+}

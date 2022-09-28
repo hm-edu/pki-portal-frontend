@@ -12,17 +12,18 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 
 import React, { FormEvent, useEffect, useRef, useState } from "react";
+import Link from "next/link";
 import Moment from "react-moment";
 
 import { PortalApisSslCertificateDetails, SSLApi } from "../../api/pki/api";
 import { Configuration } from "../../api/pki/configuration";
-import { AuthProps, Config } from "../../components/config";
-import { getServerSideProps } from "../../components/auth";
-import { dataGridStyle } from "../../components/theme";
+import { AuthProps, Config } from "../../src/config";
+import { getServerSideProps } from "../../src/auth";
+import { dataGridStyle } from "../../src/theme";
 
 export default SslCertificates;
 
-export function SslCertificates({ session }: { session: AuthProps | null }) {
+export function SslCertificates({ session, nonce }: { session: AuthProps | null; nonce: string }) {
     const [pageSize, setPageSize] = useState<number>(15);
     const [loading, setLoading] = useState(true);
     const reason = useRef<TextFieldProps>(null);
@@ -225,6 +226,7 @@ export function SslCertificates({ session }: { session: AuthProps | null }) {
                     sortModel: [{ field: "created", sort: "desc" }],
                 },
             }}
+            nonce={nonce}
             onSelectionModelChange={(event) => { setSelected(event); }}
             selectionModel={selected}
             components={{ LoadingOverlay: LinearProgress }}
@@ -259,7 +261,7 @@ export function SslCertificates({ session }: { session: AuthProps | null }) {
                 <Button variant="outlined" color="warning" onClick={() => revoke()}>Widerrufen</Button>
             </DialogActions>
         </Dialog>
-        <Button variant="contained" disabled={!session} color="success" startIcon={<AddCircleOutlineIcon />} sx={{ mt: 1 }} href="/ssl/new">Neues Zertifikat beziehen</Button>
+        <Link href="/ssl/new"><Button variant="contained" disabled={!session} color="success" startIcon={<AddCircleOutlineIcon />} sx={{ mt: 1 }} >Neues Zertifikat beziehen</Button></Link>
 
     </Box>;
 }

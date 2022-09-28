@@ -10,24 +10,36 @@ import React, { useEffect, useState } from "react";
 import { SignInButton } from "./signInButton";
 import Link from "next/link";
 import { signOut, useSession } from "next-auth/react";
-import jwt_decode from "jwt-decode";
+import useSWR from "swr";
+import { CircularProgress } from "@mui/material";
 
-export default function ButtonAppBar({ idp }: { idp: string }) {
+const fetcher = (args: RequestInfo | URL) => fetch(args).then(res => res.json());
+
+function useIdp() {
+    const { data, error } = useSWR("/api/idp", fetcher);
+
+    return {
+        idp: data,
+        isLoading: !error && !data,
+        isError: error,
+    };
+}
+
+export default function ButtonAppBar() {
     const { data: session } = useSession();
+    const { idp, isLoading } = useIdp();
     const [userFragment, setFragment] = useState(<></>);
-    const logout = <Button color="inherit" key='logout'
-        onClick={() => {
-            // eslint-disable-next-line @typescript-eslint/restrict-plus-operands, @typescript-eslint/no-unsafe-member-access            
-            void signOut({ callbackUrl: idp + "/idp/profile/Logout" });
-        }}
-        variant="outlined">
-        Abmelden
-    </Button>;
+
     useEffect(() => {
+        const logout = isLoading ? <CircularProgress /> : <Button color="inherit" key='logout'
+            onClick={() => {
+                // eslint-disable-next-line @typescript-eslint/restrict-plus-operands, @typescript-eslint/no-unsafe-member-access            
+                void signOut({ callbackUrl: idp.idp + "/idp/profile/Logout" });
+            }}
+            variant="outlined">
+            Abmelden
+        </Button>;
         if (session) {
-            if (session.accessToken && !session.user) {
-                session.user = jwt_decode(session.accessToken);
-            }
             setFragment(<>
                 <Tooltip title={session.user?.email ? session.user?.email : ""} arrow>
                     <Typography sx={{ paddingRight: "10px" }}>{session.user?.name ? session.user?.name : ""}</Typography>
@@ -35,7 +47,7 @@ export default function ButtonAppBar({ idp }: { idp: string }) {
         } else {
             setFragment(<SignInButton />);
         }
-    }, [session, session?.user, session?.user?.email, session?.user?.name]);
+    }, [session, session?.user, session?.user?.email, session?.user?.name, idp]);
 
     const buttons = session ? [
         <Link key="ssl" href="/ssl" prefetch={false}><Button key="ssl" color="inherit">SSL Zertifikate</Button></Link>,

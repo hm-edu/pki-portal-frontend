@@ -14,9 +14,9 @@ import Checkbox from "@mui/material/Checkbox";
 import React, { FormEvent, useCallback, useEffect, useRef, useState } from "react";
 import { SMIMEApi } from "../../api/pki/api";
 import { Configuration } from "../../api/pki/configuration";
-import { AuthProps, Config } from "../../components/config";
-import { modalTheme } from "../../components/theme";
-import { getServerSideProps } from "../../components/auth";
+import { AuthProps, Config } from "../../src/config";
+import { modalTheme } from "../../src/theme";
+import { getServerSideProps } from "../../src/auth";
 
 async function createP12(privateKey: string, chain: string[], password: string): Promise<string> {
 
@@ -42,7 +42,7 @@ async function createP12(privateKey: string, chain: string[], password: string):
 
 export default SMIMEGenerator;
 
-export function SMIMEGenerator({ session }: { session: AuthProps | null }) {
+export function SMIMEGenerator({ session, nonce }: { session: AuthProps | null; nonce: string }) {
 
     const [progress, setProgress] = useState<string>("");
     const [download, setDownload] = useState<JSX.Element>(<></>);
@@ -69,7 +69,7 @@ export function SMIMEGenerator({ session }: { session: AuthProps | null }) {
             setSuccess(false);
             setLoading(true);
             setProgress("Generiere CSR...");
-            const CsrBuilder = (await import("../../components/csr")).CsrBuilder;
+            const CsrBuilder = (await import("../../src/csr")).CsrBuilder;
             const csr = new CsrBuilder();
             csr.build("rsa", undefined, 3072).then((x) => {
                 setProgress("CSR generiert...");

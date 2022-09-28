@@ -15,13 +15,14 @@ import React, { useEffect, useRef, useState } from "react";
 
 import { PortalApisListSmimeResponseCertificateDetails, SMIMEApi } from "../../api/pki/api";
 import { Configuration } from "../../api/pki/configuration";
-import { AuthProps, Config } from "../../components/config";
-import { getServerSideProps } from "../../components/auth";
-import { dataGridStyle } from "../../components/theme";
+import { AuthProps, Config } from "../../src/config";
+import { getServerSideProps } from "../../src/auth";
+import { dataGridStyle } from "../../src/theme";
+import Link from "next/link";
 
 export default SmimeCertificates;
 
-export function SmimeCertificates({ session }: { session: AuthProps | null }) {
+export function SmimeCertificates({ session, nonce }: { session: AuthProps | null; nonce: string }) {
     const [open, setOpen] = useState(false);
     const reason = useRef<TextFieldProps>(null);
     const [pageSize, setPageSize] = useState<number>(15);
@@ -138,6 +139,7 @@ export function SmimeCertificates({ session }: { session: AuthProps | null }) {
                     sortModel: [{ field: "notBefore", sort: "desc" }],
                 },
             }}
+            nonce={nonce}
             components={{ LoadingOverlay: LinearProgress }}
             componentsProps={{ loadingOverlay: { color: "inherit" } }}
             loading={loading}
@@ -169,7 +171,7 @@ export function SmimeCertificates({ session }: { session: AuthProps | null }) {
                 <Button color="warning" variant="outlined" onClick={() => revoke()}>Widerrufen</Button>
             </DialogActions>
         </Dialog>
-        <Button variant="contained" disabled={!session} color="success" startIcon={<AddCircleOutlineIcon />} sx={{ mt: 1 }} href="/smime/new">Neues Zertifikat beziehen</Button>
+        <Link href="/smime/new"><Button variant="contained" disabled={!session} color="success" startIcon={<AddCircleOutlineIcon />} sx={{ mt: 1 }}>Neues Zertifikat beziehen</Button></Link>
     </Box>;
 }
 

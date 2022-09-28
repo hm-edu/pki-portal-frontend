@@ -21,14 +21,14 @@ import React, { FormEvent, useEffect, useRef, useState } from "react";
 import { DomainsApi } from "../../api/domains/api";
 import { ModelDomain } from "../../api/domains/api";
 import { Configuration } from "../../api/domains/configuration";
-import { AuthProps, Config } from "../../components/config";
-import Delegation from "../../components/delegation";
-import { getServerSideProps } from "../../components/auth";
-import { dataGridStyle } from "../../components/theme";
+import { AuthProps, Config } from "../../src/config";
+import Delegation from "../../src/delegation";
+import { getServerSideProps } from "../../src/auth";
+import { dataGridStyle } from "../../src/theme";
 
 export default Domains;
 
-export function Domains({ session }: { session: AuthProps | null }) {
+export function Domains({ session, nonce }: { session: AuthProps | null; nonce: string }) {
     const [pageSize, setPageSize] = useState<number>(15);
     const [domains, setDomains] = useState([] as ModelDomain[]);
     const [loading, setLoading] = useState(true);
@@ -196,6 +196,7 @@ export function Domains({ session }: { session: AuthProps | null }) {
                     sortModel: [{ field: "fqdn", sort: "asc" }],
                 },
             }}
+            nonce={nonce}
             sx={dataGridStyle}
             columns={columns}
             pageSize={pageSize}
