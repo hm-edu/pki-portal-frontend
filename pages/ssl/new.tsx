@@ -177,7 +177,7 @@ export function SslGenerator({ session, nonce }: { session: AuthProps | null; no
     /* eslint-disable @typescript-eslint/no-misused-promises */
     return <Box sx={{ width: "100%", display: "flex", height: "100%", flexDirection: "column", alignItems: "left", alignSelf: "center" }}>
         <Box component="form" onSubmit={createHandler} sx={{ width: "100%", display: "flex", height: "100%", flexDirection: "column", alignItems: "left", alignSelf: "center" }}>
-            <h1>Erstellung eines neuen SSL Zertifikats</h1>
+            <Typography variant="h1">Erstellung eines neuen SSL Zertifikats</Typography>
             {body}
         </Box>
         <Modal open={loadingDomains} aria-labelledby="modal-modal-title" aria-describedby="modal-modal-description">

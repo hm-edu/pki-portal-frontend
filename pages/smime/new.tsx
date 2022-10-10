@@ -17,9 +17,7 @@ import { Configuration } from "../../api/pki/configuration";
 import { AuthProps, Config } from "../../src/config";
 import { modalTheme } from "../../src/theme";
 import { getServerSideProps } from "../../src/auth";
-import { AlertTitle, Table } from "@mui/material";
-import TableRow from '@mui/material/TableRow';
-import TableCell from '@mui/material/TableCell';
+import { AlertTitle } from "@mui/material";
 
 async function createP12(privateKey: string, chain: string[], password: string): Promise<string> {
 

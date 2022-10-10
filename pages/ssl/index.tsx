@@ -20,6 +20,7 @@ import { Configuration } from "../../api/pki/configuration";
 import { AuthProps, Config } from "../../src/config";
 import { getServerSideProps } from "../../src/auth";
 import { dataGridStyle } from "../../src/theme";
+import { Typography } from "@mui/material";
 
 export default SslCertificates;
 
@@ -207,7 +208,7 @@ export function SslCertificates({ session, nonce }: { session: AuthProps | null;
             return undefined;
         }
     };
-    return <Box sx={{ display: "flex", flexDirection: "column", height: "100%" }}><h1>Ihre Zertifikate</h1>
+    return <Box sx={{ display: "flex", flexDirection: "column", height: "100%" }}><Typography variant="h1">Ihre Zertifikate</Typography>
         <DataGrid columns={columns}
             pageSize={pageSize}
             sx={dataGridStyle}

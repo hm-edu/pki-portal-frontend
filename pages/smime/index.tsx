@@ -19,6 +19,7 @@ import { AuthProps, Config } from "../../src/config";
 import { getServerSideProps } from "../../src/auth";
 import { dataGridStyle } from "../../src/theme";
 import Link from "next/link";
+import { Typography } from "@mui/material";
 
 export default SmimeCertificates;
 
@@ -126,7 +127,7 @@ export function SmimeCertificates({ session, nonce }: { session: AuthProps | nul
         },
     ];
 
-    return <Box sx={{ display: "flex", flexDirection: "column", height: "100%" }}><h1>Ihre Zertifikate</h1>
+    return <Box sx={{ display: "flex", flexDirection: "column", height: "100%" }}><Typography variant="h1">Ihre Zertifikate</Typography>
         <DataGrid columns={columns}
             sx={dataGridStyle}
             pageSize={pageSize}

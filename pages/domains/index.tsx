@@ -25,6 +25,7 @@ import { AuthProps, Config } from "../../src/config";
 import Delegation from "../../src/delegation";
 import { getServerSideProps } from "../../src/auth";
 import { dataGridStyle } from "../../src/theme";
+import { Typography } from "@mui/material";
 
 export default Domains;
 
@@ -189,7 +190,7 @@ export function Domains({ session, nonce }: { session: AuthProps | null; nonce: 
         </Dialog>;
     }
 
-    return <Box sx={{ display: "flex", flexDirection: "column", height: "100%" }}><h1>Ihre Domains</h1>
+    return <Box sx={{ display: "flex", flexDirection: "column", height: "100%" }}><Typography variant="h1">Ihre Domains</Typography>
         <DataGrid
             initialState={{
                 sorting: {
