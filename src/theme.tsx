@@ -19,6 +19,19 @@ export const theme: Theme = createTheme({
     }, shape: {
         borderRadius: 0,
     },
+    typography: {
+        h1: {
+            fontSize: "2rem",
+            fontWeight: 700,
+            paddingTop: "0.5rem",
+            paddingBottom: "0.5rem",
+        },
+        h2: {
+            fontSize: "1.5rem",
+            fontWeight: 500,
+            paddingBottom: "0.5rem",
+        },
+    },
     components: {
         MuiCheckbox: {
             styleOverrides: {

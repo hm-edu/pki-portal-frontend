@@ -17,6 +17,9 @@ import { Configuration } from "../../api/pki/configuration";
 import { AuthProps, Config } from "../../src/config";
 import { modalTheme } from "../../src/theme";
 import { getServerSideProps } from "../../src/auth";
+import { AlertTitle, Table } from "@mui/material";
+import TableRow from '@mui/material/TableRow';
+import TableCell from '@mui/material/TableCell';
 
 async function createP12(privateKey: string, chain: string[], password: string): Promise<string> {
 
@@ -51,7 +54,7 @@ export function SMIMEGenerator({ session, nonce }: { session: AuthProps | null; 
     const [success, setSuccess] = useState(false);
     const [warning, setWarning] = useState(false);
     const [error, setError] = useState("");
-    const [validation, setValidation] = useState<string | undefined>(undefined);
+    const [validation, setValidation] = useState<string | undefined>("Bitte geben Sie ein Passwort für das PKCS12-Datei an.");
     const p12PasswordRef = useRef<TextFieldProps>(null);
     const p12PasswordConfirmRef = useRef<TextFieldProps>(null);
 
@@ -137,8 +140,7 @@ export function SMIMEGenerator({ session, nonce }: { session: AuthProps | null; 
     const validate = useCallback(() => {
         if (p12PasswordRef.current?.value == "") {
             setValidation("Bitte geben Sie ein Passwort für das PKCS12-Datei an.");
-        }
-        if (p12PasswordRef.current?.value != p12PasswordConfirmRef.current?.value) {
+        } else if (p12PasswordRef.current?.value != p12PasswordConfirmRef.current?.value) {
             setValidation("Die eingegebenen Passwörter stimmen nicht überein.");
         } else {
             setValidation(undefined);
@@ -147,15 +149,30 @@ export function SMIMEGenerator({ session, nonce }: { session: AuthProps | null; 
 
     /* eslint-disable @typescript-eslint/no-misused-promises */
     return <div>
-        <h1>Erstellung eines neuen SMIME Zertifikats</h1>
-        {!error && <Box sx={{ display: "flex", flexDirection: "column", width: "md", alignItems: "center" }}>
+        <Typography variant="h1">Erstellung eines neuen SMIME Zertifikats</Typography>
+        {!error && <Box sx={{ display: "flex", flexDirection: "column", width: "md", alignItems: "left" }}>
+            {session && <Box sx={{ display: "flex", flexDirection: "column", alignItems: "left", alignSelf: "left", paddingBottom: "10px" }}>
+                <Typography variant="h2">Aktuelle Benutzerdaten:</Typography>
+                <Typography><b>Name:</b> {session.user.name}</Typography>
+                <Typography><b>E-Mail:</b> {session.user.email}</Typography>
+            </Box>}
             <Box component="form" onSubmit={create} sx={{ display: "flex", width: "100%", flexDirection: "column", alignItems: "left", gap: "10px", alignSelf: "center" }}>
-                {warning && <Alert severity="warning">Sie haben derzeit 2 aktive SMIME Zertifikate. Durch Ausstellung eines neuen Zertifikats wird automatisch das ältere dieser beiden Zertifikate widerrufen. Sofern Sie dies nicht möchten widerrufen Sie bitte ein Zertifikat von Hand.</Alert>}
-                {warning && <FormControlLabel control={<Checkbox color="secondary" required />} label="Zertifikat automatisch widerrufen." />}
-                <TextField required label="PKCS12 Password" type="password" inputRef={p12PasswordRef} fullWidth variant="standard" onChange={validate} />
-                <TextField required label="PKCS12 Passwort Bestätigung" type="password" fullWidth inputRef={p12PasswordConfirmRef} variant="standard" onChange={validate} />
+
+                <Box>
+                    <Typography >Bitte definieren Sie ein individuelles PKCS12 Import-Passwort.</Typography>
+                    <TextField required label="PKCS12 Passwort" type="password" inputRef={p12PasswordRef} fullWidth variant="standard" onChange={validate} />
+                    <TextField required label="PKCS12 Passwort Bestätigung" type="password" fullWidth inputRef={p12PasswordConfirmRef} variant="standard" onChange={validate} />
+                </Box>
                 {validation && <Alert variant="filled" severity="warning">{validation}</Alert>}
-                <Button type="submit" variant="outlined" color="inherit" disabled={(loading || success) || (validation != undefined)} sx={buttonSx}>Generiere Zertifikat {loading && (
+                {warning && <Alert severity="warning">
+                    <AlertTitle>Warnung</AlertTitle>
+                    <Typography>Sie haben derzeit 2 aktive SMIME Zertifikate. </Typography>
+                    <Typography>Durch Ausstellung eines neuen Zertifikats wird automatisch das ältere dieser beiden Zertifikate widerrufen. </Typography>
+                    <Typography>Das Widerrufen eines Zertifikats kann nicht rückgängig gemacht werden!</Typography>
+                    <Typography>Sofern Sie dies nicht möchten widerrufen Sie bitte ein Zertifikat von Hand. </Typography>
+                </Alert>}
+                {warning && <FormControlLabel control={<Checkbox color="secondary" required />} label="Ja, ich möchte das ältere aktive Zertifikat automatisch widerrufen." />}
+                <Button type="submit" variant="outlined" color="inherit" disabled={(loading || success) || (validation != undefined) || p12PasswordRef.current?.value == ""} sx={buttonSx}>Generiere Zertifikat {loading && (
                     <CircularProgress size={24} sx={{ color: green[500], position: "absolute", top: "50%", left: "50%", marginTop: "-12px", marginLeft: "-12px" }} />
                 )}</Button>
                 {download}
