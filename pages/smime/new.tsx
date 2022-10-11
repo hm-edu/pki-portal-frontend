@@ -43,7 +43,7 @@ async function createP12(privateKey: string, chain: string[], password: string):
 
 export default SMIMEGenerator;
 
-export function SMIMEGenerator({ session, nonce }: { session: AuthProps | null; nonce: string }) {
+export function SMIMEGenerator({ session }: { session: AuthProps | null; nonce: string }) {
 
     const [progress, setProgress] = useState<string>("");
     const [download, setDownload] = useState<JSX.Element>(<></>);
@@ -161,7 +161,6 @@ export function SMIMEGenerator({ session, nonce }: { session: AuthProps | null; 
                     <TextField required label="PKCS12 Passwort" type="password" inputRef={p12PasswordRef} fullWidth variant="standard" onChange={validate} />
                     <TextField required label="PKCS12 Passwort Bestätigung" type="password" fullWidth inputRef={p12PasswordConfirmRef} variant="standard" onChange={validate} />
                 </Box>
-                {validation && <Alert variant="filled" severity="warning">{validation}</Alert>}
                 {warning && <Alert severity="warning">
                     <AlertTitle>Warnung</AlertTitle>
                     <Typography>Sie haben derzeit 2 aktive SMIME Zertifikate. </Typography>
@@ -173,6 +172,10 @@ export function SMIMEGenerator({ session, nonce }: { session: AuthProps | null; 
                 <Button type="submit" variant="outlined" color="inherit" disabled={(loading || success) || (validation != undefined) || p12PasswordRef.current?.value == ""} sx={buttonSx}>Generiere Zertifikat {loading && (
                     <CircularProgress size={24} sx={{ color: green[500], position: "absolute", top: "50%", left: "50%", marginTop: "-12px", marginLeft: "-12px" }} />
                 )}</Button>
+                {validation && <Alert variant="filled" severity="error">
+                    <AlertTitle>Fehler!</AlertTitle>
+                    {validation}
+                </Alert>}
                 {download}
             </Box>
         </Box>}
