@@ -94,15 +94,21 @@ export function SMIMEGenerator({ session }: { session: AuthProps | null; nonce: 
                             setLoading(false);
                         }).catch((err) => {
                             console.log(err);
+                            setLoading(false);
+                            setError("Es ist ein unbekannter Fehler aufgetreten!");
                         });
                     }).catch((error) => {
                         console.error(error);
+                        setLoading(false);
+                        setError("Es ist ein unbekannter Fehler aufgetreten!");
                     });
 
                 }
                 return Promise.resolve();
             }).catch((error) => {
                 console.log(error);
+                setLoading(false);
+                setError("Es ist ein unbekannter Fehler aufgetreten!");
             });
         }
     };
@@ -128,6 +134,7 @@ export function SMIMEGenerator({ session }: { session: AuthProps | null; nonce: 
             }).catch((error) => {
                 setLoading(false);
                 console.error(error);
+                setError("Es ist ein unbekannter Fehler aufgetreten!");
             });
         } else {
             setLoading(false);
