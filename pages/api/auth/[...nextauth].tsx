@@ -46,10 +46,10 @@ export const authOptions: NextAuthOptions =
         },
     ],
     jwt: {
-        maxAge: 15 * 60, // 15 minutes
+        maxAge: 10 * 60, // 10 minutes
     },
     session: {
-        maxAge: 15 * 60, // 15 minutes
+        maxAge: 10 * 60, // 10 minutes
     },
     callbacks: {
         async redirect({ url, baseUrl }) {
@@ -79,7 +79,6 @@ export const authOptions: NextAuthOptions =
         session({ session, token }) {
             session.user = token.user;
             session.accessToken = token.accessToken;
-            session.error = token.error;
             return session;
         },
     },

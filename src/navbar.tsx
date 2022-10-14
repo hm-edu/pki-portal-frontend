@@ -11,7 +11,8 @@ import { SignInButton } from "./signInButton";
 import Link from "next/link";
 import { signOut, useSession } from "next-auth/react";
 import useSWR from "swr";
-import { CircularProgress } from "@mui/material";
+import { Box, CircularProgress } from "@mui/material";
+import Moment from "react-moment";
 
 const fetcher = (args: RequestInfo | URL) => fetch(args).then(res => res.json());
 
@@ -41,7 +42,10 @@ export default function ButtonAppBar() {
         </Button>;
         if (session) {
             setFragment(<>
-                <Tooltip title={session.user?.email ? session.user?.email : ""} arrow>
+                <Tooltip title={<Box>
+                    <Typography variant="body2">{session.user?.email ? session.user?.email : ""}</Typography>
+                    <Typography variant="body2">Sitzung gültig bis: <Moment format="DD.MM.YYYY HH:mm">{new Date(session.expires)}</Moment></Typography>
+                </Box>}>
                     <Typography sx={{ paddingRight: "10px" }}>{session.user?.name ? session.user?.name : ""}</Typography>
                 </Tooltip>{logout}</>);
         } else {
