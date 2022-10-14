@@ -55,7 +55,7 @@ export const theme: Theme = createTheme({
             styleOverrides: {
                 "root": ({ ownerState }) => ({
                     ":hover": {
-                        ...(ownerState.color === "inherit" && ownerState.variant === "outlined" && {
+                        ...(ownerState.color === "inherit" && {
                             backgroundColor: "#3E46D9",
                             color: "#FFFFFF",
                             borderColor: "#FFFFFF",
