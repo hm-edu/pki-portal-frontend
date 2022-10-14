@@ -9,7 +9,7 @@ import { green } from "@mui/material/colors";
 import CircularProgress from "@mui/material/CircularProgress";
 import Alert from "@mui/material/Alert";
 import FormControlLabel from "@mui/material/FormControlLabel";
-import Checkbox, { CheckboxProps } from "@mui/material/Checkbox";
+import Checkbox from "@mui/material/Checkbox";
 
 import React, { FormEvent, useCallback, useEffect, useRef, useState } from "react";
 import { SMIMEApi } from "../../api/pki/api";
@@ -153,7 +153,7 @@ export function SMIMEGenerator({ session }: { session: AuthProps | null; nonce: 
         } else {
             setValidation(undefined);
         }
-    }, [p12PasswordConfirmRef, p12PasswordRef, revokeRef]);
+    }, [p12PasswordConfirmRef, p12PasswordRef, revokeRef, revokeRef.current]);
 
     /* eslint-disable @typescript-eslint/no-misused-promises */
     return <div><Typography variant="h1">Erstellung eines neuen SMIME Zertifikats</Typography>
@@ -166,9 +166,9 @@ export function SMIMEGenerator({ session }: { session: AuthProps | null; nonce: 
             </Box>}
             <Box component="form" onSubmit={create} sx={{ display: "flex", width: "100%", flexDirection: "column", alignItems: "left", gap: "15px", alignSelf: "center" }}>
 
-                <Box sx={{ gap: "15px" }}>
-                    <Typography >Bitte vergeben Sie ein individuelles PKCS12 Import-Passwort.</Typography>
-                    <TextField required label="PKCS12 Passwort" type="password" inputRef={p12PasswordRef} fullWidth variant="standard" onChange={validate} />
+                <Box >
+                    <Typography sx={{ paddingBottom: "10px" }}>Bitte vergeben Sie ein individuelles PKCS12 Import-Passwort.</Typography>
+                    <TextField required label="PKCS12 Passwort" sx={{ paddingBottom: "10px" }} type="password" inputRef={p12PasswordRef} fullWidth variant="standard" onChange={validate} />
                     <TextField required label="PKCS12 Passwort Bestätigung" type="password" fullWidth inputRef={p12PasswordConfirmRef} variant="standard" onChange={validate} />
                 </Box>
                 <Box>
