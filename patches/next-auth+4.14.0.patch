@@ -52,24 +52,15 @@ index 02e19fb..a240290 100644
      httpOptions?: HttpOptions;
      /**
 diff --git a/node_modules/next-auth/react/index.js b/node_modules/next-auth/react/index.js
-index c8cf434..f6cf1ec 100644
+index c8cf434..4ccb10a 100644
 --- a/node_modules/next-auth/react/index.js
 +++ b/node_modules/next-auth/react/index.js
-@@ -542,11 +542,16 @@ function SessionProvider(props) {
+@@ -542,7 +542,7 @@ function SessionProvider(props) {
  
      if (refetchInterval) {
        var refetchIntervalTimer = setInterval(function () {
 -        if (__NEXTAUTH._session) {
-+        console.log("refetchIntervalTimer");
-+        if (__NEXTAUTH._session && !document.hidden && document.hasFocus) {
-+          console.log("refetching session");
++        if (__NEXTAUTH._session && document.visibilityState === "visible" && document.hasFocus()) {
            __NEXTAUTH._getSession({
              event: "poll"
            });
-+        } else {
-+          console.log("not refetching session");
-         }
-+
-       }, refetchInterval * 1000);
-       return function () {
-         return clearInterval(refetchIntervalTimer);
