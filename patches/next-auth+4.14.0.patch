@@ -22,7 +22,7 @@ index bafe973..9e77621 100644
  
  var _utils = require("../lib/utils");
  
-+var _errors = require("jose/dist/types/util/errors");
++var _jose = require("jose");
 +
  async function session(params) {
    const {
@@ -43,7 +43,7 @@ index bafe973..9e77621 100644
        var _response$cookies2;
  
 -      logger.error("JWT_SESSION_ERROR", error);
-+      if (!(error instanceof _errors.JWTExpired)) logger.error("JWT_SESSION_ERROR", error);
++      if (!(error instanceof _jose.errors.JWTExpired)) logger.error("JWT_SESSION_ERROR", error);
        (_response$cookies2 = response.cookies) === null || _response$cookies2 === void 0 ? void 0 : _response$cookies2.push(...sessionStore.clean());
      }
    } else {
