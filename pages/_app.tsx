@@ -32,7 +32,7 @@ function MyApp({ Component, pageProps: { ...pageProps }, emotionCache = clientSi
     __N_RSC?: boolean;
 } & { emotionCache: EmotionCache }) {
 
-    return <SessionProvider session={pageProps.session} >
+    return <SessionProvider session={pageProps.session} refetchInterval={60} >
         <Head>
             <title>HM Portal</title>
         </Head>
