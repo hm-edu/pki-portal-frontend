@@ -15,10 +15,19 @@ index 7943303..47a8c41 100644
        token_endpoint: (_provider$token = provider.token) === null || _provider$token === void 0 ? void 0 : _provider$token.url,
        userinfo_endpoint: (_provider$userinfo = provider.userinfo) === null || _provider$userinfo === void 0 ? void 0 : _provider$userinfo.url
 diff --git a/node_modules/next-auth/core/routes/session.js b/node_modules/next-auth/core/routes/session.js
-index bafe973..22a0ed2 100644
+index bafe973..9e77621 100644
 --- a/node_modules/next-auth/core/routes/session.js
 +++ b/node_modules/next-auth/core/routes/session.js
-@@ -62,9 +62,7 @@ async function session(params) {
+@@ -7,6 +7,8 @@ exports.default = session;
+ 
+ var _utils = require("../lib/utils");
+ 
++var _errors = require("jose/dist/types/util/errors");
++
+ async function session(params) {
+   const {
+     options,
+@@ -62,9 +64,7 @@ async function session(params) {
          token,
          maxAge: options.session.maxAge
        });
@@ -29,6 +38,15 @@ index bafe973..22a0ed2 100644
        (_response$cookies = response.cookies) === null || _response$cookies === void 0 ? void 0 : _response$cookies.push(...sessionCookies);
        await ((_events$session = events.session) === null || _events$session === void 0 ? void 0 : _events$session.call(events, {
          session: newSession,
+@@ -73,7 +73,7 @@ async function session(params) {
+     } catch (error) {
+       var _response$cookies2;
+ 
+-      logger.error("JWT_SESSION_ERROR", error);
++      if (!(error instanceof _errors.JWTExpired)) logger.error("JWT_SESSION_ERROR", error);
+       (_response$cookies2 = response.cookies) === null || _response$cookies2 === void 0 ? void 0 : _response$cookies2.push(...sessionStore.clean());
+     }
+   } else {
 diff --git a/node_modules/next-auth/providers/oauth.d.ts b/node_modules/next-auth/providers/oauth.d.ts
 index 02e19fb..a240290 100644
 --- a/node_modules/next-auth/providers/oauth.d.ts
