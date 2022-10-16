@@ -13,7 +13,7 @@ const securityMiddleware = [
         {
             "script-src": ["self", "data:"],
             "style-src": ["self", "data:"],
-            "connect-src": ["https://eab.api.hmtest.de", "https://pki.api.hmtest.de", "https://domain.api.hmtest.de", "self"],
+            "connect-src": ["https://eab.api.hm.edu", "https://pki.api.hm.edu", "https://domain.api.hm.edu", "self"],
         },
     }),
     strictDynamic(),

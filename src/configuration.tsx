@@ -23,24 +23,24 @@ export class RecommendedConfigurationsComponent extends React.Component<{ token:
         const key_bytes = this.props.token?.key_bytes ? this.props.token?.key_bytes : "";
 
         const register_acme_sh = `acme.sh --register-account \\
-    --server https://acme.hmtest.de/acme/acme/directory \\
-    --email noreply@hmtest.de \\
+    --server https://acme.hm.edu/acme/acme/directory \\
+    --email noreply@hm.edu \\
     --eab-kid "${id}" \\
     --eab-hmac-key "${key_bytes}"`;
 
         const issue_acme_sh = `acme.sh --issue \\
     --standalone \\
     --keylength ec-256 \\
-    --server https://acme.hmtest.de/acme/acme/directory \\
-    -d dummy.hmtest.de`;
+    --server https://acme.hm.edu/acme/acme/directory \\
+    -d dummy.hm.edu`;
 
         const certbot = `certbot certonly \\
-    --standalone --non-interactive --agree-tos --email noreply@hmtest.de \\
-    --server https://acme.hmtest.de/acme/acme/directory  \\
+    --standalone --non-interactive --agree-tos --email noreply@hm.edu \\
+    --server https://acme.hm.edu/acme/acme/directory  \\
     --key-type ecdsa \\
     --eab-kid ${id} \\
     --eab-hmac-key ${key_bytes} \\
-    --domain dummy.hmtest.de `;
+    --domain dummy.hm.edu `;
 
         return <Modal open={this.props.token != undefined} onClose={() => { this.props.onClose(); }} aria-labelledby="modal-modal-title" aria-describedby="modal-modal-description" >
             <Box sx={{ ...modalTheme, width: 1000 }}>
