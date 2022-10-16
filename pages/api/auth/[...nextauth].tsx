@@ -29,7 +29,7 @@ export const authOptions: NextAuthOptions =
             token: `${idp}/idp/profile/oidc/token`,
             authorization: {
                 url: `${idp}/idp/profile/oidc/authorize`,
-                params: { scope: "openid profile email offline_access Certificates EAB Domains", resource: "https://api.hmtest.de" },
+                params: { scope: "openid profile email offline_access Certificates EAB Domains", resource: process.env.AUTH_RESOURCE },
             },
             userinfo: `${idp}/idp/profile/oidc/userinfo`,
             profile(_profile, tokens) {
