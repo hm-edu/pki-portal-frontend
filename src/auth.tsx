@@ -7,7 +7,7 @@ import { AuthProps } from "./config";
 
 async function loadSession(context: { req: IncomingMessage & { cookies: NextApiRequestCookies }; res: ServerResponse }): Promise<{ props: { session: AuthProps | null } }> {
     const session = await unstable_getServerSession(context.req, context.res, authOptions);
-    const data = session?.accessToken ? { accessToken: session.accessToken, user: { name: session.user.name ?? "", email: session.user.email ?? "" } } : null;
+    const data = session?.accessToken ? { accessToken: session.accessToken, user: { name: session.user.name ?? "", email: session.user.email ?? "" }, expires: session.expires } : null;
     return {
         props: {
             session: data,

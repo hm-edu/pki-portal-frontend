@@ -13,4 +13,5 @@ export interface AuthProps {
         name: string;
         email: string;
     };
+    expires: string;
 }
