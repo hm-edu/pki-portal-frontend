@@ -127,7 +127,7 @@ export function SmimeCertificates({ session, nonce }: { session: AuthProps | nul
         },
     ];
 
-    return <Box sx={{ display: "flex", flexDirection: "column", height: "100%" }}><Typography variant="h1">Ihre Zertifikate</Typography>
+    return <Box sx={{ display: "flex", flexDirection: "column", height: "100%" }}><Typography variant="h1">Ihre Benutzerzsertifikate</Typography>
         <DataGrid columns={columns}
             sx={dataGridStyle}
             pageSize={pageSize}
