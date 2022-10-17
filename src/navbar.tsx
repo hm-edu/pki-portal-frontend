@@ -11,7 +11,7 @@ import { SignInButton } from "./signInButton";
 import Link from "next/link";
 import { signOut, useSession } from "next-auth/react";
 import useSWR from "swr";
-import { Box, CircularProgress } from "@mui/material";
+import { Box, CircularProgress, Divider, Drawer, Hidden, List, ListItem, ListItemButton, ListItemText } from "@mui/material";
 import Moment from "react-moment";
 
 const fetcher = (args: RequestInfo | URL) => fetch(args).then(res => res.json());
@@ -30,6 +30,7 @@ export default function ButtonAppBar() {
     const { data: session } = useSession();
     const { idp, isLoading } = useIdp();
     const [userFragment, setFragment] = useState(<></>);
+    const [openDrawer, setDrawer] = React.useState<boolean>(false);
 
     useEffect(() => {
         const logout = isLoading ? <CircularProgress /> : <Button color="inherit" key='logout'
@@ -63,17 +64,37 @@ export default function ButtonAppBar() {
     return (
         <AppBar position="fixed">
             <Toolbar>
-                <IconButton size="large" edge="start" color="inherit" aria-label="menu" sx={{ mr: 2 }}>
-                    <MenuIcon />
-                </IconButton>
-                <Typography component="div" sx={{ flexGrow: 1 }}>
-                    <Link href="/">
-                        <Button color="inherit">Home</Button>
-                    </Link>
-                    {buttons}
-                </Typography>
-                {userFragment}
+                <Hidden mdDown>
+                    <Typography component="div" sx={{ flexGrow: 1 }}>
+                        <Link href="/">
+                            <Button color="inherit">Home</Button>
+                        </Link>
+                        {buttons}
+
+                    </Typography>
+                    {userFragment}
+                </Hidden>
+                <Hidden mdUp>
+                    <Typography component="div" sx={{ flexGrow: 1 }}>
+                        PKI-Portal
+                    </Typography>
+                    {userFragment}
+                    <Drawer anchor="right" open={openDrawer} onClose={() => setDrawer(false)}>
+                        <Box sx={{ width: 250 }}>
+                            <List>
+                                {buttons.map((x) => {
+                                    return <Link href={x.props["href"]} passHref><ListItemButton onClick={() => setDrawer(false)} component="a">
+                                        <ListItemText primary={(x.props["children"] as JSX.Element).props["children"]} /></ListItemButton></Link>;
+                                })}
+                            </List>
+                        </Box>
+                    </Drawer>
+                    <IconButton onClick={() => setDrawer(!openDrawer)} size="large" edge="start" color="inherit" aria-label="menu" sx={{ ml: 2, display: session == null ? "none" : "" }}>
+                        <MenuIcon />
+                    </IconButton>
+                </Hidden>
+
             </Toolbar>
-        </AppBar>
+        </AppBar >
     );
 }
