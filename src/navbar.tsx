@@ -11,7 +11,7 @@ import { SignInButton } from "./signInButton";
 import Link from "next/link";
 import { signOut, useSession } from "next-auth/react";
 import useSWR from "swr";
-import { Box, CircularProgress, Divider, Drawer, Hidden, List, ListItem, ListItemButton, ListItemText } from "@mui/material";
+import { Box, CircularProgress, Drawer, Hidden, List, ListItemButton, ListItemText } from "@mui/material";
 import Moment from "react-moment";
 
 const fetcher = (args: RequestInfo | URL) => fetch(args).then(res => res.json());
@@ -83,8 +83,8 @@ export default function ButtonAppBar() {
                         <Box sx={{ width: 250 }}>
                             <List>
                                 {buttons.map((x) => {
-                                    return <Link href={x.props["href"]} passHref><ListItemButton onClick={() => setDrawer(false)} component="a">
-                                        <ListItemText primary={(x.props["children"] as JSX.Element).props["children"]} /></ListItemButton></Link>;
+                                    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+                                    return <Link href={x.props["href"]} passHref><ListItemButton onClick={() => setDrawer(false)} component="a"><ListItemText primary={(x.props["children"] as JSX.Element).props["children"]} /></ListItemButton></Link>;
                                 })}
                             </List>
                         </Box>
