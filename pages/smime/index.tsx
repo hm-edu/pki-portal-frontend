@@ -15,15 +15,15 @@ import React, { useEffect, useRef, useState } from "react";
 
 import { PortalApisListSmimeResponseCertificateDetails, SMIMEApi } from "../../api/pki/api";
 import { Configuration } from "../../api/pki/configuration";
-import { AuthProps, Config } from "../../src/config";
-import { getServerSideProps } from "../../src/auth";
+import { Config } from "../../src/config";
 import { dataGridStyle } from "../../src/theme";
 import Link from "next/link";
 import { Typography } from "@mui/material";
+import { useSession } from "next-auth/react";
 
 export default SmimeCertificates;
 
-export function SmimeCertificates({ session, nonce }: { session: AuthProps | null; nonce: string }) {
+export function SmimeCertificates() {
     const [open, setOpen] = useState(false);
     const reason = useRef<TextFieldProps>(null);
     const [pageSize, setPageSize] = useState<number>(15);
@@ -31,7 +31,7 @@ export function SmimeCertificates({ session, nonce }: { session: AuthProps | nul
     const [error, setError] = useState<undefined | boolean | string>(undefined);
     const [selection, setSelection] = useState<PortalApisListSmimeResponseCertificateDetails | undefined>(undefined);
     const [certificates, setCertificates] = useState([] as PortalApisListSmimeResponseCertificateDetails[]);
-
+    const { data: session } = useSession();
     function revoke() {
         const item = selection;
         if (session) {
@@ -73,6 +73,7 @@ export function SmimeCertificates({ session, nonce }: { session: AuthProps | nul
             });
         } else {
             setLoading(false);
+            setCertificates([]);
             setError("Bitte melden Sie sich an!");
         }
 
@@ -141,7 +142,6 @@ export function SmimeCertificates({ session, nonce }: { session: AuthProps | nul
                     sortModel: [{ field: "notBefore", sort: "desc" }],
                 },
             }}
-            nonce={nonce}
             components={{ LoadingOverlay: LinearProgress }}
             componentsProps={{ loadingOverlay: { color: "inherit" } }}
             loading={loading}
@@ -176,5 +176,3 @@ export function SmimeCertificates({ session, nonce }: { session: AuthProps | nul
         <Link href="/smime/new"><Button variant="contained" disabled={!session} color="success" startIcon={<AddCircleOutlineIcon />} sx={{ mt: 1 }}>Neues Zertifikat beziehen</Button></Link>
     </Box>;
 }
-
-export { getServerSideProps };

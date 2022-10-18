@@ -14,10 +14,10 @@ import Checkbox from "@mui/material/Checkbox";
 import React, { FormEvent, useCallback, useEffect, useRef, useState } from "react";
 import { SMIMEApi } from "../../api/pki/api";
 import { Configuration } from "../../api/pki/configuration";
-import { AuthProps, Config } from "../../src/config";
+import { Config } from "../../src/config";
 import { modalTheme } from "../../src/theme";
-import { getServerSideProps } from "../../src/auth";
 import { AlertTitle } from "@mui/material";
+import { useSession } from "next-auth/react";
 
 async function createP12(privateKey: string, chain: string[], password: string): Promise<string> {
 
@@ -41,13 +41,10 @@ async function createP12(privateKey: string, chain: string[], password: string):
     });
 }
 
-export default SMIMEGenerator;
-
-export function SMIMEGenerator({ session }: { session: AuthProps | null; nonce: string }) {
+export default function SMIMEGenerator() {
 
     const [progress, setProgress] = useState<string>("");
     const [download, setDownload] = useState<JSX.Element>(<></>);
-
     const [loading, setLoading] = useState(true);
     const [success, setSuccess] = useState(false);
     const [warning, setWarning] = useState(false);
@@ -56,6 +53,8 @@ export function SMIMEGenerator({ session }: { session: AuthProps | null; nonce: 
     const p12PasswordRef = useRef<TextFieldProps>(null);
     const p12PasswordConfirmRef = useRef<TextFieldProps>(null);
     const revokeRef = useRef<HTMLInputElement>(null);
+
+    const { data: session } = useSession();
 
     const buttonSx = {
         ...(success && {
@@ -209,5 +208,3 @@ export function SMIMEGenerator({ session }: { session: AuthProps | null; nonce: 
 
     </div>;
 }
-
-export { getServerSideProps };

@@ -21,15 +21,13 @@ import React, { FormEvent, useEffect, useRef, useState } from "react";
 import { DomainsApi } from "../../api/domains/api";
 import { ModelDomain } from "../../api/domains/api";
 import { Configuration } from "../../api/domains/configuration";
-import { AuthProps, Config } from "../../src/config";
+import { Config } from "../../src/config";
 import Delegation from "../../src/delegation";
-import { getServerSideProps } from "../../src/auth";
 import { dataGridStyle } from "../../src/theme";
 import { Typography } from "@mui/material";
+import { useSession } from "next-auth/react";
 
-export default Domains;
-
-export function Domains({ session, nonce }: { session: AuthProps | null; nonce: string }) {
+export default function Domains() {
     const [pageSize, setPageSize] = useState<number>(15);
     const [domains, setDomains] = useState([] as ModelDomain[]);
     const [loading, setLoading] = useState(true);
@@ -39,6 +37,7 @@ export function Domains({ session, nonce }: { session: AuthProps | null; nonce: 
     const [delegationDomain, setDelegationDomain] = useState<ModelDomain>();
     const [error, setError] = useState<undefined | boolean | string>(undefined);
     const newDomain = useRef<TextFieldProps>(null);
+    const { data: session } = useSession();
 
     const handleDeleteClose = () => {
         if (deleting)
@@ -160,7 +159,7 @@ export function Domains({ session, nonce }: { session: AuthProps | null; nonce: 
 
     let delegationModal;
     if (delegationDomain) {
-        delegationModal = <Delegation delegationDomain={delegationDomain} nonce={nonce} onClose={(domain: ModelDomain) => {
+        delegationModal = <Delegation delegationDomain={delegationDomain} onClose={(domain: ModelDomain) => {
             const updated: ModelDomain[] = [...domains];
             updated[updated.findIndex((x) => x.id == delegationDomain.id)].delegations = domain.delegations;
             setDomains(updated);
@@ -199,7 +198,6 @@ export function Domains({ session, nonce }: { session: AuthProps | null; nonce: 
                     sortModel: [{ field: "fqdn", sort: "asc" }],
                 },
             }}
-            nonce={nonce}
             sx={dataGridStyle}
             columns={columns}
             pageSize={pageSize}
@@ -229,5 +227,3 @@ export function Domains({ session, nonce }: { session: AuthProps | null; nonce: 
         {delegationModal}
     </Box>;
 }
-
-export { getServerSideProps };

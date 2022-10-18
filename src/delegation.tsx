@@ -11,7 +11,7 @@ import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import { useSession } from "next-auth/react";
 
-export default function Delegation(props: { delegationDomain: ModelDomain; onClose: (domain: ModelDomain) => void; nonce: string }) {
+export default function Delegation(props: { delegationDomain: ModelDomain; onClose: (domain: ModelDomain) => void }) {
     const style = {
         position: "absolute",
         top: "50%",
@@ -83,7 +83,7 @@ export default function Delegation(props: { delegationDomain: ModelDomain; onClo
                             return <Button color="warning" variant="outlined" startIcon={<DeleteIcon />} onClick={remove}> Löschen</Button>;
                         },
                     },
-                ]} rows={rows} nonce={props.nonce} />
+                ]} rows={rows} />
             </Box>
             <Box component="form" onSubmit={(e: FormEvent) => { delegate(e); }} sx={{ maxWidth: "300px", display: "flex", flexDirection: "column" }}>
                 <TextField required label="Nutzer" inputRef={newDelegation} variant="standard" />

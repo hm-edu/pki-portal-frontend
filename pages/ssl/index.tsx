@@ -17,14 +17,12 @@ import Moment from "react-moment";
 
 import { PortalApisSslCertificateDetails, SSLApi } from "../../api/pki/api";
 import { Configuration } from "../../api/pki/configuration";
-import { AuthProps, Config } from "../../src/config";
-import { getServerSideProps } from "../../src/auth";
+import { Config } from "../../src/config";
 import { dataGridStyle } from "../../src/theme";
 import { Typography } from "@mui/material";
+import { useSession } from "next-auth/react";
 
-export default SslCertificates;
-
-export function SslCertificates({ session, nonce }: { session: AuthProps | null; nonce: string }) {
+export default function SslCertificates() {
     const [pageSize, setPageSize] = useState<number>(15);
     const [loading, setLoading] = useState(true);
     const reason = useRef<TextFieldProps>(null);
@@ -32,6 +30,7 @@ export function SslCertificates({ session, nonce }: { session: AuthProps | null;
     const [certificates, setCertificates] = useState([] as PortalApisSslCertificateDetails[]);
     const [selected, setSelected] = useState<GridRowId[]>();
     const [error, setError] = useState<undefined | boolean | string>(undefined);
+    const { data: session } = useSession();
 
     const handleClose = () => {
         setSelected(undefined);
@@ -87,6 +86,7 @@ export function SslCertificates({ session, nonce }: { session: AuthProps | null;
             });
         } else {
             setLoading(false);
+            setCertificates([]);
             setError("Bitte melden Sie sich an!");
         }
     }
@@ -227,7 +227,6 @@ export function SslCertificates({ session, nonce }: { session: AuthProps | null;
                     sortModel: [{ field: "created", sort: "desc" }],
                 },
             }}
-            nonce={nonce}
             onSelectionModelChange={(event) => { setSelected(event); }}
             selectionModel={selected}
             components={{ LoadingOverlay: LinearProgress }}
@@ -263,8 +262,5 @@ export function SslCertificates({ session, nonce }: { session: AuthProps | null;
             </DialogActions>
         </Dialog>
         <Link href="/ssl/new"><Button variant="contained" disabled={!session} color="success" startIcon={<AddCircleOutlineIcon />} sx={{ mt: 1 }} >Neues Zertifikat beziehen</Button></Link>
-
     </Box>;
 }
-
-export { getServerSideProps };

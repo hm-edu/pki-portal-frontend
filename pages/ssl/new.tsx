@@ -20,13 +20,13 @@ import { DomainsApi, ModelDomain } from "../../api/domains/api";
 import { Configuration } from "../../api/domains/configuration";
 import { SSLApi } from "../../api/pki/api";
 import { Configuration as PKIConfig } from "../../api/pki/configuration";
-import { AuthProps, Config } from "../../src/config";
+import { Config } from "../../src/config";
 import { Buffer } from "buffer";
 import { KeyPair } from "../../src/keypair";
 import { dataGridStyle, modalTheme } from "../../src/theme";
-import { getServerSideProps } from "../../src/auth";
+import { useSession } from "next-auth/react";
 
-export function SslGenerator({ session, nonce }: { session: AuthProps | null; nonce: string }) {
+export default function SslGenerator() {
 
     interface SwitchProps {
         checked: boolean;
@@ -52,7 +52,7 @@ export function SslGenerator({ session, nonce }: { session: AuthProps | null; no
     const [domains, setDomains] = useState<ModelDomain[]>([]);
     const [selected, setSelected] = useState<GridRowId[]>();
     const [pageSize, setPageSize] = useState<number>(15);
-
+    const { data: session } = useSession();
     const buttonSx = {
         ...(generatedKey && {
             bgcolor: green[500],
@@ -131,7 +131,6 @@ export function SslGenerator({ session, nonce }: { session: AuthProps | null; no
                                 sortModel: [{ field: "fqdn", sort: "asc" }],
                             },
                         }}
-                        nonce={nonce}
                         pageSize={pageSize} selectionModel={selected}
                         onSelectionModelChange={(event) => { setSelected(event); }}
                         loading={loadingDomains} density="compact"
@@ -245,7 +244,3 @@ export function SslGenerator({ session, nonce }: { session: AuthProps | null; no
         }
     }
 }
-
-export default SslGenerator;
-
-export { getServerSideProps };
