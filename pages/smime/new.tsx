@@ -118,7 +118,7 @@ export default function SMIMEGenerator() {
             const cfg = new Configuration({ accessToken: session.accessToken });
             const api = new SMIMEApi(cfg, `${Config.PKI_HOST}`);
             api.smimeGet().then((response) => {
-                if (response) {
+                if (response && response != null && response.data != null) {
                     let active = 0;
                     for (const cert of response.data) {
                         if (cert.status != "revoked") {
