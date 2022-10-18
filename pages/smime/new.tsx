@@ -129,6 +129,7 @@ export default function SMIMEGenerator() {
                         setWarning(true);
                     }
                 }
+                setError("");
                 setLoading(false);
                 validate();
             }).catch((error) => {

@@ -80,6 +80,7 @@ export default function SslCertificates() {
                     }
                     setCertificates(data);
                 }
+                setError(false);
                 setLoading(false);
             }).catch(() => {
                 setError(true);

@@ -83,6 +83,7 @@ export default function SslGenerator() {
             const cfg = new Configuration({ accessToken: session.accessToken });
             const api = new DomainsApi(cfg, `${Config.DOMAIN_HOST}`);
             api.domainsGet().then((response) => {
+                setError(false);
                 setDomains(response.data.filter(x => x.approved));
                 setLoadingDomains(false);
             }).catch(() => {

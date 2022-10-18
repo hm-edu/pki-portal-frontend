@@ -66,6 +66,7 @@ export function SmimeCertificates() {
                     }
                     setCertificates(data);
                 }
+                setError(false);
                 setLoading(false);
             }).catch(() => {
                 setLoading(false);
