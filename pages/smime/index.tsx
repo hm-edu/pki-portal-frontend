@@ -114,6 +114,7 @@ export function SmimeCertificates({ session, nonce }: { session: AuthProps | nul
             filterable: false,
             hideable: false,
             flex: 1,
+            minWidth: 250,
             renderCell: (params) => {
                 const row = (params.row as PortalApisListSmimeResponseCertificateDetails);
                 if (row.status !== "revoked") {

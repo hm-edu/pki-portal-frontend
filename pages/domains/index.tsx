@@ -122,6 +122,7 @@ export function Domains({ session, nonce }: { session: AuthProps | null; nonce: 
             filterable: false,
             hideable: false,
             flex: 1,
+            minWidth: 500,
             renderCell: (params) => {
                 const row = (params.row as ModelDomain);
                 const buttons = [];

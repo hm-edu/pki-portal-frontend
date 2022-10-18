@@ -71,6 +71,7 @@ class EabTokens extends React.Component<{ session: AuthProps | null; nonce: stri
             filterable: false,
             hideable: false,
             flex: 1,
+            minWidth: 250,
             renderCell: (params) => {
                 const row = (params.row as ModelsEAB);
                 const remove = (event: FormEvent<Element>) => {
