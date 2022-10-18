@@ -149,7 +149,7 @@ class EabTokens extends React.Component<{ session: AuthProps | null; nonce: stri
 
     render() {
         return <Box sx={{ display: "flex", flexDirection: "column", height: "100%" }}><Typography variant="h1">Ihre EAB Tokens</Typography>
-            <DataGrid autoHeight columns={this.columns}
+            <DataGrid columns={this.columns}
                 sx={dataGridStyle}
                 initialState={{
                     columns: {
