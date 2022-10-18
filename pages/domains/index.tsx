@@ -54,7 +54,7 @@ export default function Domains() {
             setDomains([]);
             setError("Bitte melden Sie sich an!");
         }
-    }, [session]);
+    }, [session, session?.user, session?.user?.email, session?.user?.name]);
 
     const create = (event: FormEvent<Element>) => {
         event.preventDefault();

@@ -93,7 +93,7 @@ export default function SslCertificates() {
 
     useEffect(() => {
         load();
-    }, [session]);
+    }, [session, session?.user, session?.user?.email, session?.user?.name]);
 
     const columns: GridColDef[] = [
 

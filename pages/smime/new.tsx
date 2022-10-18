@@ -140,7 +140,7 @@ export default function SMIMEGenerator() {
             setLoading(false);
             setError("Sie sind nicht angemeldet!");
         }
-    }, [session]);
+    }, [session, session?.user, session?.user?.email, session?.user?.name]);
 
     const validate = useCallback(() => {
         if (p12PasswordRef.current?.value == "") {

@@ -81,7 +81,7 @@ export function SmimeCertificates() {
 
     useEffect(() => {
         load();
-    }, [session]);
+    }, [session, session?.user, session?.user?.email, session?.user?.name]);
 
     const handleClickOpen = () => {
         setOpen(true);

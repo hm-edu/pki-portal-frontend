@@ -93,7 +93,7 @@ export default function SslGenerator() {
             setProgress(<Typography>Sie sind nicht angemeldet</Typography>);
             setError(true);
         }
-    }, [session]);
+    }, [session, session?.user, session?.user?.email, session?.user?.name]);
 
     const columns = [
         {
