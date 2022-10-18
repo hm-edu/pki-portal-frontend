@@ -52,6 +52,7 @@ export function Domains({ session, nonce }: { session: AuthProps | null; nonce: 
             loadDomains((domains: ModelDomain[]) => { setDomains(domains); setLoading(false); }, () => { setError(true); setLoading(false); });
         } else {
             setLoading(false);
+            setDomains([]);
             setError("Bitte melden Sie sich an!");
         }
     }, [session]);
