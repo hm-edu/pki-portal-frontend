@@ -59,6 +59,7 @@ export default function SslCertificates() {
     function load() {
         if (session) {
             setError(undefined);
+            setLoading(true);
             const cfg = new Configuration({ accessToken: session.accessToken });
             const api = new SSLApi(cfg, `${Config.PKI_HOST}`);
             api.sslGet().then((response) => {

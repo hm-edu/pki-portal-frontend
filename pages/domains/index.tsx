@@ -49,6 +49,7 @@ export default function Domains() {
     useEffect(() => {
         if (session) {
             setError(undefined);
+            setLoading(true);
             loadDomains((domains: ModelDomain[]) => { setDomains(domains); setLoading(false); }, () => { setError(true); setLoading(false); });
         } else {
             setLoading(false);
