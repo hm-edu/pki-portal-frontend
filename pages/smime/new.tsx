@@ -18,34 +18,37 @@ import { Config } from "../../src/config";
 import { modalTheme } from "../../src/theme";
 import { AlertTitle } from "@mui/material";
 import { useSession } from "next-auth/react";
-
-async function createP12(privateKey: string, chain: string[], password: string): Promise<string> {
-
-    const forge = (await import("node-forge")).default;
-    return await new Promise((resolve, reject) => {
-        const encodedChain = [];
-        for (const cert of chain) {
-            encodedChain.push(forge.pki.certificateFromPem(cert));
-        }
-
-        const encodedPrivateKey = forge.pki.privateKeyFromPem(privateKey);
-        if (!encodedPrivateKey || !encodedChain || !password) {
-            reject();
-        }
-        const p12Asn1 = forge.pkcs12.toPkcs12Asn1(encodedPrivateKey, encodedChain, password, { algorithm: "3des" });
-
-        // base64-encode p12
-        const p12Der = forge.asn1.toDer(p12Asn1).getBytes();
-
-        resolve(forge.util.encode64(p12Der));
-    });
-}
+import unidecode from "unidecode";
+import moment from "moment";
 
 export default function SMIMEGenerator() {
+
+    async function createP12(privateKey: string, chain: string[], password: string): Promise<string> {
+
+        const forge = (await import("node-forge")).default;
+        return await new Promise((resolve, reject) => {
+            const encodedChain = [];
+            for (const cert of chain) {
+                encodedChain.push(forge.pki.certificateFromPem(cert));
+            }
+
+            const encodedPrivateKey = forge.pki.privateKeyFromPem(privateKey);
+            if (!encodedPrivateKey || !encodedChain || !password) {
+                reject();
+            }
+            const p12Asn1 = forge.pkcs12.toPkcs12Asn1(encodedPrivateKey, encodedChain, password, { algorithm: "3des" });
+
+            // base64-encode p12
+            const p12Der = forge.asn1.toDer(p12Asn1).getBytes();
+
+            resolve(forge.util.encode64(p12Der));
+        });
+    }
 
     const [progress, setProgress] = useState<string>("");
     const [download, setDownload] = useState<JSX.Element>(<></>);
     const [loading, setLoading] = useState(true);
+    const [issuing, setIssuing] = useState(false);
     const [success, setSuccess] = useState(false);
     const [warning, setWarning] = useState(false);
     const [error, setError] = useState("");
@@ -74,7 +77,11 @@ export default function SMIMEGenerator() {
             const csr = new CsrBuilder();
             csr.build("rsa", undefined, 3072).then((x) => {
                 setProgress("CSR generiert...");
-                if (session) {
+                setIssuing(true);
+                if (session && session.user.name) {
+                    // eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/restrict-plus-operands, @typescript-eslint/no-unsafe-member-access
+                    const filename = unidecode(session.user.name).replace(" ", "_") + "_" + moment().format("DD-MM-YYYY_HH-mm-ss") + ".p12";
+
                     const cfg = new Configuration({ accessToken: session.accessToken });
                     const api = new SMIMEApi(cfg, `${Config.PKI_HOST}`);
                     setProgress("Signiere CSR...");
@@ -83,12 +90,13 @@ export default function SMIMEGenerator() {
                         return createP12(x.privateKey, [response.data], p12PasswordRef.current?.value as string).then((p12) => {
                             const element = document.createElement("a");
                             element.setAttribute("href", "data:application/x-pkcs12;base64," + p12);
-                            element.setAttribute("download", "smime.p12");
+                            element.setAttribute("download", filename);
                             element.style.display = "none";
                             document.body.appendChild(element);
                             element.click();
                             document.body.removeChild(element);
-                            setDownload(<Button variant="contained" startIcon={<FileDownload />} download="smime.p12" href={"data:application/x-pkcs12;base64," + p12}>Erneuter Download</Button>);
+                            // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
+                            setDownload(<Button variant="contained" startIcon={<FileDownload />} download={filename} href={"data:application/x-pkcs12;base64," + p12}>Erneuter Download</Button>);
                             setProgress("PKCS12 generiert");
                             setSuccess(true);
                             setLoading(false);
@@ -114,7 +122,7 @@ export default function SMIMEGenerator() {
     };
     useEffect(() => {
         setProgress("Bitte warten...");
-        if (status == "authenticated") {
+        if (status == "authenticated" && !issuing) {
             const cfg = new Configuration({ accessToken: session.accessToken });
             const api = new SMIMEApi(cfg, `${Config.PKI_HOST}`);
             api.smimeGet().then((response) => {

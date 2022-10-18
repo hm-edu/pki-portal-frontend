@@ -18,8 +18,9 @@ import { Configuration } from "../../api/pki/configuration";
 import { Config } from "../../src/config";
 import { dataGridStyle } from "../../src/theme";
 import Link from "next/link";
-import { Typography } from "@mui/material";
+import { CircularProgress, Typography } from "@mui/material";
 import { useSession } from "next-auth/react";
+import { green } from "@mui/material/colors";
 
 export default SmimeCertificates;
 
@@ -32,17 +33,23 @@ export function SmimeCertificates() {
     const [selection, setSelection] = useState<PortalApisListSmimeResponseCertificateDetails | undefined>(undefined);
     const [certificates, setCertificates] = useState([] as PortalApisListSmimeResponseCertificateDetails[]);
     const { data: session, status } = useSession();
+    const [revoking, setRevoking] = useState(false);
+
     function revoke() {
         const item = selection;
         if (session) {
             if (item && item.serial) {
                 const cfg = new Configuration({ accessToken: session.accessToken });
                 const api = new SMIMEApi(cfg, `${Config.PKI_HOST}`);
+                setRevoking(true);
                 api.smimeRevokePost({ serial: item.serial, reason: (reason.current?.value as string) }).then(() => {
                     load();
                     setSelection(undefined);
+                    setRevoking(false);
                     setOpen(false);
-                }).catch(() => {
+                }).catch((error) => {
+                    setRevoking(false);
+                    console.log(error);
                     return;
                 });
             }
@@ -67,7 +74,8 @@ export function SmimeCertificates() {
                     setCertificates(data);
                 }
                 setLoading(false);
-            }).catch(() => {
+            }).catch((error) => {
+                console.log(error);
                 setLoading(false);
                 setError("Es ist ein unbekannter Fehler aufgetreten.");
             });
@@ -169,8 +177,8 @@ export function SmimeCertificates() {
                 />
             </DialogContent>
             <DialogActions>
-                <Button color="inherit" variant="outlined" onClick={handleClose}>Abbrechen</Button>
-                <Button color="warning" variant="outlined" onClick={() => revoke()}>Widerrufen</Button>
+                <Button color="inherit" variant="outlined" disabled={revoking} onClick={handleClose}>Abbrechen</Button>
+                <Button color="warning" variant="outlined" disabled={revoking} onClick={() => revoke()}>Widerrufen {revoking && <CircularProgress size={24} sx={{ color: green[500], position: "absolute", top: "50%", left: "50%", marginTop: "-12px", marginLeft: "-12px" }} />} </Button>
             </DialogActions>
         </Dialog>
         <Link href="/smime/new"><Button variant="contained" disabled={!session} color="success" startIcon={<AddCircleOutlineIcon />} sx={{ mt: 1 }}>Neues Zertifikat beziehen</Button></Link>
