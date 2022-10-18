@@ -50,6 +50,7 @@ export function SmimeCertificates() {
     }
     function load() {
         if (session) {
+            setError(undefined);
             const cfg = new Configuration({ accessToken: session.accessToken });
             const api = new SMIMEApi(cfg, `${Config.PKI_HOST}`);
             api.smimeGet().then((response) => {
@@ -66,7 +67,6 @@ export function SmimeCertificates() {
                     }
                     setCertificates(data);
                 }
-                setError(false);
                 setLoading(false);
             }).catch(() => {
                 setLoading(false);

@@ -115,6 +115,7 @@ export default function SMIMEGenerator() {
     useEffect(() => {
         setProgress("Bitte warten...");
         if (session) {
+            setError("");
             const cfg = new Configuration({ accessToken: session.accessToken });
             const api = new SMIMEApi(cfg, `${Config.PKI_HOST}`);
             api.smimeGet().then((response) => {
@@ -129,7 +130,6 @@ export default function SMIMEGenerator() {
                         setWarning(true);
                     }
                 }
-                setError("");
                 setLoading(false);
                 validate();
             }).catch((error) => {

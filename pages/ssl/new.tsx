@@ -79,6 +79,7 @@ export default function SslGenerator() {
 
     useEffect(() => {
         if (session) {
+            setError(false);
             setProgress(<Typography>Bitte warten...</Typography>);
             const cfg = new Configuration({ accessToken: session.accessToken });
             const api = new DomainsApi(cfg, `${Config.DOMAIN_HOST}`);
