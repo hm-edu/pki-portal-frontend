@@ -52,7 +52,7 @@ export default function SslGenerator() {
     const [domains, setDomains] = useState<ModelDomain[]>([]);
     const [selected, setSelected] = useState<GridRowId[]>();
     const [pageSize, setPageSize] = useState<number>(15);
-    const { data: session } = useSession();
+    const { data: session, status } = useSession();
     const buttonSx = {
         ...(generatedKey && {
             bgcolor: green[500],
@@ -78,9 +78,7 @@ export default function SslGenerator() {
     };
 
     useEffect(() => {
-        if (session) {
-            setError(false);
-            setLoadingDomains(true);
+        if (status == "authenticated") {
             setProgress(<Typography>Bitte warten...</Typography>);
             const cfg = new Configuration({ accessToken: session.accessToken });
             const api = new DomainsApi(cfg, `${Config.DOMAIN_HOST}`);
@@ -91,7 +89,7 @@ export default function SslGenerator() {
             }).catch(() => {
                 setLoadingDomains(false);
             });
-        } else {
+        } else if (status == "unauthenticated") {
             setLoadingDomains(false);
             setProgress(<Typography>Sie sind nicht angemeldet</Typography>);
             setError(true);

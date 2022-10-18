@@ -37,7 +37,7 @@ export default function Domains() {
     const [delegationDomain, setDelegationDomain] = useState<ModelDomain>();
     const [error, setError] = useState<undefined | boolean | string>(undefined);
     const newDomain = useRef<TextFieldProps>(null);
-    const { data: session } = useSession();
+    const { data: session, status } = useSession();
 
     const handleDeleteClose = () => {
         if (deleting)
@@ -47,11 +47,9 @@ export default function Domains() {
     };
 
     useEffect(() => {
-        if (session) {
-            setError(undefined);
-            setLoading(true);
+        if (status == "authenticated") {
             loadDomains((domains: ModelDomain[]) => { setDomains(domains); setLoading(false); }, () => { setError(true); setLoading(false); });
-        } else {
+        } else if (status == "unauthenticated") {
             setLoading(false);
             setDomains([]);
             setError("Bitte melden Sie sich an!");

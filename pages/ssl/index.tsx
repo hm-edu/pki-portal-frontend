@@ -30,7 +30,7 @@ export default function SslCertificates() {
     const [certificates, setCertificates] = useState([] as PortalApisSslCertificateDetails[]);
     const [selected, setSelected] = useState<GridRowId[]>();
     const [error, setError] = useState<undefined | boolean | string>(undefined);
-    const { data: session } = useSession();
+    const { data: session, status } = useSession();
 
     const handleClose = () => {
         setSelected(undefined);
@@ -57,9 +57,7 @@ export default function SslCertificates() {
     }
 
     function load() {
-        if (session) {
-            setError(undefined);
-            setLoading(true);
+        if (status == "authenticated") {
             const cfg = new Configuration({ accessToken: session.accessToken });
             const api = new SSLApi(cfg, `${Config.PKI_HOST}`);
             api.sslGet().then((response) => {
@@ -86,7 +84,7 @@ export default function SslCertificates() {
             }).catch(() => {
                 setError(true);
             });
-        } else {
+        } else if (status == "unauthenticated") {
             setLoading(false);
             setCertificates([]);
             setError("Bitte melden Sie sich an!");

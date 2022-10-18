@@ -31,7 +31,7 @@ export function SmimeCertificates() {
     const [error, setError] = useState<undefined | boolean | string>(undefined);
     const [selection, setSelection] = useState<PortalApisListSmimeResponseCertificateDetails | undefined>(undefined);
     const [certificates, setCertificates] = useState([] as PortalApisListSmimeResponseCertificateDetails[]);
-    const { data: session } = useSession();
+    const { data: session, status } = useSession();
     function revoke() {
         const item = selection;
         if (session) {
@@ -49,9 +49,7 @@ export function SmimeCertificates() {
         }
     }
     function load() {
-        if (session) {
-            setError(undefined);
-            setLoading(true);
+        if (status == "authenticated") {
             const cfg = new Configuration({ accessToken: session.accessToken });
             const api = new SMIMEApi(cfg, `${Config.PKI_HOST}`);
             api.smimeGet().then((response) => {
@@ -73,7 +71,7 @@ export function SmimeCertificates() {
                 setLoading(false);
                 setError("Es ist ein unbekannter Fehler aufgetreten.");
             });
-        } else {
+        } else if (status == "unauthenticated") {
             setLoading(false);
             setCertificates([]);
             setError("Bitte melden Sie sich an!");

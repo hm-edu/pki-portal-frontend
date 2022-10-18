@@ -54,7 +54,7 @@ export default function SMIMEGenerator() {
     const p12PasswordConfirmRef = useRef<TextFieldProps>(null);
     const revokeRef = useRef<HTMLInputElement>(null);
 
-    const { data: session } = useSession();
+    const { data: session, status } = useSession();
 
     const buttonSx = {
         ...(success && {
@@ -114,9 +114,7 @@ export default function SMIMEGenerator() {
     };
     useEffect(() => {
         setProgress("Bitte warten...");
-        if (session) {
-            setError("");
-            setLoading(true);
+        if (status == "authenticated") {
             const cfg = new Configuration({ accessToken: session.accessToken });
             const api = new SMIMEApi(cfg, `${Config.PKI_HOST}`);
             api.smimeGet().then((response) => {
@@ -138,7 +136,7 @@ export default function SMIMEGenerator() {
                 console.error(error);
                 setError("Es ist ein unbekannter Fehler aufgetreten!");
             });
-        } else {
+        } else if (status == "unauthenticated") {
             setLoading(false);
             setError("Sie sind nicht angemeldet!");
         }
