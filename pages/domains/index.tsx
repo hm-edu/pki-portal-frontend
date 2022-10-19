@@ -32,18 +32,20 @@ export default function Domains() {
     const [domains, setDomains] = useState([] as ModelDomain[]);
     const [loading, setLoading] = useState(true);
     const [deleting, setDeleting] = useState(false);
-    const [open, setOpen] = useState(false);
+    const [deleteOpen, setDeleteOpen] = useState(false);
     const [selected, setSelected] = useState<ModelDomain>();
     const [delegationDomain, setDelegationDomain] = useState<ModelDomain>();
+    const [transferDomain, setTransferDomain] = useState<ModelDomain>();
     const [error, setError] = useState<undefined | boolean | string>(undefined);
     const newDomain = useRef<TextFieldProps>(null);
+    const target = useRef<TextFieldProps>(null);
     const { data: session, status } = useSession();
 
     const handleDeleteClose = () => {
         if (deleting)
             return;
         setSelected(undefined);
-        setOpen(false);
+        setDeleteOpen(false);
     };
 
     useEffect(() => {
@@ -60,6 +62,16 @@ export default function Domains() {
         event.preventDefault();
         if (session) {
             void createDomain(newDomain.current!.value as string, setDomains, setError).then(() => newDomain.current!.value = "");
+        }
+    };
+
+    const transfer = (event: FormEvent<Element>) => {
+        event.preventDefault();
+        if (session && transferDomain && transferDomain.id && target.current) {
+
+            const cfg = new Configuration({ accessToken: session?.accessToken });
+            const api = new DomainsApi(cfg, `${Config.DOMAIN_HOST}`);
+            api.domainsIdTransferPost(transferDomain?.id, { owner: target.current?.value as string }).then(() => { loadDomains(setDomains, setError); setTransferDomain(undefined); }).catch(() => { setError(true); setTransferDomain(undefined); });
         }
     };
 
@@ -134,7 +146,7 @@ export default function Domains() {
 
                 const remove = (event: FormEvent<Element>) => {
                     event.preventDefault();
-                    setOpen(true);
+                    setDeleteOpen(true);
                     setSelected(row);
                 };
 
@@ -145,6 +157,7 @@ export default function Domains() {
 
                 const transfer = (event: FormEvent<Element>) => {
                     event.preventDefault();
+                    setTransferDomain(row);
                 };
 
                 buttons.push(<Button key="approve" color="success" disabled={!row.permissions?.can_approve} sx={{ px: 1, mx: 1 }} variant="outlined" onClick={approve}>Freischalten</Button>);
@@ -168,8 +181,8 @@ export default function Domains() {
     }
 
     let deleteDialog;
-    if (selected) {
-        deleteDialog = <Dialog open={open} onClose={handleDeleteClose}>
+    if (selected && deleteOpen) {
+        deleteDialog = <Dialog open={deleteOpen} onClose={handleDeleteClose}>
             <DialogTitle>Domain löschen</DialogTitle>
             <DialogContent>
                 <DialogContentText>
@@ -191,6 +204,33 @@ export default function Domains() {
         </Dialog>;
     }
 
+    let transferDialog;
+    if (transferDomain) {
+        console.log("Fu");
+        transferDialog = <Dialog open={true} onClose={() => setTransferDomain(undefined)}>
+            <DialogTitle>Domain übertragen</DialogTitle>
+            <DialogContent>
+                <DialogContentText>
+                    Sie möchten die Domain {transferDomain?.fqdn} an einen anderen Benutzer übertragen.
+
+                    Bitte geben Sie die E-Mail des neuen Nutzers ein.
+                </DialogContentText>
+                <TextField
+                    inputRef={target}
+                    autoFocus
+                    margin="dense"
+                    id="target"
+                    label="Neuer Nutzer"
+                    fullWidth
+                    variant="standard"
+                />
+            </DialogContent>
+            <DialogActions>
+                <Button key="cancel" variant="outlined" color="inherit" onClick={() => setTransferDomain(undefined)}>Abbrechen</Button>
+                <Button key="revoke" variant="outlined" color="warning" onClick={(e) => transfer(e)}>Übertragen</Button>
+            </DialogActions>
+        </Dialog >;
+    }
     return <Box sx={{ display: "flex", flexDirection: "column", height: "100%" }}><Typography variant="h1">Ihre Domains</Typography>
         <DataGrid
             initialState={{
@@ -224,6 +264,7 @@ export default function Domains() {
             <Button type="submit" variant="contained" disabled={!session} color="success" startIcon={<AddCircleOutlineIcon />} sx={{ mt: 1 }} >Erstelle Domain</Button>
         </Box>
         {deleteDialog}
+        {transferDialog}
         {delegationModal}
     </Box>;
 }
