@@ -24,7 +24,7 @@ import { Configuration } from "../../api/domains/configuration";
 import { Config } from "../../src/config";
 import Delegation from "../../src/delegation";
 import { dataGridStyle } from "../../src/theme";
-import { Typography } from "@mui/material";
+import Typography from "@mui/material/Typography";
 import { useSession } from "next-auth/react";
 
 export default function Domains() {
@@ -122,7 +122,7 @@ export default function Domains() {
             filterable: false,
             hideable: false,
             flex: 1,
-            minWidth: 500,
+            minWidth: 700,
             renderCell: (params) => {
                 const row = (params.row as ModelDomain);
                 const buttons = [];
@@ -147,10 +147,10 @@ export default function Domains() {
                     event.preventDefault();
                 };
 
-                buttons.push(<Button color="success" disabled={!row.permissions?.can_approve} sx={{ px: 1, mx: 1 }} variant="outlined" onClick={approve}>Freischalten</Button>);
-                buttons.push(<Button color="warning" disabled={!row.permissions?.can_delete} sx={{ px: 1, mx: 1 }} variant="outlined" onClick={remove} startIcon={<DeleteIcon />}>Löschen</Button>);
-                buttons.push(<Button color="inherit" disabled={!row.permissions?.can_delegate} sx={{ px: 1, mx: 1 }} variant="outlined" onClick={openDelegation}>Delegationen bearbeiten</Button>);
-                buttons.push(<Button color="inherit" disabled={!row.permissions?.can_transfer} sx={{ px: 1, mx: 1 }} variant="outlined" onClick={transfer}>Zuständigkeit übertragen</Button>);
+                buttons.push(<Button key="approve" color="success" disabled={!row.permissions?.can_approve} sx={{ px: 1, mx: 1 }} variant="outlined" onClick={approve}>Freischalten</Button>);
+                buttons.push(<Button key="delete" color="warning" disabled={!row.permissions?.can_delete} sx={{ px: 1, mx: 1 }} variant="outlined" onClick={remove} startIcon={<DeleteIcon />}>Löschen</Button>);
+                buttons.push(<Button key="delegate" color="inherit" disabled={!row.permissions?.can_delegate} sx={{ px: 1, mx: 1 }} variant="outlined" onClick={openDelegation}>Delegationen bearbeiten</Button>);
+                buttons.push(<Button key="transfer" color="inherit" disabled={!row.permissions?.can_transfer} sx={{ px: 1, mx: 1 }} variant="outlined" onClick={transfer}>Zuständigkeit übertragen</Button>);
 
                 return <Box sx={{ display: "flex" }}>{buttons}</Box>;
             },

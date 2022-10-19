@@ -1,4 +1,4 @@
-import { Alert } from "@mui/material";
+import Alert from "@mui/material/Alert";
 import { useRouter } from "next/router";
 
 export default function Error() {

@@ -19,7 +19,7 @@ import { PortalApisSslCertificateDetails, SSLApi } from "../../api/pki/api";
 import { Configuration } from "../../api/pki/configuration";
 import { Config } from "../../src/config";
 import { dataGridStyle } from "../../src/theme";
-import { Typography } from "@mui/material";
+import Typography from "@mui/material/Typography";
 import { useSession } from "next-auth/react";
 
 export default function SslCertificates() {
@@ -148,7 +148,7 @@ export default function SslCertificates() {
             filterable: false,
             hideable: false,
             flex: 1,
-            minWidth: 250,
+            minWidth: 150,
             renderCell: (params) => {
 
                 const row = (params.row as PortalApisSslCertificateDetails);
@@ -257,8 +257,8 @@ export default function SslCertificates() {
                 />
             </DialogContent>
             <DialogActions>
-                <Button variant="outlined" color="inherit" onClick={handleClose}>Abbrechen</Button>
-                <Button variant="outlined" color="warning" onClick={() => revoke()}>Widerrufen</Button>
+                <Button key="cancel" variant="outlined" color="inherit" onClick={handleClose}>Abbrechen</Button>
+                <Button key="revoke" variant="outlined" color="warning" onClick={() => revoke()}>Widerrufen</Button>
             </DialogActions>
         </Dialog>
         <Link href="/ssl/new"><Button variant="contained" disabled={!session} color="success" startIcon={<AddCircleOutlineIcon />} sx={{ mt: 1 }} >Neues Zertifikat beziehen</Button></Link>

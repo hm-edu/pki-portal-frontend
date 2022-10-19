@@ -18,7 +18,8 @@ import { Configuration } from "../../api/pki/configuration";
 import { Config } from "../../src/config";
 import { dataGridStyle } from "../../src/theme";
 import Link from "next/link";
-import { CircularProgress, Typography } from "@mui/material";
+import CircularProgress from "@mui/material/CircularProgress";
+import Typography from "@mui/material/Typography";
 import { useSession } from "next-auth/react";
 import { green } from "@mui/material/colors";
 
@@ -123,7 +124,7 @@ export function SmimeCertificates() {
             filterable: false,
             hideable: false,
             flex: 1,
-            minWidth: 250,
+            minWidth: 150,
             renderCell: (params) => {
                 const row = (params.row as PortalApisListSmimeResponseCertificateDetails);
                 if (row.status !== "revoked") {
@@ -162,7 +163,7 @@ export function SmimeCertificates() {
             <DialogTitle>SMIME Zertifikat widerrufen</DialogTitle>
             <DialogContent>
                 <DialogContentText>
-                    Sie möchten das SMIME Zertifikat mit Seriennummer widerrufen.
+                    Sie möchten das SMIME Zertifikat mit Seriennummer {selection?.serial} widerrufen.
 
                     Bitte geben Sie einen Grund ein.
                 </DialogContentText>
@@ -177,8 +178,8 @@ export function SmimeCertificates() {
                 />
             </DialogContent>
             <DialogActions>
-                <Button color="inherit" variant="outlined" disabled={revoking} onClick={handleClose}>Abbrechen</Button>
-                <Button color="warning" variant="outlined" disabled={revoking} onClick={() => revoke()}>Widerrufen {revoking && <CircularProgress size={24} sx={{ color: green[500], position: "absolute", top: "50%", left: "50%", marginTop: "-12px", marginLeft: "-12px" }} />} </Button>
+                <Button key="cancel" color="inherit" variant="outlined" disabled={revoking} onClick={handleClose}>Abbrechen</Button>
+                <Button key="revoke" color="warning" variant="outlined" disabled={revoking} onClick={() => revoke()}>Widerrufen {revoking && <CircularProgress size={24} sx={{ color: green[500], position: "absolute", top: "50%", left: "50%", marginTop: "-12px", marginLeft: "-12px" }} />} </Button>
             </DialogActions>
         </Dialog>
         <Link href="/smime/new"><Button variant="contained" disabled={!session} color="success" startIcon={<AddCircleOutlineIcon />} sx={{ mt: 1 }}>Neues Zertifikat beziehen</Button></Link>

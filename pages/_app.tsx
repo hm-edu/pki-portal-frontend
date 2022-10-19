@@ -8,7 +8,7 @@ import "@fontsource/fira-mono/500.css";
 import "@fontsource/fira-mono/700.css";
 import { SessionProvider } from "next-auth/react";
 import CssBaseline from "@mui/material/CssBaseline";
-import { ThemeProvider } from "@mui/material/styles";
+import ThemeProvider from "@mui/material/styles/ThemeProvider";
 import Container from "@mui/material/Container";
 import ButtonAppBar from "../src/navbar";
 import { createEmotionCache, theme } from "../src/theme";

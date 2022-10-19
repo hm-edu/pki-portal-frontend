@@ -2,7 +2,6 @@ import { DataGrid } from "@mui/x-data-grid";
 import React, { FormEvent, useRef, useState } from "react";
 import { ModelDomain, DomainsApi } from "../api/domains/api";
 import { Configuration } from "../api/domains/configuration";
-import { Config } from "./config";
 import DeleteIcon from "@mui/icons-material/Delete";
 import TextField, { TextFieldProps } from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
@@ -10,6 +9,7 @@ import Modal from "@mui/material/Modal";
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import { useSession } from "next-auth/react";
+import { Config } from "./config";
 
 export default function Delegation(props: { delegationDomain: ModelDomain; onClose: (domain: ModelDomain) => void }) {
     const style = {

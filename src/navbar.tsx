@@ -5,14 +5,21 @@ import MenuIcon from "@mui/icons-material/Menu";
 import Button from "@mui/material/Button";
 import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
+import Box from "@mui/material/Box";
+import CircularProgress from "@mui/material/CircularProgress";
+import Divider from "@mui/material/Divider";
+import Drawer from "@mui/material/Drawer";
+import Hidden from "@mui/material/Hidden";
+import List from "@mui/material/List";
+import ListItemButton from "@mui/material/ListItemButton";
+import ListItemText from "@mui/material/ListItemText";
 
 import React, { useEffect, useState } from "react";
 import { SignInButton } from "./signInButton";
 import Link from "next/link";
 import { signOut, useSession } from "next-auth/react";
 import useSWR from "swr";
-import { Box, CircularProgress, Divider, Drawer, Hidden, List, ListItemButton, ListItemText } from "@mui/material";
-import Moment from "react-moment";
+import dynamic from "next/dynamic";
 
 const fetcher = (args: RequestInfo | URL) => fetch(args).then(res => res.json());
 
@@ -42,10 +49,12 @@ export default function ButtonAppBar() {
             Abmelden
         </Button>;
         if (session) {
+            const DynamicMoment = dynamic(() => import("react-moment"));
+
             setFragment(<>
                 <Tooltip title={<Box>
                     <Typography variant="body2">{session.user?.email ? session.user?.email : ""}</Typography>
-                    <Typography variant="body2">Sitzung gültig bis: <Moment format="DD.MM.YYYY HH:mm">{new Date(session.expires)}</Moment></Typography>
+                    <Typography variant="body2">Sitzung gültig bis: <DynamicMoment format="DD.MM.YYYY HH:mm">{new Date(session.expires)}</DynamicMoment></Typography>
                 </Box>}>
                     <Typography sx={{ paddingRight: "10px" }}>{session.user?.name ? session.user?.name : ""}</Typography>
                 </Tooltip>{logout}</>);
@@ -63,8 +72,8 @@ export default function ButtonAppBar() {
 
     return (
         <AppBar position="fixed">
-            <Toolbar>
-                <Hidden mdDown>
+            <Toolbar key="bar">
+                <Hidden key="desktop" mdDown>
                     <Typography component="div" sx={{ flexGrow: 1 }}>
                         <Link href="/">
                             <Button color="inherit">Home</Button>
@@ -74,7 +83,7 @@ export default function ButtonAppBar() {
                     </Typography>
                     {userFragment}
                 </Hidden>
-                <Hidden mdUp>
+                <Hidden key="mobile" mdUp>
                     <Typography component="div" sx={{ flexGrow: 1 }}>
                         PKI-Portal
                     </Typography>
@@ -84,7 +93,7 @@ export default function ButtonAppBar() {
                             <List>
                                 {buttons.map((x) => {
                                     // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-                                    return <Link href={x.props["href"]} passHref><ListItemButton onClick={() => setDrawer(false)} component="a"><ListItemText primary={(x.props["children"] as JSX.Element).props["children"]} /></ListItemButton></Link>;
+                                    return <Link key={x.key} href={x.props["href"]} passHref><ListItemButton onClick={() => setDrawer(false)} component="a"><ListItemText primary={(x.props["children"] as JSX.Element).props["children"]} /></ListItemButton></Link>;
                                 })}
                                 <Divider />
                             </List>

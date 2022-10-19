@@ -15,12 +15,16 @@ import React, { FormEvent } from "react";
 import { EABApi, ModelsEAB } from "../../api/eab/api";
 import { Configuration } from "../../api/eab/configuration";
 import { AuthProps, Config } from "../../src/config";
-import { RecommendedConfigurationsComponent } from "../../src/configuration";
-import { getServerSideProps } from "../../src/auth";
+import { RecommendedConfigurationsComponent } from "../../src/eabConfiguration";
 import { deDE } from "@mui/x-data-grid";
 import { dataGridStyle } from "../../src/theme";
+import { useSession } from "next-auth/react";
 
-class EabTokens extends React.Component<{ session: AuthProps | null; nonce: string }, { pageSize: number; tokens: ModelsEAB[]; selected: GridSelectionModel; loading: boolean; recommendations: boolean; error: string | boolean | undefined }> {
+interface EabState { initalized: boolean; pageSize: number; tokens: ModelsEAB[]; selected: GridSelectionModel; loading: boolean; recommendations: boolean; error: string | boolean | undefined }
+
+class EabTokens extends React.Component<{ session: AuthProps | null; status: string }, EabState> {
+
+    initalized = false;
 
     tdStyle = {
         padding: "0px",
@@ -71,7 +75,7 @@ class EabTokens extends React.Component<{ session: AuthProps | null; nonce: stri
             filterable: false,
             hideable: false,
             flex: 1,
-            minWidth: 250,
+            minWidth: 150,
             renderCell: (params) => {
                 const row = (params.row as ModelsEAB);
                 const remove = (event: FormEvent<Element>) => {
@@ -87,7 +91,7 @@ class EabTokens extends React.Component<{ session: AuthProps | null; nonce: stri
     ];
 
     // eslint-disable-next-line @typescript-eslint/ban-types
-    constructor(props: { session: AuthProps | null; nonce: string }) {
+    constructor(props: { session: AuthProps | null; status: string }) {
         super(props);
         this.state = {
             pageSize: 15,
@@ -96,15 +100,8 @@ class EabTokens extends React.Component<{ session: AuthProps | null; nonce: stri
             loading: true,
             recommendations: false,
             error: undefined,
+            initalized: false,
         };
-    }
-
-    componentDidMount() {
-        if (this.props.session) {
-            this.loadTokens();
-        } else {
-            this.setState({ error: "Bitte melden Sie sich an!", loading: false });
-        }
     }
 
     private selection(): JSX.Element | undefined {
@@ -148,6 +145,13 @@ class EabTokens extends React.Component<{ session: AuthProps | null; nonce: stri
     }
 
     render() {
+        if (this.props.session && this.props.status == "authenticated" && !this.initalized) {
+            this.initalized = true;
+            this.loadTokens();
+        } else if (this.props.status == "unauthenticated") {
+            this.setState({ error: "Bitte melden Sie sich an!", loading: false });
+        }
+
         return <Box sx={{ display: "flex", flexDirection: "column", height: "100%" }}><Typography variant="h1">Ihre EAB Tokens</Typography>
             <DataGrid columns={this.columns}
                 sx={dataGridStyle}
@@ -158,7 +162,6 @@ class EabTokens extends React.Component<{ session: AuthProps | null; nonce: stri
                         },
                     },
                 }}
-                nonce={this.props.nonce}
                 pageSize={this.state.pageSize}
                 components={{ LoadingOverlay: LinearProgress }}
                 componentsProps={{ loadingOverlay: { color: "inherit" } }}
@@ -181,6 +184,16 @@ class EabTokens extends React.Component<{ session: AuthProps | null; nonce: stri
     }
 }
 
-export { getServerSideProps };
+const withSession = (Comp: EabTokens) => (props: JSX.IntrinsicAttributes) => {
+    const { data: session, status } = useSession();
 
-export default EabTokens;
+    // if the component has a render property, we are good
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    return <Comp session={session} status={status} {...props} />;
+};
+
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
+// eslint-disable-next-line no-class-assign
+export default EabTokens = withSession(EabTokens);

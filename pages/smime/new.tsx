@@ -16,7 +16,7 @@ import { SMIMEApi } from "../../api/pki/api";
 import { Configuration } from "../../api/pki/configuration";
 import { Config } from "../../src/config";
 import { modalTheme } from "../../src/theme";
-import { AlertTitle } from "@mui/material";
+import AlertTitle from "@mui/material/AlertTitle";
 import { useSession } from "next-auth/react";
 import unidecode from "unidecode";
 import moment from "moment";
