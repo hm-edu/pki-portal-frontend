@@ -64,8 +64,8 @@ export default function ButtonAppBar() {
     }, [session, session?.user, session?.user?.email, session?.user?.name, idp]);
 
     const buttons = session ? [
-        <Link key="ssl" href="/ssl" ><Button key="ssl" color="inherit">SSL Zertifikate</Button></Link>,
-        <Link key="smime" href="/smime" ><Button key="smime" color="inherit" >SMIME Zertifikate</Button></Link>,
+        <Link key="server" href="/server" ><Button key="server" color="inherit">Serverzertifikate</Button></Link>,
+        <Link key="user" href="/user" ><Button key="user" color="inherit" >Nutzerzertifikate</Button></Link>,
         <Link key="domains" href="/domains" ><Button key="domains" color="inherit" >Domainverwaltung</Button></Link>,
         <Link key="eab" href="/eab" ><Button key="eab" color="inherit" >EAB Tokens</Button></Link>,
     ] : [];

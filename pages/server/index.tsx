@@ -261,6 +261,6 @@ export default function SslCertificates() {
                 <Button key="revoke" variant="outlined" color="warning" onClick={() => revoke()}>Widerrufen</Button>
             </DialogActions>
         </Dialog>
-        <Link href="/ssl/new"><Button variant="contained" disabled={!session} color="success" startIcon={<AddCircleOutlineIcon />} sx={{ mt: 1 }} >Neues Zertifikat beziehen</Button></Link>
+        <Link href="/server/new"><Button variant="contained" disabled={!session} color="success" startIcon={<AddCircleOutlineIcon />} sx={{ mt: 1 }} >Neues Zertifikat beziehen</Button></Link>
     </Box>;
 }
