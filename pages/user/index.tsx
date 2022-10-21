@@ -138,7 +138,7 @@ export function SmimeCertificates() {
         },
     ];
 
-    return <Box sx={{ display: "flex", flexDirection: "column", height: "100%" }}><Typography variant="h1">Ihre Benutzerzertifikate</Typography>
+    return <Box sx={{ display: "flex", flexDirection: "column", height: "100%" }}><Typography variant="h1">Ihre Nutzerzertifikate</Typography>
         <DataGrid columns={columns}
             sx={dataGridStyle}
             pageSize={pageSize}
@@ -160,10 +160,10 @@ export function SmimeCertificates() {
             rowsPerPageOptions={[5, 15, 25, 50, 100]}
             pagination rows={certificates}></DataGrid>
         <Dialog open={open} onClose={handleClose}>
-            <DialogTitle>SMIME Zertifikat widerrufen</DialogTitle>
+            <DialogTitle>Nutzerzertifikat widerrufen</DialogTitle>
             <DialogContent>
                 <DialogContentText>
-                    Sie möchten das SMIME Zertifikat mit Seriennummer {selection?.serial} widerrufen.
+                    Sie möchten das Nutzerzertifikat mit Seriennummer {selection?.serial} widerrufen.
 
                     Bitte geben Sie einen Grund ein.
                 </DialogContentText>

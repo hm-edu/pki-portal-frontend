@@ -163,7 +163,7 @@ export default function SMIMEGenerator() {
     }, [p12PasswordConfirmRef, p12PasswordRef, revokeRef, revokeRef.current]);
 
     /* eslint-disable @typescript-eslint/no-misused-promises */
-    return <div><Typography variant="h1">Erstellung eines neuen SMIME Zertifikats</Typography>
+    return <div><Typography variant="h1">Erstellung eines neuen Nutzerzertifikats</Typography>
         {!error && <Box sx={{ display: "flex", flexDirection: "column", gap: "15px", width: "md", alignItems: "left" }}>
 
             {session && <Box sx={{ display: "flex", flexDirection: "column", alignItems: "left", alignSelf: "left", paddingBottom: "10px" }}>
