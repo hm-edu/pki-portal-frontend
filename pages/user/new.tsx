@@ -99,7 +99,7 @@ export default function SMIMEGenerator() {
                             // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
                             setDownload(<Button variant="contained" startIcon={<FileDownload />} download={filename} href={"data:application/x-pkcs12;base64," + p12}>Erneuter Download</Button>);
                             setProgress(<Box sx={{ display: "flex", flexDirection: "column", gap: "15px", width: "md", alignItems: "left" }}>
-                                <Typography id="modal-modal-description" sx={{ mt: "24px" }}>PKCS12 generiert.</Typography> Download von <Typography id="modal-modal-description" sx={{ mt: "24px" }}>Datei gestartet! Bitte sichern Sie diese Datei!</Typography>
+                                <Typography id="modal-modal-description" sx={{ mt: "24px" }}>PKCS12 generiert.</Typography> <Typography id="modal-modal-description" sx={{ mt: "24px" }}>Download von Datei gestartet! Bitte sichern Sie generierte diese Datei!</Typography>
                                 <Button variant="contained" sx={buttonSx} startIcon={<FileDownload />} download={filename} href={"data:application/x-pkcs12;base64," + p12}>Erneuter Download</Button>
                             </Box>);
                             setSuccess(true);
@@ -125,8 +125,8 @@ export default function SMIMEGenerator() {
         }
     };
     useEffect(() => {
-        setProgress(
-            <Typography id="modal-modal-description" sx={{ mt: "24px" }}>Bitte warten...</Typography>);
+        if (!success)
+            setProgress(<Typography id="modal-modal-description" sx={{ mt: "24px" }}>Bitte warten...</Typography>);
         if (status == "authenticated" && !issuing) {
             const cfg = new Configuration({ accessToken: session.accessToken });
             const api = new SMIMEApi(cfg, `${Config.PKI_HOST}`);
