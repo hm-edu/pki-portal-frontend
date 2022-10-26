@@ -50,6 +50,7 @@ export default function SMIMEGenerator() {
     const [loading, setLoading] = useState(true);
     const [issuing, setIssuing] = useState(false);
     const [success, setSuccess] = useState(false);
+    const [closed, setClosed] = useState(false);
     const [warning, setWarning] = useState(false);
     const [error, setError] = useState("");
     const [validation, setValidation] = useState<string | undefined>(undefined);
@@ -102,6 +103,7 @@ export default function SMIMEGenerator() {
                                 <Typography id="modal-modal-description" sx={{ mt: "24px" }}>PKCS12 generiert.</Typography>
                                 <Typography sx={{ mt: "10px" }}>Download von Datei gestartet! Bitte sichern Sie die generierte Datei!</Typography>
                                 <Button variant="contained" sx={buttonSx} startIcon={<FileDownload />} download={filename} href={"data:application/x-pkcs12;base64," + p12}>Erneuter Download</Button>
+                                <Button variant="outlined" color="inherit" onClick={(event) => { event.preventDefault(); setClosed(true); }}>Dialog schließen</Button>
                             </Box>);
                             setSuccess(true);
                             setLoading(false);
@@ -208,7 +210,7 @@ export default function SMIMEGenerator() {
             </Box>
         </Box>}
         {error && <Alert sx={{ width: "100%" }} severity="error">{error}</Alert>}
-        <Modal open={loading || success} aria-labelledby="modal-modal-title" aria-describedby="modal-modal-description">
+        <Modal open={(loading || success) && !closed} aria-labelledby="modal-modal-title" aria-describedby="modal-modal-description">
             <Box sx={modalTheme}>
                 <Typography id="modal-modal-title" variant="h6" component="h2">
                     Generierung eines neuen Nutzerzertifikats
