@@ -211,7 +211,7 @@ export default function SMIMEGenerator() {
         </Box>}
         {error && <Alert sx={{ width: "100%" }} severity="error">{error}</Alert>}
         <Modal open={(loading || success) && !closed} aria-labelledby="modal-modal-title" aria-describedby="modal-modal-description">
-            <Box sx={modalTheme}>
+            <Box sx={{ ...modalTheme, width: "500px" }}>
                 <Typography id="modal-modal-title" variant="h6" component="h2">
                     Generierung eines neuen Nutzerzertifikats
                 </Typography>
