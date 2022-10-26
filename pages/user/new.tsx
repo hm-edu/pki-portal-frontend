@@ -73,8 +73,7 @@ export default function SMIMEGenerator() {
         if (!loading) {
             setSuccess(false);
             setLoading(true);
-            setProgress(
-                <Typography id="modal-modal-description" sx={{ mt: "24px" }}>Generiere CSR...</Typography>);
+            setProgress(<Typography id="modal-modal-description" sx={{ mt: "24px" }}>Generiere CSR...</Typography>);
             const CsrBuilder = (await import("../../src/csr")).CsrBuilder;
             const csr = new CsrBuilder();
             csr.build("rsa", undefined, 3072).then((x) => {
@@ -98,7 +97,7 @@ export default function SMIMEGenerator() {
                             element.click();
                             document.body.removeChild(element);
                             // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
-                            setDownload(<Button variant="contained" startIcon={<FileDownload />} download={filename} href={"data:application/x-pkcs12;base64," + p12}>Erneuter Download</Button>);
+                            setDownload(<Button variant="contained" color="inherit" startIcon={<FileDownload />} download={filename} href={"data:application/x-pkcs12;base64," + p12}>Erneuter Download</Button>);
                             setProgress(<Box sx={{ display: "flex", flexDirection: "column", gap: "15px", width: "md", alignItems: "left" }}>
                                 <Typography id="modal-modal-description" sx={{ mt: "24px" }}>PKCS12 generiert.</Typography>
                                 <Typography sx={{ mt: "10px" }}>Download von Datei gestartet! Bitte sichern Sie die generierte Datei!</Typography>
