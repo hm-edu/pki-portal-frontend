@@ -153,6 +153,8 @@ export default function SMIMEGenerator() {
     const validate = useCallback(() => {
         if (p12PasswordRef.current?.value == "") {
             setValidation("Bitte vergeben Sie ein individuelles Passwort für Ihre PKCS12-Datei.");
+        } else if ((p12PasswordRef.current?.value as string).length < 6) {
+            setValidation("Das Passwort muss mindestens 6 Zeichen lang sein.");
         } else if (p12PasswordRef.current?.value != p12PasswordConfirmRef.current?.value) {
             setValidation("Die eingegebenen Passwörter stimmen nicht überein.");
         } else if (warning && !revokeRef.current?.checked) {
