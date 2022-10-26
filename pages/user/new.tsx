@@ -189,7 +189,7 @@ export default function SMIMEGenerator() {
                 <Box>
                     {warning && <Alert severity="warning">
                         <AlertTitle>Warnung</AlertTitle>
-                        <Typography>Sie haben derzeit 2 aktive SMIME Zertifikate. </Typography>
+                        <Typography>Sie haben derzeit 2 aktive Nutzerzertifikate. </Typography>
                         <Typography>Durch Ausstellung eines neuen Zertifikats wird automatisch das ältere dieser beiden Zertifikate widerrufen. </Typography>
                         <Typography>Das Widerrufen eines Zertifikats kann nicht rückgängig gemacht werden!</Typography>
                         <Typography>Sofern Sie dies nicht möchten widerrufen Sie bitte ein Zertifikat von Hand. </Typography>
@@ -211,7 +211,7 @@ export default function SMIMEGenerator() {
         <Modal open={loading || success} aria-labelledby="modal-modal-title" aria-describedby="modal-modal-description">
             <Box sx={modalTheme}>
                 <Typography id="modal-modal-title" variant="h6" component="h2">
-                    Generierung eines neuen SMIME Zertifikats
+                    Generierung eines neuen Nutzerzertifikats
                 </Typography>
                 {loading && <Box sx={{ padding: 2 }}>
                     <CircularProgress size={24} sx={{ color: green[500], position: "absolute", left: "50%", marginLeft: "-12px" }} />
