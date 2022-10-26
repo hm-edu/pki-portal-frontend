@@ -99,7 +99,8 @@ export default function SMIMEGenerator() {
                             // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
                             setDownload(<Button variant="contained" startIcon={<FileDownload />} download={filename} href={"data:application/x-pkcs12;base64," + p12}>Erneuter Download</Button>);
                             setProgress(<Box sx={{ display: "flex", flexDirection: "column", gap: "15px", width: "md", alignItems: "left" }}>
-                                <Typography id="modal-modal-description" sx={{ mt: "24px" }}>PKCS12 generiert.</Typography> <Typography id="modal-modal-description" sx={{ mt: "24px" }}>Download von Datei gestartet! Bitte sichern Sie generierte diese Datei!</Typography>
+                                <Typography id="modal-modal-description" sx={{ mt: "24px" }}>PKCS12 generiert.</Typography>
+                                <Typography sx={{ mt: "10px" }}>Download von Datei gestartet! Bitte sichern Sie die generierte Datei!</Typography>
                                 <Button variant="contained" sx={buttonSx} startIcon={<FileDownload />} download={filename} href={"data:application/x-pkcs12;base64," + p12}>Erneuter Download</Button>
                             </Box>);
                             setSuccess(true);
