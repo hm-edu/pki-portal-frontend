@@ -39,7 +39,7 @@
     "unidecode": "^0.1.8"
   },
   "devDependencies": {
-    "@next/bundle-analyzer": "^12.3.1",
+    "@next/bundle-analyzer": "^13.0.0",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^14.4.3",
     "@types/node": "18.11.7",
