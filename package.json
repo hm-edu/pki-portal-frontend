@@ -11,13 +11,13 @@
     "analyze": "cross-env ANALYZE=true next build"
   },
   "dependencies": {
-    "@emotion/react": "^11.10.4",
+    "@emotion/react": "^11.10.5",
     "@emotion/server": "^11.10.0",
-    "@emotion/styled": "^11.10.4",
+    "@emotion/styled": "^11.10.5",
     "@fontsource/fira-mono": "^4.5.10",
     "@fontsource/roboto": "^4.5.8",
     "@mui/icons-material": "^5.10.9",
-    "@mui/material": "^5.10.10",
+    "@mui/material": "^5.10.11",
     "@mui/system": "^5.10.10",
     "@mui/x-data-grid": "^5.17.8",
     "@next-safe/middleware": "^0.10.0",
@@ -39,21 +39,21 @@
     "unidecode": "^0.1.8"
   },
   "devDependencies": {
-    "@next/bundle-analyzer": "^12.3.1",
+    "@next/bundle-analyzer": "^13.0.0",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^14.4.3",
-    "@types/node": "18.11.3",
-    "@types/react": "18.0.21",
-    "@types/react-dom": "18.0.6",
+    "@types/node": "18.11.7",
+    "@types/react": "18.0.24",
+    "@types/react-dom": "18.0.8",
     "@types/unidecode": "^0.1.1",
-    "@typescript-eslint/eslint-plugin": "^5.40.1",
-    "@typescript-eslint/parser": "^5.40.1",
+    "@typescript-eslint/eslint-plugin": "^5.41.0",
+    "@typescript-eslint/parser": "^5.41.0",
     "cross-env": "^7.0.3",
     "duplicate-package-checker-webpack-plugin": "^3.0.0",
-    "eslint": "8.25.0",
-    "eslint-config-next": "12.3.1",
-    "eslint-plugin-testing-library": "^5.9.0",
-    "patch-package": "^6.4.7",
+    "eslint": "8.26.0",
+    "eslint-config-next": "13.0.0",
+    "eslint-plugin-testing-library": "^5.9.1",
+    "patch-package": "^6.5.0",
     "typescript": "^4.8.4"
   }
 }

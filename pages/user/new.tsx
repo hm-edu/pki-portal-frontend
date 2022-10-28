@@ -45,11 +45,12 @@ export default function SMIMEGenerator() {
         });
     }
 
-    const [progress, setProgress] = useState<string>("");
+    const [progress, setProgress] = useState<JSX.Element>(<></>);
     const [download, setDownload] = useState<JSX.Element>(<></>);
     const [loading, setLoading] = useState(true);
     const [issuing, setIssuing] = useState(false);
     const [success, setSuccess] = useState(false);
+    const [closed, setClosed] = useState(false);
     const [warning, setWarning] = useState(false);
     const [error, setError] = useState("");
     const [validation, setValidation] = useState<string | undefined>(undefined);
@@ -72,11 +73,11 @@ export default function SMIMEGenerator() {
         if (!loading) {
             setSuccess(false);
             setLoading(true);
-            setProgress("Generiere CSR...");
+            setProgress(<Typography id="modal-modal-description" sx={{ mt: "24px" }}>Generiere CSR...</Typography>);
             const CsrBuilder = (await import("../../src/csr")).CsrBuilder;
             const csr = new CsrBuilder();
             csr.build("rsa", undefined, 3072).then((x) => {
-                setProgress("CSR generiert...");
+                setProgress(<Typography id="modal-modal-description" sx={{ mt: "24px" }}>CSR generiert...</Typography>);
                 setIssuing(true);
                 if (session && session.user.name) {
                     // eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/restrict-plus-operands, @typescript-eslint/no-unsafe-member-access
@@ -84,9 +85,9 @@ export default function SMIMEGenerator() {
 
                     const cfg = new Configuration({ accessToken: session.accessToken });
                     const api = new SMIMEApi(cfg, `${Config.PKI_HOST}`);
-                    setProgress("Signiere CSR...");
+                    setProgress(<Typography id="modal-modal-description" sx={{ mt: "24px" }}>Signiere CSR...</Typography>);
                     return api.smimeCsrPost({ csr: x.csr }).then((response) => {
-                        setProgress("Generiere PKCS12...");
+                        setProgress(<Typography id="modal-modal-description" sx={{ mt: "24px" }}>Generiere PKCS12...</Typography>);
                         return createP12(x.privateKey, [response.data], p12PasswordRef.current?.value as string).then((p12) => {
                             const element = document.createElement("a");
                             element.setAttribute("href", "data:application/x-pkcs12;base64," + p12);
@@ -96,8 +97,13 @@ export default function SMIMEGenerator() {
                             element.click();
                             document.body.removeChild(element);
                             // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
-                            setDownload(<Button variant="contained" startIcon={<FileDownload />} download={filename} href={"data:application/x-pkcs12;base64," + p12}>Erneuter Download</Button>);
-                            setProgress("PKCS12 generiert");
+                            setDownload(<Button variant="contained" color="inherit" startIcon={<FileDownload />} download={filename} href={"data:application/x-pkcs12;base64," + p12}>Erneuter Download</Button>);
+                            setProgress(<Box sx={{ display: "flex", flexDirection: "column", gap: "15px", width: "md", alignItems: "left" }}>
+                                <Typography id="modal-modal-description" sx={{ mt: "24px" }}>PKCS12 generiert.</Typography>
+                                <Typography sx={{ mt: "10px" }}>Download von Datei gestartet! Bitte sichern Sie die generierte Datei!</Typography>
+                                <Button variant="contained" sx={buttonSx} startIcon={<FileDownload />} download={filename} href={"data:application/x-pkcs12;base64," + p12}>Erneuter Download</Button>
+                                <Button variant="outlined" color="inherit" onClick={(event) => { event.preventDefault(); setClosed(true); }}>Dialog schließen</Button>
+                            </Box>);
                             setSuccess(true);
                             setLoading(false);
                         }).catch((err) => {
@@ -121,7 +127,8 @@ export default function SMIMEGenerator() {
         }
     };
     useEffect(() => {
-        setProgress("Bitte warten...");
+        if (!success)
+            setProgress(<Typography id="modal-modal-description" sx={{ mt: "24px" }}>Bitte warten...</Typography>);
         if (status == "authenticated" && !issuing) {
             const cfg = new Configuration({ accessToken: session.accessToken });
             const api = new SMIMEApi(cfg, `${Config.PKI_HOST}`);
@@ -153,6 +160,8 @@ export default function SMIMEGenerator() {
     const validate = useCallback(() => {
         if (p12PasswordRef.current?.value == "") {
             setValidation("Bitte vergeben Sie ein individuelles Passwort für Ihre PKCS12-Datei.");
+        } else if ((p12PasswordRef.current?.value as string).length < 6) {
+            setValidation("Das Passwort muss mindestens 6 Zeichen lang sein.");
         } else if (p12PasswordRef.current?.value != p12PasswordConfirmRef.current?.value) {
             setValidation("Die eingegebenen Passwörter stimmen nicht überein.");
         } else if (warning && !revokeRef.current?.checked) {
@@ -163,7 +172,7 @@ export default function SMIMEGenerator() {
     }, [p12PasswordConfirmRef, p12PasswordRef, revokeRef, revokeRef.current]);
 
     /* eslint-disable @typescript-eslint/no-misused-promises */
-    return <div><Typography variant="h1">Erstellung eines neuen SMIME Zertifikats</Typography>
+    return <div><Typography variant="h1">Erstellung eines neuen Nutzerzertifikats</Typography>
         {!error && <Box sx={{ display: "flex", flexDirection: "column", gap: "15px", width: "md", alignItems: "left" }}>
 
             {session && <Box sx={{ display: "flex", flexDirection: "column", alignItems: "left", alignSelf: "left", paddingBottom: "10px" }}>
@@ -181,7 +190,7 @@ export default function SMIMEGenerator() {
                 <Box>
                     {warning && <Alert severity="warning">
                         <AlertTitle>Warnung</AlertTitle>
-                        <Typography>Sie haben derzeit 2 aktive SMIME Zertifikate. </Typography>
+                        <Typography>Sie haben derzeit 2 aktive Nutzerzertifikate. </Typography>
                         <Typography>Durch Ausstellung eines neuen Zertifikats wird automatisch das ältere dieser beiden Zertifikate widerrufen. </Typography>
                         <Typography>Das Widerrufen eines Zertifikats kann nicht rückgängig gemacht werden!</Typography>
                         <Typography>Sofern Sie dies nicht möchten widerrufen Sie bitte ein Zertifikat von Hand. </Typography>
@@ -200,19 +209,17 @@ export default function SMIMEGenerator() {
             </Box>
         </Box>}
         {error && <Alert sx={{ width: "100%" }} severity="error">{error}</Alert>}
-        <Modal open={loading} aria-labelledby="modal-modal-title" aria-describedby="modal-modal-description">
-            <Box sx={modalTheme}>
+        <Modal open={(loading || success) && !closed} aria-labelledby="modal-modal-title" aria-describedby="modal-modal-description">
+            <Box sx={{ ...modalTheme, width: "500px" }}>
                 <Typography id="modal-modal-title" variant="h6" component="h2">
-                    Generierung eines neuen SMIME Zertifikats
+                    Generierung eines neuen Nutzerzertifikats
                 </Typography>
-                <Box sx={{ padding: 2 }}>
+                {loading && <Box sx={{ padding: 2 }}>
                     <CircularProgress size={24} sx={{ color: green[500], position: "absolute", left: "50%", marginLeft: "-12px" }} />
-                </Box>
-                <Typography id="modal-modal-description" sx={{ mt: "24px" }}>
-                    {progress}
-                </Typography>
+                </Box>}
+                {progress}
             </Box>
         </Modal>
 
-    </div>;
+    </div >;
 }
