@@ -34,7 +34,7 @@ function MyApp({ Component, pageProps: { ...pageProps }, emotionCache = clientSi
 
     return <SessionProvider session={pageProps.session} refetchInterval={60} >
         <Head>
-            <title>HM Portal</title>
+            <title>HM PKI-Portal</title>
         </Head>
         <CacheProvider value={emotionCache}>
             <ThemeProvider theme={theme}>
