@@ -13,7 +13,7 @@
   "dependencies": {
     "@emotion/react": "^11.10.4",
     "@emotion/server": "^11.10.0",
-    "@emotion/styled": "^11.10.4",
+    "@emotion/styled": "^11.10.5",
     "@fontsource/fira-mono": "^4.5.10",
     "@fontsource/roboto": "^4.5.8",
     "@mui/icons-material": "^5.10.9",
