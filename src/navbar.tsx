@@ -22,6 +22,7 @@ import useSWR from "swr";
 import dynamic from "next/dynamic";
 import Image from "next/image";
 import logo from "../public/cube.png";
+import Container from "@mui/system/Container";
 const fetcher = (args: RequestInfo | URL) => fetch(args).then(res => res.json());
 
 function useIdp() {
@@ -73,20 +74,25 @@ export default function ButtonAppBar() {
 
     return (
         <AppBar position="fixed">
-            <Toolbar key="bar">
-                <Hidden key="desktop" mdDown>
-                    <Image src={logo} height={36} width={36} alt="Logo" />
-                    
-                    <Typography component="div" sx={{ ml:1, flexGrow: 1 }}>
-                        <Link href="/">
-                            <Button color="inherit">Home</Button>
-                        </Link>
-                        {buttons}
+            <Hidden key="desktop" mdDown>
+                <Container maxWidth="xl">
+                    <Toolbar key="bar" >
+                        <Image src={logo} height={36} width={36} alt="Logo" />
 
-                    </Typography>
-                    {userFragment}
-                </Hidden>
-                <Hidden key="mobile" mdUp>
+                        <Typography component="div" sx={{ ml: 1, flexGrow: 1 }}>
+                            <Link href="/">
+                                <Button color="inherit">Home</Button>
+                            </Link>
+                            {buttons}
+
+                        </Typography>
+                        {userFragment}
+
+                    </Toolbar>
+                </Container>
+            </Hidden>
+            <Hidden key="mobile" mdUp>
+                <Toolbar key="bar-mobile">
                     <Typography component="div" sx={{ flexGrow: 1 }}>
                         PKI-Portal
                     </Typography>
@@ -105,9 +111,8 @@ export default function ButtonAppBar() {
                     <IconButton onClick={() => setDrawer(!openDrawer)} size="large" edge="start" color="inherit" aria-label="menu" sx={{ ml: 2, display: session == null ? "none" : "" }}>
                         <MenuIcon />
                     </IconButton>
-                </Hidden>
-
-            </Toolbar>
+                </Toolbar>
+            </Hidden>
         </AppBar >
     );
 }
