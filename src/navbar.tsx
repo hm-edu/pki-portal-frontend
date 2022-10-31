@@ -21,7 +21,7 @@ import { signOut, useSession } from "next-auth/react";
 import useSWR from "swr";
 import dynamic from "next/dynamic";
 import Image from "next/image";
-import logo from "../public/logo.png";
+import logo from "../public/cube.png";
 const fetcher = (args: RequestInfo | URL) => fetch(args).then(res => res.json());
 
 function useIdp() {
@@ -75,9 +75,9 @@ export default function ButtonAppBar() {
         <AppBar position="fixed">
             <Toolbar key="bar">
                 <Hidden key="desktop" mdDown>
-                    <Image src={logo} height={36} width={ 36 * (2000/923) } alt="Logo" />
+                    <Image src={logo} height={36} width={36} alt="Logo" />
                     
-                    <Typography component="div" sx={{ flexGrow: 1 }}>
+                    <Typography component="div" sx={{ ml:1, flexGrow: 1 }}>
                         <Link href="/">
                             <Button color="inherit">Home</Button>
                         </Link>
