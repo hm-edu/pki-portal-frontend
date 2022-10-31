@@ -54,7 +54,7 @@ class EabTokens extends React.Component<{ session: AuthProps | null; status: str
     private createEABToken() {
         const cfg = new Configuration({ accessToken: this.props.session?.accessToken });
         const api = new EABApi(cfg, `${Config.EAB_HOST}`);
-        api.eabPost().then(() => {
+        api.eabPost({}).then(() => {
             this.loadTokens();
         }).catch((error) => {
             console.log(error);

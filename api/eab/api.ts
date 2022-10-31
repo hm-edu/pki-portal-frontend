@@ -51,6 +51,12 @@ export interface ModelsEAB {
      * @type {string}
      * @memberof ModelsEAB
      */
+    'comment'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ModelsEAB
+     */
     'id'?: string;
     /**
      * 
@@ -58,6 +64,19 @@ export interface ModelsEAB {
      * @memberof ModelsEAB
      */
     'key_bytes'?: string;
+}
+/**
+ * 
+ * @export
+ * @interface ModelsEabRequest
+ */
+export interface ModelsEabRequest {
+    /**
+     * 
+     * @type {string}
+     * @memberof ModelsEabRequest
+     */
+    'comment'?: string;
 }
 
 /**
@@ -141,10 +160,13 @@ export const EABApiAxiosParamCreator = function (configuration?: Configuration) 
         /**
          * Creates a new key.
          * @summary Create a new key.
+         * @param {ModelsEabRequest} modelsEabRequest The optional comment of the token to create
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        eabPost: async (options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+        eabPost: async (modelsEabRequest: ModelsEabRequest, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'modelsEabRequest' is not null or undefined
+            assertParamExists('eabPost', 'modelsEabRequest', modelsEabRequest)
             const localVarPath = `/eab/`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -163,9 +185,12 @@ export const EABApiAxiosParamCreator = function (configuration?: Configuration) 
 
 
     
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(modelsEabRequest, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -206,11 +231,12 @@ export const EABApiFp = function(configuration?: Configuration) {
         /**
          * Creates a new key.
          * @summary Create a new key.
+         * @param {ModelsEabRequest} modelsEabRequest The optional comment of the token to create
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async eabPost(options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ModelsEAB>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.eabPost(options);
+        async eabPost(modelsEabRequest: ModelsEabRequest, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ModelsEAB>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.eabPost(modelsEabRequest, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
     }
@@ -245,11 +271,12 @@ export const EABApiFactory = function (configuration?: Configuration, basePath?:
         /**
          * Creates a new key.
          * @summary Create a new key.
+         * @param {ModelsEabRequest} modelsEabRequest The optional comment of the token to create
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        eabPost(options?: any): AxiosPromise<ModelsEAB> {
-            return localVarFp.eabPost(options).then((request) => request(axios, basePath));
+        eabPost(modelsEabRequest: ModelsEabRequest, options?: any): AxiosPromise<ModelsEAB> {
+            return localVarFp.eabPost(modelsEabRequest, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -287,12 +314,13 @@ export class EABApi extends BaseAPI {
     /**
      * Creates a new key.
      * @summary Create a new key.
+     * @param {ModelsEabRequest} modelsEabRequest The optional comment of the token to create
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof EABApi
      */
-    public eabPost(options?: AxiosRequestConfig) {
-        return EABApiFp(this.configuration).eabPost(options).then((request) => request(this.axios, this.basePath));
+    public eabPost(modelsEabRequest: ModelsEabRequest, options?: AxiosRequestConfig) {
+        return EABApiFp(this.configuration).eabPost(modelsEabRequest, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
