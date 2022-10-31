@@ -11,7 +11,7 @@ import Typography from "@mui/material/Typography";
 import LinearProgress from "@mui/material/LinearProgress";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import { DataGrid, GridColDef, GridSelectionModel } from "@mui/x-data-grid";
-import React, { FormEvent } from "react";
+import React, { FormEvent, RefObject } from "react";
 import { EABApi, ModelsEAB } from "../../api/eab/api";
 import { Configuration } from "../../api/eab/configuration";
 import { AuthProps, Config } from "../../src/config";
@@ -19,6 +19,8 @@ import { RecommendedConfigurationsComponent } from "../../src/eabConfiguration";
 import { deDE } from "@mui/x-data-grid";
 import { dataGridStyle } from "../../src/theme";
 import { useSession } from "next-auth/react";
+import { TextFieldProps } from "@mui/material/TextField";
+import TextField from "@mui/material/TextField";
 
 interface EabState { initalized: boolean; pageSize: number; tokens: ModelsEAB[]; selected: GridSelectionModel; loading: boolean; recommendations: boolean; error: string | boolean | undefined }
 
@@ -30,6 +32,8 @@ class EabTokens extends React.Component<{ session: AuthProps | null; status: str
         padding: "0px",
         height: "36px",
     };
+
+    newComment: RefObject<TextFieldProps>;
 
     private removeEAB(id: string) {
         const cfg = new Configuration({ accessToken: this.props.session?.accessToken });
@@ -54,7 +58,8 @@ class EabTokens extends React.Component<{ session: AuthProps | null; status: str
     private createEABToken() {
         const cfg = new Configuration({ accessToken: this.props.session?.accessToken });
         const api = new EABApi(cfg, `${Config.EAB_HOST}`);
-        api.eabPost({}).then(() => {
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-non-null-assertion
+        api.eabPost({ comment: (this.newComment.current!.value as string) }).then(() => {
             this.loadTokens();
         }).catch((error) => {
             console.log(error);
@@ -63,6 +68,7 @@ class EabTokens extends React.Component<{ session: AuthProps | null; status: str
 
     columns: GridColDef[] = [
         { field: "id", headerName: "ID", width: 280 },
+        { field: "comment", headerName: "Kommentar", width: 280 },
         { field: "key_bytes", headerName: "HMAC", width: 280 },
         {
             field: "bound_at", headerName: "Bereits verwendet?", type: "boolean", width: 150,
@@ -102,6 +108,7 @@ class EabTokens extends React.Component<{ session: AuthProps | null; status: str
             error: undefined,
             initalized: false,
         };
+        this.newComment = React.createRef<TextFieldProps>();
     }
 
     private selection(): JSX.Element | undefined {
@@ -151,7 +158,6 @@ class EabTokens extends React.Component<{ session: AuthProps | null; status: str
         } else if (this.props.status == "unauthenticated") {
             this.setState({ error: "Bitte melden Sie sich an!", loading: false });
         }
-
         return <Box sx={{ display: "flex", flexDirection: "column", height: "100%" }}><Typography variant="h1">Ihre EAB Tokens</Typography>
             <DataGrid columns={this.columns}
                 sx={dataGridStyle}
@@ -178,6 +184,10 @@ class EabTokens extends React.Component<{ session: AuthProps | null; status: str
                 e.preventDefault();
                 this.createEABToken();
             }}>
+                <TextField
+                    label="Optionaler Kommentar"
+                    inputRef={this.newComment}
+                    variant="standard" />
                 <Button type="submit" variant="contained" disabled={!this.props.session} color="success" startIcon={<AddCircleOutlineIcon />} sx={{ mt: 1 }} >Erstelle neuen Token</Button>
             </Box>
         </Box>;
