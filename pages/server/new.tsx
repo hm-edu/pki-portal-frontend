@@ -51,7 +51,6 @@ export default function SslGenerator() {
     const [generatedKey, setGeneratedKey] = useState(false);
     const [keypair, setKeyPair] = useState<KeyPair>();
     const [domains, setDomains] = useState<ModelDomain[]>([]);
-    const [fqdns, setFqdns] = useState<string[]>([]);
     const [selected, setSelected] = useState<GridRowId[]>();
     const [pageSize, setPageSize] = useState<number>(15);
     const { data: session, status } = useSession();
@@ -106,8 +105,11 @@ export default function SslGenerator() {
     ];
 
     let body: JSX.Element | undefined = undefined;
-
     let publicKeyElement: JSX.Element = <></>;
+    let fqdns: string[] = [];
+    if (selected) {
+        fqdns = domains.filter(x => selected.includes(x.id!)).sort((a, b) => a.fqdn!.localeCompare(b.fqdn!)).map((domain) => domain.fqdn!);
+    }
     if (generateKey) {
         publicKeyElement = <Box sx={columnStyle}>
             <Typography variant="h6">Öffentlicher Schlüssel</Typography>
@@ -159,7 +161,7 @@ export default function SslGenerator() {
                     <Typography>ECDSA</Typography>
                 </Stack></Box>
 
-            <Button type="submit" color="inherit" variant="outlined" disabled={loadingDomains || generateKey || generatedKey} sx={buttonSx}>Generiere Zertifikat {loadingDomains && (
+            <Button type="submit" color="inherit" variant="outlined" disabled={!selected || selected.length == 0 || loadingDomains || generateKey || generatedKey} sx={buttonSx}>Generiere Zertifikat {loadingDomains && (
                 <CircularProgress size={24} sx={{ color: green[500], position: "absolute", top: "50%", left: "50%", marginTop: "-12px", marginLeft: "-12px" }} />
             )}</Button>
         </Box>;
@@ -200,7 +202,6 @@ export default function SslGenerator() {
     async function create() {
         setProgress(<Typography>Erstelle privaten Schüssel</Typography>);
         if (!loadingDomains && selected && session?.accessToken) {
-            setFqdns(domains.filter(x => selected.includes(x.id!)).sort((a, b) => a.fqdn!.localeCompare(b.fqdn!)).map((domain) => domain.fqdn!));
             const CsrBuilder = (await import("../../src/csr")).CsrBuilder;
             const csr = new CsrBuilder();
             csr.build(switchRef.current?.checked ? "ecdsa" : "rsa", fqdns).then((result) => {
