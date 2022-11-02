@@ -124,7 +124,13 @@ export default function Domains() {
     }
 
     const columns: GridColDef[] = [
-        { field: "fqdn", headerName: "FQDN", width: 280 },
+        {
+            field: "fqdn", headerName: "FQDN", width: 280, sortComparator: (v1, v2) => {
+                const a = v1 as string;
+                const b = v2 as string;
+                return a.split(".").reverse().join(".").localeCompare(b.split(".").reverse().join("."));
+            },
+        },
         { field: "owner", headerName: "Inhaber", width: 280 },
         { field: "approved", headerName: "Bestätigt", width: 90, type: "boolean" },
         {

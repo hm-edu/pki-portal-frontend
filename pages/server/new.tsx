@@ -4,7 +4,7 @@ import Modal from "@mui/material/Modal";
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import { green } from "@mui/material/colors";
-import { DataGrid, GridRowId } from "@mui/x-data-grid";
+import { DataGrid, GridColDef, GridRowId } from "@mui/x-data-grid";
 import FileDownload from "@mui/icons-material/FileDownload";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import Stack from "@mui/material/Stack";
@@ -97,10 +97,13 @@ export default function SslGenerator() {
         }
     }, [session, session?.user, session?.user?.email, session?.user?.name]);
 
-    const columns = [
+    const columns: GridColDef[] = [
         {
-            field: "fqdn", headerName: "FQDN",
-            flex: 1,
+            field: "fqdn", headerName: "FQDN", flex: 1, sortComparator: (v1, v2) => {
+                const a = v1 as string;
+                const b = v2 as string;
+                return a.split(".").reverse().join(".").localeCompare(b.split(".").reverse().join("."));
+            },
         },
     ];
 
