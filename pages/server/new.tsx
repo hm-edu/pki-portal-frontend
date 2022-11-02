@@ -25,6 +25,7 @@ import { Buffer } from "buffer";
 import { KeyPair } from "../../src/keypair";
 import { dataGridStyle, modalTheme } from "../../src/theme";
 import { useSession } from "next-auth/react";
+import moment from "moment";
 
 export default function SslGenerator() {
 
@@ -50,6 +51,7 @@ export default function SslGenerator() {
     const [generatedKey, setGeneratedKey] = useState(false);
     const [keypair, setKeyPair] = useState<KeyPair>();
     const [domains, setDomains] = useState<ModelDomain[]>([]);
+    const [fqdns, setFqdns] = useState<string[]>([]);
     const [selected, setSelected] = useState<GridRowId[]>();
     const [pageSize, setPageSize] = useState<number>(15);
     const { data: session, status } = useSession();
@@ -117,7 +119,7 @@ export default function SslGenerator() {
             </Box>
         </Box>;
     } else if (keypair && keypair.public && !generateKey) {
-        publicKeyElement = keySegment(keypair.public, "public.pem", "Öffentlicher Schlüssel");
+        publicKeyElement = keySegment(keypair.public, `${fqdns[0]}_${moment().format("DD-MM-YYYY_HH-mm-ss")}.pem`, "Öffentlicher Schlüssel");
     }
 
     if (!generatedKey && !generateKey && !error) {
@@ -167,7 +169,7 @@ export default function SslGenerator() {
         </Box >;
     } else if (generatedKey || generateKey && keypair?.private) {
         body = <Box sx={{ minWidth: 0, maxWidth: "100%", maxHeight: "100%", minHeight: 0, display: "flex", gap: "10px", flexDirection: "row" }}>
-            {keySegment(keypair!.private, "private.pem", "Privater Schlüssel")}
+            {keySegment(keypair!.private, `${fqdns[0]}_${moment().format("DD-MM-YYYY_HH-mm-ss")}.key`, "Privater Schlüssel")}
             <Box sx={columnStyle}>
                 {publicKeyElement}
             </Box>
@@ -198,7 +200,7 @@ export default function SslGenerator() {
     async function create() {
         setProgress(<Typography>Erstelle privaten Schüssel</Typography>);
         if (!loadingDomains && selected && session?.accessToken) {
-            const fqdns = domains.filter(x => selected.includes(x.id!)).sort((a, b) => a.fqdn!.localeCompare(b.fqdn!)).map((domain) => domain.fqdn!);
+            setFqdns(domains.filter(x => selected.includes(x.id!)).sort((a, b) => a.fqdn!.localeCompare(b.fqdn!)).map((domain) => domain.fqdn!));
             const CsrBuilder = (await import("../../src/csr")).CsrBuilder;
             const csr = new CsrBuilder();
             csr.build(switchRef.current?.checked ? "ecdsa" : "rsa", fqdns).then((result) => {
@@ -210,14 +212,14 @@ export default function SslGenerator() {
                 api.sslCsrPost({ csr: result.csr }).then((response) => {
                     const element = document.createElement("a");
                     element.setAttribute("href", "data:application/x-pem-file;base64," + Buffer.from(response.data).toString("base64"));
-                    element.setAttribute("download", "public.pem");
+                    element.setAttribute("download", `${fqdns[0]}_${moment().format("DD-MM-YYYY_HH-mm-ss")}.pem`);
                     element.style.display = "none";
                     document.body.appendChild(element);
                     element.click();
                     document.body.removeChild(element);
 
                     element.setAttribute("href", "data:application/x-pem-file;base64," + Buffer.from(result.privateKey).toString("base64"));
-                    element.setAttribute("download", "private.pem");
+                    element.setAttribute("download", `${fqdns[0]}_${moment().format("DD-MM-YYYY_HH-mm-ss")}.key`);
                     element.style.display = "none";
                     document.body.appendChild(element);
                     element.click();

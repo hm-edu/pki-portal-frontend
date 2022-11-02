@@ -18,6 +18,7 @@ import { NextComponentType, NextPageContext } from "next";
 import { Router } from "next/router";
 import Head from "next/head";
 import { CacheProvider, EmotionCache } from "@emotion/react";
+import AutoLogout from "../src/autoLogout";
 
 const clientSideEmotionCache = createEmotionCache();
 const Offset = styled("div")(({ theme }) => {
@@ -41,7 +42,7 @@ function MyApp({ Component, pageProps: { ...pageProps }, emotionCache = clientSi
                 {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
                 <CssBaseline />
                 <ButtonAppBar />
-
+                <AutoLogout />
                 <Offset />
                 <Container sx={{ paddingTop: "10px", paddingBottom: "10px" }} maxWidth="xl" >
                     <Component {...pageProps} />

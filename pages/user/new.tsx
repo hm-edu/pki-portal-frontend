@@ -81,7 +81,7 @@ export default function SMIMEGenerator() {
                 setIssuing(true);
                 if (session && session.user.name) {
                     // eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/restrict-plus-operands, @typescript-eslint/no-unsafe-member-access
-                    const filename = unidecode(session.user.name).replace(" ", "_") + "_" + moment().format("DD-MM-YYYY_HH-mm-ss") + ".p12";
+                    const filename = `${unidecode(session.user.name).replace(" ", "_")}_${moment().format("DD-MM-YYYY_HH-mm-ss")}.p12`;
 
                     const cfg = new Configuration({ accessToken: session.accessToken });
                     const api = new SMIMEApi(cfg, `${Config.PKI_HOST}`);

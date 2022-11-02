@@ -185,6 +185,7 @@ class EabTokens extends React.Component<{ session: AuthProps | null; status: str
                 this.createEABToken();
             }}>
                 <TextField
+                    inputProps={{ pattern: "[a-zA-Z0-9-_.: üäöÄÖÜß]*" }}
                     label="Optionaler Kommentar"
                     inputRef={this.newComment}
                     variant="standard" />
