@@ -49,15 +49,15 @@ export class RecommendedConfigurationsComponent extends React.Component<{ token:
                 </Typography>
                 <Box sx={{ height: 680 }}>
                     {(this.props.token?.key_bytes == undefined || this.props.token.key_bytes == "" || this.props.token.bound_at) && <Alert severity="warning">Account bereits registriert!</Alert>}
-                    Regeistrierung acme.sh
+                    Registrierung acme.sh
                     <pre>
                         <code style={{ width: "100%", display: "inline-block" }}> {register_acme_sh} </code>
                     </pre>
-                    Zertifikatzbezug acme.sh
+                    Zertifikatsbezug acme.sh
                     <pre>
                         <code style={{ width: "100%", display: "inline-block" }}> {issue_acme_sh} </code>
                     </pre>
-                    Zertifikatzbezug certbot
+                    Zertifikatsbezug certbot
                     <pre>
                         <code style={{ width: "100%", display: "inline-block" }}> {certbot} </code>
                     </pre>
