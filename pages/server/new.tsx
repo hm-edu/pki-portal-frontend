@@ -26,10 +26,6 @@ import { KeyPair } from "../../src/keypair";
 import { dataGridStyle, modalTheme } from "../../src/theme";
 import { useSession } from "next-auth/react";
 import moment from "moment";
-import { Checkbox, FormControlLabel } from "@mui/material";
-import { createP12 } from "../../src/pkcs12";
-import JSZip from "jszip";
-import { saveAs } from "file-saver";
 
 export default function SslGenerator() {
 
@@ -57,8 +53,6 @@ export default function SslGenerator() {
     const [domains, setDomains] = useState<ModelDomain[]>([]);
     const [selected, setSelected] = useState<GridRowId[]>();
     const [pageSize, setPageSize] = useState<number>(15);
-    const pkcs12Ref = useRef<HTMLInputElement>(null);
-
     const { data: session, status } = useSession();
     const buttonSx = {
         ...(generatedKey && {
@@ -168,9 +162,7 @@ export default function SslGenerator() {
                     <Typography>RSA</Typography>
                     <Switch defaultChecked color="secondary" inputRef={switchRef} />
                     <Typography>ECDSA</Typography>
-                </Stack>
-                <FormControlLabel control={<Checkbox color="secondary" inputRef={pkcs12Ref} required />} label="Zusätzliche PKCS12 Datei generieren" />
-            </Box>
+                </Stack></Box>
 
             <Button type="submit" color="inherit" variant="outlined" disabled={!selected || selected.length == 0 || loadingDomains || generateKey || generatedKey} sx={buttonSx}>Generiere Zertifikat {loadingDomains && (
                 <CircularProgress size={24} sx={{ color: green[500], position: "absolute", top: "50%", left: "50%", marginTop: "-12px", marginLeft: "-12px" }} />
@@ -221,21 +213,25 @@ export default function SslGenerator() {
                 setProgress(<><Typography>Signiere CSR...</Typography><Typography>(Dieser Schritt kann bis zu 5 Minuten dauern!)</Typography></>);
                 const cfg = new PKIConfig({ accessToken: session.accessToken });
                 const api = new SSLApi(cfg, `${Config.PKI_HOST}`);
-                api.sslCsrPost({ csr: result.csr }).then((response) => { return { pkcs12: createP12(result.privateKey, [response.data], null), public: response.data }; }).then((response) => {
-                    const zip = new JSZip();
-                    if (pkcs12Ref.current?.checked) {
-                        zip.file(`${fqdns[0]}_${moment().format("DD-MM-YYYY_HH-mm-ss")}.p12`, response.pkcs12, { base64: true });
-                    }
-                    zip.file(`${fqdns[0]}_${moment().format("DD-MM-YYYY_HH-mm-ss")}.pem`, response.public, { base64: true });
-                    zip.file(`${fqdns[0]}_${moment().format("DD-MM-YYYY_HH-mm-ss")}.key`, result.privateKey, { base64: true });
-                    return zip.generateAsync({ type: "blob" }).then((content) => {
-                        // eslint-disable-next-line @typescript-eslint/no-unsafe-call
-                        saveAs(content, `${fqdns[0]}_${moment().format("DD-MM-YYYY_HH-mm-ss")}.zip`);
-                        setKeyPair({ private: result.privateKey, public: response.public });
-                        setGeneratedKey(true);
-                        setLoadingDomains(false);
-                        setGenerateKey(false);
-                    });
+                api.sslCsrPost({ csr: result.csr }).then((response) => {
+                    const element = document.createElement("a");
+                    element.setAttribute("href", "data:application/x-pem-file;base64," + Buffer.from(response.data).toString("base64"));
+                    element.setAttribute("download", `${fqdns[0]}_${moment().format("DD-MM-YYYY_HH-mm-ss")}.pem`);
+                    element.style.display = "none";
+                    document.body.appendChild(element);
+                    element.click();
+                    document.body.removeChild(element);
+
+                    element.setAttribute("href", "data:application/x-pem-file;base64," + Buffer.from(result.privateKey).toString("base64"));
+                    element.setAttribute("download", `${fqdns[0]}_${moment().format("DD-MM-YYYY_HH-mm-ss")}.key`);
+                    element.style.display = "none";
+                    document.body.appendChild(element);
+                    element.click();
+                    document.body.removeChild(element);
+                    setKeyPair({ private: result.privateKey, public: response.data });
+                    setGeneratedKey(true);
+                    setLoadingDomains(false);
+                    setGenerateKey(false);
                 }).catch(() => {
                     setProgress(<>
                         Es ist ein unbekannter Fehler bei der Erstellung des Zertifikats aufgetreten. Bitte versuchen Sie es erneut oder wenden sich an den IT-Support

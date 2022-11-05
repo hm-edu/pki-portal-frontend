@@ -20,9 +20,30 @@ import AlertTitle from "@mui/material/AlertTitle";
 import { useSession } from "next-auth/react";
 import unidecode from "unidecode";
 import moment from "moment";
-import { createP12 } from "../../src/pkcs12";
 
 export default function SMIMEGenerator() {
+
+    async function createP12(privateKey: string, chain: string[], password: string): Promise<string> {
+
+        const forge = (await import("node-forge")).default;
+        return await new Promise((resolve, reject) => {
+            const encodedChain = [];
+            for (const cert of chain) {
+                encodedChain.push(forge.pki.certificateFromPem(cert));
+            }
+
+            const encodedPrivateKey = forge.pki.privateKeyFromPem(privateKey);
+            if (!encodedPrivateKey || !encodedChain || !password) {
+                reject();
+            }
+            const p12Asn1 = forge.pkcs12.toPkcs12Asn1(encodedPrivateKey, encodedChain, password, { algorithm: "3des" });
+
+            // base64-encode p12
+            const p12Der = forge.asn1.toDer(p12Asn1).getBytes();
+
+            resolve(forge.util.encode64(p12Der));
+        });
+    }
 
     const [progress, setProgress] = useState<JSX.Element>(<></>);
     const [download, setDownload] = useState<JSX.Element>(<></>);
