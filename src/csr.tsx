@@ -1,4 +1,5 @@
 import * as pkijs from "pkijs";
+import * as asn1js from "asn1js";
 import { Buffer } from "buffer";
 
 export class CSRBundle {
@@ -7,7 +8,7 @@ export class CSRBundle {
 
 export class CsrBuilder {
 
-    async build(type: "ecdsa" | "rsa", fqdns?: string[], strength?: string | number): Promise<CSRBundle> {
+    async build(type: "ecdsa" | "rsa", fqdns?: string[], cn?: string, strength?: string | number): Promise<CSRBundle> {
         const pkcs10 = new pkijs.CertificationRequest();
         const crypto = pkijs.getCrypto(true);
         pkcs10.attributes = [];
@@ -31,6 +32,12 @@ export class CsrBuilder {
         await pkcs10.subjectPublicKeyInfo.importKey(publicKey);
 
         if (fqdns) {
+            if (cn) {
+                pkcs10.subject.typesAndValues.push(new pkijs.AttributeTypeAndValue({
+                    type: "2.5.4.3",
+                    value: new asn1js.Utf8String({ value: cn }),
+                }));
+            }
             const altNames = new pkijs.GeneralNames({
                 names: fqdns.map(fqdn => new pkijs.GeneralName({
                     type: 2,

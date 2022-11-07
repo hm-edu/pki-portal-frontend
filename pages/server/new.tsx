@@ -26,6 +26,41 @@ import { KeyPair } from "../../src/keypair";
 import { dataGridStyle, modalTheme } from "../../src/theme";
 import { useSession } from "next-auth/react";
 import moment from "moment";
+import Select, { SelectChangeEvent } from "@mui/material/Select";
+import InputLabel from "@mui/material/InputLabel";
+import FormControl from "@mui/material/FormControl";
+import MenuItem from "@mui/material/MenuItem";
+import styled from "@emotion/styled";
+import { createP12 } from "../../src/pkcs12";
+import TextField, { TextFieldProps } from "@mui/material/TextField";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import Checkbox from "@mui/material/Checkbox";
+const CustomSelect = styled(Select<string>)(() => ({
+    "&.MuiOutlinedInput-root": {
+        "& fieldset": {
+            borderColor: "#C6C6C6",
+        },
+        "&:hover fieldset": {
+            borderColor: "#C6C6C6",
+        },
+        "&.Mui-focused fieldset": {
+            borderColor: "#C6C6C6",
+        },
+    },
+}));
+const CustomTextField = styled(TextField)(() => ({
+    "& .MuiOutlinedInput-root": {
+        "& fieldset": {
+            borderColor: "#C6C6C6",
+        },
+        "&:hover fieldset": {
+            borderColor: "#C6C6C6",
+        },
+        "&.Mui-focused fieldset": {
+            borderColor: "#C6C6C6",
+        },
+    },
+}));
 
 export default function SslGenerator() {
 
@@ -50,10 +85,15 @@ export default function SslGenerator() {
     const [generateKey, setGenerateKey] = useState(false);
     const [generatedKey, setGeneratedKey] = useState(false);
     const [keypair, setKeyPair] = useState<KeyPair>();
+    const [pkcs12, setPkcs12] = useState<boolean>(false);
     const [domains, setDomains] = useState<ModelDomain[]>([]);
     const [selected, setSelected] = useState<GridRowId[]>();
     const [pageSize, setPageSize] = useState<number>(15);
     const { data: session, status } = useSession();
+
+    const p12PasswordRef = useRef<TextFieldProps>(null);
+    const pkcs12Ref = useRef<HTMLInputElement>(null);
+
     const buttonSx = {
         ...(generatedKey && {
             bgcolor: green[500],
@@ -63,7 +103,11 @@ export default function SslGenerator() {
         }), mt: 3, mb: 2,
     };
     const switchRef = useRef<SwitchProps>(null);
+    const [commonName, setCommonName] = React.useState("");
 
+    const handleChange = (event: SelectChangeEvent<unknown>) => {
+        setCommonName(event.target.value as string);
+    };
     function keySegment(segment: string, fileName: string, label: string) {
         return <Box sx={columnStyle}>
             <Typography variant="h6">{label}</Typography>
@@ -110,8 +154,11 @@ export default function SslGenerator() {
     let body: JSX.Element | undefined = undefined;
     let publicKeyElement: JSX.Element = <></>;
     let fqdns: string[] = [];
+    let cn = "";
     if (selected) {
         fqdns = domains.filter(x => selected.includes(x.id!)).sort((a, b) => a.fqdn!.localeCompare(b.fqdn!)).map((domain) => domain.fqdn!);
+        // eslint-disable-next-line @typescript-eslint/no-non-null-asserted-optional-chain
+        cn = domains.find(x => String(x.id) == commonName)?.fqdn!;
     }
     if (generateKey) {
         publicKeyElement = <Box sx={columnStyle}>
@@ -124,7 +171,7 @@ export default function SslGenerator() {
             </Box>
         </Box>;
     } else if (keypair && keypair.public && !generateKey) {
-        publicKeyElement = keySegment(keypair.public, `${fqdns[0]}_${moment().format("DD-MM-YYYY_HH-mm-ss")}.pem`, "Öffentlicher Schlüssel");
+        publicKeyElement = keySegment(keypair.public, `${cn}_${moment().format("DD-MM-YYYY_HH-mm-ss")}.pem`, "Öffentlicher Schlüssel");
     }
 
     if (!generatedKey && !generateKey && !error) {
@@ -140,30 +187,67 @@ export default function SslGenerator() {
                             },
                         }}
                         pageSize={pageSize} selectionModel={selected}
-                        onSelectionModelChange={(event) => { setSelected(event); }}
+                        onSelectionModelChange={(event) => {
+                            setSelected(event);
+                            if (commonName != "" && !event.find(x => x == commonName)) {
+                                setCommonName(String(event.at(0)));
+                            }
+                            if (commonName == "") {
+                                setCommonName(String(event.at(0)));
+                            }
+                        }}
                         loading={loadingDomains} density="compact"
                         onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
                         rowsPerPageOptions={[5, 15, 25, 50, 100]}
                         pagination checkboxSelection rows={domains}></DataGrid>
+
                 </Box>
                 <Box sx={{ flex: "auto", minWidth: "49%", maxWidth: "100%", display: "flex", flexDirection: "column", alignContent: "flex-start", overflow: "auto" }}>
                     <Typography variant="h6">Aktuelle Auswahl:</Typography>
+
+                    <FormControl size="small">
+                        <InputLabel id="cn-select-helper-label">Common Name</InputLabel>
+                        <CustomSelect
+                            required
+                            labelId="cn-select-helper-label"
+                            id="cn-select-helper"
+                            value={commonName}
+                            label="Common Name"
+                            onChange={handleChange}
+                        >
+                            {selected && selected.length > 0 && domains.filter(x => selected.includes(x.id!)).sort((a, b) => a.fqdn!.localeCompare(b.fqdn!)).map((domain) => {
+                                return <MenuItem value={domain.id}> {domain.fqdn} </MenuItem>;
+                            })}
+                        </CustomSelect>
+                    </FormControl>
+                    <Typography variant="h6">Alle ausgewählten FQDNs:</Typography>
                     <List dense sx={{ flex: "auto", width: "100%", display: "flex", flexDirection: "column", alignContent: "flex-start", overflow: "auto" }}>
-                        {selected && selected.length > 0 && domains.filter(x => selected.includes(x.id!)).sort((a, b) => a.fqdn!.localeCompare(b.fqdn!)).map((domain) => {
+                        {selected && selected.length > 0 && domains.filter(x => selected.includes(x.id!) && String(x.id) != commonName).sort((a, b) => a.fqdn!.localeCompare(b.fqdn!)).map((domain) => {
                             const labelId = `checkbox-list-label-${domain.id!}`;
                             return <ListItem sx={{ display: "flex" }} key={domain.id} disablePadding> <ListItemText id={labelId} primary={domain.fqdn} /> </ListItem>;
                         })}
                     </List>
+
                 </Box>
             </Box>
-            <Box>
-                <Typography variant="h6">Schlüsslart:</Typography>
-                <Stack direction="row" spacing={1} alignItems="center">
-                    <Typography>RSA</Typography>
-                    <Switch defaultChecked color="secondary" inputRef={switchRef} />
-                    <Typography>ECDSA</Typography>
-                </Stack></Box>
+            <Box sx={{ width: "100%", display: "flex", gap: "10px", flexDirection: "row" }}>
+                <Box sx={{ flex: "auto", minWidth: "50%", maxWidth: "100%", display: "flex", flexDirection: "column", alignContent: "flex-start", overflow: "auto" }}>
 
+                    <Typography variant="h6">Schlüsslart:</Typography>
+                    <Stack direction="row" spacing={1} alignItems="center">
+                        <Typography>RSA</Typography>
+                        <Switch defaultChecked color="secondary" inputRef={switchRef} />
+                        <Typography>ECDSA</Typography>
+                    </Stack>
+                </Box>
+                <Box sx={{ flex: "auto", minWidth: "50%", maxWidth: "100%", display: "flex", flexDirection: "column", alignContent: "flex-start", overflow: "auto" }}>
+
+                    <Stack direction="column">
+                        <FormControlLabel control={<Checkbox color="secondary" inputRef={pkcs12Ref} onChange={() => setPkcs12(pkcs12Ref.current!.checked)} />} label="Zusätzliche PKCS12 Datei generieren" />
+                        <CustomTextField size="small" label="PKCS12 Passwort" type="password" inputRef={p12PasswordRef} fullWidth variant="outlined" disabled={!pkcs12} />
+                    </Stack>
+                </Box>
+            </Box>
             <Button type="submit" color="inherit" variant="outlined" disabled={!selected || selected.length == 0 || loadingDomains || generateKey || generatedKey} sx={buttonSx}>Generiere Zertifikat {loadingDomains && (
                 <CircularProgress size={24} sx={{ color: green[500], position: "absolute", top: "50%", left: "50%", marginTop: "-12px", marginLeft: "-12px" }} />
             )}</Button>
@@ -173,11 +257,14 @@ export default function SslGenerator() {
             <Alert sx={{ width: "100%" }} severity="error">{progress}</Alert>
         </Box >;
     } else if (generatedKey || generateKey && keypair?.private) {
-        body = <Box sx={{ minWidth: 0, maxWidth: "100%", maxHeight: "100%", minHeight: 0, display: "flex", gap: "10px", flexDirection: "row" }}>
-            {keySegment(keypair!.private, `${fqdns[0]}_${moment().format("DD-MM-YYYY_HH-mm-ss")}.key`, "Privater Schlüssel")}
-            <Box sx={columnStyle}>
-                {publicKeyElement}
+        body = <Box sx={{ minWidth: 0, maxWidth: "100%", maxHeight: "100%", minHeight: 0, display: "flex", gap: "10px", flexDirection: "column" }}>
+            <Box sx={{ minWidth: 0, maxWidth: "100%", maxHeight: "100%", minHeight: 0, display: "flex", gap: "10px", flexDirection: "row" }}>
+                {keySegment(keypair!.private, `${cn}_${moment().format("DD-MM-YYYY_HH-mm-ss")}.key`, "Privater Schlüssel")}
+                <Box sx={columnStyle}>
+                    {publicKeyElement}
+                </Box>
             </Box>
+            {keypair?.pkcs12 && <Button color="inherit" variant="outlined" startIcon={<FileDownload />} download={`${cn}_${moment().format("DD-MM-YYYY_HH-mm-ss")}.p12`} href={"data:application/x-pkcs12;base64," + keypair?.pkcs12}>PKCS12 Herunterladen</Button>}
         </Box>;
     }
 
@@ -207,32 +294,43 @@ export default function SslGenerator() {
         if (!loadingDomains && selected && session?.accessToken) {
             const CsrBuilder = (await import("../../src/csr")).CsrBuilder;
             const csr = new CsrBuilder();
-            csr.build(switchRef.current?.checked ? "ecdsa" : "rsa", fqdns).then((result) => {
-                setKeyPair({ private: result.privateKey, public: undefined });
+            const type = switchRef.current?.checked ? "ecdsa" : "rsa";
+            const password = p12PasswordRef.current?.value as string;
+            csr.build(type, fqdns, cn).then((result) => {
+                setKeyPair({ private: result.privateKey, public: undefined, pkcs12: undefined });
                 setGenerateKey(true);
                 setProgress(<><Typography>Signiere CSR...</Typography><Typography>(Dieser Schritt kann bis zu 5 Minuten dauern!)</Typography></>);
                 const cfg = new PKIConfig({ accessToken: session.accessToken });
                 const api = new SSLApi(cfg, `${Config.PKI_HOST}`);
-                api.sslCsrPost({ csr: result.csr }).then((response) => {
+                api.sslCsrPost({ csr: result.csr }).then(async x => { return { public: x.data, pkcs12: pkcs12 ? await createP12(result.privateKey, [x.data], password, type) : undefined }; }).then((response) => {
                     const element = document.createElement("a");
-                    element.setAttribute("href", "data:application/x-pem-file;base64," + Buffer.from(response.data).toString("base64"));
-                    element.setAttribute("download", `${fqdns[0]}_${moment().format("DD-MM-YYYY_HH-mm-ss")}.pem`);
+                    element.setAttribute("href", "data:application/x-pem-file;base64," + Buffer.from(response.public).toString("base64"));
+                    element.setAttribute("download", `${cn}_${moment().format("DD-MM-YYYY_HH-mm-ss")}.pem`);
                     element.style.display = "none";
                     document.body.appendChild(element);
                     element.click();
                     document.body.removeChild(element);
 
                     element.setAttribute("href", "data:application/x-pem-file;base64," + Buffer.from(result.privateKey).toString("base64"));
-                    element.setAttribute("download", `${fqdns[0]}_${moment().format("DD-MM-YYYY_HH-mm-ss")}.key`);
+                    element.setAttribute("download", `${cn}_${moment().format("DD-MM-YYYY_HH-mm-ss")}.key`);
                     element.style.display = "none";
                     document.body.appendChild(element);
                     element.click();
                     document.body.removeChild(element);
-                    setKeyPair({ private: result.privateKey, public: response.data });
+                    if (response.pkcs12) {
+                        element.setAttribute("href", "data:application/x-pkcs12;base64," + response.pkcs12);
+                        element.setAttribute("download", `${cn}_${moment().format("DD-MM-YYYY_HH-mm-ss")}.p12`);
+                        element.style.display = "none";
+                        document.body.appendChild(element);
+                        element.click();
+                        document.body.removeChild(element);
+                    }
+                    setKeyPair({ private: result.privateKey, public: response.public, pkcs12: response.pkcs12 });
                     setGeneratedKey(true);
                     setLoadingDomains(false);
                     setGenerateKey(false);
-                }).catch(() => {
+                }).catch((e) => {
+                    console.log(e);
                     setProgress(<>
                         Es ist ein unbekannter Fehler bei der Erstellung des Zertifikats aufgetreten. Bitte versuchen Sie es erneut oder wenden sich an den IT-Support
                     </>);
