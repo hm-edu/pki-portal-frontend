@@ -1,5 +1,5 @@
 diff --git a/node_modules/next-auth/core/lib/oauth/client.js b/node_modules/next-auth/core/lib/oauth/client.js
-index 7943303..47a8c41 100644
+index 7943303..2f3bf44 100644
 --- a/node_modules/next-auth/core/lib/oauth/client.js
 +++ b/node_modules/next-auth/core/lib/oauth/client.js
 @@ -16,9 +16,9 @@ async function openidClient(options) {
@@ -7,7 +7,7 @@ index 7943303..47a8c41 100644
    } else {
      var _provider$authorizati, _provider$token, _provider$userinfo;
 -
-+    var metadata = typeof provider.issuer === "object" ? { ... provider.issuer}  : {issuer: provider.issuer};
++    var metadata = typeof provider.issuer === "object" ? { ...provider.issuer } : { issuer: provider.issuer };
      issuer = new _openidClient.Issuer({
 -      issuer: provider.issuer,
 +      ...metadata,
@@ -15,7 +15,7 @@ index 7943303..47a8c41 100644
        token_endpoint: (_provider$token = provider.token) === null || _provider$token === void 0 ? void 0 : _provider$token.url,
        userinfo_endpoint: (_provider$userinfo = provider.userinfo) === null || _provider$userinfo === void 0 ? void 0 : _provider$userinfo.url
 diff --git a/node_modules/next-auth/core/routes/session.js b/node_modules/next-auth/core/routes/session.js
-index bafe973..9e77621 100644
+index bafe973..9452002 100644
 --- a/node_modules/next-auth/core/routes/session.js
 +++ b/node_modules/next-auth/core/routes/session.js
 @@ -7,6 +7,8 @@ exports.default = session;
@@ -48,7 +48,7 @@ index bafe973..9e77621 100644
      }
    } else {
 diff --git a/node_modules/next-auth/providers/oauth.d.ts b/node_modules/next-auth/providers/oauth.d.ts
-index 02e19fb..a240290 100644
+index 963a65d..4fcebea 100644
 --- a/node_modules/next-auth/providers/oauth.d.ts
 +++ b/node_modules/next-auth/providers/oauth.d.ts
 @@ -53,7 +53,7 @@ export declare type TokenEndpointHandler = EndpointHandler<UrlParams, {
@@ -70,12 +70,12 @@ index 02e19fb..a240290 100644
      httpOptions?: HttpOptions;
      /**
 diff --git a/node_modules/next-auth/react/index.js b/node_modules/next-auth/react/index.js
-index c8cf434..4ccb10a 100644
+index b86d7fc..283daf3 100644
 --- a/node_modules/next-auth/react/index.js
 +++ b/node_modules/next-auth/react/index.js
-@@ -542,7 +542,7 @@ function SessionProvider(props) {
- 
-     if (refetchInterval) {
+@@ -578,7 +578,7 @@ function SessionProvider(props) {
+   React.useEffect(function () {
+     if (refetchInterval && shouldRefetch) {
        var refetchIntervalTimer = setInterval(function () {
 -        if (__NEXTAUTH._session) {
 +        if (__NEXTAUTH._session && document.visibilityState === "visible" && document.hasFocus()) {
