@@ -18,9 +18,9 @@ import { AuthProps, Config } from "../../src/config";
 import { RecommendedConfigurationsComponent } from "../../src/eabConfiguration";
 import { deDE } from "@mui/x-data-grid";
 import { dataGridStyle } from "../../src/theme";
-import { useSession } from "next-auth/react";
 import { TextFieldProps } from "@mui/material/TextField";
 import TextField from "@mui/material/TextField";
+import withSession from "../../src/session";
 
 interface EabState { initalized: boolean; pageSize: number; tokens: ModelsEAB[]; selected: GridSelectionModel; loading: boolean; recommendations: boolean; error: string | boolean | undefined }
 
@@ -194,17 +194,6 @@ class EabTokens extends React.Component<{ session: AuthProps | null; status: str
         </Box>;
     }
 }
+const AuthEabTokens = withSession(EabTokens);
 
-const withSession = (Comp: EabTokens) => (props: JSX.IntrinsicAttributes) => {
-    const { data: session, status } = useSession();
-
-    // if the component has a render property, we are good
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    return <Comp session={session} status={status} {...props} />;
-};
-
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
-// eslint-disable-next-line no-class-assign
-export default EabTokens = withSession(EabTokens);
+export default AuthEabTokens;
