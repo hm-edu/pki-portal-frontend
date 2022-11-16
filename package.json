@@ -16,7 +16,7 @@
     "@emotion/styled": "^11.10.5",
     "@fontsource/fira-mono": "^4.5.10",
     "@fontsource/roboto": "^4.5.8",
-    "@mui/icons-material": "^5.10.9",
+    "@mui/icons-material": "^5.10.14",
     "@mui/material": "^5.10.14",
     "@mui/system": "^5.10.14",
     "@mui/x-data-grid": "^5.17.11",
