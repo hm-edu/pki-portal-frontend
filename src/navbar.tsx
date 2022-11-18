@@ -70,6 +70,7 @@ export default function ButtonAppBar() {
         <Link key="server" href="/server" ><Button key="server" color="inherit">Serverzertifikate</Button></Link>,
         <Link key="eab" href="/eab" ><Button key="eab" color="inherit" >ACME Tokens</Button></Link>,
         <Link key="user" href="/user" ><Button key="user" color="inherit" >Nutzerzertifikate</Button></Link>,
+        <Link key="help" href="https://conwiki.cc.hm.edu/confluence/pages/viewpage.action?pageId=198048309" ><Button key="user" color="inherit" >Anleitungen</Button></Link>,
     ] : [];
 
     return (

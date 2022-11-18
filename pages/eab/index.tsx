@@ -21,6 +21,7 @@ import { dataGridStyle } from "../../src/theme";
 import { TextFieldProps } from "@mui/material/TextField";
 import TextField from "@mui/material/TextField";
 import withSession from "../../src/session";
+import LoggedOut from "../loggedOut";
 
 interface EabState { initalized: boolean; pageSize: number; tokens: ModelsEAB[]; selected: GridSelectionModel; loading: boolean; recommendations: boolean; error: string | boolean | undefined }
 
@@ -155,6 +156,8 @@ class EabTokens extends React.Component<{ session: AuthProps | null; status: str
         if (this.props.session && this.props.status == "authenticated" && !this.initalized) {
             this.initalized = true;
             this.loadTokens();
+        } else if (this.initalized && this.props.status == "unauthenticated") {
+            return <LoggedOut></LoggedOut>;
         } else if (this.props.status == "unauthenticated") {
             this.setState({ error: "Bitte melden Sie sich an!", loading: false });
         }

@@ -9,8 +9,11 @@ export default function LoggedOut() {
         void router.push("/");
         return <></>;
     } else {
-        return <Container maxWidth="md" sx={{ mt: 2 }}><Alert severity="warning">
-            <AlertTitle>Hinweis</AlertTitle>
-            Sie wurden aufgrund von Inaktivität automatisch abgemeldet</Alert ></Container>;
+        return <Container maxWidth="md" sx={{ mt: 2 }}>
+            <Alert severity="warning">
+                <AlertTitle>Hinweis</AlertTitle>
+                Sie wurden aufgrund von Inaktivität automatisch abgemeldet
+            </Alert>
+        </Container>;
     }
 }
