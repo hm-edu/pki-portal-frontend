@@ -214,10 +214,10 @@ export default function Domains() {
     if (transferDomain) {
         console.log("Fu");
         transferDialog = <Dialog open={true} onClose={() => setTransferDomain(undefined)}>
-            <DialogTitle>Domain übertragen</DialogTitle>
+            <DialogTitle>Host übertragen</DialogTitle>
             <DialogContent>
                 <DialogContentText>
-                    Sie möchten die Domain {transferDomain?.fqdn} an einen anderen Benutzer übertragen.
+                    Sie möchten den Host {transferDomain?.fqdn} an einen anderen Benutzer übertragen.
 
                     Bitte geben Sie die E-Mail des neuen Nutzers ein.
                 </DialogContentText>
@@ -237,7 +237,7 @@ export default function Domains() {
             </DialogActions>
         </Dialog >;
     }
-    return <Box sx={{ display: "flex", flexDirection: "column", height: "100%" }}><Typography variant="h1">Ihre Domains</Typography>
+    return <Box sx={{ display: "flex", flexDirection: "column", height: "100%" }}><Typography variant="h1">Ihre Hosts</Typography>
         <DataGrid
             initialState={{
                 sorting: {
@@ -264,10 +264,10 @@ export default function Domains() {
                 flexDirection: "column",
             }}>
             <TextField required
-                label="Neue Domain"
+                label="Neuer Host"
                 inputRef={newDomain}
                 variant="standard" />
-            <Button type="submit" variant="contained" disabled={!session} color="success" startIcon={<AddCircleOutlineIcon />} sx={{ mt: 1 }} >Erstelle Domain</Button>
+            <Button type="submit" variant="contained" disabled={!session} color="success" startIcon={<AddCircleOutlineIcon />} sx={{ mt: 1 }} >Erstelle Host</Button>
         </Box>
         {deleteDialog}
         {transferDialog}

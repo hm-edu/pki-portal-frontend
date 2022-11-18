@@ -158,7 +158,7 @@ class EabTokens extends React.Component<{ session: AuthProps | null; status: str
         } else if (this.props.status == "unauthenticated") {
             this.setState({ error: "Bitte melden Sie sich an!", loading: false });
         }
-        return <Box sx={{ display: "flex", flexDirection: "column", height: "100%" }}><Typography variant="h1">Ihre EAB Tokens</Typography>
+        return <Box sx={{ display: "flex", flexDirection: "column", height: "100%" }}><Typography variant="h1">Ihre ACME Tokens</Typography>
             <DataGrid columns={this.columns}
                 sx={dataGridStyle}
                 initialState={{
