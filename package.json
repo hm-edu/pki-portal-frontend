@@ -56,7 +56,7 @@
     "cross-env": "^7.0.3",
     "duplicate-package-checker-webpack-plugin": "^3.0.0",
     "eslint": "8.28.0",
-    "eslint-config-next": "13.0.3",
+    "eslint-config-next": "13.0.4",
     "eslint-plugin-testing-library": "^5.9.1",
     "patch-package": "^6.5.0",
     "typescript": "^4.9.3"
