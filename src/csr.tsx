@@ -5,6 +5,12 @@ import { Buffer } from "buffer";
 export class CSRBundle {
     constructor(public csr: string, public privateKey: string) { }
 }
+export function fromPEM(pem: string): ArrayBuffer {
+    const base64 = pem
+        .replace(/-{5}(BEGIN|END) .*-{5}/gm, "")
+        .replace(/\s/gm, "");
+    return Buffer.from(base64, "base64");
+}
 
 export class CsrBuilder {
 
