@@ -21,6 +21,7 @@ import { Config } from "../../src/config";
 import { dataGridStyle } from "../../src/theme";
 import Typography from "@mui/material/Typography";
 import { useSession } from "next-auth/react";
+import UploadFileIcon from "@mui/icons-material/UploadFile";
 
 export default function SslCertificates() {
     const [pageSize, setPageSize] = useState<number>(15);
@@ -263,7 +264,7 @@ export default function SslCertificates() {
         </Dialog>
         <Box sx={{ display: "flex", flexDirection: "row", gap: "6px", width: "100%", justifyContent: "space-between" }}>
             <Link href="/server/new"><Button variant="contained" disabled={!session} color="success" startIcon={<AddCircleOutlineIcon />} sx={{ mt: 1, width: "80%" }} >Neues Zertifikat mit Assistent erstellen</Button></Link>
-            <Link href="/server/csr"><Button variant="contained" disabled={!session} color="success" startIcon={<AddCircleOutlineIcon />} sx={{ mt: 1, width: "20%" }} >Eigenen CSR einreichen</Button></Link>
+            <Link href="/server/csr"><Button variant="contained" disabled={!session} color="success" startIcon={<UploadFileIcon />} sx={{ mt: 1, width: "20%" }} >Eigenen CSR verwenden</Button></Link>
         </Box>
 
     </Box>;
