@@ -48,9 +48,18 @@ index bafe973..9452002 100644
      }
    } else {
 diff --git a/node_modules/next-auth/providers/oauth.d.ts b/node_modules/next-auth/providers/oauth.d.ts
-index f444657..753731b 100644
+index f444657..4268ed6 100644
 --- a/node_modules/next-auth/providers/oauth.d.ts
 +++ b/node_modules/next-auth/providers/oauth.d.ts
+@@ -61,7 +61,7 @@ export interface OAuthProviderButtonStyles {
+     text: string;
+     textDark: string;
+ }
+-export interface OAuthConfig<P> extends CommonProviderOptions, PartialIssuer {
++export interface OAuthConfig<P> extends CommonProviderOptions {
+     /**
+      * OpenID Connect (OIDC) compliant providers can configure
+      * this instead of `authorize`/`token`/`userinfo` options
 @@ -101,7 +101,7 @@ export interface OAuthConfig<P> extends CommonProviderOptions, PartialIssuer {
       */
      idToken?: boolean;
@@ -61,7 +70,7 @@ index f444657..753731b 100644
      httpOptions?: HttpOptions;
      style?: OAuthProviderButtonStyles;
 diff --git a/node_modules/next-auth/react/index.js b/node_modules/next-auth/react/index.js
-index b86d7fc..283daf3 100644
+index b86d7fc..5478694 100644
 --- a/node_modules/next-auth/react/index.js
 +++ b/node_modules/next-auth/react/index.js
 @@ -578,7 +578,7 @@ function SessionProvider(props) {
