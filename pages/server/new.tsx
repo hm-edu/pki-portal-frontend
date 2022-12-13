@@ -277,7 +277,7 @@ export default function SslGenerator() {
         <Modal open={loadingDomains} aria-labelledby="modal-modal-title" aria-describedby="modal-modal-description">
             <Box sx={modalTheme}>
                 <Typography id="modal-modal-title" variant="h6" component="h2">
-                    Generierung eines neuen Serverzertifikats
+                    Generierung eines neuen SSL Zertifikats
                 </Typography>
                 <Box sx={{ padding: 2 }}>
                     <CircularProgress size={24} sx={{ color: green[500], position: "absolute", left: "50%", marginLeft: "-12px" }} />

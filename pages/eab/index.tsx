@@ -21,7 +21,7 @@ import { dataGridStyle } from "../../src/theme";
 import { TextFieldProps } from "@mui/material/TextField";
 import TextField from "@mui/material/TextField";
 import withSession from "../../src/session";
-import LoggedOut from "../logout";
+import LoggedOut from "../loggedOut";
 
 interface EabState { initalized: boolean; pageSize: number; tokens: ModelsEAB[]; selected: GridSelectionModel; loading: boolean; recommendations: boolean; error: string | boolean | undefined }
 

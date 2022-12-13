@@ -10,7 +10,7 @@ export default function AutoLogout() {
 
     useEffect(() => {
         if (authState === "authenticated" && status === "unauthenticated") {
-            void router.push("/logout").catch((err) => console.error(err));
+            void router.push("/loggedOut").catch((err) => console.error(err));
         }
         setAuthState(status);
     }, [session, status]);
