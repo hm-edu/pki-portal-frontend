@@ -90,7 +90,7 @@ export default function ButtonAppBar() {
     return (
         <AppBar position="fixed">
             <Hidden key="desktop" mdDown>
-                <Container maxWidth="lg">
+                <Container maxWidth="xl">
                     <Toolbar key="bar" >
                         <Hidden lgDown>
                             <Image src={logo} height={36} width={36} alt="Logo" />
