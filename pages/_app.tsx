@@ -33,7 +33,7 @@ function MyApp({ Component, pageProps: { ...pageProps }, emotionCache = clientSi
     __N_RSC?: boolean;
 } & { emotionCache: EmotionCache }) {
 
-    return <SessionProvider session={pageProps.session} refetchInterval={60} >
+    return <SessionProvider session={pageProps.session} refetchOnWindowFocus={false} refetchInterval={60} >
         <Head>
             <title>HM PKI-Portal</title>
         </Head>
