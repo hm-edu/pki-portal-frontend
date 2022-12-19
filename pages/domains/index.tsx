@@ -28,7 +28,7 @@ import Typography from "@mui/material/Typography";
 import { useSession } from "next-auth/react";
 
 export default function Domains() {
-    const [pageSize, setPageSize] = useState<number>(15);
+    const [pageSize, setPageSize] = useState<number>(50);
     const [domains, setDomains] = useState([] as ModelDomain[]);
     const [loading, setLoading] = useState(true);
     const [deleting, setDeleting] = useState(false);

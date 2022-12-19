@@ -24,7 +24,7 @@ import { useSession } from "next-auth/react";
 import UploadFileIcon from "@mui/icons-material/UploadFile";
 
 export default function SslCertificates() {
-    const [pageSize, setPageSize] = useState<number>(15);
+    const [pageSize, setPageSize] = useState<number>(50);
     const [loading, setLoading] = useState(true);
     const reason = useRef<TextFieldProps>(null);
     const [open, setOpen] = useState(false);

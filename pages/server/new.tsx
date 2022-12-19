@@ -88,7 +88,7 @@ export default function SslGenerator() {
     const [pkcs12, setPkcs12] = useState<boolean>(false);
     const [domains, setDomains] = useState<ModelDomain[]>([]);
     const [selected, setSelected] = useState<GridRowId[]>();
-    const [pageSize, setPageSize] = useState<number>(15);
+    const [pageSize, setPageSize] = useState<number>(50);
     const { data: session, status } = useSession();
 
     const p12PasswordRef = useRef<TextFieldProps>(null);

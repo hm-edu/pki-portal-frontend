@@ -28,7 +28,7 @@ export default SmimeCertificates;
 export function SmimeCertificates() {
     const [open, setOpen] = useState(false);
     const reason = useRef<TextFieldProps>(null);
-    const [pageSize, setPageSize] = useState<number>(15);
+    const [pageSize, setPageSize] = useState<number>(50);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<undefined | boolean | string>(undefined);
     const [selection, setSelection] = useState<PortalApisListSmimeResponseCertificateDetails | undefined>(undefined);
