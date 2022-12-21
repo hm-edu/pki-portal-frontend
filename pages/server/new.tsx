@@ -4,7 +4,7 @@ import Modal from "@mui/material/Modal";
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import { green } from "@mui/material/colors";
-import { DataGrid, GridColDef, GridRowId } from "@mui/x-data-grid";
+import { DataGrid, GridColDef, GridRowId, GridToolbar } from "@mui/x-data-grid";
 import FileDownload from "@mui/icons-material/FileDownload";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import Stack from "@mui/material/Stack";
@@ -23,7 +23,7 @@ import { Configuration as PKIConfig } from "../../api/pki/configuration";
 import { Config } from "../../src/config";
 import { Buffer } from "buffer";
 import { KeyPair } from "../../src/keypair";
-import { dataGridStyle, modalTheme } from "../../src/theme";
+import { QuickSearchToolbar, dataGridStyle, modalTheme } from "../../src/theme";
 import { useSession } from "next-auth/react";
 import moment from "moment";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
@@ -186,6 +186,7 @@ export default function SslGenerator() {
                                 sortModel: [{ field: "fqdn", sort: "asc" }],
                             },
                         }}
+                        components={{ Toolbar: QuickSearchToolbar }}
                         pageSize={pageSize} selectionModel={selected}
                         onSelectionModelChange={(event) => {
                             setSelected(event);

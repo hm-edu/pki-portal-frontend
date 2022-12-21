@@ -2,7 +2,7 @@
 import TextField, { TextFieldProps } from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
-import { DataGrid, GridColDef } from "@mui/x-data-grid";
+import { DataGrid, GridColDef, GridToolbar, GridToolbarQuickFilter } from "@mui/x-data-grid";
 import DeleteIcon from "@mui/icons-material/Delete";
 import LinearProgress from "@mui/material/LinearProgress";
 import DialogActions from "@mui/material/DialogActions";
@@ -23,7 +23,7 @@ import { ModelDomain } from "../../api/domains/api";
 import { Configuration } from "../../api/domains/configuration";
 import { Config } from "../../src/config";
 import Delegation from "../../src/delegation";
-import { dataGridStyle } from "../../src/theme";
+import { QuickSearchToolbar, dataGridStyle } from "../../src/theme";
 import Typography from "@mui/material/Typography";
 import { useSession } from "next-auth/react";
 
@@ -248,9 +248,12 @@ export default function Domains() {
             columns={columns}
             pageSize={pageSize}
             components={{
+                Toolbar: QuickSearchToolbar,
                 LoadingOverlay: LinearProgress,
             }}
-            componentsProps={{ loadingOverlay: { color: "inherit" } }}
+            componentsProps={{
+                loadingOverlay: { color: "inherit" },
+            }}
             loading={loading}
             localeText={{ ...deDE.components.MuiDataGrid.defaultProps.localeText, errorOverlayDefaultLabel: typeof error === "string" ? error : "Ein unerwarteter Fehler ist aufgetreten." }}
             error={error}
