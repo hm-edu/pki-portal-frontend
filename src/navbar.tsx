@@ -46,7 +46,6 @@ export default function ButtonAppBar() {
                 // eslint-disable-next-line @typescript-eslint/no-floating-promises
                 getSession({
                     event: "visibilitychange",
-                    triggerEvent: false,
                 });
             }
         };
