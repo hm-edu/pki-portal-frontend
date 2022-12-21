@@ -23,6 +23,7 @@ import dynamic from "next/dynamic";
 import Image from "next/image";
 import logo from "../public/cube.png";
 import Container from "@mui/system/Container";
+import { useRouter } from "next/router";
 const fetcher = (args: RequestInfo | URL) => fetch(args).then(res => res.json());
 
 function useIdp() {
@@ -39,20 +40,6 @@ export default function ButtonAppBar() {
     const { idp, isLoading } = useIdp();
     const [userFragment, setFragment] = useState(<></>);
     const [openDrawer, setDrawer] = React.useState<boolean>(false);
-
-    React.useEffect(() => {
-        const visibilityHandler = () => {
-            if (document.visibilityState === "visible") {
-                // eslint-disable-next-line @typescript-eslint/no-floating-promises
-                getSession({
-                    event: "visibilitychange",
-                });
-            }
-        };
-        document.addEventListener("visibilitychange", visibilityHandler, false);
-        return () => document.removeEventListener("visibilitychange", visibilityHandler, false);
-
-    });
 
     useEffect(() => {
         const logout = isLoading ? <CircularProgress /> : <Button color="inherit" key='logout'
