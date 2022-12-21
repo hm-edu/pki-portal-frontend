@@ -9,6 +9,7 @@ export default function AutoLogout() {
     const router = useRouter();
 
     useEffect(() => {
+        console.log("AutoLogout: status: " + status);
         if (authState === "authenticated" && status === "unauthenticated") {
             void router.push("/logout").catch((err) => console.error(err));
         }
