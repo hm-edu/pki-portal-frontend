@@ -2,7 +2,7 @@
 import TextField, { TextFieldProps } from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
-import { DataGrid, GridColDef, GridToolbar, GridToolbarQuickFilter } from "@mui/x-data-grid";
+import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import DeleteIcon from "@mui/icons-material/Delete";
 import LinearProgress from "@mui/material/LinearProgress";
 import DialogActions from "@mui/material/DialogActions";
@@ -23,9 +23,10 @@ import { ModelDomain } from "../../api/domains/api";
 import { Configuration } from "../../api/domains/configuration";
 import { Config } from "../../src/config";
 import Delegation from "../../src/delegation";
-import { QuickSearchToolbar, dataGridStyle } from "../../src/theme";
+import { dataGridStyle } from "../../src/theme";
 import Typography from "@mui/material/Typography";
 import { useSession } from "next-auth/react";
+import { QuickSearchToolbar } from "../../src/toolbar";
 
 export default function Domains() {
     const [pageSize, setPageSize] = useState<number>(50);

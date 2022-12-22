@@ -17,13 +17,12 @@ import ListItemText from "@mui/material/ListItemText";
 import React, { useEffect, useState } from "react";
 import { SignInButton } from "./signInButton";
 import Link from "next/link";
-import { getSession, signOut, useSession } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 import useSWR from "swr";
 import dynamic from "next/dynamic";
 import Image from "next/image";
 import logo from "../public/cube.png";
 import Container from "@mui/system/Container";
-import { useRouter } from "next/router";
 const fetcher = (args: RequestInfo | URL) => fetch(args).then(res => res.json());
 
 function useIdp() {
