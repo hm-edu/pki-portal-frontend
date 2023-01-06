@@ -16,6 +16,7 @@ import { Config } from "../../src/config";
 import { green } from "@mui/material/colors";
 import moment from "moment";
 import { AxiosError } from "axios";
+import forge from "node-forge";
 const typemap: Record<string, string> = {
     "2.5.4.6": "C",
     "2.5.4.11": "OU",
@@ -84,6 +85,7 @@ export default function ServerCertificatesCsr() {
             if (evt.target?.result) {
                 const content = evt.target.result.toString();
                 const buffer = fromPEM(content);
+                const csr = forge.pki.certificationRequestFromPem(content) as forge.pki.CertificateRequest;
                 const attributes: [string, string][] = [];
                 if (buffer) {
                     const pkcs10 = pkijs.CertificationRequest.fromBER(buffer);
@@ -94,7 +96,6 @@ export default function ServerCertificatesCsr() {
                             attributes.push([type, value.value.valueBlock.value]);
                         }
                     });
-                    console.log(attributes);
                     if (pkcs10.attributes) {
                         for (let i = 0; i < pkcs10.attributes.length; i++) {
                             const typeval = pkcs10.attributes[i].type;
@@ -114,11 +115,25 @@ export default function ServerCertificatesCsr() {
                                     // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-argument
                                     attributes.push([typeval, pkcs10.attributes[i].values[j].valueBlock.value]);
                                 }
-                                else
-                                    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-argument
-                                    attributes.push([typeval, pkcs10.attributes[i].values[j].constructor.blockName()]);
                             }
                         }
+                    }
+                    if (csr) {
+                        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call
+                        const extensions = csr.getAttribute({ name: "extensionRequest" })?.extensions;
+                        if (extensions) {
+                            extensions.forEach((ext) => {
+                                // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call
+                                if (ext.name == "subjectAltName") {
+                                    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+                                    const values = (ext.altNames as { type: number; value: string }[]).map((alt) => {
+                                        return alt.value;
+                                    });
+                                    attributes.push(["subjectAltName", values.join(", ")]);
+                                }
+                            });
+                        }
+
                     }
                     setValues(attributes);
                     setCsr(content);
