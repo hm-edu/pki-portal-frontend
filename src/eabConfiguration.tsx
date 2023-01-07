@@ -29,7 +29,7 @@ export class RecommendedConfigurationsComponent extends React.Component<{ token:
     --eab-hmac-key "${key_bytes}"`;
 
         const issue_acme_sh = `acme.sh --issue \\
-    --standalone --days 300\\
+    --standalone --days 300 \\
     --keylength ec-256 \\
     --server https://acme.hm.edu/acme/acme/directory \\
     -d dummy.hm.edu`;
