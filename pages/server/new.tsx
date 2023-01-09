@@ -304,7 +304,7 @@ export default function SslGenerator() {
                 setProgress(<><Typography>Signiere CSR...</Typography><Typography>(Dieser Schritt kann bis zu 5 Minuten dauern!)</Typography></>);
                 const cfg = new PKIConfig({ accessToken: session.accessToken });
                 const api = new SSLApi(cfg, `${Config.PKI_HOST}`);
-                api.sslCsrPost({ csr: result.csr }).then(async x => { return { public: x.data, pkcs12: pkcs12 ? await createP12(result.privateKey, [x.data], password, type) : undefined }; }).then((response) => {
+                api.sslCsrPost({ csr: result.csr }, { timeout: 600000 }).then(async x => { return { public: x.data, pkcs12: pkcs12 ? await createP12(result.privateKey, [x.data], password, type) : undefined }; }).then((response) => {
                     const element = document.createElement("a");
                     element.setAttribute("href", "data:application/x-pem-file;base64," + Buffer.from(response.public).toString("base64"));
                     element.setAttribute("download", `${cn}_${moment().format("DD-MM-YYYY_HH-mm-ss")}.pem`);

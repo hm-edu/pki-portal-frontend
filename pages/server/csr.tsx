@@ -47,7 +47,7 @@ export default function ServerCertificatesCsr() {
             setGenerateKey(true);
             const cfg = new PKIConfig({ accessToken: session.accessToken });
             const api = new SSLApi(cfg, `${Config.PKI_HOST}`);
-            api.sslCsrPost({ csr }).then((response) => {
+            api.sslCsrPost({ csr }, { timeout: 600000 }).then((response) => {
                 const element = document.createElement("a");
                 const name = `${moment().format("DD-MM-YYYY_HH-mm-ss")}.pem`;
                 element.setAttribute("href", "data:application/x-pem-file;base64," + Buffer.from(response.data).toString("base64"));
