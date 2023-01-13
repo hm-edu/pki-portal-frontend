@@ -69,7 +69,10 @@ export default function ButtonAppBar() {
         <Link legacyBehavior={true} key="server" href="/server" ><Button key="server" color="inherit">Serverzertifikate</Button></Link>,
         <Link legacyBehavior={true} key="eab" href="/eab" ><Button key="eab" color="inherit" >ACME Tokens</Button></Link>,
         <Link legacyBehavior={true} key="user" href="/user" ><Button key="user" color="inherit" >Nutzerzertifikate</Button></Link>,
-        <Link legacyBehavior={true} passHref target="_blank" key="help" href="https://conwiki.cc.hm.edu/confluence/pages/viewpage.action?pageId=198048309"><a target="_blank" ><Button key="user" color="inherit" >Anleitungen</Button></a></Link>,
+        <Link legacyBehavior={true} passHref target="_blank" key="help" href="https://conwiki.cc.hm.edu/confluence/pages/viewpage.action?pageId=198048309"><a target="_blank" style={{
+            textDecoration: "none",
+            color: "inherit",
+        }}><Button key="user" color="inherit" >Anleitungen</Button></a></Link >,
     ] : [];
 
     return (
