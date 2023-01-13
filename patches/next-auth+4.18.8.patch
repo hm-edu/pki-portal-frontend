@@ -15,7 +15,7 @@ index 7943303..2f3bf44 100644
        token_endpoint: (_provider$token = provider.token) === null || _provider$token === void 0 ? void 0 : _provider$token.url,
        userinfo_endpoint: (_provider$userinfo = provider.userinfo) === null || _provider$userinfo === void 0 ? void 0 : _provider$userinfo.url
 diff --git a/node_modules/next-auth/core/routes/session.js b/node_modules/next-auth/core/routes/session.js
-index becc70f..aa48ae1 100644
+index bafe973..9452002 100644
 --- a/node_modules/next-auth/core/routes/session.js
 +++ b/node_modules/next-auth/core/routes/session.js
 @@ -7,6 +7,8 @@ exports.default = session;
@@ -27,7 +27,7 @@ index becc70f..aa48ae1 100644
  async function session(params) {
    const {
      options,
-@@ -61,9 +63,7 @@ async function session(params) {
+@@ -62,9 +64,7 @@ async function session(params) {
          token,
          maxAge: options.session.maxAge
        });
@@ -38,7 +38,7 @@ index becc70f..aa48ae1 100644
        (_response$cookies = response.cookies) === null || _response$cookies === void 0 ? void 0 : _response$cookies.push(...sessionCookies);
        await ((_events$session = events.session) === null || _events$session === void 0 ? void 0 : _events$session.call(events, {
          session: newSession,
-@@ -72,7 +72,7 @@ async function session(params) {
+@@ -73,7 +73,7 @@ async function session(params) {
      } catch (error) {
        var _response$cookies2;
  
@@ -70,10 +70,10 @@ index f444657..4268ed6 100644
      httpOptions?: HttpOptions;
      style?: OAuthProviderButtonStyles;
 diff --git a/node_modules/next-auth/react/index.js b/node_modules/next-auth/react/index.js
-index 55764d4..b1b00e9 100644
+index b86d7fc..283daf3 100644
 --- a/node_modules/next-auth/react/index.js
 +++ b/node_modules/next-auth/react/index.js
-@@ -602,7 +602,7 @@ function SessionProvider(props) {
+@@ -578,7 +578,7 @@ function SessionProvider(props) {
    React.useEffect(function () {
      if (refetchInterval && shouldRefetch) {
        var refetchIntervalTimer = setInterval(function () {
