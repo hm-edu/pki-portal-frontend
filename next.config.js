@@ -15,8 +15,12 @@ module.exports = {
                 envs[env] = process.env[env];
             }
         });
+        for (const env in envs) {
+            envs[env.replace("NEXT_PUBLIC_", "")] = envs[env];
+        }
 
         if (!isServer) {
+            console.log("Providing following environment variables during runtime: \n", envs);
             config.plugins.push(
                 new webpack.DefinePlugin({
                     "process.env": JSON.stringify(envs),
