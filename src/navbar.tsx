@@ -6,7 +6,6 @@ import Button from "@mui/material/Button";
 import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
-import CircularProgress from "@mui/material/CircularProgress";
 import Divider from "@mui/material/Divider";
 import Drawer from "@mui/material/Drawer";
 import Hidden from "@mui/material/Hidden";
@@ -18,33 +17,21 @@ import React, { useEffect, useState } from "react";
 import { SignInButton } from "./signInButton";
 import Link from "next/link";
 import { signOut, useSession } from "next-auth/react";
-import useSWR from "swr";
 import dynamic from "next/dynamic";
 import Image from "next/image";
 import logo from "../public/cube.png";
 import Container from "@mui/system/Container";
-const fetcher = (args: RequestInfo | URL) => fetch(args).then(res => res.json());
-
-function useIdp() {
-    const { data, error } = useSWR("/api/idp", fetcher);
-    return {
-        idp: data,
-        isLoading: !error && !data,
-        isError: error,
-    };
-}
 
 export default function ButtonAppBar() {
     const { data: session } = useSession();
-    const { idp, isLoading } = useIdp();
     const [userFragment, setFragment] = useState(<></>);
     const [openDrawer, setDrawer] = React.useState<boolean>(false);
 
     useEffect(() => {
-        const logout = isLoading ? <CircularProgress /> : <Button color="inherit" key='logout'
+        const logout = <Button color="inherit" key='logout'
             onClick={() => {
                 // eslint-disable-next-line @typescript-eslint/restrict-plus-operands, @typescript-eslint/no-unsafe-member-access            
-                void signOut({ callbackUrl: idp.idp + "/idp/profile/Logout" });
+                void signOut({ callbackUrl: (process.env.AUTH_IDP ?? "https://sso.hm.edu") + "/idp/profile/Logout" });
             }}
             variant="outlined">
             Abmelden
@@ -62,7 +49,7 @@ export default function ButtonAppBar() {
         } else {
             setFragment(<SignInButton />);
         }
-    }, [session, session?.user, session?.user?.email, session?.user?.name, idp]);
+    }, [session, session?.user, session?.user?.email, session?.user?.name]);
 
     const buttons = session ? [
         <Link legacyBehavior={true} key="domains" href="/domains" ><Button key="domains" color="inherit" >Hostverwaltung</Button></Link>,
