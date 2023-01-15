@@ -34,16 +34,18 @@ RUN --mount=type=secret,id=SENTRY_DSN \
   --mount=type=secret,id=NEXT_PUBLIC_DOMAIN_HOST \
   --mount=type=secret,id=NEXT_PUBLIC_AUTH_IDP \
   if [ -f /run/secrets/SENTRY_RELEASE ]; then \
-    echo "Using secrets as of environment variables!" && \
+    echo "Using secrets as environment variables!" && \
     export SENTRY_RELEASE=$(cat /run/secrets/SENTRY_RELEASE) && \
     export SENTRY_DSN=$(cat /run/secrets/SENTRY_DSN) && \ 
     export SENTRY_AUTH_TOKEN=$(cat /run/secrets/SENTRY_AUTH_TOKEN) && \
     export NEXT_PUBLIC_EAB_HOST=$(cat /run/secrets/NEXT_PUBLIC_EAB_HOST) && \
     export NEXT_PUBLIC_PKI_HOST=$(cat /run/secrets/NEXT_PUBLIC_PKI_HOST) && \
     export NEXT_PUBLIC_DOMAIN_HOST=$(cat /run/secrets/NEXT_PUBLIC_DOMAIN_HOST) && \
-    export NEXT_PUBLIC_AUTH_IDP=$(cat /run/secrets/NEXT_PUBLIC_AUTH_IDP); \
+    export NEXT_PUBLIC_AUTH_IDP=$(cat /run/secrets/NEXT_PUBLIC_AUTH_IDP) && yarn build; \
+  else \
+    echo "No secrets found, using environment variables!" && \
+    yarn build; \
   fi
-RUN yarn build
 
 # If using npm comment out above and use below instead
 # RUN npm run build
