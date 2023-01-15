@@ -4,7 +4,7 @@ import jwt_decode from "jwt-decode";
 import { JWT } from "next-auth/jwt";
 import { OAuthConfig } from "next-auth/providers";
 
-const idp = process.env.AUTH_IDP ?? "https://idp.hmtest.de";
+const idp = process.env.AUTH_IDP ?? process.env.NEXT_PUBLIC_AUTH_IDP ?? "https://sso-test.hm.edu";
 
 export const authOptions: NextAuthOptions =
 {
