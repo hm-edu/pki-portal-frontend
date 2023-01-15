@@ -1,34 +1,38 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# PKI-Portal @ hm.edu
+
+This repository contains all required sources for building the PKI-Portal running at Munich University of Applied Sciences.
+The techstack is built out of the following components:
+
+ - Next.JS 13
+ - Material UI using MUI
+ - Sentry Error Reporting
+ - PKI.js for client-side cryptography
 
 ## Getting Started
 
-First, run the development server:
+Due to the usage of Next.JS and Sentry several environment variables and flags must be set at build time and during runtime.
 
-```bash
-npm run dev
-# or
-yarn dev
-```
+## Build Time Variables
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+At development and during building a compiled version or a container, the following variables must be set and configured.
 
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
+| Variable | Description | Example Value | 
+| --- | --- | --- |
+| NEXTAUTH_URL | | | 
+| NEXT_PUBLIC_AUTH_IDP | | | 
+| NEXT_PUBLIC_EAB_HOST | | | 
+| NEXT_PUBLIC_PKI_HOST | | | 
+| NEXT_PUBLIC_DOMAIN_HOST | | | 
+| NEXT_PUBLIC_SENTRY_DSN | | | 
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
+## Runtime Variables
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+| Variable | Description | Example Value | 
+| --- | --- | --- |
+| AUTH_CLIENT_ID | | | 
+| AUTH_CLIENT_SECRET | | | 
+| AUTH_IDP | | | 
+| AUTH_RESOURCE | | | 
+| AUTH_SECRET | | | 
+| NEXTAUTH_URL | | | 
+| SENTRY_DSN | | | 
