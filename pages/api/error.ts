@@ -23,6 +23,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
         const sentryResponse = await fetch(sentryIngestURL, { method: "POST", body: envelope });
         return res.status(sentryResponse.status).send(sentryResponse.body);
     } catch (e) {
+        console.log(e);
         captureException(e);
         return res.status(400).json({ status: "invalid request" });
     }
