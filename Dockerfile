@@ -32,6 +32,7 @@ RUN --mount=type=secret,id=SENTRY_DSN \
   --mount=type=secret,id=NEXT_PUBLIC_EAB_HOST \
   --mount=type=secret,id=NEXT_PUBLIC_PKI_HOST \
   --mount=type=secret,id=NEXT_PUBLIC_DOMAIN_HOST \
+  --mount=type=secret,id=NEXT_PUBLIC_AUTH_IDP \
   if [ -f /run/secrets/SENTRY_RELEASE ]; then \
     echo "Using secrets as of environment variables!" && \
     export SENTRY_RELEASE=$(cat /run/secrets/SENTRY_RELEASE) && \
