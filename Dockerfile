@@ -24,8 +24,24 @@ COPY . .
 # Next.js collects completely anonymous telemetry data about general usage.
 # Learn more here: https://nextjs.org/telemetry
 # Uncomment the following line in case you want to disable telemetry during the build.
-# ENV NEXT_TELEMETRY_DISABLED 1
+ENV NEXT_TELEMETRY_DISABLED 1
 
+RUN --mount=type=secret,id=SENTRY_DSN \
+  --mount=type=secret,id=SENTRY_AUTH_TOKEN \
+  --mount=type=secret,id=SENTRY_RELEASE \
+  --mount=type=secret,id=NEXT_PUBLIC_EAB_HOST \
+  --mount=type=secret,id=NEXT_PUBLIC_PKI_HOST \
+  --mount=type=secret,id=NEXT_PUBLIC_DOMAIN_HOST \
+  if [ -f /run/secrets/SENTRY_RELEASE ]; then \
+    echo "Using secrets as of environment variables!" && \
+    export SENTRY_RELEASE=$(cat /run/secrets/SENTRY_RELEASE) && \
+    export SENTRY_DSN=$(cat /run/secrets/SENTRY_DSN) && \ 
+    export SENTRY_AUTH_TOKEN=$(cat /run/secrets/SENTRY_AUTH_TOKEN) && \
+    export NEXT_PUBLIC_EAB_HOST=$(cat /run/secrets/NEXT_PUBLIC_EAB_HOST) && \
+    export NEXT_PUBLIC_PKI_HOST=$(cat /run/secrets/NEXT_PUBLIC_PKI_HOST) && \
+    export NEXT_PUBLIC_DOMAIN_HOST=$(cat /run/secrets/NEXT_PUBLIC_DOMAIN_HOST) && \
+    export NEXT_PUBLIC_AUTH_IDP=$(cat /run/secrets/NEXT_PUBLIC_AUTH_IDP); \
+  fi
 RUN yarn build
 
 # If using npm comment out above and use below instead
