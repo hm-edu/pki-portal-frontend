@@ -14,6 +14,7 @@ import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import React, { FormEvent, useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import Moment from "react-moment";
+import * as Sentry from "@sentry/nextjs";
 
 import { PortalApisSslCertificateDetails, SSLApi } from "../../api/pki/api";
 import { Configuration } from "../../api/pki/configuration";
@@ -49,7 +50,8 @@ export default function SslCertificates() {
                     load();
                     setSelected(undefined);
                     setOpen(false);
-                }).catch(() => {
+                }).catch((error) => {
+                    Sentry.captureException(error);
                     setError(true);
                     return;
                 });
@@ -82,7 +84,8 @@ export default function SslCertificates() {
                     setCertificates(data);
                 }
                 setLoading(false);
-            }).catch(() => {
+            }).catch((error) => {
+                Sentry.captureException(error);
                 setError(true);
             });
         } else if (status == "unauthenticated") {

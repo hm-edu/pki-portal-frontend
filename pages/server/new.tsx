@@ -14,6 +14,7 @@ import List from "@mui/material/List";
 import ListItemText from "@mui/material/ListItemText";
 import Switch from "@mui/material/Switch";
 import Alert from "@mui/material/Alert";
+import * as Sentry from "@sentry/nextjs";
 
 import React, { FormEvent, useEffect, useState, useRef, FormEventHandler } from "react";
 import { DomainsApi, ModelDomain } from "../../api/domains/api";
@@ -132,7 +133,8 @@ export default function SslGenerator() {
                 setError(false);
                 setDomains(response.data.filter(x => x.approved));
                 setLoadingDomains(false);
-            }).catch(() => {
+            }).catch((error) => {
+                Sentry.captureException(error);
                 setLoadingDomains(false);
             });
         } else if (status == "unauthenticated") {
@@ -331,8 +333,8 @@ export default function SslGenerator() {
                     setGeneratedKey(true);
                     setLoadingDomains(false);
                     setGenerateKey(false);
-                }).catch((e) => {
-                    console.log(e);
+                }).catch((error) => {
+                    Sentry.captureException(error);
                     setProgress(<>
                         Es ist ein unbekannter Fehler bei der Erstellung des Zertifikats aufgetreten. Bitte versuchen Sie es erneut oder wenden sich an den IT-Support
                     </>);
@@ -340,7 +342,8 @@ export default function SslGenerator() {
                     setGenerateKey(false);
                     setLoadingDomains(false);
                 });
-            }).catch(() => {
+            }).catch((error) => {
+                Sentry.captureException(error);
                 setProgress(<>
                     Es ist ein unbekannter Fehler bei der Erstellung des Zertifikats aufgetreten. Bitte versuchen Sie es erneut oder wenden sich an den IT-Support
                 </>);

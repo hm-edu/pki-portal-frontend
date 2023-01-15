@@ -66,7 +66,6 @@ export class CsrBuilder {
 
         // Signing final PKCS#10 request
         await pkcs10.sign(privateKey, "sha-256");
-
         return { csr: this.convertBinaryToPem(pkcs10.toSchema().toBER(false), "CERTIFICATE REQUEST"), privateKey: this.convertBinaryToPem(await crypto.exportKey("pkcs8", privateKey), "PRIVATE KEY") };
     }
 

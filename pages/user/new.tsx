@@ -10,6 +10,7 @@ import CircularProgress from "@mui/material/CircularProgress";
 import Alert from "@mui/material/Alert";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
+import * as Sentry from "@sentry/nextjs";
 
 import React, { FormEvent, useCallback, useEffect, useRef, useState } from "react";
 import { SMIMEApi } from "../../api/pki/api";
@@ -100,7 +101,7 @@ export default function SMIMEGenerator() {
                 }
                 return Promise.resolve();
             }).catch((error) => {
-                console.log(error);
+                Sentry.captureException(error);
                 setLoading(false);
                 setError("Es ist ein unbekannter Fehler aufgetreten!");
             });
@@ -127,8 +128,8 @@ export default function SMIMEGenerator() {
                 setLoading(false);
                 validate();
             }).catch((error) => {
+                Sentry.captureException(error);
                 setLoading(false);
-                console.error(error);
                 setError("Es ist ein unbekannter Fehler aufgetreten!");
             });
         } else if (status == "unauthenticated") {
