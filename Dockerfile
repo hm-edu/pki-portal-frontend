@@ -43,7 +43,7 @@ RUN --mount=type=secret,id=SENTRY_AUTH_TOKEN \
     export NEXT_PUBLIC_EAB_HOST=$(cat /run/secrets/NEXT_PUBLIC_EAB_HOST) && \
     export NEXT_PUBLIC_PKI_HOST=$(cat /run/secrets/NEXT_PUBLIC_PKI_HOST) && \
     export NEXT_PUBLIC_DOMAIN_HOST=$(cat /run/secrets/NEXT_PUBLIC_DOMAIN_HOST) && \
-    export NEXT_PUBLIC_AUTH_IDP=$(cat /run/secrets/NEXT_PUBLIC_AUTH_IDP) && \&& yarn build; \
+    export NEXT_PUBLIC_AUTH_IDP=$(cat /run/secrets/NEXT_PUBLIC_AUTH_IDP) && yarn build; \
   else \
     echo "No secrets found, using environment variables!" && \
     yarn build; \
