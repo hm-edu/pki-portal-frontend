@@ -15,6 +15,7 @@ import CircularProgress from "@mui/material/CircularProgress";
 import Alert from "@mui/material/Alert";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import { deDE } from "@mui/x-data-grid";
+import * as Sentry from "@sentry/nextjs";
 
 import React, { FormEvent, useEffect, useRef, useState } from "react";
 
@@ -72,7 +73,13 @@ export default function Domains() {
 
             const cfg = new Configuration({ accessToken: session?.accessToken });
             const api = new DomainsApi(cfg, `${Config.DOMAIN_HOST}`);
-            api.domainsIdTransferPost(transferDomain?.id, { owner: target.current?.value as string }).then(() => { loadDomains(setDomains, setError); setTransferDomain(undefined); }).catch(() => { setError(true); setTransferDomain(undefined); });
+            api.domainsIdTransferPost(transferDomain?.id, { owner: target.current?.value as string }).then(() => {
+                loadDomains(setDomains, setError); setTransferDomain(undefined);
+            }).catch((error) => {
+                Sentry.captureException(error);
+                setError(true);
+                setTransferDomain(undefined);
+            });
         }
     };
 
@@ -83,7 +90,8 @@ export default function Domains() {
             api.domainsIdDelete(id).then(() => {
                 loadDomains(setDomains, setError);
                 resolve(undefined);
-            }).catch(() => {
+            }).catch((error) => {
+                Sentry.captureException(error);
                 setError(true);
                 reject(undefined);
             });
@@ -96,7 +104,8 @@ export default function Domains() {
         const api = new DomainsApi(cfg, `${Config.DOMAIN_HOST}`);
         api.domainsIdApprovePost(id).then(() => {
             loadDomains(setDomains, setError);
-        }).catch(() => {
+        }).catch((error) => {
+            Sentry.captureException(error);
             setError(true);
         });
     }
@@ -106,7 +115,8 @@ export default function Domains() {
         const api = new DomainsApi(cfg, `${Config.DOMAIN_HOST}`);
         api.domainsGet().then((response) => {
             setDomains(response.data);
-        }).catch(() => {
+        }).catch((error) => {
+            Sentry.captureException(error);
             setError(true);
         });
     }
@@ -119,6 +129,7 @@ export default function Domains() {
                 loadDomains(setDomains, setError);
                 resolve(true);
             }).catch((error) => {
+                Sentry.captureException(error);
                 reject(error);
             });
         });
@@ -213,7 +224,6 @@ export default function Domains() {
 
     let transferDialog;
     if (transferDomain) {
-        console.log("Fu");
         transferDialog = <Dialog open={true} onClose={() => setTransferDomain(undefined)}>
             <DialogTitle>Host übertragen</DialogTitle>
             <DialogContent>

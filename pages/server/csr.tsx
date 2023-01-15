@@ -17,6 +17,7 @@ import { green } from "@mui/material/colors";
 import moment from "moment";
 import { AxiosError } from "axios";
 import forge from "node-forge";
+import * as Sentry from "@sentry/nextjs";
 const typemap: Record<string, string> = {
     "2.5.4.6": "C",
     "2.5.4.11": "OU",
@@ -61,6 +62,7 @@ export default function ServerCertificatesCsr() {
                 setGeneratedKey(true);
                 setKeyFileName(name);
             }).catch((error) => {
+                Sentry.captureException(error);
                 if (error instanceof AxiosError) {
                     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                     // @ts-ignore - AxiosError is not typed correctly

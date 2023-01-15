@@ -12,7 +12,7 @@ import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 
 import { DataGrid, deDE, GridColDef } from "@mui/x-data-grid";
 import React, { useEffect, useRef, useState } from "react";
-
+import * as Sentry from "@sentry/nextjs";
 import { PortalApisListSmimeResponseCertificateDetails, SMIMEApi } from "../../api/pki/api";
 import { Configuration } from "../../api/pki/configuration";
 import { Config } from "../../src/config";
@@ -49,8 +49,8 @@ export function SmimeCertificates() {
                     setRevoking(false);
                     setOpen(false);
                 }).catch((error) => {
+                    Sentry.captureException(error);
                     setRevoking(false);
-                    console.log(error);
                     return;
                 });
             }
@@ -76,7 +76,7 @@ export function SmimeCertificates() {
                 }
                 setLoading(false);
             }).catch((error) => {
-                console.log(error);
+                Sentry.captureException(error);
                 setLoading(false);
                 setError("Es ist ein unbekannter Fehler aufgetreten.");
             });
