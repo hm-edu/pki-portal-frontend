@@ -26,24 +26,24 @@ COPY . .
 # Uncomment the following line in case you want to disable telemetry during the build.
 ENV NEXT_TELEMETRY_DISABLED 1
 
-RUN --mount=type=secret,id=SENTRY_DSN \
-  --mount=type=secret,id=SENTRY_AUTH_TOKEN \
-  --mount=type=secret,id=SENTRY_RELEASE \
+RUN --mount=type=secret,id=SENTRY_AUTH_TOKEN \
+  --mount=type=secret,id=SENTRY_RELEASE \ 
+  --mount=type=secret,id=SENTRY_ENVIRONMENT \
+  --mount=type=secret,id=NEXT_PUBLIC_SENTRY_DSN \  
   --mount=type=secret,id=NEXT_PUBLIC_EAB_HOST \
   --mount=type=secret,id=NEXT_PUBLIC_PKI_HOST \
   --mount=type=secret,id=NEXT_PUBLIC_DOMAIN_HOST \
   --mount=type=secret,id=NEXT_PUBLIC_AUTH_IDP \
-  --mount=type=secret,id=SENTRY_ENVIRONMENT \
   if [ -f /run/secrets/SENTRY_RELEASE ]; then \
     echo "Using secrets as environment variables!" && \
-    export SENTRY_RELEASE=$(cat /run/secrets/SENTRY_RELEASE) && \
-    export SENTRY_DSN=$(cat /run/secrets/SENTRY_DSN) && \ 
     export SENTRY_AUTH_TOKEN=$(cat /run/secrets/SENTRY_AUTH_TOKEN) && \
+    export SENTRY_RELEASE=$(cat /run/secrets/SENTRY_RELEASE) && \
+    export SENTRY_ENVIRONMENT=$(cat /run/secrets/SENTRY_ENVIRONMENT) && \
+    export NEXT_PUBLIC_SENTRY_DSN=$(cat /run/secrets/NEXT_PUBLIC_SENTRY_DSN) && \ 
     export NEXT_PUBLIC_EAB_HOST=$(cat /run/secrets/NEXT_PUBLIC_EAB_HOST) && \
     export NEXT_PUBLIC_PKI_HOST=$(cat /run/secrets/NEXT_PUBLIC_PKI_HOST) && \
     export NEXT_PUBLIC_DOMAIN_HOST=$(cat /run/secrets/NEXT_PUBLIC_DOMAIN_HOST) && \
-    export NEXT_PUBLIC_AUTH_IDP=$(cat /run/secrets/NEXT_PUBLIC_AUTH_IDP) && \
-    export SENTRY_ENVIRONMENT=$(cat /run/secrets/SENTRY_ENVIRONMENT) && yarn build; \
+    export NEXT_PUBLIC_AUTH_IDP=$(cat /run/secrets/NEXT_PUBLIC_AUTH_IDP) && \&& yarn build; \
   else \
     echo "No secrets found, using environment variables!" && \
     yarn build; \

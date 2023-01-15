@@ -31,7 +31,7 @@ const moduleExports = {
     webpack: (config, { webpack, isServer }) => {
         const envs = {};
         Object.keys(process.env).forEach((env) => {
-            if (env.startsWith("NEXT_PUBLIC_")) {
+            if (env.startsWith("NEXT_PUBLIC_") && env != "NEXT_PUBLIC_SENTRY_DSN") {
                 envs[env] = process.env[env];
             }
         });

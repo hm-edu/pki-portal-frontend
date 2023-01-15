@@ -18,13 +18,14 @@ jobs:
       - run: yarn lint
       - run: yarn build
         env:
-          SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
+          SENTRY_ENVIRONMENT: ${{ github.ref_name == 'main' && 'production' || 'staging' }}
           SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+          SENTRY_RELEASE: ${{ github.sha }}
+          NEXT_PUBLIC_SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
           NEXT_PUBLIC_EAB_HOST: ${{ github.ref_name == 'main' && 'https://eab.api.hm.edu' || 'https://eab.api.hmtest.de' }}
           NEXT_PUBLIC_PKI_HOST: ${{ github.ref_name == 'main' && 'https://pki.api.hm.edu' || 'https://pki.api.hmtest.de' }}
           NEXT_PUBLIC_DOMAIN_HOST: ${{ github.ref_name == 'main' && 'https://domain.api.hm.edu' || 'https://domain.api.hmtest.de' }}
           NEXT_PUBLIC_AUTH_IDP: ${{ github.ref_name == 'main' && 'https://sso.hm.edu' || 'https://sso-test.hm.edu' }}
-          SENTRY_ENVIRONMENT: ${{ github.ref_name == 'main' && 'production' || 'staging' }}
 
   docker:
     runs-on: ubuntu-latest
@@ -68,14 +69,14 @@ jobs:
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           secrets: |
-            SENTRY_DSN=${{ secrets.SENTRY_DSN }}
+            SENTRY_ENVIRONMENT=${{ github.ref_name == 'main' && 'production' || 'staging' }}
             SENTRY_AUTH_TOKEN=${{ secrets.SENTRY_AUTH_TOKEN }}
             SENTRY_RELEASE=${{ github.sha }}
+            NEXT_PUBLIC_SENTRY_DSN=${{ secrets.SENTRY_DSN }}
             NEXT_PUBLIC_EAB_HOST=${{ github.ref_name == 'main' && 'https://eab.api.hm.edu' || 'https://eab.api.hmtest.de' }}
             NEXT_PUBLIC_PKI_HOST=${{ github.ref_name == 'main' && 'https://pki.api.hm.edu' || 'https://pki.api.hmtest.de' }}
             NEXT_PUBLIC_DOMAIN_HOST=${{ github.ref_name == 'main' && 'https://domain.api.hm.edu' || 'https://domain.api.hmtest.de' }}
             NEXT_PUBLIC_AUTH_IDP=${{ github.ref_name == 'main' && 'https://sso.hm.edu' || 'https://sso-test.hm.edu' }}
-            SENTRY_ENVIRONMENT=${{ github.ref_name == 'main' && 'production' || 'staging' }}
 
   dependabot:
     runs-on: ubuntu-latest
