@@ -7,8 +7,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint",
-    "analyze": "cross-env ANALYZE=true next build"
+    "lint": "next lint"
   },
   "dependencies": {
     "@emotion/cache": "^11.10.5",
@@ -42,7 +41,6 @@
     "unidecode": "^0.1.8"
   },
   "devDependencies": {
-    "@next/bundle-analyzer": "^13.1.1",
     "@testing-library/react": "^13.4.0",
     "@types/node": "18.11.18",
     "@types/react": "18.0.26",
