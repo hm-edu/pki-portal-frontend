@@ -3282,10 +3282,10 @@ pirates@^4.0.1:
   resolved "https://registry.yarnpkg.com/pirates/-/pirates-4.0.5.tgz#feec352ea5c3268fb23a37c702ab1699f35a5f3b"
   integrity sha512-8V9+HQPupnaXMA23c5hvl69zXvTwTzyAYasnkb0Tts4XvO4CliqONMOnvlq26rkhLC3nWDFBJf73LU1e1VZLaQ==
 
-pkijs@^3.0.10:
-  version "3.0.10"
-  resolved "https://registry.yarnpkg.com/pkijs/-/pkijs-3.0.10.tgz#2639148fd3fcb45ef253e9a6c22c681f870a0785"
-  integrity sha512-l1yQoBYPMuujXrBZKjuZC0Bto84IfSC8KMtdYhC4BIxpA9/zPuD6B9YZze8FYFvGFdUOjKCyh9h1vVw6B1ukGg==
+pkijs@^3.0.11:
+  version "3.0.11"
+  resolved "https://registry.yarnpkg.com/pkijs/-/pkijs-3.0.11.tgz#603142f8faf5dffec8cbd124637f0f163f985946"
+  integrity sha512-vwNdOt4MFi3r3Loghx55FawZ/xo2QeVh0Qh9Ona94Yuca6PcdgPnTsw9tnEBG2hYdWu/+5Kj/m/CKTfU4AwxVQ==
   dependencies:
     asn1js "^3.0.5"
     bytestreamjs "^2.0.0"
