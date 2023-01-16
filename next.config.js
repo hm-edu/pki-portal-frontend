@@ -19,16 +19,6 @@ const moduleExports = {
     swcMinify: false,
     productionBrowserSourceMaps: true,
     output: "standalone",
-    sentry: {
-        // Use `hidden-source-map` rather than `source-map` as the Webpack `devtool`
-        // for client-side builds. (This will be the default starting in
-        // `@sentry/nextjs` version 8.0.0.) See
-        // https://webpack.js.org/configuration/devtool/ and
-        // https://docs.sentry.io/platforms/javascript/guides/nextjs/manual-setup/#use-hidden-source-map
-        // for more information.
-        hideSourceMaps: true,
-        widenClientFileUpload: true,
-    },
     webpack: (config, { webpack, isServer }) => {
         const envs = {};
         Object.keys(process.env).forEach((env) => {
@@ -53,4 +43,19 @@ const moduleExports = {
     },
 };
 
-module.exports = withSentryConfig(moduleExports, sentryWebpackPluginOptions);
+module.exports = process.env.NEXT_PUBLIC_SENTRY_DSN ?
+    withSentryConfig(
+        {
+            ...moduleExports,
+            sentry: {
+                // Use `hidden-source-map` rather than `source-map` as the Webpack `devtool`
+                // for client-side builds. (This will be the default starting in
+                // `@sentry/nextjs` version 8.0.0.) See
+                // https://webpack.js.org/configuration/devtool/ and
+                // https://docs.sentry.io/platforms/javascript/guides/nextjs/manual-setup/#use-hidden-source-map
+                // for more information.
+                hideSourceMaps: true,
+                widenClientFileUpload: true,
+            },
+        }, sentryWebpackPluginOptions)
+    : moduleExports;
