@@ -220,7 +220,7 @@ export default function SslGenerator() {
                             onChange={handleChange}
                         >
                             {selected && selected.length > 0 && domains.filter(x => selected.includes(x.id!)).sort((a, b) => a.fqdn!.localeCompare(b.fqdn!)).map((domain) => {
-                                return <MenuItem value={domain.id}> {domain.fqdn} </MenuItem>;
+                                return <MenuItem value={domain.id} key={domain.id}> {domain.fqdn} </MenuItem>;
                             })}
                         </CustomSelect>
                     </FormControl>

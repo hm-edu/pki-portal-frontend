@@ -1,3 +1,4 @@
+/* eslint-disable react/display-name */
 import { useSession } from "next-auth/react";
 import { AuthProps } from "./config";
 

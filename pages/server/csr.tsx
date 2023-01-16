@@ -167,7 +167,7 @@ export default function ServerCertificatesCsr() {
         <Typography variant="h2">Informationen aus dem CSR</Typography>
         <Box sx={{ display: "flex", flexDirection: "column" }}>
             <Typography>Dateiname: {filename}</Typography>
-            <List> {values.map((value) => { return <Typography>{value[0]}: {value[1]}</Typography>; })} </List>
+            <List> {values.map((value) => { return <Typography key={value[0]}>{value[0]}: {value[1]}</Typography>; })} </List>
         </Box>
         <Button variant="outlined" color="inherit" disabled={!filename || generateKey || generatedKey} onClick={sendCsr} sx={{ width: "100%" }}>Absenden {generateKey && <CircularProgress size={24} sx={{ color: green[500], position: "absolute", top: "50%", left: "50%", marginTop: "-12px", marginLeft: "-12px" }} />}</Button>
         {generatedKey && <Box sx={{

@@ -178,7 +178,7 @@ export default function SslCertificates() {
                         </tr>
                         <tr style={{ verticalAlign: "baseline" }}>
                             <td><b>Subject Alternative Names</b></td>
-                            <td><ul style={{ listStyleType: "none", padding: 0, margin: 0 }}>{cert?.subject_alternative_names?.map(x => <li>{x}</li>)}</ul></td>
+                            <td><ul style={{ listStyleType: "none", padding: 0, margin: 0 }}>{cert?.subject_alternative_names?.map(x => <li key={x}>{x}</li>)}</ul></td>
                         </tr>
                         <tr>
                             <td><b>Serial</b></td>
