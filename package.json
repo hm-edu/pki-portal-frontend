@@ -46,7 +46,7 @@
     "@types/react": "18.0.27",
     "@types/react-dom": "18.0.10",
     "@types/unidecode": "^0.1.1",
-    "@typescript-eslint/eslint-plugin": "^5.48.1",
+    "@typescript-eslint/eslint-plugin": "^5.49.0",
     "@typescript-eslint/parser": "^5.48.1",
     "cross-env": "^7.0.3",
     "eslint": "8.32.0",
