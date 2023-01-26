@@ -3195,10 +3195,10 @@ picomatch@^2.0.4, picomatch@^2.2.1, picomatch@^2.3.1:
   resolved "https://registry.yarnpkg.com/picomatch/-/picomatch-2.3.1.tgz#3ba3833733646d9d3e4995946c1365a67fb07a42"
   integrity sha512-JU3teHTNjmE2VCGFzuY8EXzCDVwEqB2a8fsIvwaStHhAWJEeVd1o1QD80CU6+ZdEXXSLbSsuLwJjkCBWqRQUVA==
 
-pkijs@^3.0.11:
-  version "3.0.11"
-  resolved "https://registry.yarnpkg.com/pkijs/-/pkijs-3.0.11.tgz#603142f8faf5dffec8cbd124637f0f163f985946"
-  integrity sha512-vwNdOt4MFi3r3Loghx55FawZ/xo2QeVh0Qh9Ona94Yuca6PcdgPnTsw9tnEBG2hYdWu/+5Kj/m/CKTfU4AwxVQ==
+pkijs@^3.0.12:
+  version "3.0.12"
+  resolved "https://registry.yarnpkg.com/pkijs/-/pkijs-3.0.12.tgz#d39a49b659a435d44604364187f77f8c8edb43c1"
+  integrity sha512-RvlTBGl9/TP/o1Ohi05V7/HkglC+wG9SggFFREj2cei7uoT4I2k9xlpdhTrtvnbaeYCFe1sKvem4JBG3TbLn1Q==
   dependencies:
     asn1js "^3.0.5"
     bytestreamjs "^2.0.0"
