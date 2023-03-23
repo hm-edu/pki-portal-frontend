@@ -29,7 +29,11 @@ export const authOptions: NextAuthOptions =
             token: `${idp}/idp/profile/oidc/token`,
             authorization: {
                 url: `${idp}/idp/profile/oidc/authorize`,
-                params: { scope: "openid profile email offline_access Certificates EAB Domains", resource: process.env.AUTH_RESOURCE },
+                params: {
+                    scope: "openid profile email offline_access Certificates EAB Domains",
+                    resource: process.env.AUTH_RESOURCE,
+                    prompt: "login",
+                },
             },
             userinfo: `${idp}/idp/profile/oidc/userinfo`,
             profile(_profile, tokens) {
