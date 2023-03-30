@@ -37,6 +37,7 @@ import TextField, { TextFieldProps } from "@mui/material/TextField";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
 import { QuickSearchToolbar } from "../../src/toolbar";
+import { AlertTitle } from "@mui/material";
 const CustomSelect = styled(Select<string>)(() => ({
     "&.MuiOutlinedInput-root": {
         "& fieldset": {
@@ -102,7 +103,7 @@ export default function SslGenerator() {
             "&:hover": {
                 bgcolor: green[700],
             },
-        }), mt: 3, mb: 2,
+        }), mt: 1, mb: 2,
     };
     const switchRef = useRef<SwitchProps>(null);
     const [commonName, setCommonName] = React.useState("");
@@ -252,6 +253,10 @@ export default function SslGenerator() {
                     </Stack>
                 </Box>
             </Box>
+            <Alert severity="warning" sx={{ mt: 1 }}>
+                <AlertTitle>Hinweis:</AlertTitle>
+                <Typography>Es zeichnet sich eine weitere Verkürzung der Zertifikatslaufzeiten auf 90 Tage ab. Wir empfehlen, sofern möglich, den Einsatz von ACME. Sollten Sie hierzu Fragen haben, wenden Sie sich gerne an die Zentrale IT. Weiterführende Informationen zu den Plänen finden sich unter anderem bei <a href="https://www.heise.de/news/Google-moechte-Laufzeiten-fuer-TLS-Zertifikate-verkuerzen-8151372.html">heise.de</a> oder <a href="https://www.chromium.org/Home/chromium-security/root-ca-policy/moving-forward-together/">Google</a>.</Typography>
+            </Alert>
             <Button type="submit" color="inherit" variant="outlined" disabled={!selected || selected.length == 0 || loadingDomains || generateKey || generatedKey} sx={buttonSx}>Generiere Zertifikat {loadingDomains && (
                 <CircularProgress size={24} sx={{ color: green[500], position: "absolute", top: "50%", left: "50%", marginTop: "-12px", marginLeft: "-12px" }} />
             )}</Button>
