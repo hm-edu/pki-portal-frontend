@@ -70,7 +70,7 @@ index f444657..4268ed6 100644
      httpOptions?: HttpOptions;
      style?: OAuthProviderButtonStyles;
 diff --git a/node_modules/next-auth/react/index.js b/node_modules/next-auth/react/index.js
-index b86d7fc..283daf3 100644
+index b86d7fc..5478694 100644
 --- a/node_modules/next-auth/react/index.js
 +++ b/node_modules/next-auth/react/index.js
 @@ -578,7 +578,7 @@ function SessionProvider(props) {
