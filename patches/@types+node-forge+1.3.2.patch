@@ -1,5 +1,5 @@
 diff --git a/node_modules/@types/node-forge/index.d.ts b/node_modules/@types/node-forge/index.d.ts
-index 54ed539..6356825 100755
+index 024979c..045c4b1 100755
 --- a/node_modules/@types/node-forge/index.d.ts
 +++ b/node_modules/@types/node-forge/index.d.ts
 @@ -253,7 +253,7 @@ declare module 'node-forge' {
@@ -11,25 +11,7 @@ index 54ed539..6356825 100755
          type EncryptionOptions = {
              algorithm?: 'aes128' | 'aes192' | 'aes256' | '3des' | undefined;
              count?: number | undefined;
-@@ -370,12 +370,12 @@ declare module 'node-forge' {
- 
-             type ToNativeBufferParameters =
-                 | {
--                      message: NativeBuffer | util.ByteBuffer;
--                  }
-+                    message: NativeBuffer | util.ByteBuffer;
-+                }
-                 | {
--                      message: string;
--                      encoding: 'binary' | 'utf8';
--                  };
-+                    message: string;
-+                    encoding: 'binary' | 'utf8';
-+                };
- 
-             // `string`s will be converted by toNativeBuffer with `encoding: 'binary'`
-             type BinaryBuffer = NativeBuffer | util.ByteBuffer | string;
-@@ -643,11 +643,11 @@ declare module 'node-forge' {
+@@ -646,11 +646,11 @@ declare module 'node-forge' {
              options?:
                  | ((verified: boolean | string, depth: number, certs: Certificate[]) => boolean)
                  | {
@@ -46,7 +28,7 @@ index 54ed539..6356825 100755
          ): boolean;
  
          function pemToDer(pem: PEM): util.ByteStringBuffer;
-@@ -699,7 +699,13 @@ declare module 'node-forge' {
+@@ -702,7 +702,13 @@ declare module 'node-forge' {
          function getPublicKeyFingerprint(publicKey: PublicKey, options: HexFingerprintOptions): Hex;
          function getPublicKeyFingerprint(publicKey: PublicKey, options: BinaryFingerprintOptions): Bytes;
      }
@@ -61,7 +43,7 @@ index 54ed539..6356825 100755
      namespace random {
          function getBytes(count: number, callback?: (err: Error | null, bytes: Bytes) => any): void;
          function getBytesSync(count: number): Bytes;
-@@ -1382,12 +1388,12 @@ declare module 'node-forge' {
+@@ -1385,12 +1391,12 @@ declare module 'node-forge' {
              verifyClient: boolean;
              verify(conn: Connection, verified: Verified, depth: number, certs: pki.Certificate[]): Verified;
              getCertificate:
