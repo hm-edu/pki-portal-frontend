@@ -22,10 +22,8 @@ export const authOptions: NextAuthOptions =
             checks: ["pkce"],
             clientId: process.env.AUTH_CLIENT_ID ?? "portal-frontend-dev",
             clientSecret: process.env.AUTH_CLIENT_SECRET ?? "this_too_should_be_ch4ng3d",
-            issuer: {
-                jwks_uri: `${idp}/idp/profile/oidc/keyset`,
-                issuer: `${idp}`,
-            },
+            issuer: idp,
+            jwks_endpoint: `${idp}/idp/profile/oidc/keyset`,
             token: `${idp}/idp/profile/oidc/token`,
             authorization: {
                 url: `${idp}/idp/profile/oidc/authorize`,
