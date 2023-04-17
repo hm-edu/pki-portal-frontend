@@ -4,7 +4,7 @@ import Modal from "@mui/material/Modal";
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import { green } from "@mui/material/colors";
-import { DataGrid, GridColDef, GridRowId } from "@mui/x-data-grid";
+import { DataGrid, GridColDef, GridPaginationModel, GridRowId } from "@mui/x-data-grid";
 import FileDownload from "@mui/icons-material/FileDownload";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import Stack from "@mui/material/Stack";
@@ -91,7 +91,7 @@ export default function SslGenerator() {
     const [pkcs12, setPkcs12] = useState<boolean>(false);
     const [domains, setDomains] = useState<ModelDomain[]>([]);
     const [selected, setSelected] = useState<GridRowId[]>();
-    const [pageSize, setPageSize] = useState<number>(50);
+    const [paginationModel, setPaginationModel] = useState<GridPaginationModel>({ page: 0, pageSize: 50 });
     const { data: session, status } = useSession();
 
     const p12PasswordRef = useRef<TextFieldProps>(null);
@@ -191,8 +191,9 @@ export default function SslGenerator() {
                             },
                         }}
                         components={{ Toolbar: QuickSearchToolbar }}
-                        pageSize={pageSize} selectionModel={selected}
-                        onSelectionModelChange={(event) => {
+                        paginationModel={paginationModel}
+                        rowSelectionModel={selected}
+                        onRowSelectionModelChange={(event) => {
                             setSelected(event);
                             if (commonName != "" && !event.find(x => x == commonName)) {
                                 setCommonName(String(event.at(0)));
@@ -202,8 +203,8 @@ export default function SslGenerator() {
                             }
                         }}
                         loading={loadingDomains} density="compact"
-                        onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
-                        rowsPerPageOptions={[5, 15, 25, 50, 100]}
+                        onPaginationModelChange={(newPaginationModel) => setPaginationModel(newPaginationModel)}
+                        pageSizeOptions={[5, 15, 25, 50, 100]}
                         pagination checkboxSelection rows={domains}></DataGrid>
 
                 </Box>

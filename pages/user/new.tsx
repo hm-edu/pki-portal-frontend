@@ -12,7 +12,7 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
 import * as Sentry from "@sentry/nextjs";
 
-import React, { FormEvent, useCallback, useEffect, useRef, useState } from "react";
+import { FormEvent, useCallback, useEffect, useRef, useState } from "react";
 import { SMIMEApi } from "../../api/pki/api";
 import { Configuration } from "../../api/pki/configuration";
 import { Config } from "../../src/config";

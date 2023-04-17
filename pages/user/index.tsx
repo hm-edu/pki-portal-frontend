@@ -10,8 +10,8 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import LinearProgress from "@mui/material/LinearProgress";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 
-import { DataGrid, deDE, GridColDef } from "@mui/x-data-grid";
-import React, { useEffect, useRef, useState } from "react";
+import { DataGrid, deDE, GridColDef, GridPaginationModel } from "@mui/x-data-grid";
+import { useEffect, useRef, useState } from "react";
 import * as Sentry from "@sentry/nextjs";
 import { PortalApisListSmimeResponseCertificateDetails, SMIMEApi } from "../../api/pki/api";
 import { Configuration } from "../../api/pki/configuration";
@@ -28,7 +28,7 @@ export default SmimeCertificates;
 export function SmimeCertificates() {
     const [open, setOpen] = useState(false);
     const reason = useRef<TextFieldProps>(null);
-    const [pageSize, setPageSize] = useState<number>(50);
+    const [pageModel, setPageModel] = useState<GridPaginationModel>({ page:0, pageSize: 50 });
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<undefined | boolean | string>(undefined);
     const [selection, setSelection] = useState<PortalApisListSmimeResponseCertificateDetails | undefined>(undefined);
@@ -139,26 +139,27 @@ export function SmimeCertificates() {
     ];
 
     return <Box sx={{ display: "flex", flexDirection: "column", height: "100%" }}><Typography variant="h1">Ihre Nutzerzertifikate</Typography>
-        <DataGrid columns={columns}
-            sx={dataGridStyle}
-            pageSize={pageSize}
-            getRowId={(row) =>
-                // eslint-disable-next-line @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-member-access  
-                row.serial
-            }
-            initialState={{
-                sorting: {
-                    sortModel: [{ field: "notBefore", sort: "desc" }],
-                },
-            }}
-            components={{ LoadingOverlay: LinearProgress }}
-            componentsProps={{ loadingOverlay: { color: "inherit" } }}
-            loading={loading}
-            localeText={{ ...deDE.components.MuiDataGrid.defaultProps.localeText, errorOverlayDefaultLabel: typeof error === "string" ? error : "Ein unerwarteter Fehler ist aufgetreten." }}
-            error={error}
-            onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
-            rowsPerPageOptions={[5, 15, 25, 50, 100]}
-            pagination rows={certificates}></DataGrid>
+        <Sentry.ErrorBoundary fallback={<p>{typeof error === "string" ? error : "Ein unerwarteter Fehler ist aufgetreten."}</p>}>
+            <DataGrid columns={columns}
+                sx={dataGridStyle}
+                paginationModel={pageModel}
+                getRowId={(row) =>
+                    // eslint-disable-next-line @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-member-access  
+                    row.serial
+                }
+                initialState={{
+                    sorting: {
+                        sortModel: [{ field: "notBefore", sort: "desc" }],
+                    },
+                }}
+                components={{ LoadingOverlay: LinearProgress }}
+                componentsProps={{ loadingOverlay: { color: "inherit" } }}
+                loading={loading}
+                localeText={{ ...deDE.components.MuiDataGrid.defaultProps.localeText }}
+                onPaginationModelChange={(newPageModel) => setPageModel(newPageModel)}
+                pageSizeOptions={[5, 15, 25, 50, 100]}
+                pagination rows={certificates}></DataGrid>
+        </Sentry.ErrorBoundary>
         <Dialog open={open} onClose={handleClose}>
             <DialogTitle>Nutzerzertifikat widerrufen</DialogTitle>
             <DialogContent>
