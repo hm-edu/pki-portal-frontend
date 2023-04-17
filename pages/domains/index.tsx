@@ -2,7 +2,7 @@
 import TextField, { TextFieldProps } from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
-import { DataGrid, GridColDef } from "@mui/x-data-grid";
+import { DataGrid, GridColDef, GridPaginationModel } from "@mui/x-data-grid";
 import DeleteIcon from "@mui/icons-material/Delete";
 import LinearProgress from "@mui/material/LinearProgress";
 import DialogActions from "@mui/material/DialogActions";
@@ -17,8 +17,7 @@ import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import { deDE } from "@mui/x-data-grid";
 import * as Sentry from "@sentry/nextjs";
 
-import React, { FormEvent, useEffect, useRef, useState } from "react";
-
+import { FormEvent, useEffect, useRef, useState } from "react";
 import { DomainsApi } from "../../api/domains/api";
 import { ModelDomain } from "../../api/domains/api";
 import { Configuration } from "../../api/domains/configuration";
@@ -30,7 +29,7 @@ import { useSession } from "next-auth/react";
 import { QuickSearchToolbar } from "../../src/toolbar";
 
 export default function Domains() {
-    const [pageSize, setPageSize] = useState<number>(50);
+    const [pageModel, setPageModel] = useState<GridPaginationModel>({ page: 0, pageSize: 50 });
     const [domains, setDomains] = useState([] as ModelDomain[]);
     const [loading, setLoading] = useState(true);
     const [deleting, setDeleting] = useState(false);
@@ -249,28 +248,29 @@ export default function Domains() {
         </Dialog >;
     }
     return <Box sx={{ display: "flex", flexDirection: "column", height: "100%" }}><Typography variant="h1">Ihre Hosts</Typography>
-        <DataGrid
-            initialState={{
-                sorting: {
-                    sortModel: [{ field: "fqdn", sort: "asc" }],
-                },
-            }}
-            sx={dataGridStyle}
-            columns={columns}
-            pageSize={pageSize}
-            components={{
-                Toolbar: QuickSearchToolbar,
-                LoadingOverlay: LinearProgress,
-            }}
-            componentsProps={{
-                loadingOverlay: { color: "inherit" },
-            }}
-            loading={loading}
-            localeText={{ ...deDE.components.MuiDataGrid.defaultProps.localeText, errorOverlayDefaultLabel: typeof error === "string" ? error : "Ein unerwarteter Fehler ist aufgetreten." }}
-            error={error}
-            onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
-            rowsPerPageOptions={[5, 15, 25, 50, 100]}
-            pagination rows={domains}></DataGrid>
+        <Sentry.ErrorBoundary fallback={<p>{typeof error === "string" ? error : "Ein unerwarteter Fehler ist aufgetreten."}</p>}>
+            <DataGrid
+                initialState={{
+                    sorting: {
+                        sortModel: [{ field: "fqdn", sort: "asc" }],
+                    },
+                }}
+                sx={dataGridStyle}
+                columns={columns}
+                paginationModel={pageModel}
+                components={{
+                    Toolbar: QuickSearchToolbar,
+                    LoadingOverlay: LinearProgress,
+                }}
+                componentsProps={{
+                    loadingOverlay: { color: "inherit" },
+                }}
+                loading={loading}
+                localeText={{ ...deDE.components.MuiDataGrid.defaultProps.localeText }}
+                onPaginationModelChange={(newPageModel) => setPageModel(newPageModel)}
+                pageSizeOptions={[5, 15, 25, 50, 100]}
+                pagination rows={domains}></DataGrid>
+        </Sentry.ErrorBoundary>
 
         <Box component="form" onSubmit={create}
             sx={{

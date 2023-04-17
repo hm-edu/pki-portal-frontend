@@ -1,5 +1,5 @@
 import { DataGrid } from "@mui/x-data-grid";
-import React, { FormEvent, useRef, useState } from "react";
+import { FormEvent, useRef, useState } from "react";
 import { ModelDomain, DomainsApi } from "../api/domains/api";
 import { Configuration } from "../api/domains/configuration";
 import DeleteIcon from "@mui/icons-material/Delete";

@@ -10,7 +10,7 @@ import TableCell from "@mui/material/TableCell";
 import Typography from "@mui/material/Typography";
 import LinearProgress from "@mui/material/LinearProgress";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
-import { DataGrid, GridColDef, GridSelectionModel } from "@mui/x-data-grid";
+import { DataGrid, GridColDef, GridPaginationModel, GridRowSelectionModel } from "@mui/x-data-grid";
 import React, { FormEvent, RefObject } from "react";
 import { EABApi, ModelsEAB } from "../../api/eab/api";
 import { Configuration } from "../../api/eab/configuration";
@@ -24,7 +24,7 @@ import withSession from "../../src/session";
 import LoggedOut from "../logout";
 import * as Sentry from "@sentry/nextjs";
 
-interface EabState { initalized: boolean; pageSize: number; tokens: ModelsEAB[]; selected: GridSelectionModel; loading: boolean; recommendations: boolean; error: string | boolean | undefined }
+interface EabState { initalized: boolean; paginationModel: GridPaginationModel; tokens: ModelsEAB[]; selected: GridRowSelectionModel; loading: boolean; recommendations: boolean; error: string | boolean | undefined }
 
 class EabTokens extends React.Component<{ session: AuthProps | null; status: string }, EabState> {
 
@@ -103,7 +103,7 @@ class EabTokens extends React.Component<{ session: AuthProps | null; status: str
     constructor(props: { session: AuthProps | null; status: string }) {
         super(props);
         this.state = {
-            pageSize: 15,
+            paginationModel: { page: 0, pageSize: 50 } ,
             tokens: [],
             selected: [],
             loading: true,
@@ -164,26 +164,27 @@ class EabTokens extends React.Component<{ session: AuthProps | null; status: str
             this.setState({ error: "Bitte melden Sie sich an!", loading: false });
         }
         return <Box sx={{ display: "flex", flexDirection: "column", height: "100%" }}><Typography variant="h1">Ihre ACME Tokens</Typography>
-            <DataGrid columns={this.columns}
-                sx={dataGridStyle}
-                initialState={{
-                    columns: {
-                        columnVisibilityModel: {
-                            key_bytes: false,
+            <Sentry.ErrorBoundary fallback={<p>{typeof this.state.error === "string" ? this.state.error : "Ein unerwarteter Fehler ist aufgetreten."}</p>}>
+                <DataGrid columns={this.columns}
+                    sx={dataGridStyle}
+                    initialState={{
+                        columns: {
+                            columnVisibilityModel: {
+                                key_bytes: false,
+                            },
                         },
-                    },
-                }}
-                pageSize={this.state.pageSize}
-                components={{ LoadingOverlay: LinearProgress }}
-                componentsProps={{ loadingOverlay: { color: "inherit" } }}
-                loading={this.state.loading}
-                onSelectionModelChange={(event) => { this.setState({ selected: event }); }}
-                localeText={{ ...deDE.components.MuiDataGrid.defaultProps.localeText, errorOverlayDefaultLabel: typeof this.state.error === "string" ? this.state.error : "Ein unerwarteter Fehler ist aufgetreten." }}
-                error={this.state.error}
-                selectionModel={this.state.selected}
-                onPageSizeChange={(newPageSize) => this.setState({ pageSize: newPageSize })}
-                rowsPerPageOptions={[5, 15, 25, 50, 100]}
-                pagination rows={this.state.tokens} />
+                    }}
+                    paginationModel={this.state.paginationModel}
+                    components={{ LoadingOverlay: LinearProgress }}
+                    componentsProps={{ loadingOverlay: { color: "inherit" } }}
+                    loading={this.state.loading}
+                    onRowSelectionModelChange={(event) => { this.setState({ selected: event }); }}
+                    localeText={{ ...deDE.components.MuiDataGrid.defaultProps.localeText }}
+                    rowSelectionModel={this.state.selected}
+                    onPaginationModelChange={(newPaginationModel) => this.setState({ paginationModel: newPaginationModel })}
+                    pageSizeOptions={[5, 15, 25, 50, 100]}
+                    pagination rows={this.state.tokens} />
+            </Sentry.ErrorBoundary>
             {this.selection()}
             <Box component="form" sx={{ maxWidth: "100%", display: "flex", flexDirection: "column" }} onSubmit={(e: FormEvent<Element>) => {
                 e.preventDefault();

@@ -1,7 +1,7 @@
 import TextField, { TextFieldProps } from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
-import { DataGrid, deDE, GridColDef, GridRowId } from "@mui/x-data-grid";
+import { DataGrid, deDE, GridColDef, GridPaginationModel, GridRowId } from "@mui/x-data-grid";
 import Dialog from "@mui/material/Dialog";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
@@ -11,7 +11,7 @@ import LinearProgress from "@mui/material/LinearProgress";
 import DeleteIcon from "@mui/icons-material/Delete";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 
-import React, { FormEvent, useEffect, useRef, useState } from "react";
+import { FormEvent, useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import Moment from "react-moment";
 import * as Sentry from "@sentry/nextjs";
@@ -25,7 +25,7 @@ import { useSession } from "next-auth/react";
 import UploadFileIcon from "@mui/icons-material/UploadFile";
 
 export default function SslCertificates() {
-    const [pageSize, setPageSize] = useState<number>(50);
+    const [pageModel, setPageModel] = useState<GridPaginationModel>({ page: 0, pageSize: 50 });
     const [loading, setLoading] = useState(true);
     const reason = useRef<TextFieldProps>(null);
     const [open, setOpen] = useState(false);
@@ -213,34 +213,35 @@ export default function SslCertificates() {
         }
     };
     return <Box sx={{ display: "flex", flexDirection: "column", height: "100%" }}><Typography variant="h1">Ihre Serverzertifikate</Typography>
-        <DataGrid columns={columns}
-            pageSize={pageSize}
-            sx={dataGridStyle}
-            getRowId={(row) =>
-                // eslint-disable-next-line @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-member-access  
-                row.serial
-            }
-            initialState={{
-                columns: {
-                    columnVisibilityModel: {
-                        issued_by: false,
-                        source: false,
+        <Sentry.ErrorBoundary fallback={<p>{typeof error === "string" ? error : "Ein unerwarteter Fehler ist aufgetreten."}</p>}>
+            <DataGrid columns={columns}
+                paginationModel={pageModel}
+                sx={dataGridStyle}
+                getRowId={(row) =>
+                    // eslint-disable-next-line @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-member-access  
+                    row.serial
+                }
+                initialState={{
+                    columns: {
+                        columnVisibilityModel: {
+                            issued_by: false,
+                            source: false,
+                        },
                     },
-                },
-                sorting: {
-                    sortModel: [{ field: "created", sort: "desc" }],
-                },
-            }}
-            onSelectionModelChange={(event) => { setSelected(event); }}
-            selectionModel={selected}
-            components={{ LoadingOverlay: LinearProgress }}
-            localeText={{ ...deDE.components.MuiDataGrid.defaultProps.localeText, errorOverlayDefaultLabel: typeof error === "string" ? error : "Ein unerwarteter Fehler ist aufgetreten." }}
-            componentsProps={{ loadingOverlay: { color: "inherit" } }}
-            loading={loading}
-            error={error}
-            onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
-            rowsPerPageOptions={[5, 15, 25, 50, 100]}
-            pagination rows={certificates}></DataGrid>
+                    sorting: {
+                        sortModel: [{ field: "created", sort: "desc" }],
+                    },
+                }}
+                onRowSelectionModelChange={(event) => { setSelected(event); }}
+                rowSelectionModel={selected}
+                components={{ LoadingOverlay: LinearProgress }}
+                localeText={{ ...deDE.components.MuiDataGrid.defaultProps.localeText }}
+                componentsProps={{ loadingOverlay: { color: "inherit" } }}
+                loading={loading}
+                onPaginationModelChange={(newPageModel) => setPageModel(newPageModel)}
+                pageSizeOptions={[5, 15, 25, 50, 100]}
+                pagination rows={certificates}></DataGrid>
+        </Sentry.ErrorBoundary>
         {selection()}
         <Dialog open={open} onClose={handleClose}>
             <DialogTitle>SSL Zertifikat widerrufen</DialogTitle>
