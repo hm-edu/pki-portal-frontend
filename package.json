@@ -52,7 +52,7 @@
     "eslint": "8.37.0",
     "eslint-config-next": "13.3.0",
     "eslint-plugin-react": "^7.32.2",
-    "eslint-plugin-testing-library": "^5.10.2",
+    "eslint-plugin-testing-library": "^5.10.3",
     "patch-package": "^6.5.1",
     "typescript": "^5.0.4"
   }
