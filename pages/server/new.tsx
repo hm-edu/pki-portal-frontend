@@ -183,29 +183,31 @@ export default function SslGenerator() {
             <Box sx={{ width: "100%", height: "100%", display: "flex", gap: "10px", flexDirection: "row" }}>
                 <Box sx={{ flex: "auto", minWidth: "49%", maxWidth: "100%", display: "flex", height: "100%", flexDirection: "column" }}>
                     <Typography variant="h6">Ihre Domains:</Typography>
-                    <DataGrid columns={columns}
-                        sx={dataGridStyle}
-                        initialState={{
-                            sorting: {
-                                sortModel: [{ field: "fqdn", sort: "asc" }],
-                            },
-                        }}
-                        components={{ Toolbar: QuickSearchToolbar }}
-                        paginationModel={paginationModel}
-                        rowSelectionModel={selected}
-                        onRowSelectionModelChange={(event) => {
-                            setSelected(event);
-                            if (commonName != "" && !event.find(x => x == commonName)) {
-                                setCommonName(String(event.at(0)));
-                            }
-                            if (commonName == "") {
-                                setCommonName(String(event.at(0)));
-                            }
-                        }}
-                        loading={loadingDomains} density="compact"
-                        onPaginationModelChange={(newPaginationModel) => setPaginationModel(newPaginationModel)}
-                        pageSizeOptions={[5, 15, 25, 50, 100]}
-                        pagination checkboxSelection rows={domains}></DataGrid>
+                    <div style={{ flex: 1, overflow: "hidden" }}>
+                        <DataGrid columns={columns}
+                            sx={dataGridStyle}
+                            initialState={{
+                                sorting: {
+                                    sortModel: [{ field: "fqdn", sort: "asc" }],
+                                },
+                            }}
+                            slots={{ toolbar: QuickSearchToolbar }}
+                            paginationModel={paginationModel}
+                            rowSelectionModel={selected}
+                            onRowSelectionModelChange={(event) => {
+                                setSelected(event);
+                                if (commonName != "" && !event.find(x => x == commonName)) {
+                                    setCommonName(String(event.at(0)));
+                                }
+                                if (commonName == "") {
+                                    setCommonName(String(event.at(0)));
+                                }
+                            }}
+                            loading={loadingDomains} density="compact"
+                            onPaginationModelChange={(newPaginationModel) => setPaginationModel(newPaginationModel)}
+                            pageSizeOptions={[5, 15, 25, 50, 100]}
+                            pagination checkboxSelection rows={domains}></DataGrid>
+                    </div>
 
                 </Box>
                 <Box sx={{ flex: "auto", minWidth: "49%", maxWidth: "100%", display: "flex", flexDirection: "column", alignContent: "flex-start", overflow: "auto" }}>

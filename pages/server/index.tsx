@@ -214,33 +214,35 @@ export default function SslCertificates() {
     };
     return <Box sx={{ display: "flex", flexDirection: "column", height: "100%" }}><Typography variant="h1">Ihre Serverzertifikate</Typography>
         <Sentry.ErrorBoundary fallback={<p>{typeof error === "string" ? error : "Ein unerwarteter Fehler ist aufgetreten."}</p>}>
-            <DataGrid columns={columns}
-                paginationModel={pageModel}
-                sx={dataGridStyle}
-                getRowId={(row) =>
-                    // eslint-disable-next-line @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-member-access  
-                    row.serial
-                }
-                initialState={{
-                    columns: {
-                        columnVisibilityModel: {
-                            issued_by: false,
-                            source: false,
+            <div style={{ flex: 1, overflow: "hidden" }}>
+                <DataGrid columns={columns}
+                    paginationModel={pageModel}
+                    sx={dataGridStyle}
+                    getRowId={(row) =>
+                        // eslint-disable-next-line @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-member-access  
+                        row.serial
+                    }
+                    initialState={{
+                        columns: {
+                            columnVisibilityModel: {
+                                issued_by: false,
+                                source: false,
+                            },
                         },
-                    },
-                    sorting: {
-                        sortModel: [{ field: "created", sort: "desc" }],
-                    },
-                }}
-                onRowSelectionModelChange={(event) => { setSelected(event); }}
-                rowSelectionModel={selected}
-                components={{ LoadingOverlay: LinearProgress }}
-                localeText={{ ...deDE.components.MuiDataGrid.defaultProps.localeText }}
-                componentsProps={{ loadingOverlay: { color: "inherit" } }}
-                loading={loading}
-                onPaginationModelChange={(newPageModel) => setPageModel(newPageModel)}
-                pageSizeOptions={[5, 15, 25, 50, 100]}
-                pagination rows={certificates}></DataGrid>
+                        sorting: {
+                            sortModel: [{ field: "created", sort: "desc" }],
+                        },
+                    }}
+                    onRowSelectionModelChange={(event) => { setSelected(event); }}
+                    rowSelectionModel={selected}
+                    slots={{ loadingOverlay: LinearProgress }}
+                    localeText={{ ...deDE.components.MuiDataGrid.defaultProps.localeText }}
+                    slotProps={{ loadingOverlay: { color: "inherit" } }}
+                    loading={loading}
+                    onPaginationModelChange={(newPageModel) => setPageModel(newPageModel)}
+                    pageSizeOptions={[5, 15, 25, 50, 100]}
+                    pagination rows={certificates}></DataGrid>
+            </div>
         </Sentry.ErrorBoundary>
         {selection()}
         <Dialog open={open} onClose={handleClose}>

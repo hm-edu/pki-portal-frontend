@@ -28,7 +28,7 @@ export default SmimeCertificates;
 export function SmimeCertificates() {
     const [open, setOpen] = useState(false);
     const reason = useRef<TextFieldProps>(null);
-    const [pageModel, setPageModel] = useState<GridPaginationModel>({ page:0, pageSize: 50 });
+    const [pageModel, setPageModel] = useState<GridPaginationModel>({ page: 0, pageSize: 50 });
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<undefined | boolean | string>(undefined);
     const [selection, setSelection] = useState<PortalApisListSmimeResponseCertificateDetails | undefined>(undefined);
@@ -140,25 +140,27 @@ export function SmimeCertificates() {
 
     return <Box sx={{ display: "flex", flexDirection: "column", height: "100%" }}><Typography variant="h1">Ihre Nutzerzertifikate</Typography>
         <Sentry.ErrorBoundary fallback={<p>{typeof error === "string" ? error : "Ein unerwarteter Fehler ist aufgetreten."}</p>}>
-            <DataGrid columns={columns}
-                sx={dataGridStyle}
-                paginationModel={pageModel}
-                getRowId={(row) =>
-                    // eslint-disable-next-line @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-member-access  
-                    row.serial
-                }
-                initialState={{
-                    sorting: {
-                        sortModel: [{ field: "notBefore", sort: "desc" }],
-                    },
-                }}
-                components={{ LoadingOverlay: LinearProgress }}
-                componentsProps={{ loadingOverlay: { color: "inherit" } }}
-                loading={loading}
-                localeText={{ ...deDE.components.MuiDataGrid.defaultProps.localeText }}
-                onPaginationModelChange={(newPageModel) => setPageModel(newPageModel)}
-                pageSizeOptions={[5, 15, 25, 50, 100]}
-                pagination rows={certificates}></DataGrid>
+            <div style={{ flex: 1, overflow: "hidden" }}>
+                <DataGrid columns={columns}
+                    sx={dataGridStyle}
+                    paginationModel={pageModel}
+                    getRowId={(row) =>
+                        // eslint-disable-next-line @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-member-access  
+                        row.serial
+                    }
+                    initialState={{
+                        sorting: {
+                            sortModel: [{ field: "notBefore", sort: "desc" }],
+                        },
+                    }}
+                    slots={{ loadingOverlay: LinearProgress }}
+                    slotProps={{ loadingOverlay: { color: "inherit" } }}
+                    loading={loading}
+                    localeText={{ ...deDE.components.MuiDataGrid.defaultProps.localeText }}
+                    onPaginationModelChange={(newPageModel) => setPageModel(newPageModel)}
+                    pageSizeOptions={[5, 15, 25, 50, 100]}
+                    pagination rows={certificates}></DataGrid>
+            </div>
         </Sentry.ErrorBoundary>
         <Dialog open={open} onClose={handleClose}>
             <DialogTitle>Nutzerzertifikat widerrufen</DialogTitle>

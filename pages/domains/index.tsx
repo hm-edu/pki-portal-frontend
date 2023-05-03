@@ -249,27 +249,30 @@ export default function Domains() {
     }
     return <Box sx={{ display: "flex", flexDirection: "column", height: "100%" }}><Typography variant="h1">Ihre Hosts</Typography>
         <Sentry.ErrorBoundary fallback={<p>{typeof error === "string" ? error : "Ein unerwarteter Fehler ist aufgetreten."}</p>}>
-            <DataGrid
-                initialState={{
-                    sorting: {
-                        sortModel: [{ field: "fqdn", sort: "asc" }],
-                    },
-                }}
-                sx={dataGridStyle}
-                columns={columns}
-                paginationModel={pageModel}
-                components={{
-                    Toolbar: QuickSearchToolbar,
-                    LoadingOverlay: LinearProgress,
-                }}
-                componentsProps={{
-                    loadingOverlay: { color: "inherit" },
-                }}
-                loading={loading}
-                localeText={{ ...deDE.components.MuiDataGrid.defaultProps.localeText }}
-                onPaginationModelChange={(newPageModel) => setPageModel(newPageModel)}
-                pageSizeOptions={[5, 15, 25, 50, 100]}
-                pagination rows={domains}></DataGrid>
+
+            <div style={{ flex: 1, overflow: "hidden" }}>
+                <DataGrid
+                    initialState={{
+                        sorting: {
+                            sortModel: [{ field: "fqdn", sort: "asc" }],
+                        },
+                    }}
+                    sx={dataGridStyle}
+                    columns={columns}
+                    paginationModel={pageModel}
+                    slots={{
+                        toolbar: QuickSearchToolbar,
+                        loadingOverlay: LinearProgress,
+                    }}
+                    slotProps={{
+                        loadingOverlay: { color: "inherit" },
+                    }}
+                    loading={loading}
+                    localeText={{ ...deDE.components.MuiDataGrid.defaultProps.localeText }}
+                    onPaginationModelChange={(newPageModel) => setPageModel(newPageModel)}
+                    pageSizeOptions={[5, 15, 25, 50, 100]}
+                    pagination rows={domains}></DataGrid>
+            </div>
         </Sentry.ErrorBoundary>
 
         <Box component="form" onSubmit={create}

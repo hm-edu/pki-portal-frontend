@@ -103,7 +103,7 @@ class EabTokens extends React.Component<{ session: AuthProps | null; status: str
     constructor(props: { session: AuthProps | null; status: string }) {
         super(props);
         this.state = {
-            paginationModel: { page: 0, pageSize: 50 } ,
+            paginationModel: { page: 0, pageSize: 50 },
             tokens: [],
             selected: [],
             loading: true,
@@ -165,25 +165,28 @@ class EabTokens extends React.Component<{ session: AuthProps | null; status: str
         }
         return <Box sx={{ display: "flex", flexDirection: "column", height: "100%" }}><Typography variant="h1">Ihre ACME Tokens</Typography>
             <Sentry.ErrorBoundary fallback={<p>{typeof this.state.error === "string" ? this.state.error : "Ein unerwarteter Fehler ist aufgetreten."}</p>}>
-                <DataGrid columns={this.columns}
-                    sx={dataGridStyle}
-                    initialState={{
-                        columns: {
-                            columnVisibilityModel: {
-                                key_bytes: false,
+
+                <div style={{ flex: 1, overflow: "hidden" }}>
+                    <DataGrid columns={this.columns}
+                        sx={dataGridStyle}
+                        initialState={{
+                            columns: {
+                                columnVisibilityModel: {
+                                    key_bytes: false,
+                                },
                             },
-                        },
-                    }}
-                    paginationModel={this.state.paginationModel}
-                    components={{ LoadingOverlay: LinearProgress }}
-                    componentsProps={{ loadingOverlay: { color: "inherit" } }}
-                    loading={this.state.loading}
-                    onRowSelectionModelChange={(event) => { this.setState({ selected: event }); }}
-                    localeText={{ ...deDE.components.MuiDataGrid.defaultProps.localeText }}
-                    rowSelectionModel={this.state.selected}
-                    onPaginationModelChange={(newPaginationModel) => this.setState({ paginationModel: newPaginationModel })}
-                    pageSizeOptions={[5, 15, 25, 50, 100]}
-                    pagination rows={this.state.tokens} />
+                        }}
+                        paginationModel={this.state.paginationModel}
+                        slots={{ loadingOverlay: LinearProgress }}
+                        slotProps={{ loadingOverlay: { color: "inherit" } }}
+                        loading={this.state.loading}
+                        onRowSelectionModelChange={(event) => { this.setState({ selected: event }); }}
+                        localeText={{ ...deDE.components.MuiDataGrid.defaultProps.localeText }}
+                        rowSelectionModel={this.state.selected}
+                        onPaginationModelChange={(newPaginationModel) => this.setState({ paginationModel: newPaginationModel })}
+                        pageSizeOptions={[5, 15, 25, 50, 100]}
+                        pagination rows={this.state.tokens} />
+                </div>
             </Sentry.ErrorBoundary>
             {this.selection()}
             <Box component="form" sx={{ maxWidth: "100%", display: "flex", flexDirection: "column" }} onSubmit={(e: FormEvent<Element>) => {
