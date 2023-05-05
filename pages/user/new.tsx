@@ -121,7 +121,7 @@ export default function SMIMEGenerator() {
                             active++;
                         }
                     }
-                    if (active >= 2) {
+                    if (active >= 5) {
                         setWarning(true);
                     }
                 }
@@ -171,7 +171,7 @@ export default function SMIMEGenerator() {
                 <Box>
                     {warning && <Alert severity="warning">
                         <AlertTitle>Warnung</AlertTitle>
-                        <Typography>Sie haben derzeit 2 aktive Nutzerzertifikate. </Typography>
+                        <Typography>Sie haben derzeit 5 aktive Nutzerzertifikate. </Typography>
                         <Typography>Durch Ausstellung eines neuen Zertifikats wird automatisch das ältere dieser beiden Zertifikate widerrufen. </Typography>
                         <Typography>Das Widerrufen eines Zertifikats kann nicht rückgängig gemacht werden!</Typography>
                         <Typography>Sofern Sie dies nicht möchten widerrufen Sie bitte ein Zertifikat von Hand. </Typography>
