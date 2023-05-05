@@ -269,9 +269,9 @@ export default function SslGenerator() {
             </Box>
             <Alert severity="warning" sx={{ mt: 1 }}>
                 <AlertTitle>Hinweis:</AlertTitle>
-                <Typography>Es zeichnet sich eine weitere Verkürzung der Zertifikatslaufzeiten auf 90 Tage ab! Aus diesem Grund wird, sofern möglich, der Einsatz von ACME dringend empfohlen. Sollten Sie hierzu Fragen haben, wenden Sie sich gerne an die Zentrale IT. </Typography>
-                <Typography>
-                    Weiterführende Informationen zu den Plänen finden sich unter anderem bei <a href="https://www.heise.de/news/Google-moechte-Laufzeiten-fuer-TLS-Zertifikate-verkuerzen-8151372.html">heise.de</a> oder <a href="https://www.chromium.org/Home/chromium-security/root-ca-policy/moving-forward-together/">Google</a>.</Typography>
+                <Typography>Es zeichnet sich eine weitere Verkürzung der Zertifikatslaufzeiten auf 90 Tage ab!
+                    Weiterführende Informationen zu den Plänen finden sich unter anderem bei <a href="https://www.heise.de/news/Google-moechte-Laufzeiten-fuer-TLS-Zertifikate-verkuerzen-8151372.html">heise.de</a> oder <a href="https://www.chromium.org/Home/chromium-security/root-ca-policy/moving-forward-together/">Google</a>. </Typography><Typography><b>Aus diesem Grund wird, sofern möglich, der vorrausschauende Einsatz von ACME bei neuen Servern und Anwendungen dringend empfohlen.</b> </Typography>
+                <Typography>Sollten Sie hierzu oder zu dem Einsatz von ACME Fragen haben, wenden Sie sich gerne an die Zentrale IT.</Typography>
             </Alert>
             <Button type="submit" color="inherit" variant="outlined" disabled={!selected || selected.length == 0 || loadingDomains || generateKey || generatedKey} sx={buttonSx}>Generiere Zertifikat {loadingDomains && (
                 <CircularProgress size={24} sx={{ color: green[500], position: "absolute", top: "50%", left: "50%", marginTop: "-12px", marginLeft: "-12px" }} />
