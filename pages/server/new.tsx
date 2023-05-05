@@ -179,9 +179,18 @@ export default function SslGenerator() {
     }
 
     if (!generatedKey && !generateKey && !error) {
-        body = <Box sx={{ width: "100%", display: "flex", height: "100%", flexDirection: "column", alignItems: "left", alignSelf: "center" }}>
-            <Box sx={{ width: "100%", height: "100%", display: "flex", gap: "10px", flexDirection: "row" }}>
-                <Box sx={{ flex: "auto", minWidth: "49%", maxWidth: "100%", display: "flex", height: "100%", flexDirection: "column" }}>
+        body = <>
+            <Stack direction="row" spacing="10px" sx={{
+                flexGrow: 1,
+                height: "10%",
+                width: "100%",
+            }}>
+
+                <Stack sx={{
+                    flexGrow: 1,
+                    width: "50%",
+                    boxSizing: "border-box",
+                }}>
                     <Typography variant="h6">Ihre Domains:</Typography>
                     <div style={{ flex: 1, overflow: "hidden" }}>
                         <DataGrid columns={columns}
@@ -208,9 +217,12 @@ export default function SslGenerator() {
                             pageSizeOptions={[5, 15, 25, 50, 100]}
                             pagination checkboxSelection rows={domains}></DataGrid>
                     </div>
-
-                </Box>
-                <Box sx={{ flex: "auto", minWidth: "49%", maxWidth: "100%", display: "flex", flexDirection: "column", alignContent: "flex-start", overflow: "auto" }}>
+                </Stack>
+                <Stack sx={{
+                    flexGrow: 1,
+                    width: "50%",
+                    boxSizing: "border-box",
+                }}>
                     <Typography variant="h6">Aktuelle Auswahl:</Typography>
 
                     <FormControl size="small">
@@ -235,9 +247,8 @@ export default function SslGenerator() {
                             return <ListItem sx={{ display: "flex" }} key={domain.id} disablePadding> <ListItemText id={labelId} primary={domain.fqdn} /> </ListItem>;
                         })}
                     </List>
-
-                </Box>
-            </Box>
+                </Stack>
+            </Stack>
             <Box sx={{ width: "100%", display: "flex", gap: "10px", flexDirection: "row" }}>
                 <Box sx={{ flex: "auto", minWidth: "50%", maxWidth: "100%", display: "flex", flexDirection: "column", alignContent: "flex-start", overflow: "auto" }}>
 
@@ -263,7 +274,7 @@ export default function SslGenerator() {
             <Button type="submit" color="inherit" variant="outlined" disabled={!selected || selected.length == 0 || loadingDomains || generateKey || generatedKey} sx={buttonSx}>Generiere Zertifikat {loadingDomains && (
                 <CircularProgress size={24} sx={{ color: green[500], position: "absolute", top: "50%", left: "50%", marginTop: "-12px", marginLeft: "-12px" }} />
             )}</Button>
-        </Box>;
+        </>;
     } else if (error) {
         body = <Box sx={{ minWidth: 0, maxWidth: "100%", maxHeight: "100%", minHeight: 0, display: "flex", gap: "10px", flexDirection: "row" }}>
             <Alert sx={{ width: "100%" }} severity="error">{progress}</Alert>
@@ -281,8 +292,8 @@ export default function SslGenerator() {
     }
 
     /* eslint-disable @typescript-eslint/no-misused-promises */
-    return <Box sx={{ width: "100%", display: "flex", height: "100%", flexDirection: "column", alignItems: "left", alignSelf: "center" }}>
-        <Box component="form" onSubmit={createHandler} sx={{ width: "100%", display: "flex", height: "100%", flexDirection: "column", alignItems: "left", alignSelf: "center" }}>
+    return <Box sx={{ display: "flex", flexDirection: "column", height: "100%" }}>
+        <Box component="form" onSubmit={createHandler} sx={{ display: "flex", flexDirection: "column", height: "100%" }}>
             <Typography variant="h1">Erstellung eines neuen Serverzertifikats</Typography>
             {body}
         </Box>
