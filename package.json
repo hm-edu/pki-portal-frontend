@@ -13,7 +13,7 @@
     "@emotion/cache": "^11.11.0",
     "@emotion/react": "^11.11.0",
     "@emotion/server": "^11.11.0",
-    "@emotion/styled": "^11.10.8",
+    "@emotion/styled": "^11.11.0",
     "@fontsource/fira-mono": "^4.5.10",
     "@fontsource/roboto": "^4.5.8",
     "@mui/icons-material": "^5.11.16",
