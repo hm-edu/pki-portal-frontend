@@ -205,10 +205,10 @@
   resolved "https://registry.yarnpkg.com/@fontsource/fira-mono/-/fira-mono-5.0.1.tgz#f908d88e1f09e4d0eeba1398db6c3c541aa19453"
   integrity sha512-SXd96npOQV9g7pYjUzLcvRIvlK8p6Oo6bsMZS+3uGqH8y8GFXa+EpjVLBA7ee9s2xdM13Ln2mZb2Qi4UcuBXhA==
 
-"@fontsource/roboto@^4.5.8":
-  version "4.5.8"
-  resolved "https://registry.yarnpkg.com/@fontsource/roboto/-/roboto-4.5.8.tgz#56347764786079838faf43f0eeda22dd7328437f"
-  integrity sha512-CnD7zLItIzt86q4Sj3kZUiLcBk1dSk81qcqgMGaZe7SQ1P8hFNxhMl5AZthK1zrDM5m74VVhaOpuMGIL4gagaA==
+"@fontsource/roboto@^5.0.1":
+  version "5.0.1"
+  resolved "https://registry.yarnpkg.com/@fontsource/roboto/-/roboto-5.0.1.tgz#c9d374fc71553d356986b393ec8aace1bf740d58"
+  integrity sha512-pWF64nF35Tfoh2kWgOuJYEFTLkpn+O3/GIR//u1MGD9b1yR+UBwYKXmcNx9CRyNPjMdWjkdN9GKDHhaWZRYbnw==
 
 "@humanwhocodes/config-array@^0.11.8":
   version "0.11.8"
