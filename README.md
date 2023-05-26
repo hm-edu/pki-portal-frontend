@@ -32,7 +32,7 @@ At development and during building a compiled version or a container, the follow
 | AUTH_CLIENT_ID     | The OIDC Client ID                                                                                   | `pki`                     |
 | AUTH_CLIENT_SECRET | The OIDC Client Secret                                                                               | `Random String`           |
 | AUTH_IDP           | The IDP that shal be used for OIDC authentication (Should be the same as during build time)          | `https://sso.example.edu` |
-| AUTH_RESOURCE      | The requested OIDC resource to get OAuth2 working.                                                   | `https://api.example.edu  |
+| AUTH_RESOURCE      | The requested OIDC resource to get OAuth2 working.                                                   | `https://api.example.edu`  |
 | AUTH_SECRET        | The [Next.JS Auth Secret](https://next-auth.js.org/configuration/options#secret) used to encrypt JWT | `Random String            |
 | NEXTAUTH_URL       | The canonical URL of your site (Should be the same as during build time)                             | `https://pki.example.edu` |
 | SENTRY_DSN         | In case of using sentry the sentry DSN to upload error reports                                       |                           |
