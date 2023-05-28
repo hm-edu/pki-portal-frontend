@@ -2,6 +2,9 @@
 
 const { withSentryConfig } = require("@sentry/nextjs");
 
+const fs = require("fs");
+const download = require("download");
+
 const sentryWebpackPluginOptions = {
     // Additional config options for the Sentry Webpack plugin. Keep in mind that
     // the following options are set automatically, and overriding them is not
@@ -20,6 +23,15 @@ const moduleExports = {
     productionBrowserSourceMaps: true,
     output: "standalone",
     webpack: (config, { webpack, isServer }) => {
+        
+        (async () => {
+            if (process.env.LOGO_LARGE) {
+                fs.writeFileSync("./public/logo.png", await download(process.env.LOGO_LARGE));
+            }
+            if (process.env.LOGO_SMALL) {
+                fs.writeFileSync("./public/logo-small.png", await download(process.env.LOGO_SMALL));
+            }
+        })();
         const envs = {};
         Object.keys(process.env).forEach((env) => {
             if (env.startsWith("NEXT_PUBLIC_") && env != "NEXT_PUBLIC_SENTRY_DSN") {

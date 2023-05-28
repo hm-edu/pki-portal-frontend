@@ -19,7 +19,7 @@ import Link from "next/link";
 import { signOut, useSession } from "next-auth/react";
 import dynamic from "next/dynamic";
 import Image from "next/image";
-import logo from "../public/cube.png";
+import logo from "../public/logo-small.png";
 import Container from "@mui/system/Container";
 
 export default function ButtonAppBar() {

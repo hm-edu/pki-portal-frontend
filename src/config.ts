@@ -5,6 +5,8 @@ export class Config {
         process.env.PKI_HOST ?? "https://pki.api.hm.edu";
     static EAB_HOST: string =
         process.env.EAB_HOST ?? "https://eab.api.hm.edu";
+    static ACME_HOST: string =
+        process.env.ACME_HOST ?? "https://acme.hm.edu";
 }
 
 export interface AuthProps {
