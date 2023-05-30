@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
-import { captureException } from "@sentry/nextjs";
 import { NextApiRequest, NextApiResponse } from "next";
 
 async function handler(req: NextApiRequest, res: NextApiResponse) {
@@ -23,8 +22,6 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
         const sentryResponse = await fetch(sentryIngestURL, { method: "POST", body: envelope });
         return res.status(sentryResponse.status).send(sentryResponse.body);
     } catch (e) {
-        console.log(e);
-        captureException(e);
         return res.status(400).json({ status: "invalid request" });
     }
 }

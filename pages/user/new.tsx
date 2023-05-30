@@ -165,11 +165,11 @@ export default function SMIMEGenerator() {
 
                 <Box >
                     <Typography sx={{ paddingBottom: "10px" }}>Bitte vergeben Sie ein individuelles PKCS12 Import-Passwort.</Typography>
-                    <TextField required label="PKCS12 Passwort" sx={{ paddingBottom: "10px" }} type="password" inputRef={p12PasswordRef} fullWidth variant="standard" onChange={validate} />
-                    <TextField required label="PKCS12 Passwort Bestätigung" type="password" fullWidth inputRef={p12PasswordConfirmRef} variant="standard" onChange={validate} />
+                    <TextField required id="pkcs12" label="PKCS12 Passwort" sx={{ paddingBottom: "10px" }} type="password" inputRef={p12PasswordRef} fullWidth variant="standard" onChange={validate} />
+                    <TextField required id="pkcs12validation" label="PKCS12 Passwort Bestätigung" type="password" fullWidth inputRef={p12PasswordConfirmRef} variant="standard" onChange={validate} />
                 </Box>
                 <Box>
-                    {warning && <Alert severity="warning">
+                    {warning && <Alert id="revoke" severity="warning">
                         <AlertTitle>Warnung</AlertTitle>
                         <Typography>Sie haben derzeit 5 aktive Nutzerzertifikate. </Typography>
                         <Typography>Durch Ausstellung eines neuen Zertifikats wird automatisch das ältere dieser beiden Zertifikate widerrufen. </Typography>
@@ -177,12 +177,12 @@ export default function SMIMEGenerator() {
                         <Typography>Sofern Sie dies nicht möchten widerrufen Sie bitte ein Zertifikat von Hand. </Typography>
                     </Alert>}
 
-                    {warning && <FormControlLabel control={<Checkbox color="secondary" onChange={validate} inputRef={revokeRef} required />} label="Ja, ich möchte das ältere aktive Zertifikat automatisch widerrufen." />}
+                    {warning && <FormControlLabel control={<Checkbox color="secondary" onChange={validate} inputRef={revokeRef} required />} label="Ja, ich möchte das älteste aktive Zertifikat automatisch widerrufen." />}
                 </Box>
-                <Button type="submit" variant="outlined" color="inherit" disabled={(loading || success) || (validation != undefined) || p12PasswordRef.current?.value == ""} sx={buttonSx}>Generiere Zertifikat {loading && (
+                <Button id="generate" type="submit" variant="outlined" color="inherit" disabled={(loading || success) || (validation != undefined) || p12PasswordRef.current?.value == ""} sx={buttonSx}>Generiere Zertifikat {loading && (
                     <CircularProgress size={24} sx={{ color: green[500], position: "absolute", top: "50%", left: "50%", marginTop: "-12px", marginLeft: "-12px" }} />
                 )}</Button>
-                {validation && <Alert variant="filled" severity="error">
+                {validation && <Alert variant="filled" id="validation" severity="error">
                     <AlertTitle>Fehler!</AlertTitle>
                     {validation}
                 </Alert>}

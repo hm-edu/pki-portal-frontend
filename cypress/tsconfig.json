@@ -1,0 +1,13 @@
+{
+    "compilerOptions": {
+        "target": "es6",
+        "lib": ["es6", "dom", "esnext"],
+        "types": ["cypress", "@testing-library/cypress", "node"],
+        "module": "ES2020",
+        "baseUrl": ".",
+    },
+    "include": [
+        "**/*.ts",
+        "**/*.tsx",
+    ]
+}

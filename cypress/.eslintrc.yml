@@ -38,38 +38,7 @@ rules:
       maxEOF: 0
   no-multi-spaces: error
 overrides:
-  - files: ["*.ts", "*.tsx"]
-    excludedFiles: [ "*.cy.tsx"]
-    parserOptions:
-      project:
-        - ./tsconfig.json
-    extends:
-      - plugin:@typescript-eslint/recommended
-      - plugin:@typescript-eslint/recommended-requiring-type-checking
-    rules:
-      indent: "off"
-      no-return-await: "off"
-      "@typescript-eslint/indent":
-        - error
-        - 4
-        - SwitchCase: 1
-      "@typescript-eslint/member-delimiter-style": error
-      "@typescript-eslint/object-curly-spacing":
-        - error
-        - always
-      "@typescript-eslint/return-await":
-        - error
-        - always
-      # custom rules to fix code style
-      "@typescript-eslint/require-await": "off"
-      "@typescript-eslint/no-unsafe-assignment": "off"
-  - files: [src/**/*.test.*, test/**/*]
-    env:
-      jest: true
-    rules:
-      "@typescript-eslint/no-non-null-assertion": "off"
-      "@typescript-eslint/unbound-method": "off"
-  - files: [ "**/*.cy.tsx", "**/*.cy.ts" ]
+  - files: [ "**/*.tsx", "**/*.ts" ]
     extends:
       - plugin:cypress/recommended
     rules:

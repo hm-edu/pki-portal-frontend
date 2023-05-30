@@ -25,7 +25,7 @@ const Offset = styled("div")(({ theme }) => {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return theme.mixins.toolbar;
 });
-function MyApp({ Component, pageProps: { ...pageProps }, emotionCache = clientSideEmotionCache }: { pageProps: { session: Session } } & {
+function App({ Component, pageProps: { ...pageProps }, emotionCache = clientSideEmotionCache }: { pageProps: { session: Session } } & {
     Component: NextComponentType<NextPageContext, unknown, Record<string, unknown>>;
     router: Router;
     __N_SSG?: boolean;
@@ -52,4 +52,4 @@ function MyApp({ Component, pageProps: { ...pageProps }, emotionCache = clientSi
     </SessionProvider >;
 }
 
-export default MyApp;
+export default App;
