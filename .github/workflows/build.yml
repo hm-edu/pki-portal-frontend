@@ -75,7 +75,7 @@ jobs:
             SENTRY_RELEASE=${{ github.sha }}
             NEXT_PUBLIC_SENTRY_DSN=${{ secrets.SENTRY_DSN }}
             NEXT_PUBLIC_EAB_HOST=${{ github.ref_name == 'main' && 'https://eab.api.hm.edu' || 'https://eab.api.hmtest.de' }}
-            NEXT_PUBLIC_ACME_HOST: ${{ github.ref_name == 'main' && 'https://acme.hm.edu' || 'https://acme.hmtest.de' }}
+            NEXT_PUBLIC_ACME_HOST=${{ github.ref_name == 'main' && 'https://acme.hm.edu' || 'https://acme.hmtest.de' }}
             NEXT_PUBLIC_PKI_HOST=${{ github.ref_name == 'main' && 'https://pki.api.hm.edu' || 'https://pki.api.hmtest.de' }}
             NEXT_PUBLIC_DOMAIN_HOST=${{ github.ref_name == 'main' && 'https://domain.api.hm.edu' || 'https://domain.api.hmtest.de' }}
             NEXT_PUBLIC_AUTH_IDP=${{ github.ref_name == 'main' && 'https://sso.hm.edu' || 'https://sso-test.hm.edu' }}
