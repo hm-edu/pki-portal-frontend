@@ -1,6 +1,7 @@
 plugins:
   - "@typescript-eslint"
   - testing-library
+  - cypress
 env:
   browser: true
   node: true
@@ -38,6 +39,7 @@ rules:
   no-multi-spaces: error
 overrides:
   - files: ["*.ts", "*.tsx"]
+    excludedFiles: [ "*.cy.tsx"]
     parserOptions:
       project:
         - ./tsconfig.json
@@ -67,3 +69,8 @@ overrides:
     rules:
       "@typescript-eslint/no-non-null-assertion": "off"
       "@typescript-eslint/unbound-method": "off"
+  - files: [ "**/*.cy.tsx", "**/*.cy.ts" ]
+    extends:
+      - plugin:cypress/recommended
+    rules:
+     "testing-library/await-async-utils": "off"

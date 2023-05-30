@@ -45,8 +45,21 @@
         "api/*"
       ],
     },
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ],
+    "types": [
+      "cypress",
+      "node"
+    ]
   },
   "exclude": [
+    "node_modules",
+    "cypress/**/*",
     "api/**/*",
+    "**/*.cy.tsx",
+    "**/*.cy.ts"
   ]
 }
