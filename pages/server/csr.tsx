@@ -4,15 +4,15 @@ import UploadFileIcon from "@mui/icons-material/UploadFile";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import Box from "@mui/system/Box";
-import { fromPEM } from "../../src/csr";
+import { fromPEM } from "@/components/csr";
 import * as asn1js from "asn1js";
 import * as pkijs from "pkijs";
 import { Alert, AlertTitle, CircularProgress, List } from "@mui/material";
-import { SSLApi } from "../../api/pki/api";
-import { Configuration as PKIConfig } from "../../api/pki/configuration";
+import { SSLApi } from "@/api/pki/api";
+import { Configuration as PKIConfig } from "@/api/pki/configuration";
 import FileDownload from "@mui/icons-material/FileDownload";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
-import { Config } from "../../src/config";
+import { Config } from "@/components/config";
 import { green } from "@mui/material/colors";
 import moment from "moment";
 import { AxiosError } from "axios";
@@ -47,7 +47,7 @@ export default function ServerCertificatesCsr() {
         if (session && session.accessToken) {
             setGenerateKey(true);
             const cfg = new PKIConfig({ accessToken: session.accessToken });
-            const api = new SSLApi(cfg, `${Config.PKI_HOST}`);
+            const api = new SSLApi(cfg, `${Config.PkiHost}`);
             api.sslCsrPost({ csr }, { timeout: 600000 }).then((response) => {
                 const element = document.createElement("a");
                 const name = `${moment().format("DD-MM-YYYY_HH-mm-ss")}.pem`;

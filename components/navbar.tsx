@@ -56,10 +56,14 @@ export default function ButtonAppBar() {
         <Link legacyBehavior={true} key="server" href="/server" ><Button key="server" color="inherit">Serverzertifikate</Button></Link>,
         <Link legacyBehavior={true} key="eab" href="/eab" ><Button key="eab" color="inherit" >ACME Tokens</Button></Link>,
         <Link legacyBehavior={true} key="user" href="/user" ><Button key="user" color="inherit" >Nutzerzertifikate</Button></Link>,
-        <Link legacyBehavior={true} passHref target="_blank" key="help" href="https://conwiki.cc.hm.edu/confluence/pages/viewpage.action?pageId=198048309"><a target="_blank" style={{
-            textDecoration: "none",
-            color: "inherit",
-        }}><Button key="user" color="inherit" >Anleitungen</Button></a></Link >,
+        <Link legacyBehavior={true} passHref target="_blank" key="help" href="https://conwiki.cc.hm.edu/confluence/pages/viewpage.action?pageId=198048309">
+            <a target="_blank" style={{
+                textDecoration: "none",
+                color: "inherit",
+            }}>
+                <Button key="guides" color="inherit" >Anleitungen</Button>
+            </a>
+        </Link >,
     ] : [];
 
     return (
@@ -68,17 +72,15 @@ export default function ButtonAppBar() {
                 <Container maxWidth="xl">
                     <Toolbar key="bar" >
                         <Hidden lgDown>
-                            <Image src={logo} height={36} width={36} alt="Logo" />
+                            <Image src={logo} height={36} width={36} alt="Logo"/>
                         </Hidden>
                         <Typography component="div" sx={{ ml: 1, flexGrow: 1 }}>
                             <Link legacyBehavior={true} href="/">
                                 <Button color="inherit">Home</Button>
                             </Link>
                             {buttons}
-
                         </Typography>
                         {userFragment}
-
                     </Toolbar>
                 </Container>
             </Hidden>
@@ -92,8 +94,19 @@ export default function ButtonAppBar() {
                         <Box sx={{ width: 250 }}>
                             <List>
                                 {buttons.map((x) => {
-                                    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-                                    return <Link legacyBehavior={true} key={x.key} href={x.props["href"]} passHref><ListItemButton onClick={() => setDrawer(false)} component="a"><ListItemText primary={(x.props["children"] as JSX.Element).props["children"]} /></ListItemButton></Link>;
+                                    /* eslint-disable @typescript-eslint/no-unsafe-member-access */
+                                    let text = (x.props["children"] as JSX.Element).props["children"];
+                                    if (typeof text !== "string") {
+                                        if (text["props"] != null && text["props"]["children"] != null && typeof text["props"]["children"] === "string") {
+                                            text = text["props"]["children"];
+                                        }
+                                    }
+                                    return <Link legacyBehavior={true} key={x.key} href={x.props["href"]} passHref>
+                                        <ListItemButton onClick={() => setDrawer(false)} component="a">
+                                            <ListItemText primary={text} />
+                                        </ListItemButton>
+                                    </Link>;
+                                    /* eslint-enable @typescript-eslint/no-unsafe-member-access */
                                 })}
                                 <Divider />
                             </List>

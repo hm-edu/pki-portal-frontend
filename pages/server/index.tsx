@@ -10,19 +10,21 @@ import DialogActions from "@mui/material/DialogActions";
 import LinearProgress from "@mui/material/LinearProgress";
 import DeleteIcon from "@mui/icons-material/Delete";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
+import Typography from "@mui/material/Typography";
+import UploadFileIcon from "@mui/icons-material/UploadFile";
 
 import { FormEvent, useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import Moment from "react-moment";
 import * as Sentry from "@sentry/nextjs";
 
-import { PortalApisSslCertificateDetails, SSLApi } from "../../api/pki/api";
-import { Configuration } from "../../api/pki/configuration";
-import { Config } from "../../src/config";
-import { dataGridStyle } from "../../src/theme";
-import Typography from "@mui/material/Typography";
+import { PortalApisSslCertificateDetails, SSLApi } from "@/api/pki/api";
+import { Configuration } from "@/api/pki/configuration";
+import { Config } from "@/components/config";
+import { dataGridStyle } from "@/components/theme";
+
 import { useSession } from "next-auth/react";
-import UploadFileIcon from "@mui/icons-material/UploadFile";
+import Alert from "@mui/material/Alert";
 
 export default function SslCertificates() {
     const [pageModel, setPageModel] = useState<GridPaginationModel>({ page: 0, pageSize: 50 });
@@ -45,7 +47,7 @@ export default function SslCertificates() {
             const cert = certificates.find((cert) => cert.serial === selected.at(0));
             if (cert?.serial) {
                 const cfg = new Configuration({ accessToken: session.accessToken });
-                const api = new SSLApi(cfg, `${Config.PKI_HOST}`);
+                const api = new SSLApi(cfg, `${Config.PkiHost}`);
                 api.sslRevokePost({ serial: cert?.serial, reason: (reason.current?.value as string) }).then(() => {
                     load();
                     setSelected(undefined);
@@ -62,7 +64,7 @@ export default function SslCertificates() {
     function load() {
         if (status == "authenticated") {
             const cfg = new Configuration({ accessToken: session.accessToken });
-            const api = new SSLApi(cfg, `${Config.PKI_HOST}`);
+            const api = new SSLApi(cfg, `${Config.PkiHost}`);
             api.sslGet().then((response) => {
                 if (response.data) {
                     const data = [];
@@ -213,7 +215,7 @@ export default function SslCertificates() {
         }
     };
     return <Box sx={{ display: "flex", flexDirection: "column", height: "100%" }}><Typography variant="h1">Ihre Serverzertifikate</Typography>
-        <Sentry.ErrorBoundary fallback={<p>{typeof error === "string" ? error : "Ein unerwarteter Fehler ist aufgetreten."}</p>}>
+        {(error && <Alert severity="error">{typeof error === "string" ? error : "Ein unerwarteter Fehler ist aufgetreten."}</Alert>) || <>
             <div style={{ flex: 1, overflow: "hidden" }}>
                 <DataGrid columns={columns}
                     paginationModel={pageModel}
@@ -243,7 +245,11 @@ export default function SslCertificates() {
                     pageSizeOptions={[5, 15, 25, 50, 100]}
                     pagination rows={certificates}></DataGrid>
             </div>
-        </Sentry.ErrorBoundary>
+            <Box sx={{ display: "flex", flexDirection: "row", gap: "6px", width: "100%", justifyContent: "space-between" }}>
+                <Link legacyBehavior={true} href="/server/new"><Button variant="contained" id="newServer" disabled={!session} color="success" startIcon={<AddCircleOutlineIcon />} sx={{ mt: 1, width: "80%" }} >Neues Zertifikat mit Assistent erstellen</Button></Link>
+                <Link legacyBehavior={true} href="/server/csr"><Button variant="contained" id="newServerCsr" disabled={!session} color="success" startIcon={<UploadFileIcon />} sx={{ mt: 1, width: "20%" }} >Eigenen CSR verwenden</Button></Link>
+            </Box>
+        </>}
         {selection()}
         <Dialog open={open} onClose={handleClose}>
             <DialogTitle>SSL Zertifikat widerrufen</DialogTitle>
@@ -268,10 +274,6 @@ export default function SslCertificates() {
                 <Button key="revoke" variant="outlined" color="warning" onClick={() => revoke()}>Widerrufen</Button>
             </DialogActions>
         </Dialog>
-        <Box sx={{ display: "flex", flexDirection: "row", gap: "6px", width: "100%", justifyContent: "space-between" }}>
-            <Link legacyBehavior={true} href="/server/new"><Button variant="contained" disabled={!session} color="success" startIcon={<AddCircleOutlineIcon />} sx={{ mt: 1, width: "80%" }} >Neues Zertifikat mit Assistent erstellen</Button></Link>
-            <Link legacyBehavior={true} href="/server/csr"><Button variant="contained" disabled={!session} color="success" startIcon={<UploadFileIcon />} sx={{ mt: 1, width: "20%" }} >Eigenen CSR verwenden</Button></Link>
-        </Box>
 
     </Box>;
 }

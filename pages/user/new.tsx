@@ -13,15 +13,15 @@ import Checkbox from "@mui/material/Checkbox";
 import * as Sentry from "@sentry/nextjs";
 
 import { FormEvent, useCallback, useEffect, useRef, useState } from "react";
-import { SMIMEApi } from "../../api/pki/api";
-import { Configuration } from "../../api/pki/configuration";
-import { Config } from "../../src/config";
-import { modalTheme } from "../../src/theme";
+import { SMIMEApi } from "@/api/pki/api";
+import { Configuration } from "@/api/pki/configuration";
+import { Config } from "@/components/config";
+import { modalTheme } from "@/components/theme";
 import AlertTitle from "@mui/material/AlertTitle";
 import { useSession } from "next-auth/react";
 import unidecode from "unidecode";
 import moment from "moment";
-import { createP12 } from "../../src/pkcs12";
+import { createP12 } from "@/components/pkcs12";
 
 export default function SMIMEGenerator() {
 
@@ -54,7 +54,7 @@ export default function SMIMEGenerator() {
             setSuccess(false);
             setLoading(true);
             setProgress(<Typography id="modal-modal-description" sx={{ mt: "24px" }}>Generiere CSR...</Typography>);
-            const CsrBuilder = (await import("../../src/csr")).CsrBuilder;
+            const CsrBuilder = (await import("@/components/csr")).CsrBuilder;
             const csr = new CsrBuilder();
             csr.build("rsa", undefined, undefined, 3072).then((x) => {
                 setProgress(<Typography id="modal-modal-description" sx={{ mt: "24px" }}>CSR generiert...</Typography>);
@@ -64,7 +64,7 @@ export default function SMIMEGenerator() {
                     const filename = `${unidecode(session.user.name).replace(" ", "_")}_${moment().format("DD-MM-YYYY_HH-mm-ss")}.p12`;
 
                     const cfg = new Configuration({ accessToken: session.accessToken });
-                    const api = new SMIMEApi(cfg, `${Config.PKI_HOST}`);
+                    const api = new SMIMEApi(cfg, `${Config.PkiHost}`);
                     setProgress(<Typography id="modal-modal-description" sx={{ mt: "24px" }}>Signiere CSR...</Typography>);
                     return api.smimeCsrPost({ csr: x.csr }).then((response) => {
                         setProgress(<Typography id="modal-modal-description" sx={{ mt: "24px" }}>Generiere PKCS12...</Typography>);
@@ -112,7 +112,7 @@ export default function SMIMEGenerator() {
             setProgress(<Typography id="modal-modal-description" sx={{ mt: "24px" }}>Bitte warten...</Typography>);
         if (status == "authenticated" && !issuing) {
             const cfg = new Configuration({ accessToken: session.accessToken });
-            const api = new SMIMEApi(cfg, `${Config.PKI_HOST}`);
+            const api = new SMIMEApi(cfg, `${Config.PkiHost}`);
             api.smimeGet().then((response) => {
                 if (response && response != null && response.data != null) {
                     let active = 0;

@@ -12,19 +12,20 @@ import LinearProgress from "@mui/material/LinearProgress";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import { DataGrid, GridColDef, GridPaginationModel, GridRowSelectionModel } from "@mui/x-data-grid";
 import React, { FormEvent, RefObject } from "react";
-import { EABApi, ModelsEAB } from "../../api/eab/api";
-import { Configuration } from "../../api/eab/configuration";
-import { AuthProps, Config } from "../../src/config";
-import { RecommendedConfigurationsComponent } from "../../src/eabConfiguration";
+import { EABApi, ModelsEAB } from "@/api/eab/api";
+import { Configuration } from "@/api/eab/configuration";
+import { AuthProps, Config } from "@/components/config";
+import { RecommendedConfigurationsComponent } from "@/components/eabConfiguration";
 import { deDE } from "@mui/x-data-grid";
-import { dataGridStyle } from "../../src/theme";
+import { dataGridStyle } from "@/components/theme";
 import { TextFieldProps } from "@mui/material/TextField";
 import TextField from "@mui/material/TextField";
-import withSession from "../../src/session";
+import withSession from "@/components/session";
 import LoggedOut from "../logout";
 import * as Sentry from "@sentry/nextjs";
+import Alert from "@mui/material/Alert";
 
-interface EabState { initalized: boolean; paginationModel: GridPaginationModel; tokens: ModelsEAB[]; selected: GridRowSelectionModel; loading: boolean; recommendations: boolean; error: string | boolean | undefined }
+interface EabState { initialized: boolean; paginationModel: GridPaginationModel; tokens: ModelsEAB[]; selected: GridRowSelectionModel; loading: boolean; recommendations: boolean; error: string | boolean | undefined }
 
 class EabTokens extends React.Component<{ session: AuthProps | null; status: string }, EabState> {
 
@@ -39,7 +40,7 @@ class EabTokens extends React.Component<{ session: AuthProps | null; status: str
 
     private removeEAB(id: string) {
         const cfg = new Configuration({ accessToken: this.props.session?.accessToken });
-        const api = new EABApi(cfg, `${Config.EAB_HOST}`);
+        const api = new EABApi(cfg, `${Config.EabHost}`);
         api.eabIdDelete(id).then(() => {
             this.loadTokens();
         }).catch((error) => {
@@ -49,7 +50,7 @@ class EabTokens extends React.Component<{ session: AuthProps | null; status: str
 
     private loadTokens() {
         const cfg = new Configuration({ accessToken: this.props.session?.accessToken });
-        const api = new EABApi(cfg, `${Config.EAB_HOST}`);
+        const api = new EABApi(cfg, `${Config.EabHost}`);
         api.eabGet().then((response) => {
             this.setState({ tokens: (response.data), loading: false });
         }).catch((error) => {
@@ -60,7 +61,7 @@ class EabTokens extends React.Component<{ session: AuthProps | null; status: str
 
     private createEABToken() {
         const cfg = new Configuration({ accessToken: this.props.session?.accessToken });
-        const api = new EABApi(cfg, `${Config.EAB_HOST}`);
+        const api = new EABApi(cfg, `${Config.EabHost}`);
         // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-non-null-assertion
         api.eabPost({ comment: (this.newComment.current!.value as string) }).then(() => {
             this.loadTokens();
@@ -109,7 +110,7 @@ class EabTokens extends React.Component<{ session: AuthProps | null; status: str
             loading: true,
             recommendations: false,
             error: undefined,
-            initalized: false,
+            initialized: false,
         };
         this.newComment = React.createRef<TextFieldProps>();
     }
@@ -164,8 +165,7 @@ class EabTokens extends React.Component<{ session: AuthProps | null; status: str
             this.setState({ error: "Bitte melden Sie sich an!", loading: false });
         }
         return <Box sx={{ display: "flex", flexDirection: "column", height: "100%" }}><Typography variant="h1">Ihre ACME Tokens</Typography>
-            <Sentry.ErrorBoundary fallback={<p>{typeof this.state.error === "string" ? this.state.error : "Ein unerwarteter Fehler ist aufgetreten."}</p>}>
-
+            {(this.state.error && <Alert severity="error">{typeof this.state.error === "string" ? this.state.error : "Ein unerwarteter Fehler ist aufgetreten."}</Alert>) || <>
                 <div style={{ flex: 1, overflow: "hidden" }}>
                     <DataGrid columns={this.columns}
                         sx={dataGridStyle}
@@ -187,19 +187,19 @@ class EabTokens extends React.Component<{ session: AuthProps | null; status: str
                         pageSizeOptions={[5, 15, 25, 50, 100]}
                         pagination rows={this.state.tokens} />
                 </div>
-            </Sentry.ErrorBoundary>
-            {this.selection()}
-            <Box component="form" sx={{ maxWidth: "100%", display: "flex", flexDirection: "column" }} onSubmit={(e: FormEvent<Element>) => {
-                e.preventDefault();
-                this.createEABToken();
-            }}>
-                <TextField
-                    inputProps={{ pattern: "[a-zA-Z0-9-_.: üäöÄÖÜß]*" }}
-                    label="Optionaler Kommentar"
-                    inputRef={this.newComment}
-                    variant="standard" />
-                <Button type="submit" variant="contained" disabled={!this.props.session} color="success" startIcon={<AddCircleOutlineIcon />} sx={{ mt: 1 }} >Erstelle neuen Token</Button>
-            </Box>
+                {this.selection()}
+                <Box component="form" sx={{ maxWidth: "100%", display: "flex", flexDirection: "column" }} onSubmit={(e: FormEvent<Element>) => {
+                    e.preventDefault();
+                    this.createEABToken();
+                }}>
+                    <TextField
+                        inputProps={{ pattern: "[a-zA-Z0-9-_.: üäöÄÖÜß]*" }}
+                        label="Optionaler Kommentar"
+                        inputRef={this.newComment}
+                        variant="standard" />
+                    <Button type="submit" id="new" variant="contained" disabled={!this.props.session} color="success" startIcon={<AddCircleOutlineIcon />} sx={{ mt: 1 }} >Erstelle neuen Token</Button>
+                </Box>
+            </>}
         </Box>;
     }
 }

@@ -10,15 +10,15 @@ import { SessionProvider } from "next-auth/react";
 import CssBaseline from "@mui/material/CssBaseline";
 import { ThemeProvider } from "@mui/material";
 import Container from "@mui/material/Container";
-import ButtonAppBar from "../src/navbar";
-import { createEmotionCache, theme } from "../src/theme";
+import ButtonAppBar from "@/components/navbar";
+import { createEmotionCache, theme } from "@/components/theme";
 import { styled } from "@mui/material/styles";
 import { Session } from "next-auth";
 import { NextComponentType, NextPageContext } from "next";
 import { Router } from "next/router";
 import Head from "next/head";
 import { CacheProvider, EmotionCache } from "@emotion/react";
-import AutoLogout from "../src/autoLogout";
+import AutoLogout from "@/components/autoLogout";
 
 const clientSideEmotionCache = createEmotionCache();
 const Offset = styled("div")(({ theme }) => {

@@ -1,6 +1,6 @@
 import Document, { Html, Main } from "next/document";
 import createEmotionServer from "@emotion/server/create-instance";
-import { createEmotionCache, theme } from "../src/theme";
+import { createEmotionCache, theme } from "@/components/theme";
 import {
     getCspInitialProps,
     provideComponents,

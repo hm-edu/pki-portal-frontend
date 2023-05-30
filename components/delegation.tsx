@@ -30,7 +30,7 @@ export default function Delegation(props: { delegationDomain: ModelDomain; onClo
 
     function removeDelegation(id: number, delegation: number, setDomain: (domains: ModelDomain) => void, setError: (error: boolean) => void) {
         const cfg = new Configuration({ accessToken: session?.accessToken });
-        const api = new DomainsApi(cfg, `${Config.DOMAIN_HOST}`);
+        const api = new DomainsApi(cfg, `${Config.DomainHost}`);
         api.domainsIdDelegationDelegationDelete(id, delegation).then((data) => {
             setDomain(data.data);
         }).catch(() => {
@@ -39,7 +39,7 @@ export default function Delegation(props: { delegationDomain: ModelDomain; onClo
     }
     function addDelegation(id: number, user: string, setDomain: (domains: ModelDomain) => void, setError: (error: boolean) => void) {
         const cfg = new Configuration({ accessToken: session?.accessToken });
-        const api = new DomainsApi(cfg, `${Config.DOMAIN_HOST}`);
+        const api = new DomainsApi(cfg, `${Config.DomainHost}`);
         const req = { "user": user };
         api.domainsIdDelegationPost(id, req).then((data) => {
             setDomain(data.data);

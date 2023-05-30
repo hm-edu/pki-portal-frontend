@@ -17,14 +17,14 @@ import Alert from "@mui/material/Alert";
 import * as Sentry from "@sentry/nextjs";
 
 import React, { FormEvent, useEffect, useState, useRef, FormEventHandler } from "react";
-import { DomainsApi, ModelDomain } from "../../api/domains/api";
-import { Configuration } from "../../api/domains/configuration";
-import { SSLApi } from "../../api/pki/api";
-import { Configuration as PKIConfig } from "../../api/pki/configuration";
-import { Config } from "../../src/config";
+import { DomainsApi, ModelDomain } from "@/api/domains/api";
+import { Configuration } from "@/api/domains/configuration";
+import { SSLApi } from "@/api/pki/api";
+import { Configuration as PKIConfig } from "@/api/pki/configuration";
+import { Config } from "@/components/config";
 import { Buffer } from "buffer";
-import { KeyPair } from "../../src/keypair";
-import { dataGridStyle, modalTheme } from "../../src/theme";
+import { KeyPair } from "@/components/keypair";
+import { dataGridStyle, modalTheme } from "@/components/theme";
 import { useSession } from "next-auth/react";
 import moment from "moment";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
@@ -32,11 +32,11 @@ import InputLabel from "@mui/material/InputLabel";
 import FormControl from "@mui/material/FormControl";
 import MenuItem from "@mui/material/MenuItem";
 import styled from "@emotion/styled";
-import { createP12 } from "../../src/pkcs12";
+import { createP12 } from "@/components/pkcs12";
 import TextField, { TextFieldProps } from "@mui/material/TextField";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
-import { QuickSearchToolbar } from "../../src/toolbar";
+import { QuickSearchToolbar } from "@/components/toolbar";
 import { AlertTitle } from "@mui/material";
 const CustomSelect = styled(Select<string>)(() => ({
     "&.MuiOutlinedInput-root": {
@@ -129,7 +129,7 @@ export default function SslGenerator() {
         if (status == "authenticated" && !generateKey && !generatedKey) {
             setProgress(<Typography>Bitte warten...</Typography>);
             const cfg = new Configuration({ accessToken: session.accessToken });
-            const api = new DomainsApi(cfg, `${Config.DOMAIN_HOST}`);
+            const api = new DomainsApi(cfg, `${Config.DomainHost}`);
             api.domainsGet().then((response) => {
                 setError(false);
                 setDomains(response.data.filter(x => x.approved));
@@ -317,7 +317,7 @@ export default function SslGenerator() {
     async function create() {
         setProgress(<Typography>Erstelle privaten Schüssel</Typography>);
         if (!loadingDomains && selected && session?.accessToken) {
-            const CsrBuilder = (await import("../../src/csr")).CsrBuilder;
+            const CsrBuilder = (await import("@/components/csr")).CsrBuilder;
             const csr = new CsrBuilder();
             const type = switchRef.current?.checked ? "ecdsa" : "rsa";
             const password = p12PasswordRef.current?.value as string;
@@ -326,7 +326,7 @@ export default function SslGenerator() {
                 setGenerateKey(true);
                 setProgress(<><Typography>Signiere CSR...</Typography><Typography>(Dieser Schritt kann bis zu 5 Minuten dauern!)</Typography></>);
                 const cfg = new PKIConfig({ accessToken: session.accessToken });
-                const api = new SSLApi(cfg, `${Config.PKI_HOST}`);
+                const api = new SSLApi(cfg, `${Config.PkiHost}`);
                 api.sslCsrPost({ csr: result.csr }, { timeout: 600000 }).then(async x => { return { public: x.data, pkcs12: pkcs12 ? await createP12(result.privateKey, [x.data], password, type) : undefined }; }).then((response) => {
                     const element = document.createElement("a");
                     element.setAttribute("href", "data:application/x-pem-file;base64," + Buffer.from(response.public).toString("base64"));

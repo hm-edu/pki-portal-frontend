@@ -18,15 +18,15 @@ import { deDE } from "@mui/x-data-grid";
 import * as Sentry from "@sentry/nextjs";
 
 import { FormEvent, useEffect, useRef, useState } from "react";
-import { DomainsApi } from "../../api/domains/api";
-import { ModelDomain } from "../../api/domains/api";
-import { Configuration } from "../../api/domains/configuration";
-import { Config } from "../../src/config";
-import Delegation from "../../src/delegation";
-import { dataGridStyle } from "../../src/theme";
+import { DomainsApi } from "@/api/domains/api";
+import { ModelDomain } from "@/api/domains/api";
+import { Configuration } from "@/api/domains/configuration";
+import { Config } from "@/components/config";
+import Delegation from "@/components/delegation";
+import { dataGridStyle } from "@/components/theme";
 import Typography from "@mui/material/Typography";
 import { useSession } from "next-auth/react";
-import { QuickSearchToolbar } from "../../src/toolbar";
+import { QuickSearchToolbar } from "@/components/toolbar";
 
 export default function Domains() {
     const [pageModel, setPageModel] = useState<GridPaginationModel>({ page: 0, pageSize: 50 });
@@ -71,7 +71,7 @@ export default function Domains() {
         if (session && transferDomain && transferDomain.id && target.current) {
 
             const cfg = new Configuration({ accessToken: session?.accessToken });
-            const api = new DomainsApi(cfg, `${Config.DOMAIN_HOST}`);
+            const api = new DomainsApi(cfg, `${Config.DomainHost}`);
             api.domainsIdTransferPost(transferDomain?.id, { owner: target.current?.value as string }).then(() => {
                 loadDomains(setDomains, setError); setTransferDomain(undefined);
             }).catch((error) => {
@@ -85,7 +85,7 @@ export default function Domains() {
     function removeDomain(id: number, setDomains: (domains: ModelDomain[]) => void, setError: (error: boolean) => void) {
         return new Promise(function (resolve, reject) {
             const cfg = new Configuration({ accessToken: session?.accessToken });
-            const api = new DomainsApi(cfg, `${Config.DOMAIN_HOST}`);
+            const api = new DomainsApi(cfg, `${Config.DomainHost}`);
             api.domainsIdDelete(id).then(() => {
                 loadDomains(setDomains, setError);
                 resolve(undefined);
@@ -100,7 +100,7 @@ export default function Domains() {
 
     function approveDomain(id: number, setDomains: (domains: ModelDomain[]) => void, setError: (error: boolean) => void) {
         const cfg = new Configuration({ accessToken: session?.accessToken });
-        const api = new DomainsApi(cfg, `${Config.DOMAIN_HOST}`);
+        const api = new DomainsApi(cfg, `${Config.DomainHost}`);
         api.domainsIdApprovePost(id).then(() => {
             loadDomains(setDomains, setError);
         }).catch((error) => {
@@ -111,7 +111,7 @@ export default function Domains() {
 
     function loadDomains(setDomains: (domains: ModelDomain[]) => void, setError: (error: boolean) => void) {
         const cfg = new Configuration({ accessToken: session?.accessToken });
-        const api = new DomainsApi(cfg, `${Config.DOMAIN_HOST}`);
+        const api = new DomainsApi(cfg, `${Config.DomainHost}`);
         api.domainsGet().then((response) => {
             setDomains(response.data);
         }).catch((error) => {
@@ -123,7 +123,7 @@ export default function Domains() {
     function createDomain(domain: string, setDomains: (domains: ModelDomain[]) => void, setError: (error: boolean) => void): Promise<boolean> {
         return new Promise(function (resolve, reject) {
             const cfg = new Configuration({ accessToken: session?.accessToken });
-            const api = new DomainsApi(cfg, `${Config.DOMAIN_HOST}`);
+            const api = new DomainsApi(cfg, `${Config.DomainHost}`);
             api.domainsPost({ fqdn: domain }).then(() => {
                 loadDomains(setDomains, setError);
                 resolve(true);
@@ -248,8 +248,7 @@ export default function Domains() {
         </Dialog >;
     }
     return <Box sx={{ display: "flex", flexDirection: "column", height: "100%" }}><Typography variant="h1">Ihre Hosts</Typography>
-        <Sentry.ErrorBoundary fallback={<p>{typeof error === "string" ? error : "Ein unerwarteter Fehler ist aufgetreten."}</p>}>
-
+        {(error && <Alert severity="error">{typeof error === "string" ? error : "Ein unerwarteter Fehler ist aufgetreten."}</Alert>) || <>
             <div style={{ flex: 1, overflow: "hidden" }}>
                 <DataGrid
                     initialState={{
@@ -273,19 +272,19 @@ export default function Domains() {
                     pageSizeOptions={[5, 15, 25, 50, 100]}
                     pagination rows={domains}></DataGrid>
             </div>
-        </Sentry.ErrorBoundary>
 
-        <Box component="form" onSubmit={create}
-            sx={{
-                display: "flex",
-                flexDirection: "column",
-            }}>
-            <TextField required
-                label="Neuer Host"
-                inputRef={newDomain}
-                variant="standard" />
-            <Button type="submit" variant="contained" disabled={!session} color="success" startIcon={<AddCircleOutlineIcon />} sx={{ mt: 1 }} >Erstelle Host</Button>
-        </Box>
+            <Box component="form" onSubmit={create}
+                sx={{
+                    display: "flex",
+                    flexDirection: "column",
+                }}>
+                <TextField required
+                    label="Neuer Host"
+                    inputRef={newDomain}
+                    variant="standard" />
+                <Button type="submit" id="new" variant="contained" disabled={!session} color="success" startIcon={<AddCircleOutlineIcon />} sx={{ mt: 1 }} >Erstelle Host</Button>
+            </Box>
+        </>}
         {deleteDialog}
         {transferDialog}
         {delegationModal}

@@ -13,15 +13,16 @@ import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import { DataGrid, deDE, GridColDef, GridPaginationModel } from "@mui/x-data-grid";
 import { useEffect, useRef, useState } from "react";
 import * as Sentry from "@sentry/nextjs";
-import { PortalApisListSmimeResponseCertificateDetails, SMIMEApi } from "../../api/pki/api";
-import { Configuration } from "../../api/pki/configuration";
-import { Config } from "../../src/config";
-import { dataGridStyle } from "../../src/theme";
+import { PortalApisListSmimeResponseCertificateDetails, SMIMEApi } from "@/api/pki/api";
+import { Configuration } from "@/api/pki/configuration";
+import { Config } from "@/components/config";
+import { dataGridStyle } from "@/components/theme";
 import Link from "next/link";
 import CircularProgress from "@mui/material/CircularProgress";
 import Typography from "@mui/material/Typography";
 import { useSession } from "next-auth/react";
 import { green } from "@mui/material/colors";
+import Alert from "@mui/material/Alert";
 
 export default SmimeCertificates;
 
@@ -41,7 +42,7 @@ export function SmimeCertificates() {
         if (session) {
             if (item && item.serial) {
                 const cfg = new Configuration({ accessToken: session.accessToken });
-                const api = new SMIMEApi(cfg, `${Config.PKI_HOST}`);
+                const api = new SMIMEApi(cfg, `${Config.PkiHost}`);
                 setRevoking(true);
                 api.smimeRevokePost({ serial: item.serial, reason: (reason.current?.value as string) }).then(() => {
                     load();
@@ -59,7 +60,7 @@ export function SmimeCertificates() {
     function load() {
         if (status == "authenticated") {
             const cfg = new Configuration({ accessToken: session.accessToken });
-            const api = new SMIMEApi(cfg, `${Config.PKI_HOST}`);
+            const api = new SMIMEApi(cfg, `${Config.PkiHost}`);
             api.smimeGet().then((response) => {
                 if (response.data) {
                     const data = [];
@@ -78,7 +79,7 @@ export function SmimeCertificates() {
             }).catch((error) => {
                 Sentry.captureException(error);
                 setLoading(false);
-                setError("Es ist ein unbekannter Fehler aufgetreten.");
+                setError(true);
             });
         } else if (status == "unauthenticated") {
             setLoading(false);
@@ -139,7 +140,7 @@ export function SmimeCertificates() {
     ];
 
     return <Box sx={{ display: "flex", flexDirection: "column", height: "100%" }}><Typography variant="h1">Ihre Nutzerzertifikate</Typography>
-        <Sentry.ErrorBoundary fallback={<p>{typeof error === "string" ? error : "Ein unerwarteter Fehler ist aufgetreten."}</p>}>
+        {(error && <Alert severity="error">{typeof error === "string" ? error : "Ein unerwarteter Fehler ist aufgetreten."}</Alert>) || <>
             <div style={{ flex: 1, overflow: "hidden" }}>
                 <DataGrid columns={columns}
                     sx={dataGridStyle}
@@ -161,7 +162,8 @@ export function SmimeCertificates() {
                     pageSizeOptions={[5, 15, 25, 50, 100]}
                     pagination rows={certificates}></DataGrid>
             </div>
-        </Sentry.ErrorBoundary>
+            <Link legacyBehavior={true} href="/user/new"><Button id="new" variant="contained" disabled={!session} color="success" startIcon={<AddCircleOutlineIcon />} sx={{ mt: 1, width: "100%" }}>Neues Zertifikat beziehen</Button></Link>
+        </>}
         <Dialog open={open} onClose={handleClose}>
             <DialogTitle>Nutzerzertifikat widerrufen</DialogTitle>
             <DialogContent>
@@ -185,6 +187,5 @@ export function SmimeCertificates() {
                 <Button key="revoke" color="warning" variant="outlined" disabled={revoking} onClick={() => revoke()}>Widerrufen {revoking && <CircularProgress size={24} sx={{ color: green[500], position: "absolute", top: "50%", left: "50%", marginTop: "-12px", marginLeft: "-12px" }} />} </Button>
             </DialogActions>
         </Dialog>
-        <Link legacyBehavior={true} href="/user/new"><Button variant="contained" disabled={!session} color="success" startIcon={<AddCircleOutlineIcon />} sx={{ mt: 1, width: "100%" }}>Neues Zertifikat beziehen</Button></Link>
     </Box>;
 }

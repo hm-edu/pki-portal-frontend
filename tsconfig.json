@@ -32,7 +32,19 @@
     "jsx": "preserve",
     "allowJs": true,
     "noEmit": true,
-    "resolveJsonModule": true
+    "resolveJsonModule": true,
+    "baseUrl": ".",
+    "paths": {
+      "@/components/*": [
+        "components/*"
+      ],
+      "@/pages/*": [
+        "pages/*"
+      ],
+      "@/api/*": [
+        "api/*"
+      ],
+    },
   },
   "exclude": [
     "api/**/*",
