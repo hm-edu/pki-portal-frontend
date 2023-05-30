@@ -21,7 +21,8 @@ module.exports = (phase, { defaultConfig }) => {
         poweredByHeader: false,
         reactStrictMode: true,
         swcMinify: false,
-        productionBrowserSourceMaps: true,        
+        productionBrowserSourceMaps: true, 
+        output: "standalone",
         compiler: {
             emotion: true,
         },
