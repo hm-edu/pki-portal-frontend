@@ -1207,10 +1207,10 @@
   resolved "https://registry.npmjs.org/@fontsource/fira-mono/-/fira-mono-5.0.1.tgz"
   integrity sha512-SXd96npOQV9g7pYjUzLcvRIvlK8p6Oo6bsMZS+3uGqH8y8GFXa+EpjVLBA7ee9s2xdM13Ln2mZb2Qi4UcuBXhA==
 
-"@fontsource/roboto@^5.0.1":
-  version "5.0.1"
-  resolved "https://registry.npmjs.org/@fontsource/roboto/-/roboto-5.0.1.tgz"
-  integrity sha512-pWF64nF35Tfoh2kWgOuJYEFTLkpn+O3/GIR//u1MGD9b1yR+UBwYKXmcNx9CRyNPjMdWjkdN9GKDHhaWZRYbnw==
+"@fontsource/roboto@^5.0.2":
+  version "5.0.2"
+  resolved "https://registry.yarnpkg.com/@fontsource/roboto/-/roboto-5.0.2.tgz#06f10be117be622e6c720a1c6579b00475420bcd"
+  integrity sha512-SLw0o3kWwJ53/Ogyk8GGwSaULNX6Hogs+GsVempDdqpX8wm5hKBLYgUkdUPk+NogiViPp1x++OnkuLA+fAd9Kg==
 
 "@hapi/hoek@^9.0.0":
   version "9.3.0"
