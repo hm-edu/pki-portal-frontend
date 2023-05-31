@@ -42,6 +42,7 @@ RUN --mount=type=secret,id=SENTRY_AUTH_TOKEN \
   --mount=type=secret,id=SENTRY_RELEASE \ 
   --mount=type=secret,id=SENTRY_ENVIRONMENT \
   --mount=type=secret,id=NEXT_PUBLIC_SENTRY_DSN \  
+  --mount=type=secret,id=NEXT_PUBLIC_ORGANIZATION_NAME \
   --mount=type=secret,id=NEXT_PUBLIC_EAB_HOST \  
   --mount=type=secret,id=NEXT_PUBLIC_ACME_HOST \
   --mount=type=secret,id=NEXT_PUBLIC_PKI_HOST \
@@ -53,6 +54,7 @@ RUN --mount=type=secret,id=SENTRY_AUTH_TOKEN \
     export SENTRY_RELEASE=$(cat /run/secrets/SENTRY_RELEASE) && \
     export SENTRY_ENVIRONMENT=$(cat /run/secrets/SENTRY_ENVIRONMENT) && \
     export NEXT_PUBLIC_SENTRY_DSN=$(cat /run/secrets/NEXT_PUBLIC_SENTRY_DSN) && \ 
+    export NEXT_PUBLIC_ORGANIZATION_NAME=$(cat /run/secrets/NEXT_PUBLIC_ORGANIZATION_NAME) && \ 
     export NEXT_PUBLIC_EAB_HOST=$(cat /run/secrets/NEXT_PUBLIC_EAB_HOST) && \
     export NEXT_PUBLIC_ACME_HOST=$(cat /run/secrets/NEXT_PUBLIC_ACME_HOST) && \
     export NEXT_PUBLIC_PKI_HOST=$(cat /run/secrets/NEXT_PUBLIC_PKI_HOST) && \
