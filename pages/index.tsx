@@ -2,6 +2,7 @@ import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import Image from "next/image";
 import logo from "../public/logo.png";
+import { Config } from "@/components/config";
 
 export default function Home() {
     return (
@@ -19,7 +20,7 @@ export default function Home() {
                 alt="Logo"
             />
             <Typography variant="h1" sx={{ textAlign: "center" }}>
-                PKI-Portal der Hochschule München
+                PKI-Portal der { Config.OrganizationName }
             </Typography>
         </Box>
     );

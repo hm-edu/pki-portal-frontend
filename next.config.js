@@ -40,6 +40,9 @@ module.exports = (phase, { defaultConfig }) => {
                 if (process.env.LOGO_SMALL) {
                     fs.writeFileSync("./public/logo-small.png", await download(process.env.LOGO_SMALL));
                 }
+                if (process.env.FAVICON) {
+                    fs.writeFileSync("./public/favicon.ico", await download(process.env.FAVICON));
+                }
             })();
             const envs = {};
             Object.keys(process.env).forEach((env) => {

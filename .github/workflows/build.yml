@@ -27,6 +27,7 @@ jobs:
           NEXT_PUBLIC_PKI_HOST: ${{ github.ref_name == 'main' && 'https://pki.api.hm.edu' || 'https://pki.api.hmtest.de' }}
           NEXT_PUBLIC_DOMAIN_HOST: ${{ github.ref_name == 'main' && 'https://domain.api.hm.edu' || 'https://domain.api.hmtest.de' }}
           NEXT_PUBLIC_AUTH_IDP: ${{ github.ref_name == 'main' && 'https://sso.hm.edu' || 'https://sso-test.hm.edu' }}
+          NEXT_PUBLIC_ORANIZATION_NAME: ${{ github.ref_name == 'main' && 'Hochschule München' || 'Hochschule München' }}
   
   e2e:
     runs-on: ubuntu-22.04
@@ -95,6 +96,7 @@ jobs:
             NEXT_PUBLIC_PKI_HOST=${{ github.ref_name == 'main' && 'https://pki.api.hm.edu' || 'https://pki.api.hmtest.de' }}
             NEXT_PUBLIC_DOMAIN_HOST=${{ github.ref_name == 'main' && 'https://domain.api.hm.edu' || 'https://domain.api.hmtest.de' }}
             NEXT_PUBLIC_AUTH_IDP=${{ github.ref_name == 'main' && 'https://sso.hm.edu' || 'https://sso-test.hm.edu' }}
+            NEXT_PUBLIC_ORANIZATION_NAME=${{ github.ref_name == 'main' && 'https://sso.hm.edu' || 'https://sso-test.hm.edu' }}
 
   dependabot:
     runs-on: ubuntu-latest
