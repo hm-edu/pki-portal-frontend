@@ -19,6 +19,7 @@ import { Router } from "next/router";
 import Head from "next/head";
 import { CacheProvider, EmotionCache } from "@emotion/react";
 import AutoLogout from "@/components/autoLogout";
+import { Config } from "@/components/config";
 
 const clientSideEmotionCache = createEmotionCache();
 const Offset = styled("div")(({ theme }) => {
@@ -35,7 +36,7 @@ function App({ Component, pageProps: { ...pageProps }, emotionCache = clientSide
 
     return <SessionProvider session={pageProps.session} refetchInterval={60} >
         <Head>
-            <title>HM PKI-Portal</title>
+            <title>{Config.OrganizationName} PKI-Portal</title>
         </Head>
         <CacheProvider value={emotionCache}>
             <ThemeProvider theme={theme}>
