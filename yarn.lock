@@ -1188,10 +1188,10 @@
   resolved "https://registry.npmjs.org/@eslint/js/-/js-8.41.0.tgz"
   integrity sha512-LxcyMGxwmTh2lY9FwHPGWOHmYFCZvbrFCBZL4FzSSsxsRPuhrYUg/49/0KDfW8tnIEaEHtfmn6+NPN+1DqaNmA==
 
-"@fontsource/fira-mono@^5.0.1":
-  version "5.0.1"
-  resolved "https://registry.npmjs.org/@fontsource/fira-mono/-/fira-mono-5.0.1.tgz"
-  integrity sha512-SXd96npOQV9g7pYjUzLcvRIvlK8p6Oo6bsMZS+3uGqH8y8GFXa+EpjVLBA7ee9s2xdM13Ln2mZb2Qi4UcuBXhA==
+"@fontsource/fira-mono@^5.0.2":
+  version "5.0.2"
+  resolved "https://registry.yarnpkg.com/@fontsource/fira-mono/-/fira-mono-5.0.2.tgz#8edd29c4fabb27ee255b1c6a3b42e2808354f868"
+  integrity sha512-Ip/jwYe54KA57tCHScCVcSPTpSZXpUorUrelioICTy1DQMckZVc8MAtWSmajuVXuLIOn66hEy2yJ2iyRXGmjVQ==
 
 "@fontsource/roboto@^5.0.2":
   version "5.0.2"
