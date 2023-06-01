@@ -4,6 +4,7 @@ export class Config {
     static EabHost: string = process.env.EAB_HOST ?? process.env.NEXT_PUBLIC_EAB_HOST ?? "https://eab.api.example.edu";
     static AcmeHost: string = process.env.ACME_HOST ?? process.env.NEXT_PUBLIC_ACME_HOST ?? "https://acme.example.edu";
     static OrganizationName: string = process.env.ORGANIZATION_NAME ?? process.env.NEXT_PUBLIC_ORGANIZATION_NAME ?? "Example University";
+    static RefetchInBackground: boolean = (process.env.REFETCH_IN_BACKGROUND ?? process.env.NEXT_PUBLIC_REFETCH_IN_BACKGROUND ?? "false") === "true";  
 }
 
 export interface AuthProps {

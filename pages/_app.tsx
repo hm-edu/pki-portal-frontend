@@ -34,9 +34,9 @@ function App({ Component, pageProps: { ...pageProps }, emotionCache = clientSide
     __N_RSC?: boolean;
 } & { emotionCache: EmotionCache }) {
 
-    return <SessionProvider session={pageProps.session} refetchInterval={60} >
+    return <SessionProvider session={pageProps.session} refetchInBackground={Config.RefetchInBackground} refetchInterval={60} >
         <Head>
-            <title>{Config.OrganizationName} PKI-Portal</title>
+            <title>{Config.OrganizationName + " PKI-Portal"}</title>
         </Head>
         <CacheProvider value={emotionCache}>
             <ThemeProvider theme={theme}>
