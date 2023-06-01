@@ -47,7 +47,7 @@
   "devDependencies": {
     "@babel/core": "^7.22.1",
     "@babel/preset-env": "^7.22.4",
-    "@cypress/code-coverage": "^3.10.6",
+    "@cypress/code-coverage": "^3.10.7",
     "@swc/plugin-transform-imports": "^1.5.67",
     "@testing-library/cypress": "^9.0.0",
     "@testing-library/react": "^14.0.0",

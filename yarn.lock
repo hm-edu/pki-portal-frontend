@@ -983,10 +983,10 @@
   resolved "https://registry.npmjs.org/@colors/colors/-/colors-1.5.0.tgz"
   integrity sha512-ooWCrlZP11i8GImSjTHYHLkvFDP48nS4+204nGb1RiX/WXYHmJA2III9/e2DWVabCESdW7hBAEzHRqUn9OUVvQ==
 
-"@cypress/code-coverage@^3.10.6":
-  version "3.10.6"
-  resolved "https://registry.npmjs.org/@cypress/code-coverage/-/code-coverage-3.10.6.tgz"
-  integrity sha512-ewsNEqEFmirSGeWraOrrn/S64/jCsoA1tVwQ6ySFO+gUhOsaWveoPy8oeX5jzKS2HpqAihuuO3kXSEvVQoPTkw==
+"@cypress/code-coverage@^3.10.7":
+  version "3.10.7"
+  resolved "https://registry.yarnpkg.com/@cypress/code-coverage/-/code-coverage-3.10.7.tgz#7c281c5c058988e414190fd92871b62f9f6e78bd"
+  integrity sha512-kQFB8GemDAAk6JBINsR9MLEgCw2AKb3FcdHQjIJ3KV4ZER6ZF0NGdO8SRj5oTVp28oqfOab4cgoBdecRiOE3qA==
   dependencies:
     "@cypress/webpack-preprocessor" "^5.11.0"
     chalk "4.1.2"
