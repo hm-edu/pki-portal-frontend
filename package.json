@@ -20,7 +20,7 @@
     "@fontsource/fira-mono": "^5.0.2",
     "@fontsource/roboto": "^5.0.2",
     "@mui/icons-material": "^5.11.16",
-    "@mui/material": "^5.13.3",
+    "@mui/material": "^5.13.4",
     "@mui/system": "^5.12.3",
     "@mui/x-data-grid": "^6.6.0",
     "@next-safe/middleware": "^0.10.0",
