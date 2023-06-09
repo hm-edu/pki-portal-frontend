@@ -45,7 +45,7 @@
     "unidecode": "^0.1.8"
   },
   "devDependencies": {
-    "@babel/core": "^7.22.1",
+    "@babel/core": "^7.22.5",
     "@babel/preset-env": "^7.22.5",
     "@cypress/code-coverage": "^3.10.7",
     "@swc/plugin-transform-imports": "^1.5.67",
