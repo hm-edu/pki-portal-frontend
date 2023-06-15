@@ -1681,10 +1681,10 @@
   dependencies:
     tslib "^2.4.0"
 
-"@swc/plugin-transform-imports@^1.5.67":
-  version "1.5.67"
-  resolved "https://registry.yarnpkg.com/@swc/plugin-transform-imports/-/plugin-transform-imports-1.5.67.tgz#6bb9f9e01e43f2d8478a1be45476cfeee456d3d7"
-  integrity sha512-2e7pdYDQYzignwK03Eb1uEOOPXkPvYI6D71zT0QR9YyH3MPj4TIkTaAUFl/8QLcYLBixMoG5Hfki0g2xhUX88g==
+"@swc/plugin-transform-imports@^1.5.68":
+  version "1.5.68"
+  resolved "https://registry.yarnpkg.com/@swc/plugin-transform-imports/-/plugin-transform-imports-1.5.68.tgz#356b42d3ad3b7c66642aab6d122489a4c0f6bec6"
+  integrity sha512-afX1ya/xJaed/3YHCASKZKum/9hzQ2UKhQ/kLO/64rVB6c8AdHgaBbF2CSO//q4M0+sifZkvAv2tkYTh+dm6Ug==
 
 "@testing-library/cypress@^9.0.0":
   version "9.0.0"
