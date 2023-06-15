@@ -48,7 +48,7 @@
     "@babel/core": "^7.22.5",
     "@babel/preset-env": "^7.22.5",
     "@cypress/code-coverage": "^3.10.7",
-    "@swc/plugin-transform-imports": "^1.5.67",
+    "@swc/plugin-transform-imports": "^1.5.68",
     "@testing-library/cypress": "^9.0.0",
     "@testing-library/react": "^14.0.0",
     "@types/cypress__code-coverage": "^3.10.0",
