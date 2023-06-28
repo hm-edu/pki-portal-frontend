@@ -55,7 +55,6 @@ export default function SslCertificates() {
                 }).catch((error) => {
                     Sentry.captureException(error);
                     setError(true);
-                    return;
                 });
             }
         }

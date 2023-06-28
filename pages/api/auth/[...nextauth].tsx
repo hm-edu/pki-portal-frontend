@@ -78,7 +78,7 @@ export const authOptions: NextAuthOptions =
             }
             Sentry.addBreadcrumb({
                 category: "auth",
-                message: `Refreshing ${user.name?? "unknown"}'s access token`,
+                message: `Refreshing ${token.name?? "unknown"}'s access token`,
                 level: "info",
             });
             token = await refreshAccessToken(token);
@@ -122,6 +122,7 @@ async function refreshAccessToken(token: JWT): Promise<JWT> {
             error: undefined,
         };
     } catch (error) {
+        Sentry.captureException(error);
         return {
             ...token,
             error: "RefreshAccessTokenError",
