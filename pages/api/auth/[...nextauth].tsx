@@ -73,7 +73,7 @@ export const authOptions: NextAuthOptions =
                 };
             }
             // Return previous token if the access token has not expired yet
-            if (Date.now() < token.accessTokenExpires - (60 * 1000 * 5.5)) {
+            if (Date.now() < token.accessTokenExpires - (60 * 1000 * 2.5)) {
                 return token;
             }
             if (!token || !token.accessToken) {
