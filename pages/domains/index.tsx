@@ -27,6 +27,7 @@ import { dataGridStyle } from "@/components/theme";
 import Typography from "@mui/material/Typography";
 import { useSession } from "next-auth/react";
 import { QuickSearchToolbar } from "@/components/toolbar";
+import isValidDomain from "is-valid-domain";
 
 export default function Domains() {
     const [pageModel, setPageModel] = useState<GridPaginationModel>({ page: 0, pageSize: 50 });
@@ -38,6 +39,7 @@ export default function Domains() {
     const [delegationDomain, setDelegationDomain] = useState<ModelDomain>();
     const [transferDomain, setTransferDomain] = useState<ModelDomain>();
     const [error, setError] = useState<undefined | boolean | string>(undefined);
+    const [createError, setCreateError] = useState<undefined | string>(undefined);
     const newDomain = useRef<TextFieldProps>(null);
     const target = useRef<TextFieldProps>(null);
     const { data: session, status } = useSession();
@@ -61,6 +63,12 @@ export default function Domains() {
 
     const create = (event: FormEvent<Element>) => {
         event.preventDefault();
+        setCreateError(undefined);
+        const fqdn = newDomain.current!.value as string;
+        if (!isValidDomain(fqdn)) {
+            setCreateError("Bitte geben Sie einen gültigen Domainnamen ein!");
+            return;
+        }
         if (session) {
             void createDomain(newDomain.current!.value as string, setDomains, setError).then(() => newDomain.current!.value = "");
         }
@@ -83,7 +91,7 @@ export default function Domains() {
     };
 
     function removeDomain(id: number, setDomains: (domains: ModelDomain[]) => void, setError: (error: boolean) => void) {
-        return new Promise(function (resolve, reject) {
+        return new Promise(function (resolve) {
             const cfg = new Configuration({ accessToken: session?.accessToken });
             const api = new DomainsApi(cfg, `${Config.DomainHost}`);
             api.domainsIdDelete(id).then(() => {
@@ -92,7 +100,6 @@ export default function Domains() {
             }).catch((error) => {
                 Sentry.captureException(error);
                 setError(true);
-                reject(undefined);
             });
 
         });
@@ -121,15 +128,22 @@ export default function Domains() {
     }
 
     function createDomain(domain: string, setDomains: (domains: ModelDomain[]) => void, setError: (error: boolean) => void): Promise<boolean> {
-        return new Promise(function (resolve, reject) {
+        return new Promise(function (resolve) {
             const cfg = new Configuration({ accessToken: session?.accessToken });
             const api = new DomainsApi(cfg, `${Config.DomainHost}`);
             api.domainsPost({ fqdn: domain }).then(() => {
                 loadDomains(setDomains, setError);
                 resolve(true);
             }).catch((error) => {
-                Sentry.captureException(error);
-                reject(error);
+                // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+                if (error.response.status == 400) {
+                    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+                    if (error.response.data.message == "Domain already exists") {
+                        setCreateError("Diese Domain existiert bereits! Ein anderer Nutzer hat die Domain angelegt.");
+                    }
+                } else {
+                    Sentry.captureException(error);
+                }
             });
         });
     }
@@ -281,7 +295,22 @@ export default function Domains() {
                 <TextField required
                     label="Neuer Host"
                     inputRef={newDomain}
+                    onChange={() => {
+                        setCreateError(undefined);
+                        const fqdn = newDomain.current!.value as string;
+                        if (domains.map((domain) => {
+                            return domain.fqdn;
+                        }).includes(fqdn)) {
+                            setCreateError("Diese Domain existiert bereits!");
+                            return;
+                        }
+                        if (!isValidDomain(fqdn)) {
+                            setCreateError("Bitte geben Sie einen gültigen Domainnamen ein!");
+                            return;
+                        }
+                    } }
                     variant="standard" />
+                {createError && <Alert severity="error" sx={{ mt: 1 }}>{createError}</Alert>}
                 <Button type="submit" id="new" variant="contained" disabled={!session} color="success" startIcon={<AddCircleOutlineIcon />} sx={{ mt: 1 }} >Erstelle Host</Button>
             </Box>
         </>}
