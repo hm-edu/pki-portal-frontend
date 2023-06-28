@@ -68,25 +68,25 @@
     },
     {
       "matchDatasources": [
-        "node"
+        "npm"
       ],
       "matchUpdateTypes": [
         "major"
       ],
       "labels": [
-        "renovate/node",
+        "renovate/npm",
         "renovate/major"
       ]
     },
     {
       "matchDatasources": [
-        "node"
+        "npm"
       ],
       "matchUpdateTypes": [
         "minor"
       ],
       "labels": [
-        "renovate/node",
+        "renovate/npm",
         "renovate/minor"
       ],
       "automerge": true,
@@ -95,13 +95,13 @@
     },
     {
       "matchDatasources": [
-        "node"
+        "npm"
       ],
       "matchUpdateTypes": [
         "patch"
       ],
       "labels": [
-        "renovate/node",
+        "renovate/npm",
         "renovate/patch"
       ],
       "automerge": true,
