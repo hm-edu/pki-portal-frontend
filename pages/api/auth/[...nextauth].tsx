@@ -3,6 +3,7 @@ import NextAuth, { NextAuthOptions } from "next-auth";
 import jwt_decode from "jwt-decode";
 import { JWT } from "next-auth/jwt";
 import { OAuthConfig } from "next-auth/providers";
+import * as Sentry from "@sentry/nextjs";
 
 const idp = process.env.AUTH_IDP ?? process.env.NEXT_PUBLIC_AUTH_IDP ?? "https://sso-test.hm.edu";
 
@@ -60,7 +61,7 @@ export const authOptions: NextAuthOptions =
             // Allows callback URLs on the same origin
             return url;
         },
-        async jwt({ token, user, account }): Promise<JWT> {
+        async jwt({ token, user, account }): Promise<JWT> {            
             // Persist the OAuth access_token to the token right after signin
             if (account && user) {
                 return {
@@ -75,8 +76,14 @@ export const authOptions: NextAuthOptions =
             if (Date.now() < token.accessTokenExpires - (60 * 1000 * 2.5)) {
                 return token;
             }
+            Sentry.addBreadcrumb({
+                category: "auth",
+                message: `Refreshing ${user.name?? "unknown"}'s access token`,
+                level: "info",
+            });
+            token = await refreshAccessToken(token);
             // Access token has expired, try to update it
-            return await refreshAccessToken(token);
+            return token;
         },
         session({ session, token }) {
             session.user = token.user;
