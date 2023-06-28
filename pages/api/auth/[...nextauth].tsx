@@ -73,12 +73,16 @@ export const authOptions: NextAuthOptions =
                 };
             }
             // Return previous token if the access token has not expired yet
-            if (Date.now() < token.accessTokenExpires - (60 * 1000 * 2.5)) {
+            if (Date.now() < token.accessTokenExpires - (60 * 1000 * 5.5)) {
                 return token;
             }
+            if (!token || !token.accessToken) {
+                throw new Error("No token provided");
+            }
+            const act: { sub: string; email: string; name: string } = jwt_decode(token.accessToken);
             Sentry.addBreadcrumb({
                 category: "auth",
-                message: `Refreshing ${token.name?? "unknown"}'s access token`,
+                message: `Refreshing ${act.email}'s access token`,
                 level: "info",
             });
             token = await refreshAccessToken(token);
