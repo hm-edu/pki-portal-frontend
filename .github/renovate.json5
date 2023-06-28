@@ -96,7 +96,6 @@
         "renovate/patch"
       ],
       "automerge": true,
-      "ignoreTests": true,
       "automergeType": "pr",
       "platformAutomerge": true
     }
