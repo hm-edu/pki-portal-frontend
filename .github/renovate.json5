@@ -46,7 +46,10 @@
       "labels": [
         "renovate/docker",
         "renovate/minor"
-      ]
+      ],
+      "automerge": true,
+      "automergeType": "pr",
+      "platformAutomerge": true
     },
     {
       "matchDatasources": [
@@ -58,7 +61,10 @@
       "labels": [
         "renovate/docker",
         "renovate/patch"
-      ]
+      ],
+      "automerge": true,
+      "automergeType": "pr",
+      "platformAutomerge": true
     },
     {
       "matchDatasources": [
@@ -82,7 +88,10 @@
       "labels": [
         "renovate/node",
         "renovate/minor"
-      ]
+      ],
+      "automerge": true,
+      "automergeType": "pr",
+      "platformAutomerge": true
     },
     {
       "matchDatasources": [
