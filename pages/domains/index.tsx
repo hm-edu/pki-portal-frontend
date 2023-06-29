@@ -28,6 +28,7 @@ import Typography from "@mui/material/Typography";
 import { useSession } from "next-auth/react";
 import { QuickSearchToolbar } from "@/components/toolbar";
 import isValidDomain from "is-valid-domain";
+import Stack from "@mui/material/Stack";
 
 export default function Domains() {
     const [pageModel, setPageModel] = useState<GridPaginationModel>({ page: 0, pageSize: 50 });
@@ -39,7 +40,8 @@ export default function Domains() {
     const [delegationDomain, setDelegationDomain] = useState<ModelDomain>();
     const [transferDomain, setTransferDomain] = useState<ModelDomain>();
     const [error, setError] = useState<undefined | boolean | string>(undefined);
-    const [createError, setCreateError] = useState<undefined | string>(undefined);
+    const [createError, setCreateError] = useState<undefined | string | React.JSX.Element>(undefined);
+    const [dnsRunning, setDnsRunning] = useState(false);
     const newDomain = useRef<TextFieldProps>(null);
     const target = useRef<TextFieldProps>(null);
     const { data: session, status } = useSession();
@@ -63,15 +65,27 @@ export default function Domains() {
 
     const create = (event: FormEvent<Element>) => {
         event.preventDefault();
-        setCreateError(undefined);
+        setCreateError(undefined);        
         const fqdn = newDomain.current!.value as string;
         if (!isValidDomain(fqdn)) {
             setCreateError("Bitte geben Sie einen gültigen Domainnamen ein!");
             return;
         }
-        if (session) {
-            void createDomain(newDomain.current!.value as string, setDomains, setError).then(() => newDomain.current!.value = "");
-        }
+        setDnsRunning(true);
+        void fetch("/api/dns", { method: "POST", body: JSON.stringify({ fqdn: fqdn }) }).then((response) => {
+            setDnsRunning(false);
+            if (!response.ok) {
+                setCreateError(<Stack>Die angegebene Domain existiert nicht im DNS.
+                    <Button color="warning" variant="contained" startIcon={<AddCircleOutlineIcon />} sx={{ mt: 1 }} onClick={() => {
+                        void createDomain(newDomain.current!.value as string, setDomains, setError).then(() => newDomain.current!.value = "").then(() => setCreateError(undefined));
+                    }}>
+                        Dennoch anlegen!
+                    </Button>
+                </Stack>);
+            } else {
+                void createDomain(newDomain.current!.value as string, setDomains, setError).then(() => newDomain.current!.value = "");
+            }
+        });
     };
 
     const transfer = (event: FormEvent<Element>) => {
@@ -311,7 +325,9 @@ export default function Domains() {
                     } }
                     variant="standard" />
                 {createError && <Alert severity="error" sx={{ mt: 1 }}>{createError}</Alert>}
-                <Button type="submit" id="new" variant="contained" disabled={!session} color="success" startIcon={<AddCircleOutlineIcon />} sx={{ mt: 1 }} >Erstelle Host</Button>
+                <Button type="submit" id="new" variant="contained" disabled={!session || dnsRunning || createError != undefined} color="success" startIcon={<AddCircleOutlineIcon />} sx={{ mt: 1 }} >Erstelle Host {
+                    dnsRunning && <CircularProgress size={24} sx={{ color: green[500], position: "absolute", top: "50%", left: "50%", marginTop: "-12px", marginLeft: "-12px" }} />
+                }</Button>
             </Box>
         </>}
         {deleteDialog}
