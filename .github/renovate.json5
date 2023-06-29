@@ -7,7 +7,7 @@
   "suppressNotifications": [
     "prIgnoreNotification"
   ],
-  "rebaseWhen": "conflicted",
+  "rebaseWhen": "auto",
   "packageRules": [
     // global docker datasource settings
     {
