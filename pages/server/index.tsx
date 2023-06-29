@@ -12,6 +12,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import Typography from "@mui/material/Typography";
 import UploadFileIcon from "@mui/icons-material/UploadFile";
+import Alert from "@mui/material/Alert";
 
 import { FormEvent, useEffect, useRef, useState } from "react";
 import Link from "next/link";
@@ -22,9 +23,9 @@ import { PortalApisSslCertificateDetails, SSLApi } from "@/api/pki/api";
 import { Configuration } from "@/api/pki/configuration";
 import { Config } from "@/components/config";
 import { dataGridStyle } from "@/components/theme";
+import { QuickSearchToolbar } from "@/components/toolbar";
 
 import { useSession } from "next-auth/react";
-import Alert from "@mui/material/Alert";
 
 export default function SslCertificates() {
     const [pageModel, setPageModel] = useState<GridPaginationModel>({ page: 0, pageSize: 50 });
@@ -236,7 +237,10 @@ export default function SslCertificates() {
                     }}
                     onRowSelectionModelChange={(event) => { setSelected(event); }}
                     rowSelectionModel={selected}
-                    slots={{ loadingOverlay: LinearProgress }}
+                    slots={{
+                        loadingOverlay: LinearProgress,
+                        toolbar: QuickSearchToolbar,
+                    }}
                     localeText={{ ...deDE.components.MuiDataGrid.defaultProps.localeText }}
                     slotProps={{ loadingOverlay: { color: "inherit" } }}
                     loading={loading}
