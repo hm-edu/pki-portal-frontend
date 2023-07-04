@@ -1332,15 +1332,6 @@
     react-is "^18.2.0"
     react-transition-group "^4.4.5"
 
-"@mui/private-theming@^5.13.1":
-  version "5.13.1"
-  resolved "https://registry.npmjs.org/@mui/private-theming/-/private-theming-5.13.1.tgz"
-  integrity sha512-HW4npLUD9BAkVppOUZHeO1FOKUJWAwbpy0VQoGe3McUYTlck1HezGHQCfBQ5S/Nszi7EViqiimECVl9xi+/WjQ==
-  dependencies:
-    "@babel/runtime" "^7.21.0"
-    "@mui/utils" "^5.13.1"
-    prop-types "^15.8.1"
-
 "@mui/private-theming@^5.13.7":
   version "5.13.7"
   resolved "https://registry.yarnpkg.com/@mui/private-theming/-/private-theming-5.13.7.tgz#2f8ef5da066f3c6c6423bd4260d003a28d10b099"
@@ -1360,21 +1351,7 @@
     csstype "^3.1.2"
     prop-types "^15.8.1"
 
-"@mui/system@^5.13.6":
-  version "5.13.6"
-  resolved "https://registry.yarnpkg.com/@mui/system/-/system-5.13.6.tgz#5bf4f84fad0c9ed771458f821e384f61abfa33ca"
-  integrity sha512-G3Xr28uLqU3DyF6r2LQkHGw/ku4P0AHzlKVe7FGXOPl7X1u+hoe2xxj8Vdiq/69II/mh9OP21i38yBWgWb7WgQ==
-  dependencies:
-    "@babel/runtime" "^7.22.5"
-    "@mui/private-theming" "^5.13.1"
-    "@mui/styled-engine" "^5.13.2"
-    "@mui/types" "^7.2.4"
-    "@mui/utils" "^5.13.6"
-    clsx "^1.2.1"
-    csstype "^3.1.2"
-    prop-types "^15.8.1"
-
-"@mui/system@^5.13.7":
+"@mui/system@^5.13.6", "@mui/system@^5.13.7":
   version "5.13.7"
   resolved "https://registry.yarnpkg.com/@mui/system/-/system-5.13.7.tgz#b02e6284bbaab4201b142546ebbb2012ec0fa63d"
   integrity sha512-7R2KdI6vr8KtnauEfg9e9xQmPk6Gg/1vGNiALYyhSI+cYztxN6WmlSqGX4bjWn/Sygp1TUE1jhFEgs7MWruhkQ==
@@ -1393,7 +1370,7 @@
   resolved "https://registry.yarnpkg.com/@mui/types/-/types-7.2.4.tgz#b6fade19323b754c5c6de679a38f068fd50b9328"
   integrity sha512-LBcwa8rN84bKF+f5sDyku42w1NTxaPgPyYKODsh01U1fVstTClbUoSA96oyRBnSNyEiAVjKm6Gwx9vjR+xyqHA==
 
-"@mui/utils@^5.13.1", "@mui/utils@^5.13.6":
+"@mui/utils@^5.13.6":
   version "5.13.6"
   resolved "https://registry.yarnpkg.com/@mui/utils/-/utils-5.13.6.tgz#aa29d75de59577585b9f23891b03592d40459ed7"
   integrity sha512-ggNlxl5NPSbp+kNcQLmSig6WVB0Id+4gOxhx644987v4fsji+CSXc+MFYLocFB/x4oHtzCUlSzbVHlJfP/fXoQ==
