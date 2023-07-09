@@ -1191,9 +1191,9 @@
   integrity sha512-Qe4WNf6IAoV1h0a5VOSnVYQTRl2Rizx3GFJcVhC7PknsxOksl+6r2bQomltTgcVjJ0M50M/8OxYbnckr289TYw==
 
 "@fontsource/roboto@^5.0.3":
-  version "5.0.4"
-  resolved "https://registry.yarnpkg.com/@fontsource/roboto/-/roboto-5.0.4.tgz#69fed200b4d3af0478c9066b05dbfcbda5e2bbfd"
-  integrity sha512-4aVlY+8u/8V15zP8Z4tscGebdD62trVo1CVNW8OsvLWYduebFxxETj7yzfkR/131fVGy/lO1RTeLf6CT7eD8CQ==
+  version "5.0.5"
+  resolved "https://registry.yarnpkg.com/@fontsource/roboto/-/roboto-5.0.5.tgz#56e4b2af0d684d6e33e311f307adb958fcf8eabd"
+  integrity sha512-IMXFq5AMgGx0sgNLfwWsmPuy3qa7lmDmQcXXihqwF4mT2UpD725cbxZj93ERY793OWon+6V1ANax02I3nt9+4w==
 
 "@hapi/hoek@^9.0.0":
   version "9.3.0"
