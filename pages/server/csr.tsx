@@ -169,6 +169,12 @@ export default function ServerCertificatesCsr() {
             <Typography>Dateiname: {filename}</Typography>
             <List> {values.map((value) => { return <Typography key={value[0]}>{value[0]}: {value[1]}</Typography>; })} </List>
         </Box>
+        <Alert severity="error" sx={{ mt: 1 }}>
+            <AlertTitle>Warnung:</AlertTitle>
+            <Typography>Es zeichnet sich eine weitere Verkürzung der Zertifikatslaufzeiten auf 90 Tage ab!
+                Weiterführende Informationen zu den Plänen finden sich unter anderem bei <a href="https://www.heise.de/news/Google-moechte-Laufzeiten-fuer-TLS-Zertifikate-verkuerzen-8151372.html">heise.de</a> oder <a href="https://www.chromium.org/Home/chromium-security/root-ca-policy/moving-forward-together/">Google</a>. </Typography><Typography><b>Aus diesem Grund wird der Einsatz von ACME bei allen Servern und Anwendungen dringend empfohlen.</b> </Typography>
+            <Typography>Sollten Sie hierzu oder zu dem Einsatz von ACME Fragen haben, wenden Sie sich gerne an die Zentrale IT.</Typography>
+        </Alert>
         <Button variant="outlined" color="inherit" disabled={!filename || generateKey || generatedKey} onClick={sendCsr} sx={{ width: "100%" }}>Absenden {generateKey && <CircularProgress size={24} sx={{ color: green[500], position: "absolute", top: "50%", left: "50%", marginTop: "-12px", marginLeft: "-12px" }} />}</Button>
         {generatedKey && <Box sx={{
             flex: "auto",
