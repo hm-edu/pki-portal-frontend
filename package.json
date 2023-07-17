@@ -57,7 +57,7 @@
     "@types/react": "18.2.15",
     "@types/react-dom": "18.2.7",
     "@types/unidecode": "^0.1.1",
-    "@typescript-eslint/eslint-plugin": "^5.60.1",
+    "@typescript-eslint/eslint-plugin": "^6.0.0",
     "@typescript-eslint/parser": "^6.0.0",
     "babel-loader": "^9.1.2",
     "babel-plugin-istanbul": "^6.1.1",
