@@ -85,6 +85,7 @@ export default function ServerCertificatesCsr() {
         const reader = new FileReader();
         reader.onload = (evt) => {
             if (evt.target?.result) {
+                // eslint-disable-next-line @typescript-eslint/no-base-to-string
                 const content = evt.target.result.toString();
                 const buffer = fromPEM(content);
                 const csr = forge.pki.certificationRequestFromPem(content) as forge.pki.CertificateRequest;
@@ -142,7 +143,7 @@ export default function ServerCertificatesCsr() {
                 }
             }
         };
-        reader.readAsBinaryString(file);
+        reader.readAsText(file);
     };
 
     if (status == "unauthenticated") {
