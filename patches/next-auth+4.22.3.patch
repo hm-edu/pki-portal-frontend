@@ -32,7 +32,7 @@ index 430f538..59cb1b7 100644
      }
    } else {
 diff --git a/node_modules/next-auth/react/index.js b/node_modules/next-auth/react/index.js
-index ffa4362..af4e682 100644
+index ffa4362..61940be 100644
 --- a/node_modules/next-auth/react/index.js
 +++ b/node_modules/next-auth/react/index.js
 @@ -576,20 +576,23 @@ function SessionProvider(props) {
@@ -43,7 +43,7 @@ index ffa4362..af4e682 100644
    React.useEffect(function () {
      if (refetchInterval && shouldRefetch) {
        var refetchIntervalTimer = setInterval(function () {
-         if (__NEXTAUTH._session) {          
+         if (__NEXTAUTH._session) {
 -          __NEXTAUTH._getSession({
 -            event: "poll"
 -          });
@@ -64,7 +64,7 @@ index ffa4362..af4e682 100644
      return {
        data: session,
 diff --git a/node_modules/next-auth/react/types.d.ts b/node_modules/next-auth/react/types.d.ts
-index 129106e..0a1dd49 100644
+index 0c7b3dd..e90d40d 100644
 --- a/node_modules/next-auth/react/types.d.ts
 +++ b/node_modules/next-auth/react/types.d.ts
 @@ -68,5 +68,7 @@ export interface SessionProviderProps {
