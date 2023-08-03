@@ -1178,14 +1178,14 @@
   integrity sha512-a8TLtmPi8xzPkCbp/OGFUo5yhRkHM2Ko9kOWP4znJr0WAhWyThaw3PnwX4vOTWOAMsV2uRt32PPDcEz63esSaA==
 
 "@fontsource/fira-mono@^5.0.3":
-  version "5.0.6"
-  resolved "https://registry.yarnpkg.com/@fontsource/fira-mono/-/fira-mono-5.0.6.tgz#ab8d0bf70c683798624d6d918b9ed9a79aca390a"
-  integrity sha512-pS8vwPdXaczld69hVCILPNJPM8mpXcDGyR/zCIeUzK8BD994cLw/ypxf9MWnIqrpBivMIB0B5oDGnZZWK7t1Zg==
+  version "5.0.7"
+  resolved "https://registry.yarnpkg.com/@fontsource/fira-mono/-/fira-mono-5.0.7.tgz#b629214234fd1d7dad68d68ed0bbb6e742babe80"
+  integrity sha512-K7h00jrdND+BRLr1GHjc6Da7xECLMOlAF24pZCy/pEyLNFmd5ODQj5teKcKp/w+V2zq8B0f9LxpPUNgASX8pGQ==
 
 "@fontsource/roboto@^5.0.3":
-  version "5.0.6"
-  resolved "https://registry.yarnpkg.com/@fontsource/roboto/-/roboto-5.0.6.tgz#36a422decf98995d6ca8e0445a21d8e5a17f1070"
-  integrity sha512-SksyUGbdqY7a71l/ywdX5fm37fepCakgHZEZ3H4uP5A9wDJewrcSACtIzw6yi9QjJIYoj1xArhDSOz4XJxyWow==
+  version "5.0.7"
+  resolved "https://registry.yarnpkg.com/@fontsource/roboto/-/roboto-5.0.7.tgz#683e3294a5202339d078f784dd557e5862440070"
+  integrity sha512-Hcl5xloy9PH+hCGnKTl9Xg7SOXbvSFIg+AW2JZ5qrsAZBI9IEC4kwma6D/aTl9ywvsdEp+7TeVT2fmFImXyHTw==
 
 "@hapi/hoek@^9.0.0":
   version "9.3.0"
