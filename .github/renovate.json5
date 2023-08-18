@@ -1,112 +1,118 @@
 {
-  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "enabled": true,
-  "semanticCommits": "enabled",
-  "dependencyDashboard": true,
-  "dependencyDashboardTitle": "Renovate Dashboard 🤖",
-  "suppressNotifications": [
-    "prIgnoreNotification"
-  ],
-  "rebaseWhen": "auto",
-  "packageRules": [
-    // global docker datasource settings
-    {
-      "matchDatasources": [
-        "docker"
-      ],
-      "enabled": true,
-      "commitMessageTopic": "container image {{depName}}",
-      "commitMessageExtra": "to {{#if isSingleVersion}}v{{{newVersion}}}{{else}}{{{newValue}}}{{/if}}",
-      "matchUpdateTypes": [
-        "major",
-        "minor",
-        "patch"
-      ]
-    },
-    // add labels according to package and update types
-    {
-      "matchDatasources": [
-        "docker"
-      ],
-      "matchUpdateTypes": [
-        "major"
-      ],
-      "labels": [
-        "renovate/docker",
-        "renovate/major"
-      ]
-    },
-    {
-      "matchDatasources": [
-        "docker"
-      ],
-      "matchUpdateTypes": [
-        "minor"
-      ],
-      "labels": [
-        "renovate/docker",
-        "renovate/minor"
-      ],
-      "automerge": true,
-      "automergeType": "pr",
-      "platformAutomerge": true
-    },
-    {
-      "matchDatasources": [
-        "docker"
-      ],
-      "matchUpdateTypes": [
-        "patch"
-      ],
-      "labels": [
-        "renovate/docker",
-        "renovate/patch"
-      ],
-      "automerge": true,
-      "automergeType": "pr",
-      "platformAutomerge": true
-    },
-    {
-      "matchDatasources": [
-        "npm"
-      ],
-      "matchUpdateTypes": [
-        "major"
-      ],
-      "labels": [
-        "renovate/npm",
-        "renovate/major"
-      ]
-    },
-    {
-      "matchDatasources": [
-        "npm"
-      ],
-      "matchUpdateTypes": [
-        "minor"
-      ],
-      "labels": [
-        "renovate/npm",
-        "renovate/minor"
-      ],
-      "automerge": true,
-      "automergeType": "pr",
-      "platformAutomerge": true
-    },
-    {
-      "matchDatasources": [
-        "npm"
-      ],
-      "matchUpdateTypes": [
-        "patch"
-      ],
-      "labels": [
-        "renovate/npm",
-        "renovate/patch"
-      ],
-      "automerge": true,
-      "automergeType": "pr",
-      "platformAutomerge": true
-    }
-  ]
+    "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+    "enabled": true,
+    "semanticCommits": "enabled",
+    "dependencyDashboard": true,
+    "dependencyDashboardTitle": "Renovate Dashboard 🤖",
+    "suppressNotifications": [
+        "prIgnoreNotification"
+    ],
+    "rebaseWhen": "auto",
+    "packageRules": [
+        // global docker datasource settings
+        {
+            "matchDatasources": [
+                "docker"
+            ],
+            "enabled": true,
+            "commitMessageTopic": "container image {{depName}}",
+            "commitMessageExtra": "to {{#if isSingleVersion}}v{{{newVersion}}}{{else}}{{{newValue}}}{{/if}}",
+            "matchUpdateTypes": [
+                "major",
+                "minor",
+                "patch"
+            ]
+        },
+        // add labels according to package and update types
+        {
+            "matchDatasources": [
+                "docker"
+            ],
+            "matchUpdateTypes": [
+                "major"
+            ],
+            "labels": [
+                "renovate/docker",
+                "renovate/major"
+            ]
+        },
+        {
+            "matchDatasources": [
+                "docker"
+            ],
+            "matchUpdateTypes": [
+                "minor"
+            ],
+            "labels": [
+                "renovate/docker",
+                "renovate/minor"
+            ],
+            "automerge": true,
+            "automergeType": "pr",
+            "platformAutomerge": true
+        },
+        {
+            "matchDatasources": [
+                "docker"
+            ],
+            "matchUpdateTypes": [
+                "patch"
+            ],
+            "labels": [
+                "renovate/docker",
+                "renovate/patch"
+            ],
+            "automerge": true,
+            "automergeType": "pr",
+            "platformAutomerge": true
+        },
+        {
+            "matchDatasources": [
+                "npm"
+            ],
+            "matchUpdateTypes": [
+                "major"
+            ],
+            "labels": [
+                "renovate/npm",
+                "renovate/major"
+            ]
+        },
+        {
+            "matchDatasources": [
+                "npm"
+            ],
+            "matchUpdateTypes": [
+                "minor"
+            ],
+            "labels": [
+                "renovate/npm",
+                "renovate/minor"
+            ],
+            "automerge": true,
+            "automergeType": "pr",
+            "platformAutomerge": true
+        },
+        {
+            "matchDatasources": [
+                "npm"
+            ],
+            "matchUpdateTypes": [
+                "patch"
+            ],
+            "labels": [
+                "renovate/npm",
+                "renovate/patch"
+            ],
+            "automerge": true,
+            "automergeType": "pr",
+            "platformAutomerge": true
+        },
+        {
+            "packagePatterns": [
+                "^next"
+            ],
+            "automerge": false
+        }
+    ]
 }

@@ -64,7 +64,7 @@ index ffa4362..61940be 100644
      return {
        data: session,
 diff --git a/node_modules/next-auth/react/types.d.ts b/node_modules/next-auth/react/types.d.ts
-index 0c7b3dd..e90d40d 100644
+index 62207fd..42f1861 100644
 --- a/node_modules/next-auth/react/types.d.ts
 +++ b/node_modules/next-auth/react/types.d.ts
 @@ -68,5 +68,7 @@ export interface SessionProviderProps {
