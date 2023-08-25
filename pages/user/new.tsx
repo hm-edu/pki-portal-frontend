@@ -22,7 +22,6 @@ import { useSession } from "next-auth/react";
 import unidecode from "unidecode";
 import moment from "moment";
 import { createP12 } from "@/components/pkcs12";
-import Tooltip from "@mui/material/Tooltip";
 
 export default function SMIMEGenerator() {
 

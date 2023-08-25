@@ -23,7 +23,6 @@ import Typography from "@mui/material/Typography";
 import { useSession } from "next-auth/react";
 import { green } from "@mui/material/colors";
 import Alert from "@mui/material/Alert";
-import Tooltip from "@mui/material/Tooltip";
 
 export default SmimeCertificates;
 
