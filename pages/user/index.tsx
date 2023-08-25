@@ -23,6 +23,7 @@ import Typography from "@mui/material/Typography";
 import { useSession } from "next-auth/react";
 import { green } from "@mui/material/colors";
 import Alert from "@mui/material/Alert";
+import Tooltip from "@mui/material/Tooltip";
 
 export default SmimeCertificates;
 
@@ -146,7 +147,7 @@ export function SmimeCertificates() {
                     sx={dataGridStyle}
                     paginationModel={pageModel}
                     getRowId={(row) =>
-                        // eslint-disable-next-line @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-member-access  
+                        // eslint-disable-next-line @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-member-access
                         row.serial
                     }
                     initialState={{
@@ -162,7 +163,13 @@ export function SmimeCertificates() {
                     pageSizeOptions={[5, 15, 25, 50, 100]}
                     pagination rows={certificates}></DataGrid>
             </div>
-            <Link legacyBehavior={true} href="/user/new"><Button id="new" variant="contained" disabled={!session} color="success" startIcon={<AddCircleOutlineIcon />} sx={{ mt: 1, width: "100%" }}>Neues Zertifikat beziehen</Button></Link>
+            {
+                <Tooltip title={<Box>
+                Aufgrund der Einführung der SMIME Baseline Requirements ist die Ausstellung von Nutzerzertifikaten derzeit nicht möglich.
+                </Box>}>
+                    <Link legacyBehavior={true} href="/user/new"><Button id="new" variant="contained" disabled={true} color="success" startIcon={<AddCircleOutlineIcon />} sx={{ mt: 1, width: "100%" }}>Neues Zertifikat beziehen</Button></Link>
+                </Tooltip>
+            }
         </>}
         <Dialog open={open} onClose={handleClose}>
             <DialogTitle>Nutzerzertifikat widerrufen</DialogTitle>

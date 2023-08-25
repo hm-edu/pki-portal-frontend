@@ -22,6 +22,7 @@ import { useSession } from "next-auth/react";
 import unidecode from "unidecode";
 import moment from "moment";
 import { createP12 } from "@/components/pkcs12";
+import Tooltip from "@mui/material/Tooltip";
 
 export default function SMIMEGenerator() {
 
@@ -179,9 +180,13 @@ export default function SMIMEGenerator() {
 
                     {warning && <FormControlLabel control={<Checkbox color="secondary" onChange={validate} inputRef={revokeRef} required />} label="Ja, ich möchte das älteste aktive Zertifikat automatisch widerrufen." />}
                 </Box>
-                <Button id="generate" type="submit" variant="outlined" color="inherit" disabled={(loading || success) || (validation != undefined) || p12PasswordRef.current?.value == ""} sx={buttonSx}>Generiere Zertifikat {loading && (
-                    <CircularProgress size={24} sx={{ color: green[500], position: "absolute", top: "50%", left: "50%", marginTop: "-12px", marginLeft: "-12px" }} />
-                )}</Button>
+                <Tooltip title={<Box>
+                Aufgrund der Einführung der SMIME Baseline Requirements ist die Ausstellung von Nutzerzertifikaten derzeit nicht möglich.
+                </Box>}>
+                    <Button id="generate" type="submit" variant="outlined" color="inherit" disabled={true && (loading || success) || (validation != undefined) || p12PasswordRef.current?.value == ""} sx={buttonSx}>Generiere Zertifikat {loading && (
+                        <CircularProgress size={24} sx={{ color: green[500], position: "absolute", top: "50%", left: "50%", marginTop: "-12px", marginLeft: "-12px" }} />
+                    )}</Button>
+                </Tooltip>
                 {validation && <Alert variant="filled" id="validation" severity="error">
                     <AlertTitle>Fehler!</AlertTitle>
                     {validation}
