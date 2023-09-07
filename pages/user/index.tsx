@@ -162,9 +162,6 @@ export function SmimeCertificates() {
                     pageSizeOptions={[5, 15, 25, 50, 100]}
                     pagination rows={certificates}></DataGrid>
             </div>
-            <Alert severity="error">
-                Aufgrund der Einführung der SMIME Baseline Requirements ist die Ausstellung von Nutzerzertifikaten derzeit nicht möglich.
-            </Alert>
             <Link legacyBehavior={true} href="/user/new">
                 <Button id="new" variant="contained" disabled={true} color="success" startIcon={<AddCircleOutlineIcon />} sx={{ mt: 1, width: "100%" }}>Neues Zertifikat beziehen</Button>
             </Link>

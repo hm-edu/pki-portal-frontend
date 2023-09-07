@@ -56,7 +56,7 @@ export default function SMIMEGenerator() {
             setProgress(<Typography id="modal-modal-description" sx={{ mt: "24px" }}>Generiere CSR...</Typography>);
             const CsrBuilder = (await import("@/components/csr")).CsrBuilder;
             const csr = new CsrBuilder();
-            csr.build("rsa", undefined, undefined, 3072).then((x) => {
+            csr.build("rsa", undefined, undefined, 4096).then((x) => {
                 setProgress(<Typography id="modal-modal-description" sx={{ mt: "24px" }}>CSR generiert...</Typography>);
                 setIssuing(true);
                 if (session && session.user.name) {
@@ -182,7 +182,7 @@ export default function SMIMEGenerator() {
                 <Alert severity="error">
                 Aufgrund der Einführung der SMIME Baseline Requirements ist die Ausstellung von Nutzerzertifikaten derzeit nicht möglich.
                 </Alert>
-                <Button id="generate" type="submit" variant="outlined" color="inherit" disabled={true || (loading || success) || (validation != undefined) || p12PasswordRef.current?.value == ""} sx={buttonSx}>Generiere Zertifikat {loading && (
+                <Button id="generate" type="submit" variant="outlined" color="inherit" disabled={(loading || success) || (validation != undefined) || p12PasswordRef.current?.value == ""} sx={buttonSx}>Generiere Zertifikat {loading && (
                     <CircularProgress size={24} sx={{ color: green[500], position: "absolute", top: "50%", left: "50%", marginTop: "-12px", marginLeft: "-12px" }} />
                 )}</Button>
                 {validation && <Alert variant="filled" id="validation" severity="error">
