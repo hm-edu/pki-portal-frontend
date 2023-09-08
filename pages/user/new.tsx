@@ -179,9 +179,6 @@ export default function SMIMEGenerator() {
 
                     {warning && <FormControlLabel control={<Checkbox color="secondary" onChange={validate} inputRef={revokeRef} required />} label="Ja, ich möchte das älteste aktive Zertifikat automatisch widerrufen." />}
                 </Box>
-                <Alert severity="error">
-                Aufgrund der Einführung der SMIME Baseline Requirements ist die Ausstellung von Nutzerzertifikaten derzeit nicht möglich.
-                </Alert>
                 <Button id="generate" type="submit" variant="outlined" color="inherit" disabled={(loading || success) || (validation != undefined) || p12PasswordRef.current?.value == ""} sx={buttonSx}>Generiere Zertifikat {loading && (
                     <CircularProgress size={24} sx={{ color: green[500], position: "absolute", top: "50%", left: "50%", marginTop: "-12px", marginLeft: "-12px" }} />
                 )}</Button>
