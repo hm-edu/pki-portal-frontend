@@ -163,7 +163,7 @@ export function SmimeCertificates() {
                     pagination rows={certificates}></DataGrid>
             </div>
             <Link legacyBehavior={true} href="/user/new">
-                <Button id="new" variant="contained" disabled={true} color="success" startIcon={<AddCircleOutlineIcon />} sx={{ mt: 1, width: "100%" }}>Neues Zertifikat beziehen</Button>
+                <Button id="new" variant="contained" color="success" startIcon={<AddCircleOutlineIcon />} sx={{ mt: 1, width: "100%" }}>Neues Zertifikat beziehen</Button>
             </Link>
         </>}
         <Dialog open={open} onClose={handleClose}>
