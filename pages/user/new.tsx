@@ -65,8 +65,8 @@ export default function SMIMEGenerator() {
 
                     const cfg = new Configuration({ accessToken: session.accessToken });
                     const api = new SMIMEApi(cfg, `${Config.PkiHost}`);
-                    setProgress(<Typography id="modal-modal-description" sx={{ mt: "24px" }}>Signiere CSR...
-                        <Alert>Dieser Schritt kann leider bis zu 5 Minuten dauern.</Alert>
+                    setProgress(<Typography id="modal-modal-description" sx={{ mt: "24px", mb: "5px" }}>Signiere CSR...
+                        <Alert severity="warning">Dieser Schritt kann leider bis zu 5 Minuten dauern.</Alert>
                     </Typography>);
                     return api.smimeCsrPost({ csr: x.csr }).then((response) => {
                         setProgress(<Typography id="modal-modal-description" sx={{ mt: "24px" }}>Generiere PKCS12...</Typography>);
