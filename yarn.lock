@@ -1738,9 +1738,9 @@
     tslib "^2.4.0"
 
 "@swc/plugin-transform-imports@^1.5.68":
-  version "1.5.84"
-  resolved "https://registry.yarnpkg.com/@swc/plugin-transform-imports/-/plugin-transform-imports-1.5.84.tgz#166c5bb02d771db4b139b809e2caa4f52ed71223"
-  integrity sha512-7VQvaKLXrzevGqUbPAmsZIsLxG6HQ78yoIJMrE2aYROoZ++kj9ylvoTxxoUj9X9T6b7lpoxupon13mGj9Rl6GQ==
+  version "1.5.86"
+  resolved "https://registry.yarnpkg.com/@swc/plugin-transform-imports/-/plugin-transform-imports-1.5.86.tgz#ee6905a546a9b214b1739cbaefdb57fea253a38f"
+  integrity sha512-33o0n5AZ4mQDjjldzcd+4/u1PxqLKbhsPnDsGkkCYWBHAD+ycn4rYDGrgHoEaxTVtHTLYN9UEXtkevhHKo3J8g==
 
 "@testing-library/cypress@^10.0.0":
   version "10.0.1"
