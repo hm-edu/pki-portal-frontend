@@ -1812,7 +1812,7 @@
   resolved "https://registry.yarnpkg.com/@types/json5/-/json5-0.0.29.tgz#ee28707ae94e11d2b827bcbe5270bcea7f3e71ee"
   integrity sha512-dRLjCWHYg4oaA77cxO64oO+7JwCwnIzkZPdrrC71jQmQtlhM556pwKo5bUzqvZndkVbeFLIIi+9TC40JNF5hNQ==
 
-"@types/node-forge@^1.3.2":
+"@types/node-forge@^1.3.6":
   version "1.3.6"
   resolved "https://registry.yarnpkg.com/@types/node-forge/-/node-forge-1.3.6.tgz#06f798ec59e8395a24e91839abbde8d3f871a5b6"
   integrity sha512-rOLL54+BcPO1BV0ogdKCtfmohdL3WW3ODCbnh8gA8ZWPYfHM0aVFyXQljme5DoICH29/2JZOXqgkS9CEd/NmSQ==
