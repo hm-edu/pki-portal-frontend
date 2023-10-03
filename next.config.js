@@ -20,8 +20,8 @@ module.exports = (phase, { defaultConfig }) => {
     let moduleExports = {
         poweredByHeader: false,
         reactStrictMode: true,
-        swcMinify: false,
-        productionBrowserSourceMaps: true, 
+        swcMinify: true,
+        productionBrowserSourceMaps: true,
         output: "standalone",
         compiler: {
             emotion: true,
@@ -32,7 +32,7 @@ module.exports = (phase, { defaultConfig }) => {
             },
         },
         webpack: (config, { webpack, isServer }) => {
-        
+
             (async () => {
                 if (process.env.LOGO_LARGE) {
                     fs.writeFileSync("./public/logo.png", await download(process.env.LOGO_LARGE));
@@ -82,6 +82,6 @@ module.exports = (phase, { defaultConfig }) => {
                 },
             }, sentryWebpackPluginOptions)
         : moduleExports;
-    
+
     return moduleExports;
 };
