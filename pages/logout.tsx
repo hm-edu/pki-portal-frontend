@@ -1,4 +1,6 @@
-import { Alert, AlertTitle, Container } from "@mui/material";
+import Alert from "@mui/material/Alert";
+import AlertTitle from "@mui/material/AlertTitle";
+import Container from "@mui/material/Container";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 

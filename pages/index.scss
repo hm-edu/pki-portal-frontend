@@ -5,27 +5,26 @@ body {
       sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-  }
-  
-  button, .MuiButton-text, .MuiButton-root {
+}
+
+button, .MuiButton-text, .MuiButton-root {
     text-transform: unset !important;
-  }
-  
-  code {
+}
+
+code {
     font-family: "Fira Mono";
     background-color: black;
     padding: 4px;
     border: 3px solid black;
     color: white;
-  }
-  
-  html,
-  body,
-  #__next {
+}
+
+html,
+body,
+#__next {
     height: 100%;
-  }
-  
-  .MuiContainer-root {
+}
+
+.MuiContainer-root {
     height: calc(100% - 64px);
-  }
-  
+}
