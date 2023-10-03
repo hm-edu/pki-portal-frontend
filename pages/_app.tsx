@@ -8,7 +8,6 @@ import "@fontsource/fira-mono/500.css";
 import "@fontsource/fira-mono/700.css";
 import { SessionProvider } from "next-auth/react";
 import CssBaseline from "@mui/material/CssBaseline";
-import { ThemeProvider } from "@mui/material";
 import Container from "@mui/material/Container";
 import ButtonAppBar from "@/components/navbar";
 import { createEmotionCache, theme } from "@/components/theme";
@@ -20,6 +19,7 @@ import Head from "next/head";
 import { CacheProvider, EmotionCache } from "@emotion/react";
 import AutoLogout from "@/components/autoLogout";
 import { Config } from "@/components/config";
+import ThemeProvider from "@mui/system/ThemeProvider";
 
 const clientSideEmotionCache = createEmotionCache();
 const Offset = styled("div")(({ theme }) => {

@@ -37,7 +37,7 @@ import TextField, { TextFieldProps } from "@mui/material/TextField";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
 import { QuickSearchToolbar } from "@/components/toolbar";
-import { AlertTitle } from "@mui/material";
+import AlertTitle from "@mui/material/AlertTitle";
 const CustomSelect = styled(Select<string>)(() => ({
     "&.MuiOutlinedInput-root": {
         "& fieldset": {
