@@ -17,7 +17,7 @@ export const authOptions: NextAuthOptions =
     secret: process.env.AUTH_SECRET ?? "this_too_should_be_ch4ng3d",
     providers: [
         {
-            id: "shibboleth",
+            id: "oidc",
             name: "oidc",
             type: "oauth",
             checks: ["pkce"],
