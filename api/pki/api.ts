@@ -13,13 +13,15 @@
  */
 
 
-import { Configuration } from './configuration';
-import globalAxios, { AxiosPromise, AxiosInstance, AxiosRequestConfig } from 'axios';
+import type { Configuration } from './configuration';
+import type { AxiosPromise, AxiosInstance, AxiosRequestConfig } from 'axios';
+import globalAxios from 'axios';
 // Some imports not used depending on template conditions
 // @ts-ignore
 import { DUMMY_BASE_URL, assertParamExists, setApiKeyToObject, setBasicAuthToObject, setBearerAuthToObject, setOAuthToObject, setSearchParams, serializeDataIfNeeded, toPathString, createRequestFunction } from './common';
+import type { RequestArgs } from './base';
 // @ts-ignore
-import { BASE_PATH, COLLECTION_FORMATS, RequestArgs, BaseAPI, RequiredError } from './base';
+import { BASE_PATH, COLLECTION_FORMATS, BaseAPI, RequiredError } from './base';
 
 /**
  * 
@@ -115,6 +117,12 @@ export interface PortalApisSslCertificateDetails {
      * @memberof PortalApisSslCertificateDetails
      */
     'created'?: TimestamppbTimestamp;
+    /**
+     * 
+     * @type {number}
+     * @memberof PortalApisSslCertificateDetails
+     */
+    'db_id'?: number;
     /**
      * 
      * @type {TimestamppbTimestamp}
@@ -432,12 +440,54 @@ export class SMIMEApi extends BaseAPI {
 }
 
 
+
 /**
  * SSLApi - axios parameter creator
  * @export
  */
 export const SSLApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
+        /**
+         * 
+         * @summary SSL List active certificates Endpoint
+         * @param {string} domain domain search by domain
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        sslActiveGet: async (domain: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'domain' is not null or undefined
+            assertParamExists('sslActiveGet', 'domain', domain)
+            const localVarPath = `/ssl/active`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication API required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            if (domain !== undefined) {
+                localVarQueryParameter['domain'] = domain;
+            }
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
         /**
          * This endpoint handles a provided CSR. The validity of the CSR is checked and passed to the sectigo server.
          * @summary SSL CSR Endpoint
@@ -563,6 +613,17 @@ export const SSLApiFp = function(configuration?: Configuration) {
     const localVarAxiosParamCreator = SSLApiAxiosParamCreator(configuration)
     return {
         /**
+         * 
+         * @summary SSL List active certificates Endpoint
+         * @param {string} domain domain search by domain
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async sslActiveGet(domain: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<PortalApisSslCertificateDetails>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.sslActiveGet(domain, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
          * This endpoint handles a provided CSR. The validity of the CSR is checked and passed to the sectigo server.
          * @summary SSL CSR Endpoint
          * @param {ModelCsrRequest} modelCsrRequest The CSR
@@ -605,6 +666,16 @@ export const SSLApiFactory = function (configuration?: Configuration, basePath?:
     const localVarFp = SSLApiFp(configuration)
     return {
         /**
+         * 
+         * @summary SSL List active certificates Endpoint
+         * @param {string} domain domain search by domain
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        sslActiveGet(domain: string, options?: any): AxiosPromise<Array<PortalApisSslCertificateDetails>> {
+            return localVarFp.sslActiveGet(domain, options).then((request) => request(axios, basePath));
+        },
+        /**
          * This endpoint handles a provided CSR. The validity of the CSR is checked and passed to the sectigo server.
          * @summary SSL CSR Endpoint
          * @param {ModelCsrRequest} modelCsrRequest The CSR
@@ -644,6 +715,18 @@ export const SSLApiFactory = function (configuration?: Configuration, basePath?:
  */
 export class SSLApi extends BaseAPI {
     /**
+     * 
+     * @summary SSL List active certificates Endpoint
+     * @param {string} domain domain search by domain
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof SSLApi
+     */
+    public sslActiveGet(domain: string, options?: AxiosRequestConfig) {
+        return SSLApiFp(this.configuration).sslActiveGet(domain, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
      * This endpoint handles a provided CSR. The validity of the CSR is checked and passed to the sectigo server.
      * @summary SSL CSR Endpoint
      * @param {ModelCsrRequest} modelCsrRequest The CSR
@@ -678,6 +761,7 @@ export class SSLApi extends BaseAPI {
         return SSLApiFp(this.configuration).sslRevokePost(modelRevokeRequest, options).then((request) => request(this.axios, this.basePath));
     }
 }
+
 
 
 /**
@@ -780,5 +864,6 @@ export class UserApi extends BaseAPI {
         return UserApiFp(this.configuration).whoamiGet(options).then((request) => request(this.axios, this.basePath));
     }
 }
+
 
 

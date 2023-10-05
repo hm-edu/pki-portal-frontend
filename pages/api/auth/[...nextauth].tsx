@@ -17,7 +17,7 @@ export const authOptions: NextAuthOptions =
     secret: process.env.AUTH_SECRET ?? "this_too_should_be_ch4ng3d",
     providers: [
         {
-            id: "oidc",
+            id: "shibboleth",
             name: "oidc",
             type: "oauth",
             checks: ["pkce"],
@@ -61,7 +61,7 @@ export const authOptions: NextAuthOptions =
             // Allows callback URLs on the same origin
             return url;
         },
-        async jwt({ token, user, account }): Promise<JWT> {            
+        async jwt({ token, user, account }): Promise<JWT> {
             // Persist the OAuth access_token to the token right after signin
             if (account && user) {
                 return {

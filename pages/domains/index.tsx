@@ -15,7 +15,12 @@ import CircularProgress from "@mui/material/CircularProgress";
 import Alert from "@mui/material/Alert";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import { deDE } from "@mui/x-data-grid";
+import Typography from "@mui/material/Typography";
+import Stack from "@mui/material/Stack";
 import * as Sentry from "@sentry/nextjs";
+
+import { useSession } from "next-auth/react";
+import isValidDomain from "is-valid-domain";
 
 import { FormEvent, useEffect, useRef, useState } from "react";
 import { DomainsApi } from "@/api/domains/api";
@@ -24,11 +29,8 @@ import { Configuration } from "@/api/domains/configuration";
 import { Config } from "@/components/config";
 import Delegation from "@/components/delegation";
 import { dataGridStyle } from "@/components/theme";
-import Typography from "@mui/material/Typography";
-import { useSession } from "next-auth/react";
 import { QuickSearchToolbar } from "@/components/toolbar";
-import isValidDomain from "is-valid-domain";
-import Stack from "@mui/material/Stack";
+import { PortalApisSslCertificateDetails, SSLApi } from "@/api/pki/api";
 
 export default function Domains() {
     const [pageModel, setPageModel] = useState<GridPaginationModel>({ page: 0, pageSize: 50 });
@@ -42,8 +44,11 @@ export default function Domains() {
     const [error, setError] = useState<undefined | boolean | string>(undefined);
     const [createError, setCreateError] = useState<undefined | string | React.JSX.Element>(undefined);
     const [dnsRunning, setDnsRunning] = useState(false);
+    const [toBeDeleted, setToBeDeleted] = useState<PortalApisSslCertificateDetails[]>([]);
+
     const newDomain = useRef<TextFieldProps>(null);
     const target = useRef<TextFieldProps>(null);
+
     const { data: session, status } = useSession();
 
     const handleDeleteClose = () => {
@@ -65,7 +70,7 @@ export default function Domains() {
 
     const create = (event: FormEvent<Element>) => {
         event.preventDefault();
-        setCreateError(undefined);        
+        setCreateError(undefined);
         const fqdn = newDomain.current!.value as string;
         if (!isValidDomain(fqdn)) {
             setCreateError("Bitte geben Sie einen gültigen Domainnamen ein!");
@@ -191,8 +196,16 @@ export default function Domains() {
 
                 const remove = (event: FormEvent<Element>) => {
                     event.preventDefault();
-                    setDeleteOpen(true);
-                    setSelected(row);
+
+                    const cfg = new Configuration({
+                        accessToken: session?.accessToken,
+                    });
+                    const api = new SSLApi(cfg, `${Config.PkiHost}`);
+                    void api.sslActiveGet(row.fqdn!).then((response) => {
+                        setDeleteOpen(true);
+                        setSelected(row);
+                        setToBeDeleted(response.data);
+                    });
                 };
 
                 const openDelegation = (event: FormEvent<Element>) => {
@@ -232,7 +245,18 @@ export default function Domains() {
             <DialogContent>
                 <DialogContentText>
                     Sie möchten die Domain {selected?.fqdn} löschen.
-                    <Alert severity="warning">Diese Löschung wird automatisch alle zugeordnten Zertifikate widerrufen.</Alert>
+                    {toBeDeleted.length > 0 && <Alert severity="warning">
+
+                        Diese Löschung wird automatisch alle zugeordneten Zertifikate widerrufen.
+
+                        <ul>
+                            {toBeDeleted.map((cert) => {
+                                return <li key={cert.id}>{cert.serial}</li>;
+                            })}
+                        </ul>
+
+                    </Alert>}
+
                     Möchten Sie wirklich fortfahren?
                 </DialogContentText>
             </DialogContent>

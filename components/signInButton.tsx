@@ -7,7 +7,7 @@ import { signIn } from "next-auth/react";
 export const SignInButton = () => {
 
     return (
-        <Button color="inherit" variant="outlined" onClick={() => { void signIn("oidc"); }}>
+        <Button color="inherit" variant="outlined" onClick={() => { void signIn("shibboleth"); }}>
             Anmelden
         </Button >
     );
