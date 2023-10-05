@@ -197,15 +197,14 @@ export default function Domains() {
                 const remove = (event: FormEvent<Element>) => {
                     event.preventDefault();
 
-                    const cfg = new Configuration({
-                        accessToken: session?.accessToken,
-                    });
+                    const cfg = new Configuration({ accessToken: session?.accessToken });
                     const api = new SSLApi(cfg, `${Config.PkiHost}`);
-                    void api.sslActiveGet(row.fqdn!).then((response) => {
-                        setDeleteOpen(true);
-                        setSelected(row);
-                        setToBeDeleted(response.data);
-                    });
+                    void api.sslActiveGet(row.fqdn!)
+                        .then((response) => { setDeleteOpen(true); setSelected(row); setToBeDeleted(response.data); })
+                        .catch((error) => {
+                            Sentry.captureException(error);
+                            setError(true);
+                        });
                 };
 
                 const openDelegation = (event: FormEvent<Element>) => {
@@ -240,37 +239,53 @@ export default function Domains() {
 
     let deleteDialog;
     if (selected && deleteOpen) {
-        deleteDialog = <Dialog open={deleteOpen} onClose={handleDeleteClose}>
-            <DialogTitle>Domain löschen</DialogTitle>
-            <DialogContent>
-                <DialogContentText>
-                    Sie möchten die Domain {selected?.fqdn} löschen.
-                    {toBeDeleted.length > 0 && <Alert severity="warning">
-
-                        Diese Löschung wird automatisch alle zugeordneten Zertifikate widerrufen.
-
-                        <ul id="toBeRevoked">
-                            {toBeDeleted.map((cert) => {
-                                return <li key={cert.id}>Serial: {cert.serial}</li>;
-                            })}
-                        </ul>
-
-                    </Alert>}
-
-                    Möchten Sie wirklich fortfahren?
-                </DialogContentText>
-            </DialogContent>
-            <DialogActions>
-                <Button variant="outlined" color="inherit" disabled={deleting} onClick={handleDeleteClose}>Abbrechen</Button>
-                <Button variant="outlined" color="warning" disabled={deleting} onClick={() => {
-                    setDeleting(true);
-                    void removeDomain(selected.id!, setDomains, setError).then(() => {
-                        setDeleting(false);
-                        handleDeleteClose();
-                    });
-                }}>Löschen {(deleting && <CircularProgress size={24} sx={{ color: green[500], position: "absolute", top: "50%", left: "50%", marginTop: "-12px", marginLeft: "-12px" }} />)}</Button>
-            </DialogActions>
-        </Dialog>;
+        deleteDialog = (
+            <Dialog open={deleteOpen} onClose={handleDeleteClose}>
+                <DialogTitle>Domain löschen</DialogTitle>
+                <DialogContent>
+                    <DialogContentText>
+                        <Typography>
+                            Sie möchten die Domain {selected?.fqdn} löschen.
+                        </Typography>
+                        {toBeDeleted.length > 0 && (
+                            <Alert severity="warning">
+                                Diese Löschung wird automatisch alle
+                                zugeordneten Zertifikate widerrufen.
+                                <ul id="toBeRevoked">
+                                    {toBeDeleted.map((cert) => {
+                                        return (
+                                            <li key={cert.id}>
+                                                Serial: {cert.serial}
+                                            </li>
+                                        );
+                                    })}
+                                </ul>
+                            </Alert>
+                        )}
+                        <Typography>
+                            Möchten Sie wirklich fortfahren?
+                        </Typography>
+                    </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                    <Button variant="outlined" color="inherit" disabled={deleting} onClick={handleDeleteClose}>
+                        Abbrechen
+                    </Button>
+                    <Button variant="outlined" color="warning" disabled={deleting} onClick={() => {
+                        setDeleting(true);
+                        void removeDomain( selected.id!, setDomains, setError ).then(() => {
+                            setDeleting(false);
+                            handleDeleteClose();
+                        });
+                    }}>
+                        Löschen{" "}
+                        {deleting && (
+                            <CircularProgress size={24} sx={{ color: green[500], position: "absolute", top: "50%", left: "50%", marginTop: "-12px", marginLeft: "-12px" }}/>
+                        )}
+                    </Button>
+                </DialogActions>
+            </Dialog>
+        );
     }
 
     let transferDialog;
