@@ -249,9 +249,9 @@ export default function Domains() {
 
                         Diese Löschung wird automatisch alle zugeordneten Zertifikate widerrufen.
 
-                        <ul>
+                        <ul id="toBeRevoked">
                             {toBeDeleted.map((cert) => {
-                                return <li key={cert.id}>{cert.serial}</li>;
+                                return <li key={cert.id}>Serial: {cert.serial}</li>;
                             })}
                         </ul>
 
