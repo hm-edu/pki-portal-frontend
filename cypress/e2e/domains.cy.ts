@@ -103,6 +103,10 @@ describe("domains", () => {
                     "db_id": 1
                 }],
         }).as("getActive");
+        cy.intercept("https://pki.api.example.edu/ssl/active?domain=test-2.example.edu", {
+            statusCode: 200,
+            body: [ ],
+        }).as("getActive1");
         cy.visit("/domains");
         cy.wait(["@getSession", "@getDomains"]);
         cy.get("#new").should("be.visible");
@@ -120,6 +124,10 @@ describe("domains", () => {
         cy.get("[data-id=\"0\"] > .MuiDataGrid-cell--withRenderer.MuiDataGrid-cell--textLeft > .MuiBox-root > :nth-child(2)").click();
         cy.wait(["@getActive"]);
         cy.get("#toBeRevoked").should("be.visible").and("contain", "Serial: Test12345");
+        cy.get('body').type('{esc}');
+        cy.get("[data-id=\"2\"] > .MuiDataGrid-cell--withRenderer.MuiDataGrid-cell--textLeft > .MuiBox-root > :nth-child(2)").click();
+        cy.wait(["@getActive1"]);
+        cy.get("#toBeRevoked").should("not.exist");
     });
     it("domains loggedin error loading", () => {
         cy.viewport(1280, 1024);
