@@ -24,8 +24,13 @@ import withSession from "@/components/session";
 import LoggedOut from "../logout";
 import * as Sentry from "@sentry/nextjs";
 import Alert from "@mui/material/Alert";
+import Dialog from "@mui/material/Dialog";
+import DialogTitle from "@mui/material/DialogTitle";
+import DialogContentText from "@mui/material/DialogContentText";
+import DialogContent from "@mui/material/DialogContent";
+import DialogActions from "@mui/material/DialogActions";
 
-interface EabState { initialized: boolean; paginationModel: GridPaginationModel; tokens: ModelsEAB[]; selected: GridRowSelectionModel; loading: boolean; recommendations: boolean; error: string | boolean | undefined }
+interface EabState { initialized: boolean; paginationModel: GridPaginationModel; tokens: ModelsEAB[]; selected: GridRowSelectionModel; delete: ModelsEAB | undefined; loading: boolean; recommendations: boolean; error: string | boolean | undefined }
 
 class EabTokens extends React.Component<{ session: AuthProps | null; status: string }, EabState> {
 
@@ -70,6 +75,36 @@ class EabTokens extends React.Component<{ session: AuthProps | null; status: str
         });
     }
 
+    private delete() {
+        if (this.state.delete) {
+            return <Dialog open={this.state.delete != undefined} id="toBeDeleted" onClose={()=>this.setState({ delete: undefined })}>
+                <DialogTitle>ACME Token löschen</DialogTitle>
+                <DialogContent>
+                    <DialogContentText>
+                        <Typography>
+                            Sie möchten den ACME Token {this.state.delete.id} löschen.
+                        </Typography>
+                        <Typography>
+                            Dieser Vorgang kann nicht rückgängig gemacht werden. Die betreffenden Server werden nicht mehr in der Lage sein, Zertifikate zu beziehen oder zu erneuern.
+                        </Typography>
+                    </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                    <Button variant="outlined" color="inherit" onClick={() => this.setState({ delete: undefined })} >
+                        Abbrechen
+                    </Button>
+                    <Button variant="outlined" color="warning" onClick={() => {
+                        this.removeEAB(this.state.delete?.id as string);
+                        this.setState({ delete: undefined });
+                    }}>
+                        Löschen{" "}
+                    </Button>
+                </DialogActions>
+            </Dialog>;
+        }
+        return <></>;
+    }
+
     columns: GridColDef[] = [
         { field: "id", headerName: "ID", width: 280 },
         { field: "comment", headerName: "Kommentar", width: 280 },
@@ -87,13 +122,12 @@ class EabTokens extends React.Component<{ session: AuthProps | null; status: str
             flex: 1,
             minWidth: 150,
             renderCell: (params) => {
-                const row = (params.row as ModelsEAB);
                 const remove = (event: FormEvent<Element>) => {
                     event.stopPropagation();
                     event.preventDefault();
-                    this.setState({ selected: [] });
-                    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-                    this.removeEAB(row.id!);
+                    const row = params.row as ModelsEAB;
+
+                    this.setState({ delete: row });
                 };
                 return <Button color="warning" sx={{ px: 1, mx: 1 }} variant="outlined" startIcon={<DeleteIcon />} onClick={remove}>Löschen</Button>;
             },
@@ -111,6 +145,7 @@ class EabTokens extends React.Component<{ session: AuthProps | null; status: str
             recommendations: false,
             error: undefined,
             initialized: false,
+            delete: undefined,
         };
         this.newComment = React.createRef<TextFieldProps>();
     }
@@ -188,6 +223,7 @@ class EabTokens extends React.Component<{ session: AuthProps | null; status: str
                         pagination rows={this.state.tokens} />
                 </div>
                 {this.selection()}
+                {this.delete()}
                 <Box component="form" sx={{ maxWidth: "100%", display: "flex", flexDirection: "column" }} onSubmit={(e: FormEvent<Element>) => {
                     e.preventDefault();
                     this.createEABToken();
