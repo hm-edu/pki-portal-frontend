@@ -6,6 +6,9 @@
     "dependencyDashboardTitle": "Renovate Dashboard 🤖",
     "suppressNotifications": [
         "prIgnoreNotification"
+    ],  
+    "extends": [
+        "config:base"
     ],
     "rebaseWhen": "auto",
     "packageRules": [
