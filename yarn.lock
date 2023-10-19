@@ -1886,9 +1886,9 @@
   integrity sha512-tAe4Q+OLFOA/AMD+0lq8ovp8t3ysxAOeaScnfNdZpUxaGl51ZMDEITxkvFl1STudQ58mz6gzVGl9VhMKhwRnZQ==
 
 "@types/unidecode@^0.1.1":
-  version "0.1.1"
-  resolved "https://registry.yarnpkg.com/@types/unidecode/-/unidecode-0.1.1.tgz#e403b69809a5ac521294753170f0fa22cdf57b27"
-  integrity sha512-ReYnWajSY+QnZk5dBpSztek+kHUtpHJkf0pSZBx2ZVIxcSBkRLY7m0caPwVKXC6WjE65G2fVU84EpiFbdJVDuQ==
+  version "0.1.2"
+  resolved "https://registry.yarnpkg.com/@types/unidecode/-/unidecode-0.1.2.tgz#fc3a5f08cfa1bc93c050a22c0f376fe6dd90c1de"
+  integrity sha512-sUz8YFeSjLgKkxvriqwPQZMjiEuoWfqUn79EOVEfs2lUurl7WY4GRJpoy6DWrooVn4bJrm6Uzv186rFzSTSdZg==
 
 "@types/yauzl@^2.9.1":
   version "2.10.2"
