@@ -54,7 +54,7 @@
     "@testing-library/react": "^14.0.0",
     "@types/cypress__code-coverage": "^3.10.0",
     "@types/node": "20.8.7",
-    "@types/react": "18.2.30",
+    "@types/react": "18.2.31",
     "@types/react-dom": "18.2.14",
     "@types/unidecode": "^0.1.1",
     "@typescript-eslint/eslint-plugin": "^6.7.4",
