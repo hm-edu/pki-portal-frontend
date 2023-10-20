@@ -1,8 +1,8 @@
 diff --git a/node_modules/@types/node-forge/index.d.ts b/node_modules/@types/node-forge/index.d.ts
-index 63f64ff..a197c3c 100644
+index 83c7735..a422bb8 100644
 --- a/node_modules/@types/node-forge/index.d.ts
 +++ b/node_modules/@types/node-forge/index.d.ts
-@@ -253,7 +253,7 @@ declare module "node-forge" {
+@@ -252,7 +252,7 @@ declare module "node-forge" {
      namespace pki {
          type PEM = string;
          type PublicKey = rsa.PublicKey | ed25519.Key;
@@ -11,7 +11,7 @@ index 63f64ff..a197c3c 100644
          type EncryptionOptions = {
              algorithm?: "aes128" | "aes192" | "aes256" | "3des" | undefined;
              count?: number | undefined;
-@@ -703,6 +703,14 @@ declare module "node-forge" {
+@@ -702,6 +702,14 @@ declare module "node-forge" {
          function getPublicKeyFingerprint(publicKey: PublicKey, options: BinaryFingerprintOptions): Bytes;
      }
  
