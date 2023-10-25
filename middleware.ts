@@ -9,7 +9,9 @@ import {
 
 import { Config } from "@/components/config";
 let securityMiddleware: ChainableMiddleware[] = [];
-if (process.env.DISABLE_CSP == "true") { /* empty */ } else {
+if (process.env.NEXT_PUBLIC_DISABLE_CSP == "true") {
+    console.log("CSP disabled");
+} else {
     securityMiddleware = [
         csp({
             directives:
