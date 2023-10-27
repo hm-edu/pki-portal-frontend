@@ -1,0 +1,24 @@
+diff --git a/node_modules/@types/node-forge/index.d.ts b/node_modules/@types/node-forge/index.d.ts
+index 6e84257..b4770ac 100644
+--- a/node_modules/@types/node-forge/index.d.ts
++++ b/node_modules/@types/node-forge/index.d.ts
+@@ -226,11 +226,17 @@ declare module "node-forge" {
+         function encode(msg: ObjectPEM, options?: EncodeOptions): string;
+         function decode(str: string): ObjectPEM[];
+     }
+-
++    namespace ecdsa {
++        class PrivateKey {
++            constructor(ec, privateKey);
++        }
++        function privateKeyToAsn1(privateKey: PrivateKey): asn1.Asn1;
++        function privateKeyFromAsn1(privateKey: asn1.Asn1): PrivateKey;
++    }
+     namespace pki {
+         type PEM = string;
+         type PublicKey = rsa.PublicKey | ed25519.Key;
+-        type PrivateKey = rsa.PrivateKey | ed25519.Key;
++        type PrivateKey = rsa.PrivateKey | ed25519.Key | ecdsa.PrivateKey;
+         type EncryptionOptions = {
+             algorithm?: "aes128" | "aes192" | "aes256" | "3des" | undefined;
+             count?: number | undefined;
