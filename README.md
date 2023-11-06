@@ -24,6 +24,7 @@ At development and during building a compiled version or a container, the follow
 | NEXT_PUBLIC_PKI_HOST              | The API backend host for PKI Operations                        | `https://pki.api.example.edu`              |
 | NEXT_PUBLIC_DOMAIN_HOST           | The API backend host for Domain Operations                     | `https://domain.api.example.edu`           |
 | NEXT_PUBLIC_ACME_HOST             | The host for ACME Operations                                   | `https://acme.example.edu`                 |
+| NEXT_PUBLIC_DOCS_URL              | The url for some docs                                          | `https://wiki.pki.example.edu`             |
 | NEXT_PUBLIC_SENTRY_DSN            | In case of using sentry the sentry DSN to upload error reports |                                            |
 | NEXT_PUBLIC_ORGANIZATION_NAME     | The name of your organization                                  | Example University                         |
 | NEXT_PUBLIC_REFETCH_IN_BACKGROUND | Whether the session shall be refreshed in background or not    | false                                      |

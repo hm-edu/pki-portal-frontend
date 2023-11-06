@@ -21,6 +21,7 @@ import dynamic from "next/dynamic";
 import Image from "next/image";
 import logo from "../public/logo-small.png";
 import Container from "@mui/system/Container";
+import { Config } from "./config";
 
 export default function ButtonAppBar() {
     const { data: session } = useSession();
@@ -30,7 +31,7 @@ export default function ButtonAppBar() {
     useEffect(() => {
         const logout = <Button color="inherit" key='logout'
             onClick={() => {
-                // eslint-disable-next-line @typescript-eslint/restrict-plus-operands, @typescript-eslint/no-unsafe-member-access            
+                // eslint-disable-next-line @typescript-eslint/restrict-plus-operands, @typescript-eslint/no-unsafe-member-access
                 void signOut({ callbackUrl: (process.env.AUTH_IDP ?? process.env.NEXT_PUBLIC_AUTH_IDP ?? "https://sso-test.hm.edu") + "/idp/profile/Logout" });
             }}
             variant="outlined">
@@ -56,7 +57,7 @@ export default function ButtonAppBar() {
         <Link legacyBehavior={true} key="server" href="/server" ><Button key="server" color="inherit">Serverzertifikate</Button></Link>,
         <Link legacyBehavior={true} key="eab" href="/eab" ><Button key="eab" color="inherit" >ACME Tokens</Button></Link>,
         <Link legacyBehavior={true} key="user" href="/user" ><Button key="user" color="inherit" >Nutzerzertifikate</Button></Link>,
-        <Link legacyBehavior={true} passHref target="_blank" key="help" href="https://conwiki.cc.hm.edu/confluence/pages/viewpage.action?pageId=198048309">
+        <Link legacyBehavior={true} passHref target="_blank" key="help" href={Config.DocsUrl}>
             <a target="_blank" style={{
                 textDecoration: "none",
                 color: "inherit",
