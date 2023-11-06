@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import NextAuth, { NextAuthOptions } from "next-auth";
-import jwt_decode from "jwt-decode";
 import { JWT } from "next-auth/jwt";
 import { OAuthConfig } from "next-auth/providers";
 import * as Sentry from "@sentry/nextjs";
+import { jwtDecode } from "jwt-decode";
 
 const idp = process.env.AUTH_IDP ?? process.env.NEXT_PUBLIC_AUTH_IDP ?? "https://sso-test.hm.edu";
 
@@ -39,7 +39,8 @@ export const authOptions: NextAuthOptions =
                 if (!tokens.access_token) {
                     return { id: "", name: "", email: "" };
                 }
-                const act: { sub: string; email: string; name: string } = jwt_decode(tokens.access_token);
+                // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+                const act: { sub: string; email: string; name: string } = jwtDecode(tokens.access_token);
                 return {
                     id: act.sub,
                     name: act.name,
@@ -79,7 +80,8 @@ export const authOptions: NextAuthOptions =
             if (!token || !token.accessToken) {
                 throw new Error("No token provided");
             }
-            const act: { sub: string; email: string; name: string } = jwt_decode(token.accessToken);
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+            const act: { sub: string; email: string; name: string } = jwtDecode(token.accessToken);
             Sentry.addBreadcrumb({
                 category: "auth",
                 message: `Refreshing ${act.email}'s access token`,
