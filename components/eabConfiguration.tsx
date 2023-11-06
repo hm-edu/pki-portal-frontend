@@ -41,6 +41,7 @@ export class RecommendedConfigurationsComponent extends React.Component<{ token:
     --key-type ecdsa \\
     --eab-kid ${id} \\
     --eab-hmac-key ${key_bytes} \\
+    --issuance-timeout 300 \\
     --domain dummy.hm.edu `;
 
         return <Modal open={this.props.token != undefined} onClose={() => { this.props.onClose(); }} aria-labelledby="modal-modal-title" aria-describedby="modal-modal-description" >
