@@ -92,10 +92,10 @@ jobs:
             SENTRY_AUTH_TOKEN=${{ secrets.SENTRY_AUTH_TOKEN }}
             SENTRY_RELEASE=${{ github.sha }}
             NEXT_PUBLIC_SENTRY_DSN=${{ secrets.SENTRY_DSN }}
-            NEXT_PUBLIC_EAB_HOST='https://eab.api.hm.edu'
-            NEXT_PUBLIC_ACME_HOST='https://acme.hm.edu'
-            NEXT_PUBLIC_PKI_HOST='https://pki.api.hm.edu'
-            NEXT_PUBLIC_DOMAIN_HOST='https://domain.api.hm.edu'
-            NEXT_PUBLIC_AUTH_IDP='https://sso.hm.edu'
-            NEXT_PUBLIC_ORGANIZATION_NAME='Hochschule München'
-            NEXT_PUBLIC_DOCS_URL='https://conwiki.cc.hm.edu/confluence/pages/viewpage.action?pageId=198048309'
+            NEXT_PUBLIC_EAB_HOST=https://eab.api.hm.edu
+            NEXT_PUBLIC_ACME_HOST=https://acme.hm.edu
+            NEXT_PUBLIC_PKI_HOST=https://pki.api.hm.edu
+            NEXT_PUBLIC_DOMAIN_HOST=https://domain.api.hm.edu
+            NEXT_PUBLIC_AUTH_IDP=https://sso.hm.edu
+            NEXT_PUBLIC_ORGANIZATION_NAME=Hochschule München
+            NEXT_PUBLIC_DOCS_URL=https://conwiki.cc.hm.edu/confluence/pages/viewpage.action?pageId=198048309
