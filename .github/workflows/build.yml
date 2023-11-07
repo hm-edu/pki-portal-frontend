@@ -43,7 +43,6 @@ jobs:
           wait-on: http://localhost:3000
           wait-on-timeout: 120
           browser: edge
-          record: true
       - uses: actions/upload-artifact@v3
         with:
           name: cypress-videos
