@@ -9,7 +9,7 @@ describe("eab", () => {
     it("eab loggedin empty", () => {
         cy.viewport(1280, 1024);
         cy.login().as("getSession");
-        cy.intercept("https://eab.api.example.edu/eab/", {
+        cy.intercept("https://eab.api.hm.edu/eab/", {
             statusCode: 200,
         }).as("getEab");
         cy.visit("/eab");
@@ -20,7 +20,7 @@ describe("eab", () => {
     it("eab loggedin load & delete", () => {
         cy.viewport(1280, 1024);
         cy.login().as("getSession");
-        cy.intercept("https://eab.api.example.edu/eab/", {
+        cy.intercept("https://eab.api.hm.edu/eab/", {
             statusCode: 200,
             body: [{ "id":"Test","key_bytes":"","bound_at":"2022-11-01T07:30:57.615887734Z","comment":"test.hm.edu" }],
         }).as("getEab");
@@ -33,7 +33,7 @@ describe("eab", () => {
     it("eab loggedin error loading", () => {
         cy.viewport(1280, 1024);
         cy.login().as("getSession");
-        cy.intercept("https://eab.api.example.edu/eab/", {
+        cy.intercept("https://eab.api.hm.edu/eab/", {
             statusCode: 500,
         }).as("getEab");
         cy.visit("/eab");
