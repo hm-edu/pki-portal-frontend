@@ -36,7 +36,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
       - run: yarn install --immutable --immutable-cache --check-cache
-      - run: yarn build
       - run: yarn e2e:headless
         id: cypress
         continue-on-error: true
