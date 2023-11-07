@@ -43,6 +43,8 @@ jobs:
           start: node .next/standalone/server.js
           wait-on: http://localhost:3000
           wait-on-timeout: 120
+        env:
+          NEXT_PUBLIC_DISABLE_CSP: true
         continue-on-error: true
       - uses: actions/upload-artifact@v3
         with:
