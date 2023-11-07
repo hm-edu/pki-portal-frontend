@@ -39,8 +39,11 @@ jobs:
         uses: cypress-io/github-action@v5
         with:
           build: yarn build
-          start: yarn start
+          start: node .next/standalone/server.js
           wait-on: http://localhost:3000
+          wait-on-timeout: 120
+          browser: edge
+          record: true
       - uses: actions/upload-artifact@v3
         with:
           name: cypress-videos
