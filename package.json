@@ -8,8 +8,8 @@
     "build": "rm .babelrc || true && next build",
     "start": "next start",
     "lint": "next lint",
-    "e2e": "yarn babelrc && start-server-and-test dev http://localhost:3000 \"cypress open --e2e\"",
-    "e2e:headless": "yarn babelrc && start-server-and-test dev http://localhost:3000 \"cypress run --e2e\"",
+    "e2e": "yarn babelrc && next build && start-server-and-test start http://localhost:3000 \"cypress open --e2e\"",
+    "e2e:headless": "yarn babelrc && next build && start-server-and-test start http://localhost:3000 \"cypress run --e2e\"",
     "babelrc": "echo '{ \"presets\": [ \"next/babel\" ], \"plugins\": [ \"istanbul\" ] }' > .babelrc"
   },
   "dependencies": {
@@ -63,7 +63,6 @@
     "babel-plugin-istanbul": "^6.1.1",
     "cross-env": "^7.0.3",
     "cypress": "13.4.0",
-    "cypress-wait-for-stable-dom": "^0.1.0",
     "eslint": "8.53.0",
     "eslint-config-next": "14.0.1",
     "eslint-plugin-cypress": "^2.15.1",
