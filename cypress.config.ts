@@ -2,6 +2,8 @@ import { defineConfig } from "cypress";
 import codeCoverageTask from "@cypress/code-coverage/task";
 
 export default defineConfig({
+    video: true,
+    videosFolder: "cypress/videos",
     videoCompression: 15,
     e2e: {
         viewportHeight: 1000,

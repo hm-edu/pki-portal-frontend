@@ -43,7 +43,6 @@ jobs:
           start: node .next/standalone/server.js
           wait-on: http://localhost:3000
           wait-on-timeout: 120
-          browser: edge
         continue-on-error: true
       - uses: actions/upload-artifact@v3
         with:
