@@ -32,26 +32,41 @@ jobs:
 
   e2e:
     runs-on: ubuntu-22.04
+    container:
+     image: cypress/browsers:node-20.9.0-chrome-118.0.5993.88-1-ff-118.0.2-edge-118.0.2088.46-1
+     options: --user 1001
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+      - name: Use Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: "yarn"
       - name: Cypress run
         id: cypress
-        uses: cypress-io/github-action@v5
+        uses: cypress-io/github-action@v6
         with:
           build: yarn build
           start: yarn start
-          wait-on: http://localhost:3000
-          wait-on-timeout: 120
+          record: true
         env:
+          # pass the Cypress Cloud record key as an environment variable
+          CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
+          # pass GitHub token to allow accurately detecting a build vs a re-run build
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # pass the project ID from the secrets through environment variable
+          CYPRESS_PROJECT_ID: ${{ secrets.PROJECT_ID }}
           NEXT_PUBLIC_DISABLE_CSP: true
-          NEXT_PUBLIC_EAB_HOST: 'https://eab.api.example.edu'
-          NEXT_PUBLIC_ACME_HOST: 'https://acme.example.edu'
-          NEXT_PUBLIC_PKI_HOST: 'https://pki.api.example.edu'
-          NEXT_PUBLIC_DOMAIN_HOST: 'https://domain.api.example.edu'
+          NEXT_PUBLIC_EAB_HOST: 'https://eab.api.hm.edu'
+          NEXT_PUBLIC_ACME_HOST: 'https://acme.hm.edu'
+          NEXT_PUBLIC_PKI_HOST: 'https://pki.api.hm.edu'
+          NEXT_PUBLIC_DOMAIN_HOST: 'https://domain.api.hm.edu'
           NEXT_PUBLIC_AUTH_IDP: 'https://sso.hm.edu'
           NEXT_PUBLIC_ORGANIZATION_NAME: 'Hochschule München'
           NEXT_PUBLIC_DOCS_URL: 'https://conwiki.cc.hm.edu/confluence/pages/viewpage.action?pageId=198048309'
+          HOST: "0.0.0.0"
+          NEXT_PUBLIC_CI: "true"
         continue-on-error: true
       - uses: actions/upload-artifact@v3
         with:

@@ -9,7 +9,7 @@ describe("server", () => {
     it("server loggedin empty", () => {
         cy.viewport(1280, 1024);
         cy.login().as("getSession");
-        cy.intercept("https://pki.api.example.edu/ssl/", {
+        cy.intercept("https://pki.api.hm.edu/ssl/", {
             statusCode: 200,
         }).as("getSsl");
         cy.visit("/server");
@@ -20,7 +20,7 @@ describe("server", () => {
     it("server loggedin error loading", () => {
         cy.viewport(1280, 1024);
         cy.login().as("getSession");
-        cy.intercept("https://pki.api.example.edu/ssl/", {
+        cy.intercept("https://pki.api.hm.edu/ssl/", {
             statusCode: 500,
         }).as("getSsl");
         cy.visit("/server");

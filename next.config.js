@@ -22,7 +22,7 @@ module.exports = (phase, { defaultConfig }) => {
         reactStrictMode: true,
         swcMinify: true,
         productionBrowserSourceMaps: true,
-        output: "standalone",
+        output: process.env.NEXT_PUBLIC_CI == "true" ? undefined : "standalone",
         compiler: {
             emotion: true,
         },
