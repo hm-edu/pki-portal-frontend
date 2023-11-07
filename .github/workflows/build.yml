@@ -47,7 +47,7 @@ jobs:
           NEXT_PUBLIC_DISABLE_CSP: true
           NEXT_PUBLIC_EAB_HOST: 'https://eab.api.example.edu'
           NEXT_PUBLIC_ACME_HOST: 'https://acme.example.edu'
-          NEXT_PUBLIC_PKI_HOST: 'https://pki.api.hmexample.edu'
+          NEXT_PUBLIC_PKI_HOST: 'https://pki.api.example.edu'
           NEXT_PUBLIC_DOMAIN_HOST: 'https://domain.api.example.edu'
           NEXT_PUBLIC_AUTH_IDP: 'https://sso.hm.edu'
           NEXT_PUBLIC_ORGANIZATION_NAME: 'Hochschule München'
