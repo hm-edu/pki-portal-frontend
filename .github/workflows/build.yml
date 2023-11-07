@@ -48,14 +48,14 @@ jobs:
           NEXT_PUBLIC_AUTH_IDP: 'https://sso.hm.edu'
           NEXT_PUBLIC_ORGANIZATION_NAME: 'Hochschule München'
           NEXT_PUBLIC_DOCS_URL: 'https://conwiki.cc.hm.edu/confluence/pages/viewpage.action?pageId=198048309'
-          HOST: 0.0.0.0
+          HOST: "0.0.0.0"
       - name: Copy standalone server
         run: cp .next/standalone/server.js server.js
       - name: Cypress run
         id: cypress
         uses: cypress-io/github-action@v5
         with:
-          start: node server.js
+          start: HOST=0.0.0.0 node server.js
           browser: chrome
           headed: true
           wait-on-timeout: 120
@@ -75,7 +75,7 @@ jobs:
           NEXT_PUBLIC_AUTH_IDP: 'https://sso.hm.edu'
           NEXT_PUBLIC_ORGANIZATION_NAME: 'Hochschule München'
           NEXT_PUBLIC_DOCS_URL: 'https://conwiki.cc.hm.edu/confluence/pages/viewpage.action?pageId=198048309'
-          HOST: 0.0.0.0
+          HOST: "0.0.0.0"
         continue-on-error: true
       - uses: actions/upload-artifact@v3
         with:
