@@ -14,4 +14,7 @@ export default defineConfig({
         baseUrl: "http://localhost:3000",
         chromeWebSecurity: false,
     },
+    retries: {
+        runMode: 5,
+    },
 });
