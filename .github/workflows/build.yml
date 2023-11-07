@@ -36,16 +36,30 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
       - name: Cypress run
+        id: cypress
         uses: cypress-io/github-action@v5
         with:
           build: yarn build
           start: yarn start
           wait-on: http://localhost:3000
+          wait-on-timeout: 120
+        env:
+          NEXT_PUBLIC_DISABLE_CSP: true
+          NEXT_PUBLIC_EAB_HOST: 'https://eab.api.example.edu'
+          NEXT_PUBLIC_ACME_HOST: 'https://acme.example.edu'
+          NEXT_PUBLIC_PKI_HOST: 'https://pki.api.example.edu'
+          NEXT_PUBLIC_DOMAIN_HOST: 'https://domain.api.example.edu'
+          NEXT_PUBLIC_AUTH_IDP: 'https://sso.hm.edu'
+          NEXT_PUBLIC_ORGANIZATION_NAME: 'Hochschule München'
+          NEXT_PUBLIC_DOCS_URL: 'https://conwiki.cc.hm.edu/confluence/pages/viewpage.action?pageId=198048309'
+        continue-on-error: true
       - uses: actions/upload-artifact@v3
         with:
           name: cypress-videos
           path: cypress/videos
-
+      - name: Check on failures
+        if: steps.cypress.outcome == 'failure'
+        run: exit 1
   docker:
     runs-on: ubuntu-latest
     needs: e2e

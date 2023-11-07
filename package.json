@@ -5,12 +5,11 @@
   "scripts": {
     "postinstall": "patch-package",
     "dev": "next dev",
-    "build": "rm .babelrc || true && next build",
+    "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "e2e": "yarn babelrc && start-server-and-test dev http://localhost:3000 \"cypress open --e2e\"",
-    "e2e:headless": "yarn babelrc && start-server-and-test dev http://localhost:3000 \"cypress run --e2e\"",
-    "babelrc": "echo '{ \"presets\": [ \"next/babel\" ], \"plugins\": [ \"istanbul\" ] }' > .babelrc"
+    "e2e": "start-server-and-test start http://localhost:3000 \"cypress open --e2e\"",
+    "e2e:headless": "start-server-and-test start http://localhost:3000 \"cypress run --e2e\""
   },
   "dependencies": {
     "@emotion/cache": "^11.11.0",
@@ -48,11 +47,9 @@
   "devDependencies": {
     "@babel/core": "^7.23.0",
     "@babel/preset-env": "^7.22.20",
-    "@cypress/code-coverage": "^3.12.1",
     "@swc/plugin-transform-imports": "^1.5.68",
     "@testing-library/cypress": "^10.0.1",
     "@testing-library/react": "^14.0.0",
-    "@types/cypress__code-coverage": "^3.10.0",
     "@types/node": "20.8.10",
     "@types/react": "18.2.34",
     "@types/react-dom": "18.2.14",

@@ -54,7 +54,6 @@ describe("new user", () => {
                 { "id": 12345, "status": "issued", "serial": "", "expires": { "seconds": 1756598400 } },
                 { "id": 12345, "status": "issued", "serial": "", "expires": { "seconds": 1756598400 } },
             ],
-
         }).as("getUser");
         cy.visit("/user/new");
         cy.wait(["@getSession", "@getUser"]);

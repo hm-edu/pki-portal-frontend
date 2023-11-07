@@ -22,12 +22,12 @@ describe("eab", () => {
         cy.login().as("getSession");
         cy.intercept("https://eab.api.example.edu/eab/", {
             statusCode: 200,
-            body: [{"id":"Test","key_bytes":"","bound_at":"2022-11-01T07:30:57.615887734Z","comment":"test.hm.edu"}]
+            body: [{ "id":"Test","key_bytes":"","bound_at":"2022-11-01T07:30:57.615887734Z","comment":"test.hm.edu" }],
         }).as("getEab");
         cy.visit("/eab");
         cy.wait(["@getSession", "@getEab"]);
         cy.get("#new").should("be.visible");
-        cy.get('.MuiDataGrid-cell--withRenderer.MuiDataGrid-cell--textLeft > .MuiButtonBase-root').click();
+        cy.get(".MuiDataGrid-cell--withRenderer.MuiDataGrid-cell--textLeft > .MuiButtonBase-root").click();
         cy.get("#toBeDeleted").should("be.visible");
     });
     it("eab loggedin error loading", () => {
