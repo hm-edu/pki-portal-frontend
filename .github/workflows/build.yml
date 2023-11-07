@@ -52,6 +52,8 @@ jobs:
         uses: cypress-io/github-action@v5
         with:
           start: node server.js
+          browser: chrome
+          headed: true
           wait-on: http://localhost:3000
           wait-on-timeout: 120
         env:
