@@ -5,7 +5,6 @@ describe("new user", () => {
             statusCode: 401,
         }).as("getSession");
         cy.visit("/user/new");
-        cy.reload();
         cy.wait("@getSession");
         cy.get(".MuiButton-outlined").should("be.visible").and("contain", "Anmelden");
         cy.get(".MuiAlert-message").should("be.visible").and("contain", "Sie sind nicht angemeldet!");
@@ -17,7 +16,6 @@ describe("new user", () => {
             statusCode: 200,
         }).as("getUser");
         cy.visit("/user/new");
-        cy.reload();
         cy.wait(["@getSession", "@getUser"]);
         cy.get("#generate").should("be.visible").and("be.disabled");
         cy.get("#validation").should("be.visible");
@@ -38,7 +36,6 @@ describe("new user", () => {
             statusCode: 500,
         }).as("getUser");
         cy.visit("/user/new");
-        cy.reload();
         cy.wait(["@getSession", "@getUser"]);
         cy.get("#generate").should("not.exist");
         cy.get("#validation").should("not.exist");
@@ -59,7 +56,6 @@ describe("new user", () => {
             ],
         }).as("getUser");
         cy.visit("/user/new");
-        cy.reload();
         cy.wait(["@getSession", "@getUser"]);
         cy.get("#generate").should("be.visible").and("be.disabled");
         cy.get("#validation").should("be.visible");
@@ -70,7 +66,6 @@ describe("user", () => {
     it("user loggedout", () => {
         cy.viewport(1280, 1024);
         cy.visit("/user");
-        cy.reload();
         cy.get(".MuiButton-outlined").should("be.visible").and("contain", "Anmelden");
         cy.get(".MuiAlert-message").should("be.visible").and("contain", "Bitte melden Sie sich an!");
         cy.get("#new").should("not.exist");
@@ -82,7 +77,6 @@ describe("user", () => {
             statusCode: 200,
         }).as("getUser");
         cy.visit("/user");
-        cy.reload();
         cy.wait(["@getSession", "@getUser"]);
         cy.get("#new").should("be.visible");
         cy.get(".MuiDataGrid-overlay").should("be.visible").and("contain", "Keine Einträge");
@@ -94,7 +88,6 @@ describe("user", () => {
             statusCode: 500,
         }).as("getUser");
         cy.visit("/user");
-        cy.reload();
         cy.wait(["@getSession", "@getUser"]);
         cy.get(".MuiAlert-message").should("be.visible").and("contain", "Ein unerwarteter Fehler ist aufgetreten.");
         cy.get("#new").should("not.exist");
