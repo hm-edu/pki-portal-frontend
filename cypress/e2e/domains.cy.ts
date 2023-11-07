@@ -11,6 +11,7 @@ describe("domains", () => {
     it("domains loggedout", () => {
         cy.viewport(1280, 1024);
         cy.visit("/server");
+        cy.reload();
         cy.get(".MuiButton-outlined").should("be.visible").and("contain", "Anmelden");
         cy.get(".MuiAlert-message").should("be.visible").and("contain", "Bitte melden Sie sich an!");
         cy.get("#new").should("not.exist");
@@ -22,6 +23,7 @@ describe("domains", () => {
             statusCode: 200,
         }).as("getDomains");
         cy.visit("/domains");
+        cy.reload();
         cy.wait(["@getSession", "@getDomains"]);
         cy.get("#new").should("be.visible");
         cy.get(".MuiDataGrid-overlay").should("be.visible").and("contain", "Keine Einträge");
@@ -44,6 +46,7 @@ describe("domains", () => {
             body: data,
         }).as("getDomains");
         cy.visit("/domains");
+        cy.reload();
         cy.wait(["@getSession", "@getDomains"]);
         cy.get("#new").should("be.visible");
         cy.get(".MuiDataGrid-overlay").should("not.exist");
@@ -108,6 +111,7 @@ describe("domains", () => {
             body: [ ],
         }).as("getActive1");
         cy.visit("/domains");
+        cy.reload();
         cy.wait(["@getSession", "@getDomains"]);
         cy.get("#new").should("be.visible");
         cy.get(".MuiDataGrid-overlay").should("not.exist");
@@ -136,6 +140,7 @@ describe("domains", () => {
             statusCode: 500,
         }).as("getDomains");
         cy.visit("/domains");
+        cy.reload();
         cy.wait(["@getSession", "@getDomains"]);
         cy.get(".MuiAlert-message").should("be.visible").and("contain", "Ein unerwarteter Fehler ist aufgetreten.");
         cy.get("#new").should("not.exist");
