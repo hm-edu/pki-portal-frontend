@@ -56,7 +56,14 @@ jobs:
           headed: true
           wait-on: http://localhost:3000
           wait-on-timeout: 120
+          record: true
         env:
+          # pass the Cypress Cloud record key as an environment variable
+          CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
+          # pass GitHub token to allow accurately detecting a build vs a re-run build
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # pass the project ID from the secrets through environment variable
+          CYPRESS_PROJECT_ID: ${{ secrets.PROJECT_ID }}
           NEXT_PUBLIC_DISABLE_CSP: true
           NEXT_PUBLIC_EAB_HOST: 'https://eab.api.hm.edu'
           NEXT_PUBLIC_ACME_HOST: 'https://acme.hm.edu'
