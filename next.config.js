@@ -22,6 +22,7 @@ module.exports = (phase, { defaultConfig }) => {
         reactStrictMode: true,
         swcMinify: true,
         productionBrowserSourceMaps: true,
+        output: process.env.CI == "true" ? undefined : "standalone",
         compiler: {
             emotion: true,
         },

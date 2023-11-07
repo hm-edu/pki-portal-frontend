@@ -43,9 +43,21 @@ jobs:
         with:
           node-version: 20
           cache: "yarn"
-      - run: yarn install --immutable --immutable-cache --check-cache
-      - run: yarn build
+      - name: Cypress run
+        id: cypress
+        uses: cypress-io/github-action@v6
+        with:
+          build: yarn build
+          start: yarn start
+          record: true
         env:
+          # pass the Cypress Cloud record key as an environment variable
+          CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
+          # pass GitHub token to allow accurately detecting a build vs a re-run build
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # pass the project ID from the secrets through environment variable
+          CYPRESS_PROJECT_ID: ${{ secrets.PROJECT_ID }}
+          NEXT_PUBLIC_DISABLE_CSP: true
           NEXT_PUBLIC_EAB_HOST: 'https://eab.api.hm.edu'
           NEXT_PUBLIC_ACME_HOST: 'https://acme.hm.edu'
           NEXT_PUBLIC_PKI_HOST: 'https://pki.api.hm.edu'
@@ -53,15 +65,9 @@ jobs:
           NEXT_PUBLIC_AUTH_IDP: 'https://sso.hm.edu'
           NEXT_PUBLIC_ORGANIZATION_NAME: 'Hochschule München'
           NEXT_PUBLIC_DOCS_URL: 'https://conwiki.cc.hm.edu/confluence/pages/viewpage.action?pageId=198048309'
-      - run: yarn e2e:headless
-        env:
-          NEXT_PUBLIC_EAB_HOST: 'https://eab.api.hm.edu'
-          NEXT_PUBLIC_ACME_HOST: 'https://acme.hm.edu'
-          NEXT_PUBLIC_PKI_HOST: 'https://pki.api.hm.edu'
-          NEXT_PUBLIC_DOMAIN_HOST: 'https://domain.api.hm.edu'
-          NEXT_PUBLIC_AUTH_IDP: 'https://sso.hm.edu'
-          NEXT_PUBLIC_ORGANIZATION_NAME: 'Hochschule München'
-          NEXT_PUBLIC_DOCS_URL: 'https://conwiki.cc.hm.edu/confluence/pages/viewpage.action?pageId=198048309'
+          HOST: "0.0.0.0"
+          CI: "true"
+        continue-on-error: true
       - uses: actions/upload-artifact@v3
         with:
           name: cypress-videos
