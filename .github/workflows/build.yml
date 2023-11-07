@@ -32,11 +32,12 @@ jobs:
 
   e2e:
     runs-on: ubuntu-22.04
+    container:
+     image: cypress/browsers:node-20.9.0-chrome-118.0.5993.88-1-ff-118.0.2-edge-118.0.2088.46-1
+     options: --user 1001
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      - name: Use Node.js 21
-        uses: actions/setup-node@v4
       - run: yarn install --immutable --immutable-cache --check-cache
       - run: yarn build
         env:
@@ -47,6 +48,7 @@ jobs:
           NEXT_PUBLIC_AUTH_IDP: 'https://sso.hm.edu'
           NEXT_PUBLIC_ORGANIZATION_NAME: 'Hochschule München'
           NEXT_PUBLIC_DOCS_URL: 'https://conwiki.cc.hm.edu/confluence/pages/viewpage.action?pageId=198048309'
+          HOST: 0.0.0.0
       - name: Copy standalone server
         run: cp .next/standalone/server.js server.js
       - name: Cypress run
@@ -56,7 +58,6 @@ jobs:
           start: node server.js
           browser: chrome
           headed: true
-          wait-on: http://localhost:3000
           wait-on-timeout: 120
           record: true
         env:
@@ -74,6 +75,7 @@ jobs:
           NEXT_PUBLIC_AUTH_IDP: 'https://sso.hm.edu'
           NEXT_PUBLIC_ORGANIZATION_NAME: 'Hochschule München'
           NEXT_PUBLIC_DOCS_URL: 'https://conwiki.cc.hm.edu/confluence/pages/viewpage.action?pageId=198048309'
+          HOST: 0.0.0.0
         continue-on-error: true
       - uses: actions/upload-artifact@v3
         with:
