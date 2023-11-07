@@ -38,15 +38,17 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+      - name: Use Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: "yarn"
       - name: Cypress run
         id: cypress
         uses: cypress-io/github-action@v5
         with:
           build: yarn build
           start: yarn start
-          browser: chrome
-          headed: true
-          wait-on-timeout: 120
           record: true
         env:
           # pass the Cypress Cloud record key as an environment variable
