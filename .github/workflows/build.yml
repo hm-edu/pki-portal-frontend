@@ -53,7 +53,7 @@ jobs:
           NEXT_PUBLIC_AUTH_IDP: 'https://sso.hm.edu'
           NEXT_PUBLIC_ORGANIZATION_NAME: 'Hochschule München'
           NEXT_PUBLIC_DOCS_URL: 'https://conwiki.cc.hm.edu/confluence/pages/viewpage.action?pageId=198048309'
-          CI: true
+          NEXT_PUBLIC_CI: true
       - run: yarn e2e:headless
         id: cypress
         env:
@@ -64,7 +64,7 @@ jobs:
           NEXT_PUBLIC_AUTH_IDP: 'https://sso.hm.edu'
           NEXT_PUBLIC_ORGANIZATION_NAME: 'Hochschule München'
           NEXT_PUBLIC_DOCS_URL: 'https://conwiki.cc.hm.edu/confluence/pages/viewpage.action?pageId=198048309'
-          CI: true
+          NEXT_PUBLIC_CI: true
       - uses: actions/upload-artifact@v3
         with:
           name: cypress-videos
