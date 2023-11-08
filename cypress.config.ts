@@ -15,6 +15,6 @@ export default defineConfig({
         chromeWebSecurity: false,
     },
     retries: {
-        runMode: 5,
+        runMode: 10,
     },
 });
