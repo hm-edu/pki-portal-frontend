@@ -42,7 +42,7 @@ export class RecommendedConfigurationsComponent extends React.Component<{ token:
     --eab-kid ${id} \\
     --eab-hmac-key ${key_bytes} \\
     --issuance-timeout 300 \\
-    --domain dummy.hm.edu `;
+    --domains dummy.hm.edu `;
 
         return <Modal open={this.props.token != undefined} onClose={() => { this.props.onClose(); }} aria-labelledby="modal-modal-title" aria-describedby="modal-modal-description" >
             <Box sx={{ ...modalTheme, width: 1000 }}>
@@ -59,7 +59,7 @@ export class RecommendedConfigurationsComponent extends React.Component<{ token:
                     <pre>
                         <code style={{ width: "100%", display: "inline-block" }}> {issue_acme_sh} </code>
                     </pre>
-                    Zertifikatsbezug certbot
+                    Zertifikatsbezug certbot (ab Version 2.0)
                     <pre>
                         <code style={{ width: "100%", display: "inline-block" }}> {certbot} </code>
                     </pre>
