@@ -23,6 +23,7 @@ import Typography from "@mui/material/Typography";
 import { useSession } from "next-auth/react";
 import { green } from "@mui/material/colors";
 import Alert from "@mui/material/Alert";
+import AlertTitle from "@mui/material/AlertTitle";
 
 export default SmimeCertificates;
 
@@ -138,6 +139,15 @@ export function SmimeCertificates() {
             },
         },
     ];
+
+    if (Config.DisableUser) {
+        return (
+            <Alert severity="warning">
+                <AlertTitle>Hinweis</AlertTitle>
+                Der Bezug von Nutzerzertifikaten ist derzeit deaktiviert!
+            </Alert>
+        );
+    }
 
     return <Box sx={{ display: "flex", flexDirection: "column", height: "100%" }}><Typography variant="h1">Ihre Nutzerzertifikate</Typography>
         {(error && <Alert severity="error">{typeof error === "string" ? error : "Ein unerwarteter Fehler ist aufgetreten."}</Alert>) || <>

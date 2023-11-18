@@ -157,6 +157,13 @@ export default function SMIMEGenerator() {
         }
     }, [p12PasswordConfirmRef, p12PasswordRef, revokeRef, revokeRef.current]);
 
+    if (Config.DisableUser) {
+        return <Alert severity="warning">
+            <AlertTitle>Hinweis</AlertTitle>
+            Der Bezug von Nutzerzertifikaten ist derzeit deaktiviert!
+        </Alert>;
+    }
+
     /* eslint-disable @typescript-eslint/no-misused-promises */
     return <div><Typography variant="h1">Erstellung eines neuen Nutzerzertifikats</Typography>
         {!error && <Box sx={{ display: "flex", flexDirection: "column", gap: "15px", width: "md", alignItems: "left" }}>

@@ -29,6 +29,7 @@ import DialogTitle from "@mui/material/DialogTitle";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogContent from "@mui/material/DialogContent";
 import DialogActions from "@mui/material/DialogActions";
+import AlertTitle from "@mui/material/AlertTitle";
 
 interface EabState { initialized: boolean; paginationModel: GridPaginationModel; tokens: ModelsEAB[]; selected: GridRowSelectionModel; delete: ModelsEAB | undefined; loading: boolean; recommendations: boolean; error: string | boolean | undefined }
 
@@ -198,6 +199,15 @@ class EabTokens extends React.Component<{ session: AuthProps | null; status: str
             return <LoggedOut></LoggedOut>;
         } else if (this.props.status == "unauthenticated") {
             this.setState({ error: "Bitte melden Sie sich an!", loading: false });
+        }
+
+        if (Config.DisableAcme) {
+            return (
+                <Alert severity="warning">
+                    <AlertTitle>Hinweis</AlertTitle>
+                    Die Verwendung von ACME Tokens ist derzeit deaktiviert!
+                </Alert>
+            );
         }
         return <Box sx={{ display: "flex", flexDirection: "column", height: "100%" }}><Typography variant="h1">Ihre ACME Tokens</Typography>
             {(this.state.error && <Alert severity="error">{typeof this.state.error === "string" ? this.state.error : "Ein unerwarteter Fehler ist aufgetreten."}</Alert>) || <>

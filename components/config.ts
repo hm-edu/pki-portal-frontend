@@ -6,6 +6,10 @@ export class Config {
     static DocsUrl: string = (process.env.DOCS_URL ?? process.env.NEXT_PUBLIC_DOCS_URL ?? "https://wiki.example.edu").replace("'", "");
     static OrganizationName: string = process.env.ORGANIZATION_NAME ?? process.env.NEXT_PUBLIC_ORGANIZATION_NAME ?? "Example University";
     static RefetchInBackground: boolean = (process.env.REFETCH_IN_BACKGROUND ?? process.env.NEXT_PUBLIC_REFETCH_IN_BACKGROUND ?? "false") === "true";
+    static DisableDomain: boolean = (process.env.NEXT_PUBLIC_DISABLE_DOMAIN ?? process.env.NEXT_PUBLIC_DISABLE_DOMAIN ?? "false") === "true";
+    static DisableServer: boolean = (process.env.NEXT_PUBLIC_DISABLE_SERVER ?? process.env.NEXT_PUBLIC_DISABLE_SERVER ?? "false") === "true";
+    static DisableUser: boolean = (process.env.NEXT_PUBLIC_DISABLE_USER ?? process.env.NEXT_PUBLIC_DISABLE_USER ?? "false") === "true";
+    static DisableAcme: boolean = (process.env.NEXT_PUBLIC_DISABLE_ACME ?? process.env.NEXT_PUBLIC_DISABLE_ACME ?? "false") === "true";
 }
 
 export interface AuthProps {
