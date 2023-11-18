@@ -52,6 +52,10 @@ RUN --mount=type=secret,id=SENTRY_AUTH_TOKEN \
     --mount=type=secret,id=NEXT_PUBLIC_DOMAIN_HOST \
     --mount=type=secret,id=NEXT_PUBLIC_DOCS_URL \
     --mount=type=secret,id=NEXT_PUBLIC_AUTH_IDP \
+    --mount=type=secret,id=NEXT_PUBLIC_DISABLE_DOMAIN \
+    --mount=type=secret,id=NEXT_PUBLIC_DISABLE_SERVER \
+    --mount=type=secret,id=NEXT_PUBLIC_DISABLE_USER \
+    --mount=type=secret,id=NEXT_PUBLIC_DISABLE_ACME \
     if [ -f /run/secrets/SENTRY_RELEASE ]; then \
         echo "Using secrets as environment variables!" && \
         export SENTRY_AUTH_TOKEN=$(cat /run/secrets/SENTRY_AUTH_TOKEN) && \
@@ -64,7 +68,12 @@ RUN --mount=type=secret,id=SENTRY_AUTH_TOKEN \
         export NEXT_PUBLIC_PKI_HOST=$(cat /run/secrets/NEXT_PUBLIC_PKI_HOST) && \
         export NEXT_PUBLIC_DOMAIN_HOST=$(cat /run/secrets/NEXT_PUBLIC_DOMAIN_HOST) && \
         export NEXT_PUBLIC_DOCS_URL=$(cat /run/secrets/NEXT_PUBLIC_DOCS_URL) && \
-        export NEXT_PUBLIC_AUTH_IDP=$(cat /run/secrets/NEXT_PUBLIC_AUTH_IDP) && yarn build; \
+        export NEXT_PUBLIC_AUTH_IDP=$(cat /run/secrets/NEXT_PUBLIC_AUTH_IDP) && \
+        export NEXT_PUBLIC_DISABLE_DOMAIN=$(cat /run/secrets/NEXT_PUBLIC_DISABLE_DOMAIN) && \
+        export NEXT_PUBLIC_DISABLE_SERVER=$(cat /run/secrets/NEXT_PUBLIC_DISABLE_SERVER) && \
+        export NEXT_PUBLIC_DISABLE_USER=$(cat /run/secrets/NEXT_PUBLIC_DISABLE_USER) && \
+        export NEXT_PUBLIC_DISABLE_ACME=$(cat /run/secrets/NEXT_PUBLIC_DISABLE_ACME) && \
+        yarn build; \
     else \
         echo "No secrets found, using environment variables!" && \
         yarn build; \
