@@ -62,17 +62,19 @@ export default function ButtonAppBar() {
             </a>
         </Link >,
     ] : [];
-    if (!Config.DisableDomain) {
-        buttons.splice(0, 0, <Link legacyBehavior={true} key="domains" href="/domains" ><Button key="domains" color="inherit" >Hostverwaltung</Button></Link>);
-    }
-    if (!Config.DisableServer) {
-        buttons.splice(0, 0, <Link legacyBehavior={true} key="server" href="/server" ><Button key="server" color="inherit">Serverzertifikate</Button></Link>);
-    }
-    if (!Config.DisableUser) {
-        buttons.splice(0, 0, <Link legacyBehavior={true} key="eab" href="/eab" ><Button key="eab" color="inherit" >ACME Tokens</Button></Link>);
-    }
-    if (!Config.DisableAcme) {
-        buttons.splice(0, 0, <Link legacyBehavior={true} key="user" href="/user" ><Button key="user" color="inherit" >Nutzerzertifikate</Button></Link>);
+    if (session) {
+        if (!Config.DisableAcme) {
+            buttons.splice(0, 0, <Link legacyBehavior={true} key="user" href="/user" ><Button key="user" color="inherit" >Nutzerzertifikate</Button></Link>);
+        }
+        if (!Config.DisableUser) {
+            buttons.splice(0, 0, <Link legacyBehavior={true} key="eab" href="/eab" ><Button key="eab" color="inherit" >ACME Tokens</Button></Link>);
+        }
+        if (!Config.DisableServer) {
+            buttons.splice(0, 0, <Link legacyBehavior={true} key="server" href="/server" ><Button key="server" color="inherit">Serverzertifikate</Button></Link>);
+        }
+        if (!Config.DisableDomain) {
+            buttons.splice(0, 0, <Link legacyBehavior={true} key="domains" href="/domains" ><Button key="domains" color="inherit" >Hostverwaltung</Button></Link>);
+        }
     }
     return (
         <AppBar position="fixed">
