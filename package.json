@@ -50,7 +50,7 @@
     "@swc/plugin-transform-imports": "^1.5.68",
     "@testing-library/cypress": "^10.0.1",
     "@testing-library/react": "^14.0.0",
-    "@types/node": "20.10.3",
+    "@types/node": "20.10.4",
     "@types/react": "18.2.42",
     "@types/react-dom": "18.2.17",
     "@types/unidecode": "^0.1.1",
