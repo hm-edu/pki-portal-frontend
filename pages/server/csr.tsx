@@ -91,7 +91,7 @@ export default function ServerCertificatesCsr() {
                 // eslint-disable-next-line @typescript-eslint/no-base-to-string
                 const content = evt.target.result.toString();
                 const buffer = fromPEM(content);
-                const csr = forge.pki.certificationRequestFromPem(content) as forge.pki.CertificateRequest;
+                const csr = forge.pki.certificationRequestFromPem(content);
                 const attributes: [string, string][] = [];
                 if (buffer) {
                     const pkcs10 = pkijs.CertificationRequest.fromBER(buffer);

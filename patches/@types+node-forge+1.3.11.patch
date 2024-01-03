@@ -1,5 +1,5 @@
 diff --git a/node_modules/@types/node-forge/index.d.ts b/node_modules/@types/node-forge/index.d.ts
-index 6e84257..b4770ac 100644
+index 4f50ff5..5df5f31 100644
 --- a/node_modules/@types/node-forge/index.d.ts
 +++ b/node_modules/@types/node-forge/index.d.ts
 @@ -226,11 +226,17 @@ declare module "node-forge" {
