@@ -911,7 +911,7 @@
   resolved "https://registry.yarnpkg.com/@babel/regjsgen/-/regjsgen-0.8.0.tgz#f0ba69b075e1f05fb2825b7fad991e7adbb18310"
   integrity sha512-x/rqGMdzj+fWZvCOYForTghzbtqPDZ5gPwaoNGHdgDfF2QA/XZbCBp4Moo5scrkAMPhB7z26XM/AaHuIJdgauA==
 
-"@babel/runtime@^7.12.5", "@babel/runtime@^7.23.2", "@babel/runtime@^7.23.8", "@babel/runtime@^7.23.9", "@babel/runtime@^7.5.5", "@babel/runtime@^7.8.4", "@babel/runtime@^7.8.7":
+"@babel/runtime@^7.12.5", "@babel/runtime@^7.23.2", "@babel/runtime@^7.23.9", "@babel/runtime@^7.5.5", "@babel/runtime@^7.8.4", "@babel/runtime@^7.8.7":
   version "7.23.9"
   resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.23.9.tgz#47791a15e4603bb5f905bc0753801cf21d6345f7"
   integrity sha512-0CX6F+BI2s9dkUqr08KFrAIZgNFj75rdBU/DjCyYLIaV/quFjkk6T+EJ2LkZHyZTbEV4L5p97mNkUsHl2wLFAw==
@@ -1501,17 +1501,7 @@
   resolved "https://registry.yarnpkg.com/@mui/types/-/types-7.2.13.tgz#d1584912942f9dc042441ecc2d1452be39c666b8"
   integrity sha512-qP9OgacN62s+l8rdDhSFRe05HWtLLJ5TGclC9I1+tQngbssu0m2dmFZs+Px53AcOs9fD7TbYd4gc9AXzVqO/+g==
 
-"@mui/utils@^5.14.16":
-  version "5.15.6"
-  resolved "https://registry.yarnpkg.com/@mui/utils/-/utils-5.15.6.tgz#bbcc302b8e83e360a87230afe3ed8fc99e29fae9"
-  integrity sha512-qfEhf+zfU9aQdbzo1qrSWlbPQhH1nCgeYgwhOVnj9Bn39shJQitEnXpSQpSNag8+uty5Od6PxmlNKPTnPySRKA==
-  dependencies:
-    "@babel/runtime" "^7.23.8"
-    "@types/prop-types" "^15.7.11"
-    prop-types "^15.8.1"
-    react-is "^18.2.0"
-
-"@mui/utils@^5.15.7":
+"@mui/utils@^5.14.16", "@mui/utils@^5.15.7":
   version "5.15.7"
   resolved "https://registry.yarnpkg.com/@mui/utils/-/utils-5.15.7.tgz#a71e08c4a2f5ba9c8a07106083ebf1b4c864ebb1"
   integrity sha512-8qhsxQRNV6aEOjjSk6YQIYJxkF5klhj8oG1FEEU4z6HV78TjNqRxMP08QGcdsibEbez+nihAaz6vu83b4XqbAg==
@@ -1522,9 +1512,9 @@
     react-is "^18.2.0"
 
 "@mui/x-data-grid@^6.18.6":
-  version "6.19.2"
-  resolved "https://registry.yarnpkg.com/@mui/x-data-grid/-/x-data-grid-6.19.2.tgz#0125ed459caf3095a4cb3d538c7826c9b3643acd"
-  integrity sha512-+wizP1jEzCKB5BSQ6OD5TP6RspEbWmFWcxi1XBgKrzryUZii1o4G2BW1+d/n4p3xETCUMKRkYfItrOJGlM/dBw==
+  version "6.19.3"
+  resolved "https://registry.yarnpkg.com/@mui/x-data-grid/-/x-data-grid-6.19.3.tgz#b4d17729f0da24aff60a3230f20b65e4e2eb6f8c"
+  integrity sha512-RHt+MhTgvpXTWY0MYvzSNLF8npo+mlmWuTO+qKRt42Zj634IlUYDwW5jjQ9fWZnIpWJLunw253KqHoAlSAOXaw==
   dependencies:
     "@babel/runtime" "^7.23.2"
     "@mui/utils" "^5.14.16"
