@@ -1845,9 +1845,9 @@
     tslib "^2.4.0"
 
 "@swc/plugin-transform-imports@^1.5.68":
-  version "1.5.116"
-  resolved "https://registry.yarnpkg.com/@swc/plugin-transform-imports/-/plugin-transform-imports-1.5.116.tgz#c2d54559fc2c3908a39b8f21e84fc8b1dfa346df"
-  integrity sha512-aN4sVtPVtAFSWHe4YW33JJ5znBi8ZI/RUEoccyrEfw5DZprNcqEsJKtA9MlMVWJz4UFA8s9ssf7T+oKTp4rMKA==
+  version "1.5.117"
+  resolved "https://registry.yarnpkg.com/@swc/plugin-transform-imports/-/plugin-transform-imports-1.5.117.tgz#db01aea6c945b47b7d9b11e488edb0b5b37484d5"
+  integrity sha512-I5wAVjVXwvvhacqSktuzhOkHw/BTQSDGBuun298RIlXrte6YJ8rg8IyQnm7YwJQ2ch0bjQ0r9qzdoukJRr/X0Q==
   dependencies:
     "@swc/counter" "^0.1.3"
 
