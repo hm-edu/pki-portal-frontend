@@ -73,14 +73,19 @@
             "matchDatasources": [
                 "npm"
             ],
+            "rangeStrategy": "pin",
+        },
+        {
+            "matchDatasources": [
+                "npm"
+            ],
             "matchUpdateTypes": [
                 "major"
             ],
             "labels": [
                 "renovate/npm",
                 "renovate/major"
-            ],
-            "rangeStrategy": "pin"
+            ]
         },
         {
             "matchDatasources": [
@@ -95,8 +100,7 @@
             ],
             "automerge": true,
             "automergeType": "pr",
-            "platformAutomerge": true,
-            "rangeStrategy": "pin"
+            "platformAutomerge": true
         },
         {
             "matchDatasources": [
@@ -111,8 +115,7 @@
             ],
             "automerge": true,
             "automergeType": "pr",
-            "platformAutomerge": true,
-            "rangeStrategy": "pin"
+            "platformAutomerge": true
         }
     ]
 }
