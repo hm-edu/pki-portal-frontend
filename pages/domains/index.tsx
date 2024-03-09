@@ -31,6 +31,7 @@ import Delegation from "@/components/delegation";
 import { dataGridStyle } from "@/components/theme";
 import { QuickSearchToolbar } from "@/components/toolbar";
 import { PortalApisSslCertificateDetails, SSLApi } from "@/api/pki/api";
+import { AlertTitle } from "@mui/material";
 
 export default function Domains() {
     const [pageModel, setPageModel] = useState<GridPaginationModel>({ page: 0, pageSize: 50 });
@@ -249,7 +250,8 @@ export default function Domains() {
                         </Typography>
                         {toBeDeleted.length > 0 && (
                             <Alert severity="warning">
-                                Diese Löschung wird automatisch alle
+                                <AlertTitle>Achtung</AlertTitle>
+                                Diese Löschung wird automatisch <b>alle</b>
                                 zugeordneten Zertifikate widerrufen.
                                 <ul id="toBeRevoked">
                                     {toBeDeleted.map((cert) => {
