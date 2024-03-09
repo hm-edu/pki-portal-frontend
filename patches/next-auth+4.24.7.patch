@@ -1,3 +1,26 @@
+diff --git a/node_modules/next-auth/.patch-package.json b/node_modules/next-auth/.patch-package.json
+new file mode 100644
+index 0000000..2e342ce
+--- /dev/null
++++ b/node_modules/next-auth/.patch-package.json
+@@ -0,0 +1,16 @@
++{
++    "isRebasing": false,
++    "patches": [
++        {
++            "didApply": true,
++            "patchContentHash": "aca9d3645f5e03d0d4f02b8fe0a51dee8762393c66be8c128c3b86b6693ecde6",
++            "patchFilename": "next-auth+4.24.5.patch"
++        },
++        {
++            "didApply": true,
++            "patchContentHash": "aca9d3645f5e03d0d4f02b8fe0a51dee8762393c66be8c128c3b86b6693ecde6",
++            "patchFilename": "next-auth+4.24.6.patch"
++        }
++    ],
++    "version": 1
++}
+\ No newline at end of file
 diff --git a/node_modules/next-auth/core/routes/session.js b/node_modules/next-auth/core/routes/session.js
 index 430f538..59cb1b7 100644
 --- a/node_modules/next-auth/core/routes/session.js
