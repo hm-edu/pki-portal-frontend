@@ -6,7 +6,7 @@
     "dependencyDashboardTitle": "Renovate Dashboard 🤖",
     "suppressNotifications": [
         "prIgnoreNotification"
-    ],  
+    ],
     "extends": [
         "config:base"
     ],
@@ -79,7 +79,8 @@
             "labels": [
                 "renovate/npm",
                 "renovate/major"
-            ]
+            ],
+            "rangeStrategy": "pin"
         },
         {
             "matchDatasources": [
@@ -94,7 +95,8 @@
             ],
             "automerge": true,
             "automergeType": "pr",
-            "platformAutomerge": true
+            "platformAutomerge": true,
+            "rangeStrategy": "pin"
         },
         {
             "matchDatasources": [
@@ -109,13 +111,8 @@
             ],
             "automerge": true,
             "automergeType": "pr",
-            "platformAutomerge": true
-        },
-        {
-            "packagePatterns": [
-                "^next"
-            ],
-            "automerge": false
+            "platformAutomerge": true,
+            "rangeStrategy": "pin"
         }
     ]
 }
