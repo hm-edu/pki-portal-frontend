@@ -1824,10 +1824,10 @@
   dependencies:
     tslib "^2.4.0"
 
-"@swc/plugin-transform-imports@1.5.119":
-  version "1.5.119"
-  resolved "https://registry.yarnpkg.com/@swc/plugin-transform-imports/-/plugin-transform-imports-1.5.119.tgz#a4e798903e0773ba26c8780b816a4ddd8687f68e"
-  integrity sha512-ss0QU/K85aKNuDvFE19gDwsmYVoCog4cLXcmPAZ6aNmhpL4lOlHf9UqdnxOl71Acu1+jEQoZRCRGqv8H4BJbPw==
+"@swc/plugin-transform-imports@1.5.120":
+  version "1.5.120"
+  resolved "https://registry.yarnpkg.com/@swc/plugin-transform-imports/-/plugin-transform-imports-1.5.120.tgz#16c024cdb3b0d5c664079432df82513b7d06e349"
+  integrity sha512-jXumFQ0hHLeWfji+2YAQTXAnHp+99WMD5bTfJ1zTtl2EtBSXmh1MjZucU+aK+M4+a3Y6GNZvqd1Eeh9psOiwkA==
   dependencies:
     "@swc/counter" "^0.1.3"
 
