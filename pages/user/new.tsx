@@ -89,13 +89,11 @@ export default function SMIMEGenerator() {
                             </Box>);
                             setSuccess(true);
                             setLoading(false);
-                        }).catch((err) => {
-                            console.log(err);
+                        }).catch(() => {
                             setLoading(false);
                             setError("Es ist ein unbekannter Fehler aufgetreten!");
                         });
-                    }).catch((error) => {
-                        console.error(error);
+                    }).catch(() => {
                         setLoading(false);
                         setError("Es ist ein unbekannter Fehler aufgetreten!");
                     });

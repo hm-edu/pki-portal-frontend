@@ -9,8 +9,8 @@ import DialogTitle from "@mui/material/DialogTitle";
 import DeleteIcon from "@mui/icons-material/Delete";
 import LinearProgress from "@mui/material/LinearProgress";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
-
-import { DataGrid, deDE, GridColDef, GridPaginationModel } from "@mui/x-data-grid";
+import { deDE } from "@mui/x-data-grid/locales";
+import { DataGrid, GridColDef, GridPaginationModel, GridSlots } from "@mui/x-data-grid";
 import { useEffect, useRef, useState } from "react";
 import * as Sentry from "@sentry/nextjs";
 import { PortalApisListSmimeResponseCertificateDetails, SMIMEApi } from "@/api/pki/api";
@@ -110,13 +110,9 @@ export function SmimeCertificates() {
         },
         {
             field: "expires", headerName: "Gültig bis", type: "date", width: 150,
-            valueGetter: ({ value }) => {
+            valueGetter: (value, row) => {
                 /* eslint-disable @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-member-access  */
-                const mili = (value.seconds as number) * 1000;
-                if (!mili) {
-                    console.log(value);
-                }
-
+                const mili = (row.expires.seconds as number) * 1000;
                 return value && new Date(mili);
             },
         }, {
@@ -164,7 +160,7 @@ export function SmimeCertificates() {
                             sortModel: [{ field: "notBefore", sort: "desc" }],
                         },
                     }}
-                    slots={{ loadingOverlay: LinearProgress }}
+                    slots={{ loadingOverlay: LinearProgress as GridSlots["loadingOverlay"] }}
                     slotProps={{ loadingOverlay: { color: "inherit" } }}
                     loading={loading}
                     localeText={{ ...deDE.components.MuiDataGrid.defaultProps.localeText }}

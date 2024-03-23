@@ -2,7 +2,7 @@
 import TextField, { TextFieldProps } from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
-import { DataGrid, GridColDef, GridPaginationModel } from "@mui/x-data-grid";
+import { DataGrid, GridColDef, GridPaginationModel, GridSlots } from "@mui/x-data-grid";
 import DeleteIcon from "@mui/icons-material/Delete";
 import LinearProgress from "@mui/material/LinearProgress";
 import DialogActions from "@mui/material/DialogActions";
@@ -14,7 +14,7 @@ import { green } from "@mui/material/colors";
 import CircularProgress from "@mui/material/CircularProgress";
 import Alert from "@mui/material/Alert";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
-import { deDE } from "@mui/x-data-grid";
+import { deDE } from "@mui/x-data-grid/locales";
 import Typography from "@mui/material/Typography";
 import Stack from "@mui/material/Stack";
 import * as Sentry from "@sentry/nextjs";
@@ -330,7 +330,7 @@ export default function Domains() {
                     paginationModel={pageModel}
                     slots={{
                         toolbar: QuickSearchToolbar,
-                        loadingOverlay: LinearProgress,
+                        loadingOverlay: LinearProgress as GridSlots["loadingOverlay"],
                     }}
                     slotProps={{
                         loadingOverlay: { color: "inherit" },

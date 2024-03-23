@@ -1,7 +1,6 @@
 export async function createP12(privateKey: string, chain: string[], password: string, type: "ecdsa" | "rsa"): Promise<string> {
     const forge = (await import("node-forge")).default;
     return await new Promise((resolve, reject) => {
-        console.log(type);
         const encodedChain = [];
         for (const cert of chain) {
             encodedChain.push(forge.pki.certificateFromPem(cert));
