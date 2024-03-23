@@ -1,7 +1,8 @@
 import TextField, { TextFieldProps } from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
-import { DataGrid, deDE, GridColDef, GridPaginationModel, GridRowId } from "@mui/x-data-grid";
+import { deDE } from "@mui/x-data-grid/locales";
+import { DataGrid, GridColDef, GridPaginationModel, GridRowId, GridSlots } from "@mui/x-data-grid";
 import Dialog from "@mui/material/Dialog";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
@@ -107,22 +108,22 @@ export default function SslCertificates() {
         { field: "serial", headerName: "Serial Number", width: 280 },
         {
             field: "status", width: 100, type: "string", headerName: "Status",
-            valueGetter: (params) => {
-                if (params.value === "Unmanaged") {
+            valueGetter: (value) => {
+                if (value === "Unmanaged") {
                     return "Issued";
                 }
 
-                return params.value as string;
+                return value as string;
             },
         },
         { field: "issued_by", headerName: "Angefordert durch", width: 150 },
         { field: "source", headerName: "Quelle", width: 150 },
         {
             field: "created", headerName: "Erstellt", type: "dateTime", width: 150,
-            valueGetter: ({ value }) => {
+            valueGetter: (value, row) => {
                 if (value) {
                     /* eslint-disable @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-member-access  */
-                    const mili = (value.seconds as number) * 1000;
+                    const mili = (row.created.seconds as number) * 1000;
                     return value && new Date(mili);
                 }
                 return undefined;
@@ -130,17 +131,17 @@ export default function SslCertificates() {
         },
         {
             field: "not_before", headerName: "Gültig ab", type: "date", width: 100,
-            valueGetter: ({ value }) => {
+            valueGetter: (value, row) => {
                 /* eslint-disable @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-member-access  */
-                const mili = (value.seconds as number) * 1000;
+                const mili = (row.not_before.seconds as number) * 1000;
                 return value && new Date(mili);
             },
         },
         {
             field: "expires", headerName: "Gültig bis", type: "date", width: 100,
-            valueGetter: ({ value }) => {
+            valueGetter: (value, row) => {
                 /* eslint-disable @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-member-access  */
-                const mili = (value.seconds as number) * 1000;
+                const mili = (row.expires.seconds as number) * 1000;
                 return value && new Date(mili);
             },
         },
@@ -238,7 +239,7 @@ export default function SslCertificates() {
                     onRowSelectionModelChange={(event) => { setSelected(event); }}
                     rowSelectionModel={selected}
                     slots={{
-                        loadingOverlay: LinearProgress,
+                        loadingOverlay: LinearProgress as GridSlots["loadingOverlay"],
                         toolbar: QuickSearchToolbar,
                     }}
                     localeText={{ ...deDE.components.MuiDataGrid.defaultProps.localeText }}

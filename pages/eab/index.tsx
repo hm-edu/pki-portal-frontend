@@ -10,13 +10,13 @@ import TableCell from "@mui/material/TableCell";
 import Typography from "@mui/material/Typography";
 import LinearProgress from "@mui/material/LinearProgress";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
-import { DataGrid, GridColDef, GridPaginationModel, GridRowSelectionModel } from "@mui/x-data-grid";
+import { DataGrid, GridColDef, GridPaginationModel, GridRowSelectionModel, GridSlots } from "@mui/x-data-grid";
 import React, { FormEvent, RefObject } from "react";
 import { EABApi, ModelsEAB } from "@/api/eab/api";
 import { Configuration } from "@/api/eab/configuration";
 import { AuthProps, Config } from "@/components/config";
 import { RecommendedConfigurationsComponent } from "@/components/eabConfiguration";
-import { deDE } from "@mui/x-data-grid";
+import { deDE } from "@mui/x-data-grid/locales";
 import { dataGridStyle } from "@/components/theme";
 import { TextFieldProps } from "@mui/material/TextField";
 import TextField from "@mui/material/TextField";
@@ -222,7 +222,7 @@ class EabTokens extends React.Component<{ session: AuthProps | null; status: str
                             },
                         }}
                         paginationModel={this.state.paginationModel}
-                        slots={{ loadingOverlay: LinearProgress }}
+                        slots={{ loadingOverlay: LinearProgress as GridSlots["loadingOverlay"] }}
                         slotProps={{ loadingOverlay: { color: "inherit" } }}
                         loading={this.state.loading}
                         onRowSelectionModelChange={(event) => { this.setState({ selected: event }); }}
