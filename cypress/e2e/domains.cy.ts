@@ -47,9 +47,9 @@ describe("domains", () => {
         cy.wait(["@getSession", "@getDomains"]);
         cy.get("#new").should("be.visible");
         cy.get(".MuiDataGrid-overlay").should("not.exist");
-        cy.get("[data-id=\"0\"] > [data-field=\"fqdn\"] > .MuiDataGrid-cellContent").should("be.visible").and("contain", "test-0.hm.edu");
-        cy.get("[data-id=\"0\"] > .MuiDataGrid-cell--withRenderer.MuiDataGrid-cell--textLeft > .MuiBox-root > :nth-child(3)").should("be.enabled");
-        cy.get("[data-id=\"1\"] > .MuiDataGrid-cell--withRenderer.MuiDataGrid-cell--textLeft > .MuiBox-root > :nth-child(3)").should("not.be.enabled");
+        cy.get("[data-id=\"0\"] > [data-field=\"fqdn\"] ").should("be.visible").and("contain", "test-0.hm.edu");
+        cy.get("[data-id=\"0\"] > .MuiDataGrid-cell--textLeft > .MuiBox-root > :nth-child(3)").should("be.enabled");
+        cy.get("[data-id=\"1\"] > .MuiDataGrid-cell--textLeft > .MuiBox-root > :nth-child(3)").should("not.be.enabled");
         cy.get("body").then(elem => {
             // Check that elem[0] fits in viewport
             cy.window().then(win => {
@@ -111,21 +111,21 @@ describe("domains", () => {
         cy.wait(["@getSession", "@getDomains"]);
         cy.get("#new").should("be.visible");
         cy.get(".MuiDataGrid-overlay").should("not.exist");
-        cy.get("[data-id=\"0\"] > [data-field=\"fqdn\"] > .MuiDataGrid-cellContent").should("be.visible").and("contain", "test-0.hm.edu");
-        cy.get("[data-id=\"0\"] > .MuiDataGrid-cell--withRenderer.MuiDataGrid-cell--textLeft > .MuiBox-root > :nth-child(3)").should("be.enabled");
-        cy.get("[data-id=\"1\"] > .MuiDataGrid-cell--withRenderer.MuiDataGrid-cell--textLeft > .MuiBox-root > :nth-child(3)").should("not.be.enabled");
+        cy.get("[data-id=\"0\"] > [data-field=\"fqdn\"]").should("be.visible").and("contain", "test-0.hm.edu");
+        cy.get("[data-id=\"0\"] > .MuiDataGrid-cell--textLeft > .MuiBox-root > :nth-child(3)").should("be.enabled");
+        cy.get("[data-id=\"1\"] > .MuiDataGrid-cell--textLeft > .MuiBox-root > :nth-child(3)").should("not.be.enabled");
         cy.get("body").then(elem => {
             // Check that elem[0] fits in viewport
             cy.window().then(win => {
                 expect(elem[0].getBoundingClientRect().bottom).to.be.within(0, win.innerHeight);
             });
         });
-        cy.get("[data-id=\"0\"] > .MuiDataGrid-cell--withRenderer.MuiDataGrid-cell--textLeft > .MuiBox-root > :nth-child(2)").should("be.enabled");
-        cy.get("[data-id=\"0\"] > .MuiDataGrid-cell--withRenderer.MuiDataGrid-cell--textLeft > .MuiBox-root > :nth-child(2)").click();
+        cy.get("[data-id=\"0\"] > .MuiDataGrid-cell--textLeft > .MuiBox-root > :nth-child(2)").should("be.enabled");
+        cy.get("[data-id=\"0\"] > .MuiDataGrid-cell--textLeft > .MuiBox-root > :nth-child(2)").click();
         cy.wait(["@getActive"]);
         cy.get("#toBeRevoked").should("be.visible").and("contain", "Serial: Test12345");
         cy.get("body").type("{esc}");
-        cy.get("[data-id=\"2\"] > .MuiDataGrid-cell--withRenderer.MuiDataGrid-cell--textLeft > .MuiBox-root > :nth-child(2)").click();
+        cy.get("[data-id=\"2\"] > .MuiDataGrid-cell--textLeft > .MuiBox-root > :nth-child(2)").click();
         cy.wait(["@getActive1"]);
         cy.get("#toBeRevoked").should("not.exist");
     });
