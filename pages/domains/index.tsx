@@ -223,7 +223,7 @@ export default function Domains() {
                 buttons.push(<Button key="delegate" color="inherit" disabled={!row.permissions?.can_delegate} sx={{ px: 1, mx: 1 }} variant="outlined" onClick={openDelegation}>Delegationen bearbeiten</Button>);
                 buttons.push(<Button key="transfer" color="inherit" disabled={!row.permissions?.can_transfer} sx={{ px: 1, mx: 1 }} variant="outlined" onClick={transfer}>Zuständigkeit übertragen</Button>);
 
-                return <Box sx={{ display: "flex" }}>{buttons}</Box>;
+                return <Box>{buttons}</Box>;
             },
         },
     ];
@@ -251,8 +251,7 @@ export default function Domains() {
                         {toBeDeleted.length > 0 && (
                             <Alert severity="warning">
                                 <AlertTitle>Achtung</AlertTitle>
-                                Diese Löschung wird automatisch <b>alle</b>
-                                zugeordneten Zertifikate widerrufen.
+                                Diese Löschung wird automatisch <b>alle</b> zugeordneten Zertifikate widerrufen.
                                 <ul id="toBeRevoked">
                                     {toBeDeleted.map((cert) => {
                                         return (
