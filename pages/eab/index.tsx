@@ -112,8 +112,7 @@ class EabTokens extends React.Component<{ session: AuthProps | null; status: str
         { field: "key_bytes", headerName: "HMAC", width: 280 },
         {
             field: "bound_at", headerName: "Bereits verwendet?", type: "boolean", width: 150,
-            // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-            valueGetter: ({ value }) => { return value != undefined; },
+            valueGetter: ( row: ModelsEAB ) => { return row.bound_at != undefined; },
         }, {
             field: "action",
             headerName: "Aktionen",
