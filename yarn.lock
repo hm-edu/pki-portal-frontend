@@ -1919,10 +1919,10 @@
   dependencies:
     tslib "^2.4.0"
 
-"@swc/plugin-transform-imports@1.5.122":
-  version "1.5.122"
-  resolved "https://registry.yarnpkg.com/@swc/plugin-transform-imports/-/plugin-transform-imports-1.5.122.tgz#667eb2480f6e13c6ff36ed6611525a0a363cc026"
-  integrity sha512-aY2qOdU8ob1aNzrXwsCNyV3TvWZXYleJr+P1wbVqBsIiowILzJR8BmJEQTUFwmsNNAHgXZGoxKvatN2YabIkuw==
+"@swc/plugin-transform-imports@1.5.123":
+  version "1.5.123"
+  resolved "https://registry.yarnpkg.com/@swc/plugin-transform-imports/-/plugin-transform-imports-1.5.123.tgz#4e1c41de3d5e1ec8fe7d4fd02526ad190ab4bdbd"
+  integrity sha512-B8xOLHQ9IrbuOazdueUmIM6wFXeRakdnRKVweJfbDu3KFrIE34K8t4EzLQqge40lueOT/eJFZTQosvtkqGXg3w==
   dependencies:
     "@swc/counter" "^0.1.3"
 
