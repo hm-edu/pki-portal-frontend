@@ -139,11 +139,13 @@ export default function Domains() {
     function loadDomains(setDomains: (domains: ModelDomain[]) => void, setError: (error: boolean) => void) {
         const cfg = new Configuration({ accessToken: session?.accessToken });
         const api = new DomainsApi(cfg, `${Config.DomainHost}`);
-        api.domainsGet().then((response) => {
-            setDomains(response.data);
-        }).catch((error) => {
-            Sentry.captureException(error);
-            setError(true);
+        Sentry.startSpan({ name: "Load Domains" }, () => {
+            api.domainsGet().then((response) => {
+                setDomains(response.data);
+            }).catch((error) => {
+                Sentry.captureException(error);
+                setError(true);
+            });
         });
     }
 
@@ -151,6 +153,7 @@ export default function Domains() {
         return new Promise(function (resolve) {
             const cfg = new Configuration({ accessToken: session?.accessToken });
             const api = new DomainsApi(cfg, `${Config.DomainHost}`);
+
             api.domainsPost({ fqdn: domain }).then(() => {
                 loadDomains(setDomains, setError);
                 resolve(true);

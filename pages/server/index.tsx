@@ -47,18 +47,23 @@ export default function SslCertificates() {
         const item = selected;
         if (session && item) {
             const cert = certificates.find((cert) => cert.serial === selected.at(0));
-            if (cert?.serial) {
-                const cfg = new Configuration({ accessToken: session.accessToken });
-                const api = new SSLApi(cfg, `${Config.PkiHost}`);
-                api.sslRevokePost({ serial: cert?.serial, reason: (reason.current?.value as string) }).then(() => {
-                    load();
-                    setSelected(undefined);
-                    setOpen(false);
-                }).catch((error) => {
-                    Sentry.captureException(error);
-                    setError(true);
-                });
-            }
+            Sentry.startSpan({ name: "Revoke Certificate" }, () => {
+                if (cert?.serial) {
+                    const cfg = new Configuration({
+                        accessToken: session.accessToken,
+                    });
+                    const api = new SSLApi(cfg, `${Config.PkiHost}`);
+                    api.sslRevokePost({ serial: cert?.serial, reason: reason.current?.value as string,
+                    }).then(() => {
+                        load();
+                        setSelected(undefined);
+                        setOpen(false);
+                    }).catch((error) => {
+                        Sentry.captureException(error);
+                        setError(true);
+                    });
+                }
+            });
         }
     }
 
@@ -222,7 +227,7 @@ export default function SslCertificates() {
                     paginationModel={pageModel}
                     sx={dataGridStyle}
                     getRowId={(row) =>
-                        // eslint-disable-next-line @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-member-access  
+                        // eslint-disable-next-line @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-member-access
                         row.serial
                     }
                     initialState={{
