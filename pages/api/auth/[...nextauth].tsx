@@ -4,8 +4,16 @@ import { JWT } from "next-auth/jwt";
 import { OAuthConfig } from "next-auth/providers";
 import * as Sentry from "@sentry/nextjs";
 import { jwtDecode } from "jwt-decode";
+import { Config } from "@/components/config";
 
 const idp = process.env.AUTH_IDP ?? process.env.NEXT_PUBLIC_AUTH_IDP ?? "https://sso-test.hm.edu";
+
+class AuthProviderSuffix {
+    static jwks_endpoint: string = Config.AuthProvider == "shibboleth" ? "/idp/profile/oidc/jwks" : "/protocol/openid-connect/certs";
+    static token_endpoint: string = Config.AuthProvider == "shibboleth" ? "/idp/profile/oidc/token" : "/protocol/openid-connect/token";
+    static userinfo_endpoint: string = Config.AuthProvider == "shibboleth" ? "/idp/profile/oidc/userinfo" : "/protocol/openid-connect/userinfo";
+    static authorization_endpoint: string = Config.AuthProvider == "shibboleth" ? "/idp/profile/oidc/authorize" : "/protocol/openid-connect/auth";
+}
 
 export const authOptions: NextAuthOptions =
 {
@@ -24,17 +32,17 @@ export const authOptions: NextAuthOptions =
             clientId: process.env.AUTH_CLIENT_ID ?? "portal-frontend-dev",
             clientSecret: process.env.AUTH_CLIENT_SECRET ?? "this_too_should_be_ch4ng3d",
             issuer: idp,
-            jwks_endpoint: `${idp}/idp/profile/oidc/keyset`,
-            token: `${idp}/idp/profile/oidc/token`,
+            jwks_endpoint: `${idp}${AuthProviderSuffix.jwks_endpoint}`,
+            token: `${idp}${AuthProviderSuffix.token_endpoint}`,
             authorization: {
-                url: `${idp}/idp/profile/oidc/authorize`,
+                url: `${idp}${AuthProviderSuffix.authorization_endpoint}`,
                 params: {
                     scope: "openid profile email offline_access Certificates EAB Domains",
                     resource: process.env.AUTH_RESOURCE,
                     prompt: "login",
                 },
             },
-            userinfo: `${idp}/idp/profile/oidc/userinfo`,
+            userinfo: `${idp}${AuthProviderSuffix.userinfo_endpoint}`,
             profile(_profile, tokens) {
                 if (!tokens.access_token) {
                     return { id: "", name: "", email: "" };

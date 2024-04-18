@@ -10,6 +10,7 @@ export class Config {
     static DisableServer: boolean = (process.env.DISABLE_SERVER ?? process.env.NEXT_PUBLIC_DISABLE_SERVER ?? "false") === "true";
     static DisableUser: boolean = (process.env.DISABLE_USER ?? process.env.NEXT_PUBLIC_DISABLE_USER ?? "false") === "true";
     static DisableAcme: boolean = (process.env.DISABLE_ACME ?? process.env.NEXT_PUBLIC_DISABLE_ACME ?? "false") === "true";
+    static AuthProvider: "shibboleth" | "keycloak" = (process.env.AUTH_PROVIDER ?? process.env.NEXT_PUBLIC_AUTH_PROVIDER ?? "shibboleth") == "keycloak" ? "keycloak" : "shibboleth";
 }
 
 export interface AuthProps {

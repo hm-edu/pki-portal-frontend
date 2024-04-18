@@ -16,30 +16,33 @@ Due to the usage of Next.JS and Sentry several environment variables and flags m
 
 At development and during building a compiled version or a container, the following variables must be set and configured.
 
-| Variable                          | Description                                                    | Example Value                    & Default |
-| --------------------------------- | -------------------------------------------------------------- | ------------------------------------------ |
-| NEXTAUTH_URL                      | The canonical URL of your site                                 | `https://pki.example.edu`                  |
-| NEXT_PUBLIC_AUTH_IDP              | The IDP that shal be used for OIDC authentication              | `https://sso.example.edu`                  |
-| NEXT_PUBLIC_EAB_HOST              | The API backend host for EAB Operations                        | `https://eab.api.example.edu`              |
-| NEXT_PUBLIC_PKI_HOST              | The API backend host for PKI Operations                        | `https://pki.api.example.edu`              |
-| NEXT_PUBLIC_DOMAIN_HOST           | The API backend host for Domain Operations                     | `https://domain.api.example.edu`           |
-| NEXT_PUBLIC_ACME_HOST             | The host for ACME Operations                                   | `https://acme.example.edu`                 |
-| NEXT_PUBLIC_DOCS_URL              | The url for some docs                                          | `https://wiki.pki.example.edu`             |
-| NEXT_PUBLIC_SENTRY_DSN            | In case of using sentry the sentry DSN to upload error reports |                                            |
-| NEXT_PUBLIC_ORGANIZATION_NAME     | The name of your organization                                  | Example University                         |
-| NEXT_PUBLIC_REFETCH_IN_BACKGROUND | Whether the session shall be refreshed in background or not    | false                                      |
-| LOGO_LARGE                        | Link to the large logo for the titlepage                       |                                            |
-| LOGO_SMALL                        | Link to the small logo for the navbar                          |                                            |
-| FAVICON                           | Link to the favion                                             |                                            |
+| Variable                          | Description                                                             | Example Value                    & Default |
+|-----------------------------------|-------------------------------------------------------------------------|--------------------------------------------|
+| NEXTAUTH_URL                      | The canonical URL of your site                                          | `https://pki.example.edu`                  |
+| NEXT_PUBLIC_AUTH_IDP              | The IDP that shal be used for OIDC authentication                       | `https://sso.example.edu`                  |
+| NEXT_PUBLIC_EAB_HOST              | The API backend host for EAB Operations                                 | `https://eab.api.example.edu`              |
+| NEXT_PUBLIC_PKI_HOST              | The API backend host for PKI Operations                                 | `https://pki.api.example.edu`              |
+| NEXT_PUBLIC_DOMAIN_HOST           | The API backend host for Domain Operations                              | `https://domain.api.example.edu`           |
+| NEXT_PUBLIC_ACME_HOST             | The host for ACME Operations                                            | `https://acme.example.edu`                 |
+| NEXT_PUBLIC_DOCS_URL              | The url for some docs                                                   | `https://wiki.pki.example.edu`             |
+| NEXT_PUBLIC_SENTRY_DSN            | In case of using sentry the sentry DSN to upload error reports          |                                            |
+| NEXT_PUBLIC_ORGANIZATION_NAME     | The name of your organization                                           | Example University                         |
+| NEXT_PUBLIC_REFETCH_IN_BACKGROUND | Whether the session shall be refreshed in background or not             | false                                      |
+| NEXT_PUBLIC_AUTH_PROVIDER         | The type of your OIDC authentication priovider (keycloak or shibboleth) | shibboleth                                 |
+| LOGO_LARGE                        | Link to the large logo for the titlepage                                |                                            |
+| LOGO_SMALL                        | Link to the small logo for the navbar                                   |                                            |
+| FAVICON                           | Link to the favion                                                      |                                            |
+
 
 ## Runtime Variables
 
-| Variable           | Description                                                                                          | Example Value             |
-| ------------------ | ---------------------------------------------------------------------------------------------------- | ------------------------- |
-| AUTH_CLIENT_ID     | The OIDC Client ID                                                                                   | `pki`                     |
-| AUTH_CLIENT_SECRET | The OIDC Client Secret                                                                               | `Random String`           |
-| AUTH_IDP           | The IDP that shal be used for OIDC authentication (Should be the same as during build time)          | `https://sso.example.edu` |
-| AUTH_RESOURCE      | The requested OIDC resource to get OAuth2 working.                                                   | `https://api.example.edu` |
-| AUTH_SECRET        | The [Next.JS Auth Secret](https://next-auth.js.org/configuration/options#secret) used to encrypt JWT | `Random String            |
-| NEXTAUTH_URL       | The canonical URL of your site (Should be the same as during build time)                             | `https://pki.example.edu` |
-| SENTRY_DSN         | In case of using sentry the sentry DSN to upload error reports                                       |                           |
+| Variable                  | Description                                                                                          | Example Value             |
+|---------------------------|------------------------------------------------------------------------------------------------------|---------------------------|
+| AUTH_CLIENT_ID            | The OIDC Client ID                                                                                   | `pki`                     |
+| AUTH_CLIENT_SECRET        | The OIDC Client Secret                                                                               | `Random String`           |
+| AUTH_IDP                  | The IDP that shal be used for OIDC authentication (Should be the same as during build time)          | `https://sso.example.edu` |
+| NEXT_PUBLIC_AUTH_PROVIDER | The type of your OIDC authentication priovider (keycloak or shibboleth)                              | shibboleth                |
+| AUTH_RESOURCE             | The requested OIDC resource to get OAuth2 working.                                                   | `https://api.example.edu` |
+| AUTH_SECRET               | The [Next.JS Auth Secret](https://next-auth.js.org/configuration/options#secret) used to encrypt JWT | `Random String            |
+| NEXTAUTH_URL              | The canonical URL of your site (Should be the same as during build time)                             | `https://pki.example.edu` |
+| SENTRY_DSN                | In case of using sentry the sentry DSN to upload error reports                                       |                           |
