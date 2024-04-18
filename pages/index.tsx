@@ -16,7 +16,6 @@ export default function Home() {
             <Image
                 src={logo}
                 height={200}
-                width={200 * (2000 / 923)}
                 alt="Logo"
             />
             <Typography variant="h1" sx={{ textAlign: "center" }}>
