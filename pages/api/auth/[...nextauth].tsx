@@ -9,7 +9,7 @@ import { Config } from "@/components/config";
 const idp = process.env.AUTH_IDP ?? process.env.NEXT_PUBLIC_AUTH_IDP ?? "https://sso-test.hm.edu";
 
 class AuthProviderSuffix {
-    static jwks_endpoint: string = Config.AuthProvider == "shibboleth" ? "/idp/profile/oidc/jwks" : "/protocol/openid-connect/certs";
+    static jwks_endpoint: string = Config.AuthProvider == "shibboleth" ? "/idp/profile/oidc/keyset" : "/protocol/openid-connect/certs";
     static token_endpoint: string = Config.AuthProvider == "shibboleth" ? "/idp/profile/oidc/token" : "/protocol/openid-connect/token";
     static userinfo_endpoint: string = Config.AuthProvider == "shibboleth" ? "/idp/profile/oidc/userinfo" : "/protocol/openid-connect/userinfo";
     static authorization_endpoint: string = Config.AuthProvider == "shibboleth" ? "/idp/profile/oidc/authorize" : "/protocol/openid-connect/auth";
