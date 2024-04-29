@@ -179,6 +179,6 @@ jobs:
             NEXT_PUBLIC_ACME_HOST=https://acme.pki.hof-university.de
             NEXT_PUBLIC_PKI_HOST=https://rest.pki.hof-university.de
             NEXT_PUBLIC_DOMAIN_HOST=https://domains.pki.hof-university.de
-            NEXT_PUBLIC_AUTH_IDP=https://idp.hof-university.de
+            NEXT_PUBLIC_AUTH_IDP=https://sso.hof-university.de
             NEXT_PUBLIC_ORGANIZATION_NAME=Hochschule Hof
             NEXT_PUBLIC_DOCS_URL=https://collab.dvb.bayern/pages/viewpage.action?pageId=441753602
