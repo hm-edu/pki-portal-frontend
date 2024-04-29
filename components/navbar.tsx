@@ -32,7 +32,7 @@ export default function ButtonAppBar() {
         const logout = <Button color="inherit" key='logout'
             onClick={() => {
                 // eslint-disable-next-line @typescript-eslint/restrict-plus-operands, @typescript-eslint/no-unsafe-member-access
-                void signOut({ callbackUrl: (process.env.AUTH_IDP ?? process.env.NEXT_PUBLIC_AUTH_IDP ?? "https://sso-test.hm.edu") + (Config.AuthProvider == "shibboleth" ? "/idp/profile/oidc/logout" : "/protocol/openid-connect/logout") });
+                void signOut({ callbackUrl: (process.env.AUTH_IDP ?? process.env.NEXT_PUBLIC_AUTH_IDP ?? "https://sso-test.hm.edu") + (Config.AuthProvider == "shibboleth" ? "/idp/profile/Logout" : "/protocol/openid-connect/logout") });
             }}
             variant="outlined">
             Abmelden
