@@ -152,7 +152,7 @@ jobs:
             SENTRY_RELEASE=${{ github.sha }}
             NEXT_PUBLIC_SENTRY_DSN=${{ secrets.SENTRY_DSN }}
             NEXT_PUBLIC_EAB_HOST=${{ matrix.university.eab_host }}
-            NEXT_PUBLIC_ACME_HOST=${{ matrix.university.acme }}
+            NEXT_PUBLIC_ACME_HOST=${{ matrix.university.acme_host }}
             NEXT_PUBLIC_PKI_HOST=${{ matrix.university.pki_host }}
             NEXT_PUBLIC_DOMAIN_HOST=${{ matrix.university.domain_host }}
             NEXT_PUBLIC_AUTH_IDP=${{ matrix.university.auth_idp }}
