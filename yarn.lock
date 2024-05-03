@@ -4049,10 +4049,10 @@ eslint-module-utils@^2.7.4, eslint-module-utils@^2.8.0:
   dependencies:
     debug "^3.2.7"
 
-eslint-plugin-cypress@3.0.3:
-  version "3.0.3"
-  resolved "https://registry.yarnpkg.com/eslint-plugin-cypress/-/eslint-plugin-cypress-3.0.3.tgz#5a8f226e81276edca9fa17b24a4b9cb358a41936"
-  integrity sha512-yrdAyBoHRCarLrlozReLAuRn/AXQPqWf7+HoXzWLFAH7ntqn1RLpBqi2Vl7Czl2Y1pWNFVpXJlFeNj5dmUslsg==
+eslint-plugin-cypress@3.1.0:
+  version "3.1.0"
+  resolved "https://registry.yarnpkg.com/eslint-plugin-cypress/-/eslint-plugin-cypress-3.1.0.tgz#83333f66c917d7f51a0dedbf0d0b42a09c89822f"
+  integrity sha512-rYgUo6cAVn8TMKaaMZocBfsjTcCgZvTPL1ZEZzLEq2cd/dnIgW/WPW8pIbrkbb9TKXTbmh1jcIXIjCiTGvXFNw==
   dependencies:
     globals "^13.20.0"
 
