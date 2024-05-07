@@ -47,7 +47,7 @@
   "devDependencies": {
     "@babel/core": "7.24.5",
     "@babel/preset-env": "7.24.5",
-    "@swc/plugin-transform-imports": "2.0.0",
+    "@swc/plugin-transform-imports": "2.0.1",
     "@testing-library/cypress": "10.0.1",
     "@testing-library/react": "15.0.6",
     "@types/node": "20.12.10",
