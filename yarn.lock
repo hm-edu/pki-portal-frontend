@@ -2041,10 +2041,10 @@
     "@swc/counter" "^0.1.3"
     tslib "^2.4.0"
 
-"@swc/plugin-transform-imports@2.0.1":
-  version "2.0.1"
-  resolved "https://registry.yarnpkg.com/@swc/plugin-transform-imports/-/plugin-transform-imports-2.0.1.tgz#d800a61f1384c66909b2d8bfed9fc01cdb872a9e"
-  integrity sha512-Uq7bsG6vaJhgHkc+1rDQyhX/C8S22ZPv0e7YlHr2ySucD0GDrsVPDVihAfpN7ocDuaOW0jIuXHpOc2awlnoliQ==
+"@swc/plugin-transform-imports@2.0.3":
+  version "2.0.3"
+  resolved "https://registry.yarnpkg.com/@swc/plugin-transform-imports/-/plugin-transform-imports-2.0.3.tgz#a821354090dfe2c3f3f544db4933a38020fdbb68"
+  integrity sha512-EKj7sYneVukfEQ4j3qp3HEPLdPuzas7AT6VXiI2xDSkLqY0iBtmFCOKcgojxf2kCsgXEoPr5iKtLAaJr6sNR1Q==
   dependencies:
     "@swc/counter" "^0.1.3"
 
