@@ -27,19 +27,20 @@ export default function ButtonAppBar() {
     const { data: session } = useSession();
     const [userFragment, setFragment] = useState(<></>);
     const [openDrawer, setDrawer] = React.useState<boolean>(false);
+    const [buttons, setButtons] = useState<JSX.Element[]>([]);
 
     useEffect(() => {
-        const logout = <Button color="inherit" key='logout'
-            onClick={() => {
-                // eslint-disable-next-line @typescript-eslint/restrict-plus-operands, @typescript-eslint/no-unsafe-member-access
-                void signOut({ callbackUrl: (process.env.AUTH_IDP ?? process.env.NEXT_PUBLIC_AUTH_IDP ?? "https://sso-test.hm.edu") + (Config.AuthProvider == "shibboleth" ? "/idp/profile/Logout" : "/protocol/openid-connect/logout") });
-            }}
-            variant="outlined">
-            Abmelden
-        </Button>;
         if (session) {
             const DynamicMoment = dynamic(() => import("react-moment"));
 
+            const logout = <Button color="inherit" key='logout'
+                onClick={() => {
+                    // eslint-disable-next-line @typescript-eslint/restrict-plus-operands, @typescript-eslint/no-unsafe-member-access
+                    void signOut({ callbackUrl: (process.env.AUTH_IDP ?? process.env.NEXT_PUBLIC_AUTH_IDP ?? "https://sso-test.hm.edu") + (Config.AuthProvider == "shibboleth" ? "/idp/profile/Logout" : "/protocol/openid-connect/logout") });
+                }}
+                variant="outlined">
+                Abmelden
+            </Button>;
             setFragment(<>
                 <Tooltip title={<Box>
                     <Typography variant="body2">{session.user?.email ? session.user?.email : ""}</Typography>
@@ -47,35 +48,34 @@ export default function ButtonAppBar() {
                 </Box>}>
                     <Typography sx={{ paddingRight: "10px" }}>{session.user?.name ? session.user?.name : ""}</Typography>
                 </Tooltip>{logout}</>);
+
+            var _buttons: JSX.Element[] = [];
+            _buttons.splice(0, 0, <Link legacyBehavior={true} passHref target="_blank" key="help" href={Config.DocsUrl}>
+                <a target="_blank" style={{
+                    textDecoration: "none",
+                    color: "inherit",
+                }}>
+                    <Button key="guides" color="inherit" >Anleitungen</Button>
+                </a>
+            </Link >);
+            if (!Config.DisableUser) {
+                _buttons.splice(0, 0, <Link legacyBehavior={true} key="user" href="/user" ><Button key="user" color="inherit" >Nutzerzertifikate</Button></Link>);
+            }
+            if (!Config.DisableAcme) {
+                _buttons.splice(0, 0, <Link legacyBehavior={true} key="eab" href="/eab" ><Button key="eab" color="inherit" >ACME Tokens</Button></Link>);
+            }
+            if (!Config.DisableServer) {
+                _buttons.splice(0, 0, <Link legacyBehavior={true} key="server" href="/server" ><Button key="server" color="inherit">Serverzertifikate</Button></Link>);
+            }
+            if (!Config.DisableDomain) {
+                _buttons.splice(0, 0, <Link legacyBehavior={true} key="domains" href="/domains" ><Button key="domains" color="inherit" >Hostverwaltung</Button></Link>);
+            }
+            setButtons(_buttons);
         } else {
             setFragment(<SignInButton />);
         }
     }, [session, session?.user, session?.user?.email, session?.user?.name]);
 
-    const buttons = session ? [
-        <Link legacyBehavior={true} passHref target="_blank" key="help" href={Config.DocsUrl}>
-            <a target="_blank" style={{
-                textDecoration: "none",
-                color: "inherit",
-            }}>
-                <Button key="guides" color="inherit" >Anleitungen</Button>
-            </a>
-        </Link >,
-    ] : [];
-    if (session) {
-        if (!Config.DisableAcme) {
-            buttons.splice(0, 0, <Link legacyBehavior={true} key="user" href="/user" ><Button key="user" color="inherit" >Nutzerzertifikate</Button></Link>);
-        }
-        if (!Config.DisableUser) {
-            buttons.splice(0, 0, <Link legacyBehavior={true} key="eab" href="/eab" ><Button key="eab" color="inherit" >ACME Tokens</Button></Link>);
-        }
-        if (!Config.DisableServer) {
-            buttons.splice(0, 0, <Link legacyBehavior={true} key="server" href="/server" ><Button key="server" color="inherit">Serverzertifikate</Button></Link>);
-        }
-        if (!Config.DisableDomain) {
-            buttons.splice(0, 0, <Link legacyBehavior={true} key="domains" href="/domains" ><Button key="domains" color="inherit" >Hostverwaltung</Button></Link>);
-        }
-    }
     return (
         <AppBar position="fixed">
             <Hidden key="desktop" mdDown>
