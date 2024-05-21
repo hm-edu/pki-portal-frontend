@@ -49,8 +49,8 @@ export default function ButtonAppBar() {
                     <Typography sx={{ paddingRight: "10px" }}>{session.user?.name ? session.user?.name : ""}</Typography>
                 </Tooltip>{logout}</>);
 
-            var _buttons: JSX.Element[] = [];
-            _buttons.splice(0, 0, <Link legacyBehavior={true} passHref target="_blank" key="help" href={Config.DocsUrl}>
+            let navbarButtons: JSX.Element[] = [];
+            navbarButtons.splice(0, 0, <Link legacyBehavior={true} passHref target="_blank" key="help" href={Config.DocsUrl}>
                 <a target="_blank" style={{
                     textDecoration: "none",
                     color: "inherit",
@@ -59,18 +59,18 @@ export default function ButtonAppBar() {
                 </a>
             </Link >);
             if (!Config.DisableUser) {
-                _buttons.splice(0, 0, <Link legacyBehavior={true} key="user" href="/user" ><Button key="user" color="inherit" >Nutzerzertifikate</Button></Link>);
+                navbarButtons.splice(0, 0, <Link legacyBehavior={true} key="user" href="/user" ><Button key="user" color="inherit" >Nutzerzertifikate</Button></Link>);
             }
             if (!Config.DisableAcme) {
-                _buttons.splice(0, 0, <Link legacyBehavior={true} key="eab" href="/eab" ><Button key="eab" color="inherit" >ACME Tokens</Button></Link>);
+                navbarButtons.splice(0, 0, <Link legacyBehavior={true} key="eab" href="/eab" ><Button key="eab" color="inherit" >ACME Tokens</Button></Link>);
             }
             if (!Config.DisableServer) {
-                _buttons.splice(0, 0, <Link legacyBehavior={true} key="server" href="/server" ><Button key="server" color="inherit">Serverzertifikate</Button></Link>);
+                navbarButtons.splice(0, 0, <Link legacyBehavior={true} key="server" href="/server" ><Button key="server" color="inherit">Serverzertifikate</Button></Link>);
             }
             if (!Config.DisableDomain) {
-                _buttons.splice(0, 0, <Link legacyBehavior={true} key="domains" href="/domains" ><Button key="domains" color="inherit" >Hostverwaltung</Button></Link>);
+                navbarButtons.splice(0, 0, <Link legacyBehavior={true} key="domains" href="/domains" ><Button key="domains" color="inherit" >Hostverwaltung</Button></Link>);
             }
-            setButtons(_buttons);
+            setButtons(navbarButtons);
         } else {
             setFragment(<SignInButton />);
         }
