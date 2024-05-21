@@ -49,7 +49,7 @@ export default function ButtonAppBar() {
                     <Typography sx={{ paddingRight: "10px" }}>{session.user?.name ? session.user?.name : ""}</Typography>
                 </Tooltip>{logout}</>);
 
-            let navbarButtons: JSX.Element[] = [];
+            const navbarButtons: JSX.Element[] = [];
             navbarButtons.splice(0, 0, <Link legacyBehavior={true} passHref target="_blank" key="help" href={Config.DocsUrl}>
                 <a target="_blank" style={{
                     textDecoration: "none",
