@@ -73,6 +73,7 @@ export default function ButtonAppBar() {
             setButtons(navbarButtons);
         } else {
             setFragment(<SignInButton />);
+            setButtons([]);
         }
     }, [session, session?.user, session?.user?.email, session?.user?.name]);
 
