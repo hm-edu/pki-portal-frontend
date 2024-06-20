@@ -67,7 +67,7 @@
     "eslint-plugin-testing-library": "6.2.2",
     "patch-package": "8.0.0",
     "start-server-and-test": "2.0.4",
-    "typescript": "5.4.5",
+    "typescript": "5.5.2",
     "webpack": "5.92.1"
   }
 }
