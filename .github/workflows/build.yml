@@ -140,7 +140,7 @@ jobs:
           cp ${{ matrix.university.logo-small }} public/logo-small.png
           cp ${{ matrix.university.favicon }} public/favicon.ico
       - name: Build and push
-        uses: docker/build-push-action@v5
+        uses: docker/build-push-action@v6
         with:
           context: .
           push: ${{ github.event_name != 'pull_request' && github.actor != 'dependabot[bot]' }}
