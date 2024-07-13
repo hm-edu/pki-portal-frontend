@@ -34,7 +34,7 @@ export default function SslCertificates() {
     const reason = useRef<TextFieldProps>(null);
     const [open, setOpen] = useState(false);
     const [certificates, setCertificates] = useState([] as PortalApisSslCertificateDetails[]);
-    const [selected, setSelected] = useState<GridRowId[]>();
+    const [selected, setSelected] = useState<readonly GridRowId[]>();
     const [error, setError] = useState<undefined | boolean | string>(undefined);
     const { data: session, status } = useSession();
 

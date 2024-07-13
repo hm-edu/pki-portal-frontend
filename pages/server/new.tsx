@@ -4,7 +4,7 @@ import Modal from "@mui/material/Modal";
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import { green } from "@mui/material/colors";
-import { DataGrid, GridColDef, GridPaginationModel, GridRowId } from "@mui/x-data-grid";
+import { DataGrid, GridColDef, GridPaginationModel, GridRowSelectionModel } from "@mui/x-data-grid";
 import FileDownload from "@mui/icons-material/FileDownload";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import Stack from "@mui/material/Stack";
@@ -90,7 +90,7 @@ export default function SslGenerator() {
     const [keypair, setKeyPair] = useState<KeyPair>();
     const [pkcs12, setPkcs12] = useState<boolean>(false);
     const [domains, setDomains] = useState<ModelDomain[]>([]);
-    const [selected, setSelected] = useState<GridRowId[]>();
+    const [selected, setSelected] = useState<GridRowSelectionModel>();
     const [paginationModel, setPaginationModel] = useState<GridPaginationModel>({ page: 0, pageSize: 50 });
     const { data: session, status } = useSession();
 
