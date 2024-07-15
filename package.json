@@ -45,7 +45,7 @@
     "unidecode": "1.1.0"
   },
   "devDependencies": {
-    "@babel/core": "7.24.8",
+    "@babel/core": "7.24.9",
     "@babel/preset-env": "7.24.8",
     "@swc/plugin-transform-imports": "2.0.9",
     "@testing-library/cypress": "10.0.2",
