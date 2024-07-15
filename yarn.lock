@@ -6825,10 +6825,10 @@ pkg-dir@^7.0.0:
   dependencies:
     find-up "^6.3.0"
 
-pkijs@3.2.0:
-  version "3.2.0"
-  resolved "https://registry.yarnpkg.com/pkijs/-/pkijs-3.2.0.tgz#18279548f89c3788de7aa49a96e04fabc25f5656"
-  integrity sha512-6mN9tH4GoMJKaflE9K0YDZP5Z2EpbnsEdjqC9sDObWqRGc+hxeZaGCRWyW61hgJtdWfVp2HhiyEeE/582SecLw==
+pkijs@3.2.1:
+  version "3.2.1"
+  resolved "https://registry.yarnpkg.com/pkijs/-/pkijs-3.2.1.tgz#8ee7448f32c78143b8e55f2d484336a266934f71"
+  integrity sha512-hrONUMBtrl3stJkctCRkBIa6KBs68CCGtWdTNgWFa+qxprFxjsaWUYvzBbeLqW8hLKKjH1sAD/wbIL3/YBIrvg==
   dependencies:
     "@noble/hashes" "^1.4.0"
     asn1js "^3.0.5"
