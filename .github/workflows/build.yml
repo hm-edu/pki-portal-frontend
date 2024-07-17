@@ -9,14 +9,15 @@ jobs:
     name: Build Next.JS Webapp
     steps:
       - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v3
       - name: Use Node.js 21
         uses: actions/setup-node@v4
         with:
           node-version: 21
-          cache: "yarn"
-      - run: yarn install --immutable --immutable-cache --check-cache
-      - run: yarn lint
-      - run: yarn build
+          cache: "pnpm"
+      - run: pnpm i --frozen-lockfile
+      - run: pnpm lint
+      - run: pnpm build
         env:
           SENTRY_ENVIRONMENT: ${{ github.ref_name == 'main' && 'production' || 'staging' }}
           SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
@@ -39,17 +40,19 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v3
       - name: Use Node.js 20
         uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: "yarn"
+          cache: "pnpm"
+      - run: pnpm i --frozen-lockfile
       - name: Cypress run
         id: cypress
         uses: cypress-io/github-action@v6
         with:
-          build: yarn build
-          start: yarn start
+          build: pnpm build
+          start: pnpm start
           record: true
         env:
           # pass the Cypress Cloud record key as an environment variable
