@@ -48,7 +48,7 @@
   "devDependencies": {
     "@babel/core": "7.24.9",
     "@babel/preset-env": "7.24.8",
-    "@popperjs/core": "^2.11.8",
+    "@popperjs/core": "2.11.8",
     "@swc/plugin-transform-imports": "2.0.10",
     "@testing-library/cypress": "10.0.2",
     "@testing-library/react": "16.0.0",
