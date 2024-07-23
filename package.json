@@ -13,10 +13,10 @@
     "e2e:headless": "start-server-and-test start http://localhost:3000 \"cypress run --e2e\""
   },
   "dependencies": {
-    "@emotion/cache": "11.11.0",
-    "@emotion/react": "11.11.4",
+    "@emotion/cache": "11.13.0",
+    "@emotion/react": "11.13.0",
     "@emotion/server": "11.11.0",
-    "@emotion/styled": "11.11.5",
+    "@emotion/styled": "11.13.0",
     "@fontsource/fira-mono": "5.0.13",
     "@fontsource/roboto": "5.0.13",
     "@mui/icons-material": "5.16.4",
