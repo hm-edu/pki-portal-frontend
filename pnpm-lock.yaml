@@ -157,8 +157,8 @@ importers:
         specifier: 14.2.5
         version: 14.2.5(eslint@8.57.0)(typescript@5.5.4)
       eslint-plugin-cypress:
-        specifier: 3.3.0
-        version: 3.3.0(eslint@8.57.0)
+        specifier: 3.4.0
+        version: 3.4.0(eslint@8.57.0)
       eslint-plugin-react:
         specifier: 7.35.0
         version: 7.35.0(eslint@8.57.0)
@@ -2572,8 +2572,8 @@ packages:
       eslint-import-resolver-webpack:
         optional: true
 
-  eslint-plugin-cypress@3.3.0:
-    resolution: {integrity: sha512-HPHMPzYBIshzJM8wqgKSKHG2p/8R0Gbg4Pb3tcdC9WrmkuqxiKxSKbjunUrajhV5l7gCIFrh1P7C7GuBqH6YuQ==}
+  eslint-plugin-cypress@3.4.0:
+    resolution: {integrity: sha512-Rrrr3Ri6wHqzrRr+TyUV7bDS4UnMMrFY1R1PP2F7XdGfe9txDC6lQEshyoNOWqGoPkbbeDm1x1XPc/adxemsnA==}
     peerDependencies:
       eslint: '>=7'
 
@@ -7735,7 +7735,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  eslint-plugin-cypress@3.3.0(eslint@8.57.0):
+  eslint-plugin-cypress@3.4.0(eslint@8.57.0):
     dependencies:
       eslint: 8.57.0
       globals: 13.24.0
