@@ -71,6 +71,7 @@ class EabTokens extends React.Component<{ session: AuthProps | null; status: str
         // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-non-null-assertion
         api.eabPost({ comment: (this.newComment.current!.value as string) }).then(() => {
             this.loadTokens();
+            this.newComment.current!.value = "";
         }).catch((error) => {
             Sentry.captureException(error);
         });

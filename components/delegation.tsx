@@ -43,6 +43,7 @@ export default function Delegation(props: { delegationDomain: ModelDomain; onClo
         const req = { "user": user };
         api.domainsIdDelegationPost(id, req).then((data) => {
             setDomain(data.data);
+            newDelegation.current!.value = "";
         }).catch(() => {
             setError(true);
         });
