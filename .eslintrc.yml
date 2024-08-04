@@ -2,6 +2,7 @@ plugins:
   - "@typescript-eslint"
   - testing-library
   - cypress
+  - '@stylistic'
 env:
   browser: true
   node: true
@@ -51,12 +52,12 @@ overrides:
     rules:
       indent: "off"
       no-return-await: "off"
-      "@typescript-eslint/indent":
+      "@stylistic/indent":
         - error
         - 4
         - SwitchCase: 1
-      "@typescript-eslint/member-delimiter-style": error
-      "@typescript-eslint/object-curly-spacing":
+      "@stylistic/member-delimiter-style": error
+      "@stylistic/object-curly-spacing":
         - error
         - always
       "@typescript-eslint/return-await":
