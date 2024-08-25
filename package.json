@@ -70,6 +70,6 @@
     "patch-package": "8.0.0",
     "start-server-and-test": "2.0.5",
     "typescript": "5.5.4",
-    "webpack": "5.93.0"
+    "webpack": "5.94.0"
   }
 }
