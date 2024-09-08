@@ -68,7 +68,7 @@
     "eslint-plugin-react": "7.35.2",
     "eslint-plugin-testing-library": "6.3.0",
     "patch-package": "8.0.0",
-    "start-server-and-test": "2.0.5",
+    "start-server-and-test": "2.0.6",
     "typescript": "5.5.4",
     "webpack": "5.94.0"
   }
