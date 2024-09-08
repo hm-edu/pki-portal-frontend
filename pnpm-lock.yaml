@@ -21,8 +21,8 @@ importers:
         specifier: 11.13.0
         version: 11.13.0(@emotion/react@11.13.3(@types/react@18.3.5)(react@18.3.1))(@types/react@18.3.5)(react@18.3.1)
       '@fontsource/fira-mono':
-        specifier: 5.0.14
-        version: 5.0.14
+        specifier: 5.0.15
+        version: 5.0.15
       '@fontsource/roboto':
         specifier: 5.0.15
         version: 5.0.15
@@ -918,8 +918,8 @@ packages:
     resolution: {integrity: sha512-Ys+3g2TaW7gADOJzPt83SJtCDhMjndcDMFVQ/Tj9iA1BfJzFKD9mAUXT3OenpuPHbI6P/myECxRJrofUsDx/5g==}
     engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
 
-  '@fontsource/fira-mono@5.0.14':
-    resolution: {integrity: sha512-4IKa+cuHipk/vr2frgZh4pyR2XcoQk/j3zmMlo8uuAGUB3IPLpQlgN6Qm5d3RfRZ7dXGlTn/PWiAJeU8bkmD4w==}
+  '@fontsource/fira-mono@5.0.15':
+    resolution: {integrity: sha512-wc3TpF2GBbtFDKNbb444BrC3mEKuoPLITSYCKweNIrqBvAalIfJGloY/MVrmSGaMNgaAKUpdgy4eAWPLkUVzaA==}
 
   '@fontsource/roboto@5.0.15':
     resolution: {integrity: sha512-352XiID9jfwmYaHpdmS3ocGJi3PA+vOm4HzJIRfSyPEyLP6dZN8iiEKUbdAfB5YXQO3YxO2KZpR+R28q2zMiYw==}
@@ -5860,7 +5860,7 @@ snapshots:
 
   '@eslint/js@8.57.0': {}
 
-  '@fontsource/fira-mono@5.0.14': {}
+  '@fontsource/fira-mono@5.0.15': {}
 
   '@fontsource/roboto@5.0.15': {}
 
