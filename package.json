@@ -63,7 +63,7 @@
     "cross-env": "7.0.3",
     "cypress": "13.14.2",
     "eslint": "8.57.0",
-    "eslint-config-next": "14.2.9",
+    "eslint-config-next": "14.2.10",
     "eslint-plugin-cypress": "3.5.0",
     "eslint-plugin-react": "7.35.2",
     "eslint-plugin-testing-library": "6.3.0",
