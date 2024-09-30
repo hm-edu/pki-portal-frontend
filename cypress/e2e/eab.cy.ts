@@ -27,8 +27,7 @@ describe("eab", () => {
         cy.visit("/eab");
         cy.wait(["@getSession", "@getEab"]);
         cy.get("#new").should("be.visible");
-        cy.get("[data-id=\"Test\"] > .MuiDataGrid-cell--textLeft > .MuiButtonBase-root").click();
-        cy.get("#toBeDeleted").should("be.visible");
+        cy.get("[data-id=\"Test\"] > .MuiDataGrid-cell--textLeft > .MuiButtonBase-root").should("be.visible").and("contain", "Löschen").click();
     });
     it("eab loggedin error loading", () => {
         cy.viewport(1280, 1024);
