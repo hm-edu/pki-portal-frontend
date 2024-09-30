@@ -1,8 +1,8 @@
 /** @type {import('next').NextConfig} */
 
-const { withSentryConfig } = require("@sentry/nextjs");
-
 const fs = require("fs");
+
+const { withSentryConfig } = require("@sentry/nextjs");
 const download = require("download");
 
 const sentryWebpackPluginOptions = {
@@ -32,7 +32,6 @@ module.exports = (phase, { defaultConfig }) => {
             },
         },
         webpack: (config, { webpack, isServer }) => {
-
             (async () => {
                 if (process.env.LOGO_LARGE) {
                     fs.writeFileSync("./public/logo.png", await download(process.env.LOGO_LARGE));
@@ -62,6 +61,11 @@ module.exports = (phase, { defaultConfig }) => {
                     }),
                 );
             }
+
+            config.ignoreWarnings = [
+                { module: /@opentelemetry\/instrumentation/, message: /Critical dependency/ },
+                { module: /@prisma\/instrumentation/, message: /Critical dependency/ },
+            ];
             return defaultConfig.webpack ? defaultConfig.webpack(config) : config;
         },
     };

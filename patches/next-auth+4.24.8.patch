@@ -1,0 +1,75 @@
+diff --git a/node_modules/next-auth/core/routes/session.js b/node_modules/next-auth/core/routes/session.js
+index 95f2e2a..52e5bb3 100644
+--- a/node_modules/next-auth/core/routes/session.js
++++ b/node_modules/next-auth/core/routes/session.js
+@@ -5,6 +5,7 @@ Object.defineProperty(exports, "__esModule", {
+ });
+ exports.default = session;
+ var _utils = require("../lib/utils");
++var _jose = require("jose");
+ async function session(params) {
+   const {
+     options,
+@@ -66,9 +67,7 @@ async function session(params) {
+         token,
+         maxAge: options.session.maxAge
+       });
+-      const sessionCookies = sessionStore.chunk(newToken, {
+-        expires: newExpires
+-      });
++      const sessionCookies = sessionStore.chunk(newToken);
+       (_response$cookies = response.cookies) === null || _response$cookies === void 0 || _response$cookies.push(...sessionCookies);
+       await ((_events$session = events.session) === null || _events$session === void 0 ? void 0 : _events$session.call(events, {
+         session: updatedSession,
+@@ -76,7 +75,7 @@ async function session(params) {
+       }));
+     } catch (error) {
+       var _response$cookies2;
+-      logger.error("JWT_SESSION_ERROR", error);
++      if (!(error instanceof _jose.errors.JWTExpired)) logger.error("JWT_SESSION_ERROR", error);
+       (_response$cookies2 = response.cookies) === null || _response$cookies2 === void 0 || _response$cookies2.push(...sessionStore.clean());
+     }
+   } else {
+diff --git a/node_modules/next-auth/react/index.js b/node_modules/next-auth/react/index.js
+index d043a15..a80671f 100644
+--- a/node_modules/next-auth/react/index.js
++++ b/node_modules/next-auth/react/index.js
+@@ -465,20 +465,23 @@ function SessionProvider(props) {
+   }, [props.refetchOnWindowFocus]);
+   var isOnline = useOnline();
+   var shouldRefetch = refetchWhenOffline !== false || isOnline;
++  var refetchInBackground = props.refetchInBackground;
+   React.useEffect(function () {
+     if (refetchInterval && shouldRefetch) {
+       var refetchIntervalTimer = setInterval(function () {
+         if (__NEXTAUTH._session) {
+-          __NEXTAUTH._getSession({
+-            event: "poll"
+-          });
++          if (refetchInBackground || (document.visibilityState === "visible" && document.hasFocus())) {
++            __NEXTAUTH._getSession({
++                event: "poll"
++            });
++          }
+         }
+       }, refetchInterval * 1000);
+       return function () {
+         return clearInterval(refetchIntervalTimer);
+       };
+     }
+-  }, [refetchInterval, shouldRefetch]);
++  }, [refetchInterval, shouldRefetch, refetchInBackground]);
+   var value = React.useMemo(function () {
+     return {
+       data: session,
+diff --git a/node_modules/next-auth/react/types.d.ts b/node_modules/next-auth/react/types.d.ts
+index 62207fd..254d034 100644
+--- a/node_modules/next-auth/react/types.d.ts
++++ b/node_modules/next-auth/react/types.d.ts
+@@ -68,5 +68,6 @@ export interface SessionProviderProps {
+      * [`navigator.onLine` documentation](https://developer.mozilla.org/en-US/docs/Web/API/NavigatorOnLine/onLine)
+      */
+     refetchWhenOffline?: false;
++    refetchInBackground?: boolean;
+ }
+ //# sourceMappingURL=types.d.ts.map

@@ -1,10 +1,12 @@
-import * as pkijs from "pkijs";
-import * as asn1js from "asn1js";
 import { Buffer } from "buffer";
+
+import * as asn1js from "asn1js";
+import * as pkijs from "pkijs";
 
 export class CSRBundle {
     constructor(public csr: string, public privateKey: string) { }
 }
+
 export function fromPEM(pem: string): ArrayBuffer {
     const base64 = pem
         .replace(/-{5}(BEGIN|END) .*-{5}/gm, "")
