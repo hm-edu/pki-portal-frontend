@@ -2,7 +2,8 @@
   "include": [
     "next-env.d.ts",
     "**/*.ts",
-    "**/*.tsx"
+    "**/*.tsx",
+    ".next/types/**/*.ts"
   ],
   "compilerOptions": {
     "target": "ES2020",
@@ -44,6 +45,9 @@
       "@/api/*": [
         "api/*"
       ],
+      "@/app/*": [
+        "app/*"
+       ]
     },
     "plugins": [
       {

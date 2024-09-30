@@ -1,8 +1,10 @@
+"use client";
+
+import createCache from "@emotion/cache";
+import { checkboxClasses } from "@mui/material/Checkbox";
 import { red } from "@mui/material/colors";
 import { createTheme, Theme } from "@mui/material/styles";
-import { checkboxClasses } from "@mui/material/Checkbox";
 import { deDE } from "@mui/x-data-grid/locales";
-import createCache from "@emotion/cache";
 
 // A custom theme for this app
 export const theme: Theme = createTheme({

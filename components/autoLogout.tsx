@@ -1,5 +1,7 @@
+"use client";
+
+import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
-import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
 export default function AutoLogout() {
@@ -10,7 +12,7 @@ export default function AutoLogout() {
 
     useEffect(() => {
         if (authState === "authenticated" && status === "unauthenticated") {
-            void router.push("/logout").catch((err) => console.error(err));
+            void router.push("/logout");
         }
         setAuthState(status);
     }, [session, status]);

@@ -1,27 +1,30 @@
-import AppBar from "@mui/material/AppBar";
-import Toolbar from "@mui/material/Toolbar";
-import IconButton from "@mui/material/IconButton";
+"use client";
+
 import MenuIcon from "@mui/icons-material/Menu";
-import Button from "@mui/material/Button";
-import Tooltip from "@mui/material/Tooltip";
-import Typography from "@mui/material/Typography";
+import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
 import Divider from "@mui/material/Divider";
 import Drawer from "@mui/material/Drawer";
 import Hidden from "@mui/material/Hidden";
+import IconButton from "@mui/material/IconButton";
 import List from "@mui/material/List";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemText from "@mui/material/ListItemText";
-
-import React, { useEffect, useState } from "react";
-import { SignInButton } from "./signInButton";
-import Link from "next/link";
-import { signOut, useSession } from "next-auth/react";
+import Toolbar from "@mui/material/Toolbar";
+import Tooltip from "@mui/material/Tooltip";
+import Typography from "@mui/material/Typography";
+import Container from "@mui/system/Container";
 import dynamic from "next/dynamic";
 import Image from "next/image";
+import Link from "next/link";
+import { signOut, useSession } from "next-auth/react";
+import React, { useEffect, useState } from "react";
+
 import logo from "../public/logo-small.png";
-import Container from "@mui/system/Container";
-import { Config } from "./config";
+
+import { Config } from "@/components/config";
+import { SignInButton } from "@/components/signInButton";
 
 export default function ButtonAppBar() {
     const { data: session } = useSession();

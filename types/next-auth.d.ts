@@ -12,10 +12,10 @@ declare module "next-auth" {
         accessToken: string | undefined;
     }
 }
-declare module "next-auth/jwt" {    
-    interface JWT extends DefaultJWT {        
+declare module "next-auth/jwt" {
+    interface JWT extends DefaultJWT {
         accessToken: string | undefined;
-        accessTokenExpires: number;
+        accessTokenExpiresAt: number;
         refreshToken: string | undefined;
         error: string | undefined;
         user: User;
