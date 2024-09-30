@@ -1,3 +1,5 @@
+"use client";
+
 import { DialogTitle, DialogContent, DialogContentText, Typography, DialogActions, Button } from "@mui/material";
 import Dialog from "@mui/material/Dialog";
 import * as Sentry from "@sentry/nextjs";
