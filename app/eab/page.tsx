@@ -57,16 +57,15 @@ const EabTokens = () => {
         });
     }
 
-    function deleteToken() {
-        if (toDelete && session && session.accessToken) {
-            return <EabDeleteDialog initOpen={true} accessToken={session?.accessToken} id={toDelete.id!} callback={(success) => {
-                setDelete(undefined);
-                if (success) {
-                    loadTokens();
-                }
-            }} />;
-        }
-        return <></>;
+    let deleteModal = <></>;
+
+    if (toDelete && session && session.accessToken) {
+        deleteModal = <EabDeleteDialog initOpen={true} accessToken={session?.accessToken} id={toDelete.id!} callback={(success) => {
+            setDelete(undefined);
+            if (success) {
+                loadTokens();
+            }
+        }} />;
     }
 
     const columns: GridColDef[] = [
@@ -150,7 +149,7 @@ const EabTokens = () => {
                     pagination rows={tokens} />
             </div>
             {selection()}
-            {deleteToken()}
+            {deleteModal}
             <EabCreateForm session={session} createEABToken={createEABToken} />
         </>}
     </Box>;
