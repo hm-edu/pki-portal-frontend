@@ -23,6 +23,7 @@ settings:
     "node":
       "extensions": [".js", ".jsx", ".ts", ".tsx"]
 rules:
+  'import/namespace': 'off'
   'import/no-unresolved': 'off'
   'import/order':
     - warn
