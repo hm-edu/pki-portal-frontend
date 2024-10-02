@@ -6,13 +6,12 @@ import AlertTitle from "@mui/material/AlertTitle";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import LinearProgress from "@mui/material/LinearProgress";
-import { TextFieldProps } from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import { DataGrid, GridColDef, GridRowSelectionModel, GridSlots } from "@mui/x-data-grid";
 import { deDE } from "@mui/x-data-grid/locales";
 import * as Sentry from "@sentry/nextjs";
 import { useSession } from "next-auth/react";
-import { FormEvent, useEffect, useRef, useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
 
 import { EABApi, ModelsEAB } from "@/api/eab/api";
 import { Configuration } from "@/api/eab/configuration";
@@ -23,7 +22,6 @@ import { Config } from "@/components/config";
 import { dataGridStyle } from "@/components/theme";
 
 const EabTokens = () => {
-    const newComment = useRef<TextFieldProps>(null);
     const [tokens, setTokens] = useState<ModelsEAB[]>([]);
     const [selected, setSelected] = useState<GridRowSelectionModel|undefined>(undefined);
     const [loading, setLoading] = useState(true);
