@@ -2,9 +2,8 @@
 
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import { Box, Button, TextField } from "@mui/material";
-import { TextFieldProps } from "@mui/material/TextField";
 import { Session } from "next-auth";
-import { FormEvent, useRef } from "react";
+import { FormEvent, useState } from "react";
 
 interface EabCreateFormProps {
     session: Session | null;
@@ -12,13 +11,13 @@ interface EabCreateFormProps {
 }
 
 const EabCreateForm = ({ session, createEABToken }: EabCreateFormProps) => {
-    const newComment = useRef<TextFieldProps>(null);
+    const [newComment, setNewComment] = useState("");
 
     const handleSubmit = (e: FormEvent<Element>) => {
         e.preventDefault();
-        if (newComment.current?.value) {
-            createEABToken(newComment.current.value as string);
-            newComment.current.value = "";
+        if (newComment) {
+            createEABToken(newComment);
+            setNewComment("");
         }
     };
 
@@ -26,8 +25,9 @@ const EabCreateForm = ({ session, createEABToken }: EabCreateFormProps) => {
         <TextField
             slotProps={{ htmlInput: { pattern: "[a-zA-Z0-9-_.: üäöÄÖÜß]*" } }}
             label="Optionaler Kommentar"
-            inputRef={newComment}
+            value={newComment}
             variant="standard"
+            onChange={(e) => setNewComment(e.target.value)}
         />
         <Button type="submit" id="new" variant="contained" disabled={!session} color="success" startIcon={<AddCircleOutlineIcon />} sx={{ mt: 1 }}>
             Erstelle neuen Token
