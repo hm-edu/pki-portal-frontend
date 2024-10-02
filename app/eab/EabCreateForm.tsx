@@ -1,3 +1,5 @@
+"use client";
+
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import { Box, Button, TextField } from "@mui/material";
 import { TextFieldProps } from "@mui/material/TextField";
