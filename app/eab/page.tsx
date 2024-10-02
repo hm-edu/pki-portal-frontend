@@ -46,11 +46,11 @@ const EabTokens = () => {
         });
     }
 
-    function createEABToken() {
+    function createEABToken(comment: string) {
         const cfg = new Configuration({ accessToken: session?.accessToken });
         const api = new EABApi(cfg, `${Config.EabHost}`);
         // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-non-null-assertion
-        api.eabPost({ comment: (newComment.current!.value as string) }).then(() => {
+        api.eabPost({ comment }).then(() => {
             loadTokens();
         }).catch((error) => {
             Sentry.captureException(error);

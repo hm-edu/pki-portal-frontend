@@ -23,7 +23,7 @@ const EabCreateForm = ({ session, createEABToken }: EabCreateFormProps) => {
 
     return <Box component="form" sx={{ maxWidth: "100%", display: "flex", flexDirection: "column" }} onSubmit={handleSubmit}>
         <TextField
-            slotProps={{ htmlInput: { pattern: "[a-zA-Z0-9-_.: üäöÄÖÜß]*" } }}
+            slotProps={{ htmlInput: { pattern: /[a-zA-Z0-9-_.: üäöÄÖÜß]*/ } }}
             label="Optionaler Kommentar"
             value={newComment}
             variant="standard"
