@@ -47,8 +47,8 @@
     "unidecode": "1.1.0"
   },
   "devDependencies": {
-    "@babel/core": "7.25.2",
-    "@babel/preset-env": "7.25.4",
+    "@babel/core": "7.25.7",
+    "@babel/preset-env": "7.25.7",
     "@popperjs/core": "2.11.8",
     "@swc/plugin-transform-imports": "3.0.3",
     "@testing-library/cypress": "10.0.2",
