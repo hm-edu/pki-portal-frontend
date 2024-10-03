@@ -11,7 +11,8 @@ const sentryWebpackPluginOptions = {
     // recommended:
     //   release, url, org, project, authToken, configFile, stripPrefix,
     //   urlPrefix, include, ignore
-
+    hideSourceMaps: true,
+    widenClientFileUpload: true,
     silent: true, // Suppresses all logs
     // For all available options, see:
     // https://github.com/getsentry/sentry-webpack-plugin#options.
@@ -25,6 +26,9 @@ module.exports = (phase, { defaultConfig }) => {
         output: process.env.NEXT_PUBLIC_CI == "true" ? undefined : "standalone",
         compiler: {
             emotion: true,
+        },
+        experimental: {
+            instrumentationHook: true,
         },
         modularizeImports: {
             "@mui/icons-material": {
@@ -71,21 +75,7 @@ module.exports = (phase, { defaultConfig }) => {
     };
 
     moduleExports = process.env.NEXT_PUBLIC_SENTRY_DSN ?
-        withSentryConfig(
-            {
-                ...moduleExports,
-                sentry: {
-                    // Use `hidden-source-map` rather than `source-map` as the Webpack `devtool`
-                    // for client-side builds. (This will be the default starting in
-                    // `@sentry/nextjs` version 8.0.0.) See
-                    // https://webpack.js.org/configuration/devtool/ and
-                    // https://docs.sentry.io/platforms/javascript/guides/nextjs/manual-setup/#use-hidden-source-map
-                    // for more information.
-                    hideSourceMaps: true,
-                    widenClientFileUpload: true,
-                },
-            }, sentryWebpackPluginOptions)
-        : moduleExports;
+        withSentryConfig(...moduleExports, sentryWebpackPluginOptions) : moduleExports;
 
     return moduleExports;
 };
