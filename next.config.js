@@ -75,7 +75,7 @@ module.exports = (phase, { defaultConfig }) => {
     };
 
     moduleExports = process.env.NEXT_PUBLIC_SENTRY_DSN ?
-        withSentryConfig(...moduleExports, sentryWebpackPluginOptions) : moduleExports;
+        withSentryConfig(moduleExports, sentryWebpackPluginOptions) : moduleExports;
 
     return moduleExports;
 };
