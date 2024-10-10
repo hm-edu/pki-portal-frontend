@@ -6,22 +6,28 @@ import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/components/authOptions";
 
-async function handler(req: NextRequest) {
+interface DnsResponse {
+    found?: boolean;
+    message?: string;
+}
+
+async function handler(req: NextRequest): Promise<NextResponse<DnsResponse>> {
     const session = await getServerSession(authOptions);
 
     if (!session) {
         return NextResponse.json({ message: "You must be logged in." }, { status: 401 });
     }
     const body = await req.json();
-    return dns.resolve(body.fqdn, "A", (err, addresses) => {
-        if (err) {
-            return NextResponse.json({ message: "Error resolving DNS" }, { status: 500 });
-        }
-        if (addresses.length === 0) {
+    const promisses = dns.promises;
+    const resp = await (promisses.resolve(body.fqdn, "A").then(x => {
+        if (x.length === 0) {
             return NextResponse.json({ found: false }, { status: 200 });
         }
         return NextResponse.json({ found: true }, { status: 200 });
+    })).catch(() => {
+        return NextResponse.json({ message: "Error resolving DNS" }, { status: 500 });
     });
+    return resp;
 
 }
 
