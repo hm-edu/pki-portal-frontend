@@ -119,7 +119,7 @@ importers:
         version: 3.0.4
       '@testing-library/cypress':
         specifier: 10.0.2
-        version: 10.0.2(cypress@13.15.0)
+        version: 10.0.2(cypress@13.15.1)
       '@testing-library/react':
         specifier: 16.0.1
         version: 16.0.1(@testing-library/dom@10.4.0)(@types/react-dom@18.3.1)(@types/react@18.3.12)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -151,8 +151,8 @@ importers:
         specifier: 7.0.3
         version: 7.0.3
       cypress:
-        specifier: 13.15.0
-        version: 13.15.0
+        specifier: 13.15.1
+        version: 13.15.1
       eslint:
         specifier: 9.13.0
         version: 9.13.0
@@ -2386,8 +2386,8 @@ packages:
   csstype@3.1.3:
     resolution: {integrity: sha512-M1uQkMl8rQK/szD0LNhtqxIPLpimGm8sOBwU7lLnCpSbTyY3yeU1Vc7l4KT5zT4s/yOxHH5O7tIuuLOCnLADRw==}
 
-  cypress@13.15.0:
-    resolution: {integrity: sha512-53aO7PwOfi604qzOkCSzNlWquCynLlKE/rmmpSPcziRH6LNfaDUAklQT6WJIsD8ywxlIy+uVZsnTMCCQVd2kTw==}
+  cypress@13.15.1:
+    resolution: {integrity: sha512-DwUFiKXo4lef9kA0M4iEhixFqoqp2hw8igr0lTqafRb9qtU3X0XGxKbkSYsUFdkrAkphc7MPDxoNPhk5pj9PVg==}
     engines: {node: ^16.0.0 || ^18.0.0 || >=20.0.0}
     hasBin: true
 
@@ -4531,6 +4531,10 @@ packages:
   tr46@0.0.3:
     resolution: {integrity: sha512-N3WMsuqV66lT30CrXNbEjx4GEwlow3v6rr4mCcv6prnfwhS01rkgyFdjPNBYd9br7LpXV1+Emh01fHnq2Gdgrw==}
 
+  tree-kill@1.2.2:
+    resolution: {integrity: sha512-L0Orpi8qGpRG//Nd+H90vFB+3iHnue1zSSGmNOOCh1GLJ7rUKVwV2HvijphGQS2UmhUZewS9VgvxYIdgr+fG1A==}
+    hasBin: true
+
   trim-repeated@1.0.0:
     resolution: {integrity: sha512-pkonvlKk8/ZuR0D5tLW8ljt5I8kmxp2XKymhepUeOdCEfKpZaktSArkLHZt76OB1ZvO9bssUsDty4SWhLvZpLg==}
     engines: {node: '>=0.10.0'}
@@ -6583,11 +6587,11 @@ snapshots:
     dependencies:
       '@swc/counter': 0.1.3
 
-  '@testing-library/cypress@10.0.2(cypress@13.15.0)':
+  '@testing-library/cypress@10.0.2(cypress@13.15.1)':
     dependencies:
       '@babel/runtime': 7.25.6
       '@testing-library/dom': 10.4.0
-      cypress: 13.15.0
+      cypress: 13.15.1
 
   '@testing-library/dom@10.4.0':
     dependencies:
@@ -7381,7 +7385,7 @@ snapshots:
 
   csstype@3.1.3: {}
 
-  cypress@13.15.0:
+  cypress@13.15.1:
     dependencies:
       '@cypress/request': 3.0.5
       '@cypress/xvfb': 1.2.4(supports-color@8.1.1)
@@ -7423,6 +7427,7 @@ snapshots:
       semver: 7.6.3
       supports-color: 8.1.1
       tmp: 0.2.3
+      tree-kill: 1.2.2
       untildify: 4.0.0
       yauzl: 2.10.0
 
@@ -9829,6 +9834,8 @@ snapshots:
       url-parse: 1.5.10
 
   tr46@0.0.3: {}
+
+  tree-kill@1.2.2: {}
 
   trim-repeated@1.0.0:
     dependencies:
