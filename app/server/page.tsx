@@ -64,30 +64,32 @@ export default function SslCertificates() {
         if (status == "authenticated") {
             const cfg = new Configuration({ accessToken: session.accessToken });
             const api = new SSLApi(cfg, `${Config.PkiHost}`);
-            api.sslGet().then((response) => {
-                if (response.data) {
-                    const data = [];
-                    for (const cert of response.data) {
-                        if (cert.serial) {
-                            data.push({
-                                common_name: cert.common_name,
-                                expires: cert.expires,
-                                serial: cert.serial,
-                                not_before: cert.not_before,
-                                status: cert.status,
-                                subject_alternative_names: cert.subject_alternative_names,
-                                created: cert.created,
-                                source: cert.source,
-                                issued_by: cert.issued_by,
-                            });
+            Sentry.startSpan({ name: "Load Certificates" }, () => {
+                api.sslGet().then((response) => {
+                    if (response.data) {
+                        const data = [];
+                        for (const cert of response.data) {
+                            if (cert.serial) {
+                                data.push({
+                                    common_name: cert.common_name,
+                                    expires: cert.expires,
+                                    serial: cert.serial,
+                                    not_before: cert.not_before,
+                                    status: cert.status,
+                                    subject_alternative_names: cert.subject_alternative_names,
+                                    created: cert.created,
+                                    source: cert.source,
+                                    issued_by: cert.issued_by,
+                                });
+                            }
                         }
+                        setCertificates(data);
                     }
-                    setCertificates(data);
-                }
-                setLoading(false);
-            }).catch((error) => {
-                Sentry.captureException(error);
-                setError(true);
+                    setLoading(false);
+                }).catch((error) => {
+                    Sentry.captureException(error);
+                    setError(true);
+                });
             });
         } else if (status == "unauthenticated") {
             setLoading(false);
