@@ -103,6 +103,16 @@ jobs:
           logo-small: resources/hs-hof/logo-small.png
           favicon: resources/hs-hof/favicon.ico
           image_name: hm-edu/portal-frontend-hof
+        - name: Uni Bamberg
+          eab_host: https://eab.pki-service.uni-bamberg.de
+          acme_host: https://acme.pki-service.uni-bamberg.de
+          pki_host: https://certs.pki-service.uni-bamberg.de
+          domain_host: https://domains.pki-service.uni-bamberg.de
+          auth_idp: https://idp.iam.uni-bamberg.de
+          logo: resources/uni-bamberg/logo.png
+          logo-small: resources/uni-bamberg/logo-small.png
+          favicon: resources/uni-bamberg/favicon.ico
+          image_name: hm-edu/portal-frontend-bamberg
     runs-on: ubuntu-latest
     name: Docker Image for ${{ matrix.university.name }}
     needs: e2e
