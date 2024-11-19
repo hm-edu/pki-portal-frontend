@@ -29,7 +29,7 @@ const EabRecommendation = ({ token, onClose }: EabRecommendationProps) => {
     --eab-hmac-key "${key_bytes}"`;
 
     const issue_acme_sh = `acme.sh --issue \\
-    --standalone --days 300 \\
+    --standalone \\
     --keylength ec-256 \\
     --server ${Config.AcmeHost}/acme/acme/directory \\
     -d dummy.hm.edu`;
