@@ -11,6 +11,9 @@ const sentryWebpackPluginOptions = {
     // recommended:
     //   release, url, org, project, authToken, configFile, stripPrefix,
     //   urlPrefix, include, ignore
+    reactComponentAnnotation: {
+        enabled: true,
+    },
     hideSourceMaps: true,
     widenClientFileUpload: true,
     silent: true, // Suppresses all logs
@@ -21,14 +24,10 @@ module.exports = (phase, { defaultConfig }) => {
     let moduleExports = {
         poweredByHeader: false,
         reactStrictMode: true,
-        swcMinify: true,
         productionBrowserSourceMaps: true,
         output: process.env.NEXT_PUBLIC_CI == "true" ? undefined : "standalone",
         compiler: {
             emotion: true,
-        },
-        experimental: {
-            instrumentationHook: true,
         },
         modularizeImports: {
             "@mui/icons-material": {
@@ -74,8 +73,13 @@ module.exports = (phase, { defaultConfig }) => {
         },
     };
 
-    moduleExports = process.env.NEXT_PUBLIC_SENTRY_DSN ?
-        withSentryConfig(moduleExports, sentryWebpackPluginOptions) : moduleExports;
+    if (process.env.NEXT_PUBLIC_SENTRY_DSN) {
+        console.log("Sentry DSN found, enabling Sentry monitoring");
+        moduleExports = withSentryConfig(moduleExports, sentryWebpackPluginOptions);
+    } else {
+        moduleExports = moduleExports;
+    }
 
     return moduleExports;
 };
+
