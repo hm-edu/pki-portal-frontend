@@ -11,6 +11,9 @@ const sentryWebpackPluginOptions = {
     // recommended:
     //   release, url, org, project, authToken, configFile, stripPrefix,
     //   urlPrefix, include, ignore
+    org: "sre",
+    project: "pki-frontend",
+    url: "https://sentry.hm.edu/",
     reactComponentAnnotation: {
         enabled: true,
     },
