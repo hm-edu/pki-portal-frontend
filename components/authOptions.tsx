@@ -48,6 +48,7 @@ export const authOptions: NextAuthOptions =
                 if (!tokens.access_token) {
                     return { id: "", name: "", email: "" };
                 }
+                console.log(tokens);
                 // eslint-disable-next-line @typescript-eslint/no-unsafe-call
                 const act: { sub: string; email: string; name: string } = jwtDecode(tokens.access_token);
                 return {
