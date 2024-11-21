@@ -14,16 +14,11 @@ Sentry.init({
 
     // Setting this option to true will print useful information to the console while you're setting up Sentry.
     debug: false,
-    beforeSend(event, hint) {
-        if (event.request && event.request.headers) {
-            var ua = event.request.headers['User-Agent']
-            // check if user-agent is set and contains
-            if (ua && ua.includes('kube-probe')) {
-                // Drop the event if the user-agent contains 'kube-probe'
-                return null;
-            }
+    beforeSendTransaction(e) {
+        const isKubeProbe = e.request?.headers && e.request.headers['user-agent'].includes('kube-probe');
+        if (isKubeProbe) {
+            return null;
         }
-
-        return event
+        return e;
     }
 });
