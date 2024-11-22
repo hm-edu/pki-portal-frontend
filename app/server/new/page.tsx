@@ -124,6 +124,7 @@ export default function SslGenerator() {
 
     useEffect(() => {
         if (status == "authenticated" && !generateKey && !generatedKey) {
+            Sentry.setUser({ email: session?.user?.email?? "" });
             setProgress(<Typography>Bitte warten...</Typography>);
             const cfg = new Configuration({ accessToken: session.accessToken });
             const api = new DomainsApi(cfg, `${Config.DomainHost}`);

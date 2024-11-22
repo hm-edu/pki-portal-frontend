@@ -9,7 +9,6 @@ const SENTRY_DSN = process.env.SENTRY_DSN || process.env.NEXT_PUBLIC_SENTRY_DSN;
 Sentry.init({
     dsn: SENTRY_DSN,
 
-    tunnel: "/api/error",
     tracePropagationTargets: [
         process.env.DOMAIN_HOST ?? process.env.NEXT_PUBLIC_DOMAIN_HOST ?? '',
         process.env.PKI_HOST ?? process.env.NEXT_PUBLIC_PKI_HOST ?? '',

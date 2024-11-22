@@ -63,9 +63,9 @@ const SMIMEGenerator = () => {
             setSuccess(false);
             setLoading(true);
             setProgress(<Typography id="modal-modal-description" sx={{ mt: "24px" }}>Generiere CSR...</Typography>);
-            const CsrBuilder = (await import("@/components/csr")).CsrBuilder;
-            const csr = new CsrBuilder();
-            csr.build("rsa", undefined, undefined, 4096).then((x) => {
+            try { const CsrBuilder = (await import("@/components/csr")).CsrBuilder;
+                const csr = new CsrBuilder();
+                const x = await csr.build("rsa", undefined, undefined, 4096);
                 setProgress(<Typography id="modal-modal-description" sx={{ mt: "24px" }}>CSR generiert...</Typography>);
                 setIssuing(true);
                 if (session && session.user.name) {
@@ -74,46 +74,39 @@ const SMIMEGenerator = () => {
 
                     const cfg = new Configuration({ accessToken: session.accessToken });
                     const api = new SMIMEApi(cfg, `${Config.PkiHost}`);
-                    setProgress(<Typography id="modal-modal-description" sx={{ mt: "24px", mb: "5px" }}>Signiere CSR...
-                        <Alert severity="warning">Dieser Schritt kann leider bis zu 5 Minuten dauern.</Alert>
-                    </Typography>);
-                    return api.smimeCsrPost({ csr: x.csr }).then((response) => {
-                        setProgress(<Typography id="modal-modal-description" sx={{ mt: "24px" }}>Generiere PKCS12...</Typography>);
-                        return createP12(x.privateKey, [response.data], p12PasswordRef.current?.value as string, "rsa").then((p12) => {
-                            const element = document.createElement("a");
-                            element.setAttribute("href", "data:application/x-pkcs12;base64," + p12);
-                            element.setAttribute("download", filename);
-                            element.style.display = "none";
-                            document.body.appendChild(element);
-                            element.click();
-                            document.body.removeChild(element);
-                            // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
-                            setDownload(<Button variant="outlined" color="inherit" startIcon={<FileDownload />} download={filename} href={"data:application/x-pkcs12;base64," + p12}>Erneuter Download</Button>);
-                            setProgress(<Box sx={{ display: "flex", flexDirection: "column", gap: "15px", width: "md", alignItems: "left" }}>
-                                <Typography id="modal-modal-description" sx={{ mt: "24px" }}>PKCS12 generiert.</Typography>
-                                <Typography sx={{ mt: "5px" }}>Automatischer Download von Datei gestartet. Bitte sichern Sie die generierte Datei!</Typography>
-                                <Typography sx={{ mt: "5px" }}>Ein erneuter Download nach Verlassen der Seite ist nicht möglich!</Typography>
-                                <Button variant="outlined" color="inherit" sx={buttonSx} startIcon={<FileDownload />} download={filename} href={"data:application/x-pkcs12;base64," + p12}>Erneuter Download</Button>
-                                <Button variant="outlined" color="inherit" onClick={(event) => { event.preventDefault(); setClosed(true); }}>Dialog schließen</Button>
-                            </Box>);
-                            setSuccess(true);
-                            setLoading(false);
-                        }).catch(() => {
-                            setLoading(false);
-                            setError("Es ist ein unbekannter Fehler aufgetreten!");
-                        });
-                    }).catch(() => {
-                        setLoading(false);
-                        setError("Es ist ein unbekannter Fehler aufgetreten!");
-                    });
+                    setProgress(
+                        <Typography id="modal-modal-description" sx={{ mt: "24px", mb: "5px" }}>
+                            Signiere CSR...
+                            <Alert severity="warning">Dieser Schritt kann leider bis zu 5 Minuten dauern.</Alert>
+                        </Typography>);
+                    const response = await api.smimeCsrPost({ csr: x.csr });
+                    setProgress(<Typography id="modal-modal-description" sx={{ mt: "24px" }}>Generiere PKCS12...</Typography>);
+                    const p12 = await createP12(x.privateKey, [response.data], p12PasswordRef.current?.value as string, "rsa");
+                    const element = document.createElement("a");
+                    element.setAttribute("href", "data:application/x-pkcs12;base64," + p12);
+                    element.setAttribute("download", filename);
+                    element.style.display = "none";
+                    document.body.appendChild(element);
+                    element.click();
+                    document.body.removeChild(element);
+                    // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
+                    setDownload(<Button variant="outlined" color="inherit" startIcon={<FileDownload />} download={filename} href={"data:application/x-pkcs12;base64," + p12}>Erneuter Download</Button>);
+                    setProgress(<Box sx={{ display: "flex", flexDirection: "column", gap: "15px", width: "md", alignItems: "left" }}>
+                        <Typography id="modal-modal-description" sx={{ mt: "24px" }}>PKCS12 generiert.</Typography>
+                        <Typography sx={{ mt: "5px" }}>Automatischer Download von Datei gestartet. Bitte sichern Sie die generierte Datei!</Typography>
+                        <Typography sx={{ mt: "5px" }}>Ein erneuter Download nach Verlassen der Seite ist nicht möglich!</Typography>
+                        <Button variant="outlined" color="inherit" sx={buttonSx} startIcon={<FileDownload />} download={filename} href={"data:application/x-pkcs12;base64," + p12}>Erneuter Download</Button>
+                        <Button variant="outlined" color="inherit" onClick={(event) => { event.preventDefault(); setClosed(true); }}>Dialog schließen</Button>
+                    </Box>);
+                    setSuccess(true);
+                    setLoading(false);
 
-                }
-                return Promise.resolve();
-            }).catch((error) => {
+                }}
+            catch (error) {
                 Sentry.captureException(error);
                 setLoading(false);
                 setError("Es ist ein unbekannter Fehler aufgetreten!");
-            });
+            }
         }
     };
     useEffect(() => {
@@ -123,10 +116,11 @@ const SMIMEGenerator = () => {
         if (!success)
             setProgress(<Typography id="modal-modal-description" sx={{ mt: "24px" }}>Bitte warten...</Typography>);
         if (status == "authenticated" && !issuing) {
+            Sentry.setUser({ email: session?.user?.email?? "" });
             const cfg = new Configuration({ accessToken: session.accessToken });
             const api = new SMIMEApi(cfg, `${Config.PkiHost}`);
             api.smimeGet().then((response) => {
-                if (response && response != null && response.data != null) {
+                if (response && response.data != null) {
                     let active = 0;
                     for (const cert of response.data) {
                         if (cert.status != "revoked") {

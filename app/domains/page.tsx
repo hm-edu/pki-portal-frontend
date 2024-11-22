@@ -61,6 +61,7 @@ export default function Domains() {
 
     useEffect(() => {
         if (status == "authenticated") {
+            Sentry.setUser({ email: session?.user?.email?? "" });
             void loadDomains((domains: ModelDomain[]) => {
                 setDomains(domains);
                 setLoading(false);
