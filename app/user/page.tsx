@@ -61,6 +61,7 @@ const SmimeCertificates = () => {
     }
     function load() {
         if (status == "authenticated") {
+            Sentry.setUser({ email: session?.user?.email?? "" });
             const cfg = new Configuration({ accessToken: session.accessToken });
             const api = new SMIMEApi(cfg, `${Config.PkiHost}`);
             api.smimeGet().then((response) => {

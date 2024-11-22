@@ -31,28 +31,29 @@ const EabTokens = () => {
 
     const { data: session, status } = useSession();
 
-    function loadTokens() {
+    async function loadTokens() {
         const cfg = new Configuration({ accessToken: session?.accessToken });
         const api = new EABApi(cfg, `${Config.EabHost}`);
-        api.eabGet().then((response) => {
+        try {
+            const response = await api.eabGet();
             setTokens(response.data);
             setLoading(false);
-        }).catch((error) => {
+        } catch {
             Sentry.captureException(error);
             setLoading(false);
-            setError(true);
-        });
+            setError(true);}
     }
 
-    function createEABToken(comment: string) {
+    async function createEABToken(comment: string) {
         const cfg = new Configuration({ accessToken: session?.accessToken });
         const api = new EABApi(cfg, `${Config.EabHost}`);
+        try {
         // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-non-null-assertion
-        api.eabPost({ comment }).then(() => {
-            loadTokens();
-        }).catch((error) => {
+            await api.eabPost({ comment });
+            await loadTokens();
+        } catch {
             Sentry.captureException(error);
-        });
+        }
     }
 
     let deleteModal = <></>;
@@ -61,7 +62,7 @@ const EabTokens = () => {
         deleteModal = <EabDeleteDialog initOpen={true} accessToken={session?.accessToken} id={toDelete.id!} callback={(success) => {
             setDelete(undefined);
             if (success) {
-                loadTokens();
+                void loadTokens();
             }
         }} />;
     }
@@ -115,7 +116,8 @@ const EabTokens = () => {
 
     useEffect(() => {
         if (session && status == "authenticated") {
-            loadTokens();
+            Sentry.setUser({ email: session?.user?.email?? "" });
+            void loadTokens();
         }
     }, [session, session?.user, session?.user?.email, session?.user?.name]);
 
@@ -148,7 +150,7 @@ const EabTokens = () => {
             </div>
             {selection()}
             {deleteModal}
-            <EabCreateForm session={session} createEABToken={createEABToken} />
+            <EabCreateForm session={session} createEABToken={() =>{ void createEABToken();}} />
         </>}
     </Box>;
 };

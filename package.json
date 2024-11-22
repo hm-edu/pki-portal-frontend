@@ -9,6 +9,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
+    "format": "next lint --fix",
     "e2e": "start-server-and-test start http://localhost:3000 \"cypress open --e2e\"",
     "e2e:headless": "start-server-and-test start http://localhost:3000 \"cypress run --e2e\""
   },

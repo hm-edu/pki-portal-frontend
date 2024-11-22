@@ -50,6 +50,10 @@ export const authOptions: NextAuthOptions =
                 }
                 // eslint-disable-next-line @typescript-eslint/no-unsafe-call
                 const act: { sub: string; email: string; name: string } = jwtDecode(tokens.access_token);
+                Sentry.setUser({
+                    email: act.email,
+                    id: act.sub,
+                });
                 return {
                     id: act.sub,
                     name: act.name,

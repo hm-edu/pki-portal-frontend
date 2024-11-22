@@ -79,6 +79,7 @@ export default function SslCertificates() {
 
     function load() {
         if (status == "authenticated") {
+            Sentry.setUser({ email: session?.user?.email?? "" });
             const cfg = new Configuration({ accessToken: session.accessToken });
             const api = new SSLApi(cfg, `${Config.PkiHost}`);
             Sentry.startSpan({ name: "Load Certificates" }, async () => {
