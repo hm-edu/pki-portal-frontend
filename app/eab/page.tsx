@@ -150,7 +150,7 @@ const EabTokens = () => {
             </div>
             {selection()}
             {deleteModal}
-            <EabCreateForm session={session} createEABToken={() =>{ void createEABToken();}} />
+            <EabCreateForm session={session} createEABToken={createEABToken} />
         </>}
     </Box>;
 };

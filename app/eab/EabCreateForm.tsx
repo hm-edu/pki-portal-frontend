@@ -2,12 +2,13 @@
 
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import { Box, Button, TextField } from "@mui/material";
+import * as Sentry from "@sentry/nextjs";
 import { Session } from "next-auth";
 import { FormEvent, useState } from "react";
 
 interface EabCreateFormProps {
     session: Session | null;
-    createEABToken: (comment: string) => void;
+    createEABToken: (comment: string) => Promise<void>;
 }
 
 const EabCreateForm = ({ session, createEABToken }: EabCreateFormProps) => {
@@ -16,8 +17,11 @@ const EabCreateForm = ({ session, createEABToken }: EabCreateFormProps) => {
     const handleSubmit = (e: FormEvent<Element>) => {
         e.preventDefault();
         if (newComment) {
-            createEABToken(newComment);
-            setNewComment("");
+            createEABToken(newComment).then( () => {
+                setNewComment("");
+            }).catch( (e: Error) => {
+                Sentry.captureException(e);
+            });
         }
     };
 
