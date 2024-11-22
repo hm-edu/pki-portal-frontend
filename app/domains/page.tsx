@@ -241,9 +241,17 @@ export default function Domains() {
                 };
 
                 buttons.push(<Button key="approve" color="success" disabled={!row.permissions?.can_approve}
-                    sx={{ px: 1, mx: 1 }} variant="outlined" onClick={void approve}>Freischalten</Button>);
+                    sx={{ px: 1, mx: 1 }} variant="outlined" onClick={(event) =>{
+                        void (async () => {
+                            await approve(event).catch((e) => Sentry.captureException(e));
+                        })();
+                    }}>Freischalten</Button>);
                 buttons.push(<Button key="delete" color="warning" disabled={!row.permissions?.can_delete}
-                    sx={{ px: 1, mx: 1 }} variant="outlined" onClick={void remove}
+                    sx={{ px: 1, mx: 1 }} variant="outlined" onClick={(event) => {
+                        void (async () => {
+                            await remove(event).catch((e) => Sentry.captureException(e));
+                        })();
+                    }}
                     startIcon={<DeleteIcon/>}>Löschen</Button>);
                 buttons.push(<Button key="delegate" color="inherit" disabled={!row.permissions?.can_delegate}
                     sx={{ px: 1, mx: 1 }} variant="outlined" onClick={openDelegation}>Delegationen
