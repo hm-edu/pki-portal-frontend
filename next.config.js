@@ -14,7 +14,6 @@ const sentryWebpackPluginOptions = {
     org: "sre",
     project: "pki-frontend",
     url: "https://sentry.hm.edu/",
-    tunnelRoute: "/sentry",
     reactComponentAnnotation: {
         enabled: true,
     },
