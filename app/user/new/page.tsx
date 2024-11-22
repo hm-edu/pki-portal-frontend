@@ -101,8 +101,8 @@ const SMIMEGenerator = () => {
                     setSuccess(true);
                     setLoading(false);
 
-                }}
-            catch (error) {
+                }
+            } catch (error) {
                 Sentry.captureException(error);
                 setLoading(false);
                 setError("Es ist ein unbekannter Fehler aufgetreten!");
