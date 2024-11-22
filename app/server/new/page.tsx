@@ -276,59 +276,57 @@ export default function SslGenerator() {
             const csr = new CsrBuilder();
             const type = switchRef.current?.checked ? "ecdsa" : "rsa";
             const password = p12PasswordRef.current?.value as string;
-            csr.build(type, fqdns, cn).then((result) => {
+            try {
+                const result = await csr.build(type, fqdns, cn);
                 setKeyPair({ private: result.privateKey, public: undefined, pkcs12: undefined });
                 setGenerateKey(true);
-                setProgress(<><Typography>Signiere CSR...</Typography><Typography>(Dieser Schritt kann bis zu 5 Minuten dauern!)</Typography></>);
+                setProgress(<>
+                    <Typography>Signiere CSR...</Typography>
+                    <Typography>(Dieser Schritt kann bis zu 5 Minuten dauern!)</Typography>
+                </>);
                 const cfg = new PKIConfig({ accessToken: session.accessToken });
                 const api = new SSLApi(cfg, `${Config.PkiHost}`);
-                api.sslCsrPost({ csr: result.csr }, { timeout: 600000 })
-                    .then(async x => { return { public: x.data, pkcs12: pkcs12 ? await createP12(result.privateKey, [x.data], password, type) : undefined }; })
-                    .then((response) => {
-                        const element = document.createElement("a");
-                        element.setAttribute("href", "data:application/x-pem-file;base64," + Buffer.from(response.public).toString("base64"));
-                        element.setAttribute("download", `${cn}_${moment().format("DD-MM-YYYY_HH-mm-ss")}.pem`);
-                        element.style.display = "none";
-                        document.body.appendChild(element);
-                        element.click();
-                        document.body.removeChild(element);
+                const data = await api.sslCsrPost({ csr: result.csr }, { timeout: 600000 });
+                const response = {
+                    public: data.data,
+                    pkcs12: pkcs12 ? await createP12(result.privateKey, [data.data], password, type) : undefined,
+                };
 
-                        element.setAttribute("href", "data:application/x-pem-file;base64," + Buffer.from(result.privateKey).toString("base64"));
-                        element.setAttribute("download", `${cn}_${moment().format("DD-MM-YYYY_HH-mm-ss")}.key`);
-                        element.style.display = "none";
-                        document.body.appendChild(element);
-                        element.click();
-                        document.body.removeChild(element);
-                        if (response.pkcs12) {
-                            element.setAttribute("href", "data:application/x-pkcs12;base64," + response.pkcs12);
-                            element.setAttribute("download", `${cn}_${moment().format("DD-MM-YYYY_HH-mm-ss")}.p12`);
-                            element.style.display = "none";
-                            document.body.appendChild(element);
-                            element.click();
-                            document.body.removeChild(element);
-                        }
-                        setKeyPair({ private: result.privateKey, public: response.public, pkcs12: response.pkcs12 });
-                        setGeneratedKey(true);
-                        setLoadingDomains(false);
-                        setGenerateKey(false);
-                    }).catch((error) => {
-                        Sentry.captureException(error);
-                        setProgress(<>
-                            Es ist ein unbekannter Fehler bei der Erstellung des Zertifikats aufgetreten. Bitte versuchen Sie es erneut oder wenden sich an den IT-Support
-                        </>);
-                        setError(true);
-                        setGenerateKey(false);
-                        setLoadingDomains(false);
-                    });
-            }).catch((error) => {
+                const element = document.createElement("a");
+                element.setAttribute("href", "data:application/x-pem-file;base64," + Buffer.from(response.public).toString("base64"));
+                element.setAttribute("download", `${cn}_${moment().format("DD-MM-YYYY_HH-mm-ss")}.pem`);
+                element.style.display = "none";
+                document.body.appendChild(element);
+                element.click();
+                document.body.removeChild(element);
+
+                element.setAttribute("href", "data:application/x-pem-file;base64," + Buffer.from(result.privateKey).toString("base64"));
+                element.setAttribute("download", `${cn}_${moment().format("DD-MM-YYYY_HH-mm-ss")}.key`);
+                element.style.display = "none";
+                document.body.appendChild(element);
+                element.click();
+                document.body.removeChild(element);
+                if (response.pkcs12) {
+                    element.setAttribute("href", "data:application/x-pkcs12;base64," + response.pkcs12);
+                    element.setAttribute("download", `${cn}_${moment().format("DD-MM-YYYY_HH-mm-ss")}.p12`);
+                    element.style.display = "none";
+                    document.body.appendChild(element);
+                    element.click();
+                    document.body.removeChild(element);
+                }
+                setKeyPair({ private: result.privateKey, public: response.public, pkcs12: response.pkcs12 });
+                setGeneratedKey(true);
+                setLoadingDomains(false);
+                setGenerateKey(false);
+            } catch (error) {
                 Sentry.captureException(error);
                 setProgress(<>
-                    Es ist ein unbekannter Fehler bei der Erstellung des Zertifikats aufgetreten. Bitte versuchen Sie es erneut oder wenden sich an den IT-Support
+                            Es ist ein unbekannter Fehler bei der Erstellung des Zertifikats aufgetreten. Bitte versuchen Sie es erneut oder wenden sich an den IT-Support
                 </>);
                 setError(true);
                 setGenerateKey(false);
                 setLoadingDomains(false);
-            });
+            }
         }
     }
     /* eslint-disable @typescript-eslint/no-misused-promises */

@@ -41,55 +41,65 @@ export default function SslCertificates() {
         const item = selected;
         if (session && item) {
             const cert = certificates.find((cert) => cert.serial === selected.at(0));
-            Sentry.startSpan({ name: "Revoke Certificate" }, () => {
+            Sentry.startSpan({ name: "Revoke Certificate" }, async () => {
                 if (cert?.serial) {
                     const cfg = new Configuration({
                         accessToken: session.accessToken,
                     });
                     const api = new SSLApi(cfg, `${Config.PkiHost}`);
-                    api.sslRevokePost({ serial: cert?.serial, reason: reason }).then(() => {
+                    try {
+                        await api.sslRevokePost({ serial: cert?.serial, reason: reason });
                         load();
                         setSelected(undefined);
                         setOpen(false);
-                    }).catch((error) => {
+                    } catch (error) {
                         Sentry.captureException(error);
                         setError(true);
-                    });
+                    }
                 }
+            }).catch((error) => {
+                Sentry.captureException(error);
             });
         }
+    }
+
+    function mapCert(cert: PortalApisSslCertificateDetails) {
+        return {
+            common_name: cert.common_name,
+            expires: cert.expires,
+            serial: cert.serial,
+            not_before: cert.not_before,
+            status: cert.status,
+            subject_alternative_names: cert.subject_alternative_names,
+            created: cert.created,
+            source: cert.source,
+            issued_by: cert.issued_by,
+        };
     }
 
     function load() {
         if (status == "authenticated") {
             const cfg = new Configuration({ accessToken: session.accessToken });
             const api = new SSLApi(cfg, `${Config.PkiHost}`);
-            Sentry.startSpan({ name: "Load Certificates" }, () => {
-                api.sslGet().then((response) => {
+            Sentry.startSpan({ name: "Load Certificates" }, async () => {
+                try {
+                    const response = await api.sslGet();
                     if (response.data) {
                         const data = [];
                         for (const cert of response.data) {
                             if (cert.serial) {
-                                data.push({
-                                    common_name: cert.common_name,
-                                    expires: cert.expires,
-                                    serial: cert.serial,
-                                    not_before: cert.not_before,
-                                    status: cert.status,
-                                    subject_alternative_names: cert.subject_alternative_names,
-                                    created: cert.created,
-                                    source: cert.source,
-                                    issued_by: cert.issued_by,
-                                });
+                                data.push(mapCert(cert));
                             }
                         }
                         setCertificates(data);
                     }
                     setLoading(false);
-                }).catch((error) => {
+                } catch (error) {
                     Sentry.captureException(error);
                     setError(true);
-                });
+                }
+            }).catch((error) => {
+                Sentry.captureException(error);
             });
         } else if (status == "unauthenticated") {
             setLoading(false);
