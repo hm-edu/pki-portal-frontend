@@ -387,7 +387,7 @@ export default function Domains() {
                 pagination rows={domains}></DataGrid>
         </div>
 
-        <Box component="form" onSubmit={void create}
+            <Box component="form" onSubmit={(e) => void create(e) }
             sx={{
                 display: "flex",
                 flexDirection: "column",
