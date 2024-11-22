@@ -16,8 +16,9 @@ Sentry.init({
     // Setting this option to true will print useful information to the console while you're setting up Sentry.
     debug: false,
     beforeSendTransaction (e) {
-        const isKubeProbe = e.request?.headers && e.request?.headers['user-agent']  && e.request.headers['user-agent'].includes('kube-probe');
-        if (isKubeProbe) {
+        const isKubeProbe = e.request?.headers && e.request?.headers['user-agent'] && e.request.headers['user-agent'].includes('kube-probe');
+        const isErrorRoute = e.request?.url && e.request.url.includes('/api/error');
+        if (isKubeProbe || isErrorRoute) {
             return null;
         }
         return e;
