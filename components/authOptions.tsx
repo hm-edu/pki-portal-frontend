@@ -68,6 +68,16 @@ export const authOptions: NextAuthOptions =
     session: {
         maxAge: 10 * 60, // 10 minutes
     },
+    events: {
+        signIn: async ({ user }) => {
+            Sentry.setUser({
+                email: user.email ?? "",
+            });
+        },
+        signOut: async () => {
+            Sentry.setUser(null);
+        },
+    },
     callbacks: {
         async redirect({ url, baseUrl }) {
             // Allows relative callback URLs
