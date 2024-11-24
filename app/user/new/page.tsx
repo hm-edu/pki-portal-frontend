@@ -109,17 +109,13 @@ const SMIMEGenerator = () => {
             }
         }
     };
-    useEffect(() => {
-        if (issuing) {
-            return;
-        }
-        if (!success)
-            setProgress(<Typography id="modal-modal-description" sx={{ mt: "24px" }}>Bitte warten...</Typography>);
-        if (status == "authenticated" && !issuing) {
-            Sentry.setUser({ email: session?.user?.email?? "" });
+
+    async function load() {
+        if (session) {
             const cfg = new Configuration({ accessToken: session.accessToken });
             const api = new SMIMEApi(cfg, `${Config.PkiHost}`);
-            api.smimeGet().then((response) => {
+            try {
+                const response = await api.smimeGet();
                 if (response && response.data != null) {
                     let active = 0;
                     for (const cert of response.data) {
@@ -133,11 +129,23 @@ const SMIMEGenerator = () => {
                 }
                 setLoading(false);
                 validate();
-            }).catch((error) => {
+            } catch {
                 Sentry.captureException(error);
                 setLoading(false);
                 setError("Es ist ein unbekannter Fehler aufgetreten!");
-            });
+            };
+        }
+    }
+
+    useEffect(() => {
+        if (issuing) {
+            return;
+        }
+        if (!success)
+            setProgress(<Typography id="modal-modal-description" sx={{ mt: "24px" }}>Bitte warten...</Typography>);
+        if (status == "authenticated" && !issuing) {
+            Sentry.setUser({ email: session?.user?.email?? "" });
+            void load();
         } else if (status == "unauthenticated") {
             setLoading(false);
             setError("Sie sind nicht angemeldet!");
