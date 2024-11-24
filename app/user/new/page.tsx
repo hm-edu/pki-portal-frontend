@@ -145,11 +145,11 @@ const SMIMEGenerator = () => {
     }, [session, session?.user, session?.user?.email, session?.user?.name]);
 
     const validate = useCallback(() => {
-        if (p12PasswordRef.current?.value == "") {
+        if (p12PasswordRef.current?.value == "" || p12PasswordRef.current?.value == undefined) {
             setValidation("Bitte vergeben Sie ein individuelles Passwort für Ihre PKCS12-Datei.");
         } else if ((p12PasswordRef.current?.value as string).length < 6) {
             setValidation("Das Passwort muss mindestens 6 Zeichen lang sein.");
-        } else if (p12PasswordRef.current?.value != p12PasswordConfirmRef.current?.value) {
+        } else if (p12PasswordConfirmRef.current?.value != undefined && p12PasswordRef.current?.value != p12PasswordConfirmRef.current?.value) {
             setValidation("Die eingegebenen Passwörter stimmen nicht überein.");
         } else if (warning && !revokeRef.current?.checked) {
             setValidation("Sie müssen wahlweise ein Zertifikat händisch widerrufen oder das älteste Zertifikat automatisch widerrufen lassen!");
