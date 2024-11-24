@@ -39,32 +39,34 @@ const SmimeCertificates = () => {
     const { data: session, status } = useSession();
     const [revoking, setRevoking] = useState(false);
 
-    function revoke() {
+    async function revoke() {
         const item = selection;
         if (session) {
             if (item && item.serial) {
                 const cfg = new Configuration({ accessToken: session.accessToken });
                 const api = new SMIMEApi(cfg, `${Config.PkiHost}`);
                 setRevoking(true);
-                api.smimeRevokePost({ serial: item.serial, reason: (reason.current?.value as string) }).then(() => {
-                    load();
+                try {
+                    await api.smimeRevokePost({ serial: item.serial, reason: (reason.current?.value as string) });
+                    await load();
                     setSelection(undefined);
                     setRevoking(false);
                     setOpen(false);
-                }).catch((error) => {
+                } catch (error) {
                     Sentry.captureException(error);
                     setRevoking(false);
                     return;
-                });
+                }
             }
         }
     }
-    function load() {
+    async function load() {
         if (status == "authenticated") {
             Sentry.setUser({ email: session?.user?.email?? "" });
             const cfg = new Configuration({ accessToken: session.accessToken });
             const api = new SMIMEApi(cfg, `${Config.PkiHost}`);
-            api.smimeGet().then((response) => {
+            try {
+                const response = await api.smimeGet();
                 if (response.data) {
                     const data = [];
                     for (const cert of response.data) {
@@ -79,11 +81,11 @@ const SmimeCertificates = () => {
                     setCertificates(data);
                 }
                 setLoading(false);
-            }).catch((error) => {
+            } catch (error) {
                 Sentry.captureException(error);
                 setLoading(false);
                 setError(true);
-            });
+            };
         } else if (status == "unauthenticated") {
             setLoading(false);
             setCertificates([]);
@@ -101,7 +103,7 @@ const SmimeCertificates = () => {
     }
 
     useEffect(() => {
-        load();
+        void load();
     }, [session, session?.user, session?.user?.email, session?.user?.name]);
 
     const handleClickOpen = () => {
@@ -188,12 +190,13 @@ const SmimeCertificates = () => {
                     id="reason"
                     label="Grund"
                     fullWidth
+                    required
                     variant="standard"
                 />
             </DialogContent>
             <DialogActions>
                 <Button key="cancel" color="inherit" variant="outlined" disabled={revoking} onClick={handleClose}>Abbrechen</Button>
-                <Button key="revoke" color="warning" variant="outlined" disabled={revoking} onClick={() => revoke()}>Widerrufen {revoking && <CircularProgress size={24} sx={{ color: green[500], position: "absolute", top: "50%", left: "50%", marginTop: "-12px", marginLeft: "-12px" }} />} </Button>
+                <Button key="revoke" color="warning" variant="outlined" disabled={revoking && ((reason.current?.value as string) != "")} onClick={() => void revoke()}>Widerrufen {revoking && <CircularProgress size={24} sx={{ color: green[500], position: "absolute", top: "50%", left: "50%", marginTop: "-12px", marginLeft: "-12px" }} />} </Button>
             </DialogActions>
         </Dialog>
     </Box>;
