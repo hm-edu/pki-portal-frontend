@@ -59,82 +59,86 @@ const SMIMEGenerator = () => {
     };
     const create = async (event: FormEvent) => {
         event.preventDefault();
-        if (!loading) {
-            setSuccess(false);
-            setLoading(true);
-            setProgress(<Typography id="modal-modal-description" sx={{ mt: "24px" }}>Generiere CSR...</Typography>);
-            try { const CsrBuilder = (await import("@/components/csr")).CsrBuilder;
-                const csr = new CsrBuilder();
-                const x = await csr.build("rsa", undefined, undefined, 4096);
-                setProgress(<Typography id="modal-modal-description" sx={{ mt: "24px" }}>CSR generiert...</Typography>);
-                setIssuing(true);
-                if (session && session.user.name) {
-                    // eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/restrict-plus-operands, @typescript-eslint/no-unsafe-member-access
-                    const filename = `${unidecode(session.user.name).replace(" ", "_")}_${moment().format("DD-MM-YYYY_HH-mm-ss")}.p12`;
-
-                    const cfg = new Configuration({ accessToken: session.accessToken });
-                    const api = new SMIMEApi(cfg, `${Config.PkiHost}`);
-                    setProgress(
-                        <Typography id="modal-modal-description" sx={{ mt: "24px", mb: "5px" }}>
-                            Signiere CSR...
-                            <Alert severity="warning">Dieser Schritt kann leider bis zu 5 Minuten dauern.</Alert>
-                        </Typography>);
-                    const response = await api.smimeCsrPost({ csr: x.csr });
-                    setProgress(<Typography id="modal-modal-description" sx={{ mt: "24px" }}>Generiere PKCS12...</Typography>);
-                    const p12 = await createP12(x.privateKey, [response.data], p12PasswordRef.current?.value as string, "rsa");
-                    const element = document.createElement("a");
-                    element.setAttribute("href", "data:application/x-pkcs12;base64," + p12);
-                    element.setAttribute("download", filename);
-                    element.style.display = "none";
-                    document.body.appendChild(element);
-                    element.click();
-                    document.body.removeChild(element);
-                    // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
-                    setDownload(<Button variant="outlined" color="inherit" startIcon={<FileDownload />} download={filename} href={"data:application/x-pkcs12;base64," + p12}>Erneuter Download</Button>);
-                    setProgress(<Box sx={{ display: "flex", flexDirection: "column", gap: "15px", width: "md", alignItems: "left" }}>
-                        <Typography id="modal-modal-description" sx={{ mt: "24px" }}>PKCS12 generiert.</Typography>
-                        <Typography sx={{ mt: "5px" }}>Automatischer Download von Datei gestartet. Bitte sichern Sie die generierte Datei!</Typography>
-                        <Typography sx={{ mt: "5px" }}>Ein erneuter Download nach Verlassen der Seite ist nicht möglich!</Typography>
-                        <Button variant="outlined" color="inherit" sx={buttonSx} startIcon={<FileDownload />} download={filename} href={"data:application/x-pkcs12;base64," + p12}>Erneuter Download</Button>
-                        <Button variant="outlined" color="inherit" onClick={(event) => { event.preventDefault(); setClosed(true); }}>Dialog schließen</Button>
-                    </Box>);
-                    setSuccess(true);
-                    setLoading(false);
-
-                }
-            } catch (error) {
-                Sentry.captureException(error);
-                setLoading(false);
-                setError("Es ist ein unbekannter Fehler aufgetreten!");
-            }
+        if (loading) {
+            return;
         }
+        setSuccess(false);
+        setLoading(true);
+        setProgress(<Typography id="modal-modal-description" sx={{ mt: "24px" }}>Generiere CSR...</Typography>);
+        try {
+            const CsrBuilder = (await import("@/components/csr")).CsrBuilder;
+            const csr = new CsrBuilder();
+            const x = await csr.build("rsa", undefined, undefined, 4096);
+            setProgress(<Typography id="modal-modal-description" sx={{ mt: "24px" }}>CSR generiert...</Typography>);
+            setIssuing(true);
+            if (session && session.user.name) {
+                // eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/restrict-plus-operands, @typescript-eslint/no-unsafe-member-access
+                const filename = `${unidecode(session.user.name).replace(" ", "_")}_${moment().format("DD-MM-YYYY_HH-mm-ss")}.p12`;
+
+                const cfg = new Configuration({ accessToken: session.accessToken });
+                const api = new SMIMEApi(cfg, `${Config.PkiHost}`);
+                setProgress(
+                    <Typography id="modal-modal-description" sx={{ mt: "24px", mb: "5px" }}>
+                            Signiere CSR...
+                        <Alert severity="warning">Dieser Schritt kann leider bis zu 5 Minuten dauern.</Alert>
+                    </Typography>);
+                const response = await api.smimeCsrPost({ csr: x.csr });
+                setProgress(<Typography id="modal-modal-description" sx={{ mt: "24px" }}>Generiere PKCS12...</Typography>);
+                const p12 = await createP12(x.privateKey, [response.data], p12PasswordRef.current?.value as string, "rsa");
+                const element = document.createElement("a");
+                element.setAttribute("href", "data:application/x-pkcs12;base64," + p12);
+                element.setAttribute("download", filename);
+                element.style.display = "none";
+                document.body.appendChild(element);
+                element.click();
+                document.body.removeChild(element);
+                // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
+                setDownload(<Button variant="outlined" color="inherit" startIcon={<FileDownload />} download={filename} href={"data:application/x-pkcs12;base64," + p12}>Erneuter Download</Button>);
+                setProgress(<Box sx={{ display: "flex", flexDirection: "column", gap: "15px", width: "md", alignItems: "left" }}>
+                    <Typography id="modal-modal-description" sx={{ mt: "24px" }}>PKCS12 generiert.</Typography>
+                    <Typography sx={{ mt: "5px" }}>Automatischer Download von Datei gestartet. Bitte sichern Sie die generierte Datei!</Typography>
+                    <Typography sx={{ mt: "5px" }}>Ein erneuter Download nach Verlassen der Seite ist nicht möglich!</Typography>
+                    <Button variant="outlined" color="inherit" sx={buttonSx} startIcon={<FileDownload />} download={filename} href={"data:application/x-pkcs12;base64," + p12}>Erneuter Download</Button>
+                    <Button variant="outlined" color="inherit" onClick={(event) => { event.preventDefault(); setClosed(true); }}>Dialog schließen</Button>
+                </Box>);
+                setSuccess(true);
+                setLoading(false);
+            }
+        } catch (error) {
+            Sentry.captureException(error);
+            setLoading(false);
+            setError("Es ist ein unbekannter Fehler aufgetreten!");
+        }
+
     };
 
     async function load() {
-        if (session) {
-            const cfg = new Configuration({ accessToken: session.accessToken });
-            const api = new SMIMEApi(cfg, `${Config.PkiHost}`);
-            try {
-                const response = await api.smimeGet();
-                if (response && response.data != null) {
-                    let active = 0;
-                    for (const cert of response.data) {
-                        if (cert.status != "revoked") {
-                            active++;
-                        }
-                    }
-                    if (active >= 5) {
-                        setWarning(true);
+        if (!session) {
+            return;
+        }
+        const cfg = new Configuration({ accessToken: session.accessToken });
+        const api = new SMIMEApi(cfg, `${Config.PkiHost}`);
+        try {
+            const response = await api.smimeGet({ timeout: 60*1000 });
+            if (response && response.data != null) {
+                let active = 0;
+                for (const cert of response.data) {
+                    if (cert.status != "revoked") {
+                        active++;
                     }
                 }
-                setLoading(false);
-                validate();
-            } catch {
-                Sentry.captureException(error);
-                setLoading(false);
-                setError("Es ist ein unbekannter Fehler aufgetreten!");
-            };
-        }
+                if (active >= 5) {
+                    setWarning(true);
+                }
+            }
+            setLoading(false);
+            validate();
+        } catch {
+            Sentry.captureException(error);
+            setLoading(false);
+            setError("Es ist ein unbekannter Fehler aufgetreten!");
+        };
+
     }
 
     useEffect(() => {
