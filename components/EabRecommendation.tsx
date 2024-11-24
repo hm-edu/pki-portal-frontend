@@ -32,7 +32,7 @@ const EabRecommendation = ({ token, onClose }: EabRecommendationProps) => {
     --standalone \\
     --keylength ec-256 \\
     --server ${Config.AcmeHost}/acme/acme/directory \\
-    -d dummy.your.doman`;
+    -d dummy.your.domain`;
 
     const certbot = `certbot certonly \\
     --standalone --non-interactive --agree-tos --email noreply@notused.local \\
@@ -41,7 +41,7 @@ const EabRecommendation = ({ token, onClose }: EabRecommendationProps) => {
     --eab-kid ${id} \\
     --eab-hmac-key ${key_bytes} \\
     --issuance-timeout 300 \\
-    --domains dummy.your.doman `;
+    --domains dummy.your.domain `;
 
     return <Modal open={token != undefined} onClose={() => { onClose(); }} aria-labelledby="modal-modal-title" aria-describedby="modal-modal-description" >
         <Box sx={{ ...modalTheme, width: 1000 }}>
