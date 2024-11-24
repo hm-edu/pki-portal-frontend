@@ -16,8 +16,9 @@ Sentry.init({
     debug: false,
     beforeSendTransaction(e) {
         const isKubeProbe = e.request?.headers && e.request?.headers['user-agent'] && e.request.headers['user-agent'].includes('kube-probe');
+        const isBlackboxExporter = e.request?.headers && e.request?.headers['user-agent'] && e.request.headers['user-agent'].includes('Blackbox Exporter');
         const isErrorRoute = e.request?.url && e.request.url.includes('/api/error');
-        if (isKubeProbe || isErrorRoute) {
+        if (isKubeProbe || isErrorRoute || isBlackboxExporter) {
             return null;
         }
         return e;
