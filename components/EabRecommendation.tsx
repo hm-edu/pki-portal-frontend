@@ -24,7 +24,7 @@ const EabRecommendation = ({ token, onClose }: EabRecommendationProps) => {
 
     const register_acme_sh = `acme.sh --register-account \\
     --server ${Config.AcmeHost}/acme/acme/directory \\
-    --email noreply@hm.edu \\
+    --email noreply@notused.local \\
     --eab-kid "${id}" \\
     --eab-hmac-key "${key_bytes}"`;
 
@@ -32,21 +32,21 @@ const EabRecommendation = ({ token, onClose }: EabRecommendationProps) => {
     --standalone \\
     --keylength ec-256 \\
     --server ${Config.AcmeHost}/acme/acme/directory \\
-    -d dummy.hm.edu`;
+    -d dummy.your.doman`;
 
     const certbot = `certbot certonly \\
-    --standalone --non-interactive --agree-tos --email noreply@hm.edu \\
+    --standalone --non-interactive --agree-tos --email noreply@notused.local \\
     --server ${Config.AcmeHost}/acme/acme/directory  \\
     --key-type ecdsa \\
     --eab-kid ${id} \\
     --eab-hmac-key ${key_bytes} \\
     --issuance-timeout 300 \\
-    --domains dummy.hm.edu `;
+    --domains dummy.your.doman `;
 
     return <Modal open={token != undefined} onClose={() => { onClose(); }} aria-labelledby="modal-modal-title" aria-describedby="modal-modal-description" >
         <Box sx={{ ...modalTheme, width: 1000 }}>
             <Typography id="modal-modal-title" variant="h6" component="h2">
-                    Empfohlene Konfigurationen
+                    Vorgeschlagene Konfigurationen
             </Typography>
             <Box sx={{ height: 680 }}>
                 {(token?.key_bytes == undefined || token.key_bytes == "" || token.bound_at) && <Alert severity="warning">Account bereits registriert!</Alert>}
