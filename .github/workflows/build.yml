@@ -29,7 +29,7 @@ jobs:
           NEXT_PUBLIC_DOMAIN_HOST: 'https://domain.api.hm.edu'
           NEXT_PUBLIC_AUTH_IDP: 'https://sso.hm.edu'
           NEXT_PUBLIC_ORGANIZATION_NAME: 'Hochschule München'
-          NEXT_PUBLIC_DOCS_URL: 'https://collab.dvb.bayern/pages/viewpage.action?pageId=441753602'
+          NEXT_PUBLIC_DOCS_URL: 'https://collab.dvb.bayern/x/sQ0kRg'
 
   e2e:
     runs-on: ubuntu-24.04
@@ -68,7 +68,7 @@ jobs:
           NEXT_PUBLIC_DOMAIN_HOST: 'https://domain.api.hm.edu'
           NEXT_PUBLIC_AUTH_IDP: 'https://sso.hm.edu'
           NEXT_PUBLIC_ORGANIZATION_NAME: 'Hochschule München'
-          NEXT_PUBLIC_DOCS_URL: 'https://collab.dvb.bayern/pages/viewpage.action?pageId=441753602'
+          NEXT_PUBLIC_DOCS_URL: 'https://collab.dvb.bayern/x/sQ0kRg'
           HOST: "0.0.0.0"
           NEXT_PUBLIC_CI: "true"
         continue-on-error: true
@@ -172,4 +172,4 @@ jobs:
             NEXT_PUBLIC_DOMAIN_HOST=${{ matrix.university.domain_host }}
             NEXT_PUBLIC_AUTH_IDP=${{ matrix.university.auth_idp }}
             NEXT_PUBLIC_ORGANIZATION_NAME=${{ matrix.university.name }}
-            NEXT_PUBLIC_DOCS_URL=https://collab.dvb.bayern/pages/viewpage.action?pageId=441753602
+            NEXT_PUBLIC_DOCS_URL=https://collab.dvb.bayern/x/sQ0kRg
