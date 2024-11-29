@@ -6,9 +6,10 @@ import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import TextField, { TextFieldProps } from "@mui/material/TextField";
 import { GridRowId } from "@mui/x-data-grid";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 
 import { PortalApisSslCertificateDetails } from "@/api/pki/api";
+import { set } from "cypress/types/lodash";
 
 interface CertificateRevokeDialogProps {
     open: boolean;
@@ -20,6 +21,7 @@ interface CertificateRevokeDialogProps {
 
 const CertificateRevokeDialog = ({ open, onClose, onRevoke, selected, certificates }: CertificateRevokeDialogProps) => {
     const reason = useRef<TextFieldProps>(null);
+    const [noReason, setNoReason] = useState(true);
 
     const handleRevoke = () => {
         if (reason.current?.value) {
@@ -43,12 +45,14 @@ const CertificateRevokeDialog = ({ open, onClose, onRevoke, selected, certificat
                 id="reason"
                 label="Grund"
                 fullWidth
+                required
+                onChange={(e) => setNoReason(e.target.value === "")}
                 variant="standard"
             />
         </DialogContent>
         <DialogActions>
             <Button key="cancel" variant="outlined" color="inherit" onClick={onClose}>Abbrechen</Button>
-            <Button key="revoke" variant="outlined" color="warning" onClick={handleRevoke}>Widerrufen</Button>
+            <Button key="revoke" variant="outlined" color="warning" disabled={noReason} onClick={handleRevoke}>Widerrufen</Button>
         </DialogActions>
     </Dialog>;
 };
