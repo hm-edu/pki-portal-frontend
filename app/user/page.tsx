@@ -192,8 +192,7 @@ const SmimeCertificates = () => {
                     label="Grund"
                     fullWidth
                     required
-
-                     onChange={(e) => setNoReason(e.target.value === "")}
+                    onChange={(e) => setNoReason(e.target.value === "")}
                     variant="standard"
                 />
             </DialogContent>
