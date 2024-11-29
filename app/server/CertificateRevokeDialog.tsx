@@ -9,7 +9,6 @@ import { GridRowId } from "@mui/x-data-grid";
 import { useRef, useState } from "react";
 
 import { PortalApisSslCertificateDetails } from "@/api/pki/api";
-import { set } from "cypress/types/lodash";
 
 interface CertificateRevokeDialogProps {
     open: boolean;
