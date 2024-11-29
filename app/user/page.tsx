@@ -30,6 +30,7 @@ import { dataGridStyle } from "@/components/theme";
 
 const SmimeCertificates = () => {
     const [open, setOpen] = useState(false);
+    const [noReason, setNoReason] = useState(true);
     const reason = useRef<TextFieldProps>(null);
     const [pageModel, setPageModel] = useState<GridPaginationModel>({ page: 0, pageSize: 50 });
     const [loading, setLoading] = useState(true);
@@ -191,12 +192,14 @@ const SmimeCertificates = () => {
                     label="Grund"
                     fullWidth
                     required
+
+                     onChange={(e) => setNoReason(e.target.value === "")}
                     variant="standard"
                 />
             </DialogContent>
             <DialogActions>
                 <Button key="cancel" color="inherit" variant="outlined" disabled={revoking} onClick={handleClose}>Abbrechen</Button>
-                <Button key="revoke" color="warning" variant="outlined" disabled={revoking && ((reason.current?.value as string) != "")} onClick={() => void revoke()}>Widerrufen {revoking && <CircularProgress size={24} sx={{ color: green[500], position: "absolute", top: "50%", left: "50%", marginTop: "-12px", marginLeft: "-12px" }} />} </Button>
+                <Button key="revoke" color="warning" variant="outlined" disabled={revoking || noReason} onClick={() => void revoke()}>Widerrufen {revoking && <CircularProgress size={24} sx={{ color: green[500], position: "absolute", top: "50%", left: "50%", marginTop: "-12px", marginLeft: "-12px" }} />} </Button>
             </DialogActions>
         </Dialog>
     </Box>;
