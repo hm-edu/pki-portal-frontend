@@ -93,6 +93,7 @@ jobs:
           logo-small: resources/hm-edu/logo-small.png
           favicon: resources/hm-edu/favicon.ico
           image_name: hm-edu/portal-frontend
+          docs_url: https://collab.dvb.bayern/x/sQ0kRg
         - name: Hochschule Hof
           eab_host: https://eab.pki.hof-university.de
           acme_host: https://acme.pki.hof-university.de
@@ -103,6 +104,7 @@ jobs:
           logo-small: resources/hs-hof/logo-small.png
           favicon: resources/hs-hof/favicon.ico
           image_name: hm-edu/portal-frontend-hof
+          docs_url: https://collab.dvb.bayern/x/sQ0kRg
         - name: Uni Bamberg
           eab_host: https://eab.pki-service.uni-bamberg.de
           acme_host: https://acme.pki-service.uni-bamberg.de
@@ -113,6 +115,7 @@ jobs:
           logo-small: resources/uni-bamberg/logo-small.png
           favicon: resources/uni-bamberg/favicon.ico
           image_name: hm-edu/portal-frontend-bamberg
+          docs_url: https://www.uni-bamberg.de/?id=168686
     runs-on: ubuntu-latest
     name: Docker Image for ${{ matrix.university.name }}
     needs: e2e
@@ -172,4 +175,4 @@ jobs:
             NEXT_PUBLIC_DOMAIN_HOST=${{ matrix.university.domain_host }}
             NEXT_PUBLIC_AUTH_IDP=${{ matrix.university.auth_idp }}
             NEXT_PUBLIC_ORGANIZATION_NAME=${{ matrix.university.name }}
-            NEXT_PUBLIC_DOCS_URL=https://collab.dvb.bayern/x/sQ0kRg
+            NEXT_PUBLIC_DOCS_URL=${{ matrix.university.docs_url }}
