@@ -19,7 +19,7 @@ import dynamic from "next/dynamic";
 import Image from "next/image";
 import Link from "next/link";
 import { signOut, useSession } from "next-auth/react";
-import React, { useEffect, useState } from "react";
+import React, { JSX, useEffect, useState } from "react";
 
 import logo from "../public/logo-small.png";
 
@@ -52,7 +52,7 @@ export default function ButtonAppBar() {
                     <Typography sx={{ paddingRight: "10px" }}>{session.user?.name ? session.user?.name : ""}</Typography>
                 </Tooltip>{logout}</>);
 
-            const navbarButtons: JSX.Element[] = [];
+            const navbarButtons: React.ReactElement[] = [];
             navbarButtons.splice(0, 0, <Link legacyBehavior={true} passHref target="_blank" key="help" href={Config.DocsUrl}>
                 <a target="_blank" style={{
                     textDecoration: "none",

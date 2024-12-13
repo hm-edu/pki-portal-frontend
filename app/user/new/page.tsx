@@ -27,8 +27,8 @@ import { modalTheme } from "@/components/theme";
 
 const SMIMEGenerator = () => {
 
-    const [progress, setProgress] = useState<JSX.Element>(<></>);
-    const [download, setDownload] = useState<JSX.Element>(<></>);
+    const [progress, setProgress] = useState<React.ReactElement>(<></>);
+    const [download, setDownload] = useState<React.ReactElement>(<></>);
     const [loading, setLoading] = useState(true);
     const [issuing, setIssuing] = useState(false);
     const [success, setSuccess] = useState(false);

@@ -87,7 +87,7 @@ export default function SslGenerator() {
         alignContent: "flex-start",
     };
 
-    const [progress, setProgress] = useState<JSX.Element>(<></>);
+    const [progress, setProgress] = useState<React.ReactElement>(<></>);
     const [loadingDomains, setLoadingDomains] = useState(true);
     const [error, setError] = useState<boolean>(false);
     const [generateKey, setGenerateKey] = useState(false);
@@ -153,8 +153,8 @@ export default function SslGenerator() {
         },
     ];
 
-    let body: JSX.Element | undefined = undefined;
-    let publicKeyElement: JSX.Element = <></>;
+    let body: React.ReactElement | undefined = undefined;
+    let publicKeyElement: React.ReactElement = <></>;
     let fqdns: string[] = [];
     let cn = "";
     if (selected) {
