@@ -62,7 +62,7 @@ RUN --mount=type=secret,id=SENTRY_AUTH_TOKEN \
     --mount=type=secret,id=NEXT_PUBLIC_DISABLE_USER \
     --mount=type=secret,id=NEXT_PUBLIC_DISABLE_ACME \
     --mount=type=secret,id=NEXT_PUBLIC_AUTH_PROVIDER \
-    yarn global add pnpm;\
+    corepack enable pnpm;\
     if [ -f /run/secrets/SENTRY_RELEASE ]; then \
         echo "Using secrets as environment variables!" && \
         export SENTRY_AUTH_TOKEN=$(cat /run/secrets/SENTRY_AUTH_TOKEN) && \
