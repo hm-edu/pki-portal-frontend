@@ -12,7 +12,7 @@ describe("new user", () => {
     it("new user loggedin", () => {
         cy.viewport(1280, 1024);
         cy.login().as("getSession");
-        cy.intercept("https://pki.api.hm.edu/smime/", {
+        cy.intercept("https://pki.api.hm.edu/smime/?email=max@mustermann.de", {
             statusCode: 200,
         }).as("getUser");
         cy.visit("/user/new");
@@ -33,7 +33,7 @@ describe("new user", () => {
     it("new user loggedin error", () => {
         cy.viewport(1280, 1024);
         cy.login().as("getSession");
-        cy.intercept("https://pki.api.hm.edu/smime/", {
+        cy.intercept("https://pki.api.hm.edu/smime/?email=max@mustermann.de", {
             statusCode: 500,
         }).as("getUser");
         cy.visit("/user/new");
@@ -47,7 +47,7 @@ describe("new user", () => {
     it("new user loggedin revoke", () => {
         cy.viewport(1280, 1024);
         cy.login().as("getSession");
-        cy.intercept("https://pki.api.hm.edu/smime/", {
+        cy.intercept("https://pki.api.hm.edu/smime/?email=max@mustermann.de", {
             statusCode: 200,
             body: [
                 { "id": 12345, "status": "issued", "serial": "", "expires": { "seconds": 1756598400 } },
@@ -76,7 +76,7 @@ describe("user", () => {
     it("user loggedin empty", () => {
         cy.viewport(1280, 1024);
         cy.login().as("getSession");
-        cy.intercept("https://pki.api.hm.edu/smime/", {
+        cy.intercept("https://pki.api.hm.edu/smime/?email=max@mustermann.de", {
             statusCode: 200,
         }).as("getUser");
         cy.visit("/user");
@@ -87,7 +87,7 @@ describe("user", () => {
     it("user loggedin error loading", () => {
         cy.viewport(1280, 1024);
         cy.login().as("getSession");
-        cy.intercept("https://pki.api.hm.edu/smime/", {
+        cy.intercept("https://pki.api.hm.edu/smime/?email=max@mustermann.de", {
             statusCode: 500,
         }).as("getUser");
         cy.visit("/user");
