@@ -67,7 +67,7 @@ const SmimeCertificates = () => {
             const cfg = new Configuration({ accessToken: session.accessToken });
             const api = new SMIMEApi(cfg, `${Config.PkiHost}`);
             try {
-                const response = await api.smimeGet({ timeout: 60*1000 });
+                const response = await api.smimeGet(session.user.email!, { timeout: 60*1000 });
                 if (response.data) {
                     const data = [];
                     for (const cert of response.data) {
