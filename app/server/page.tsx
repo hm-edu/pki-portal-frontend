@@ -206,7 +206,7 @@ export default function SslCertificates() {
                             columnVisibilityModel: {
                                 issued_by: false,
                                 source: false,
-                                ca: false
+                                ca: false,
                             },
                         },
                         sorting: {
