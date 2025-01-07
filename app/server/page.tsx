@@ -74,6 +74,7 @@ export default function SslCertificates() {
             created: cert.created,
             source: cert.source,
             issued_by: cert.issued_by,
+            ca: cert.ca,
         };
     }
 
