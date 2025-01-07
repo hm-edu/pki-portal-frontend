@@ -61,7 +61,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           # pass the project ID from the secrets through environment variable
           CYPRESS_PROJECT_ID: ${{ secrets.PROJECT_ID }}
-          NEXT_PUBLIC_DISABLE_CSP: true
           NEXT_PUBLIC_EAB_HOST: 'https://eab.api.hm.edu'
           NEXT_PUBLIC_ACME_HOST: 'https://acme.hm.edu'
           NEXT_PUBLIC_PKI_HOST: 'https://pki.api.hm.edu'
@@ -94,6 +93,7 @@ jobs:
           favicon: resources/hm-edu/favicon.ico
           image_name: hm-edu/portal-frontend
           docs_url: https://collab.dvb.bayern/x/sQ0kRg
+          disable_user: true
         - name: Hochschule Hof
           eab_host: https://eab.pki.hof-university.de
           acme_host: https://acme.pki.hof-university.de
@@ -176,3 +176,4 @@ jobs:
             NEXT_PUBLIC_AUTH_IDP=${{ matrix.university.auth_idp }}
             NEXT_PUBLIC_ORGANIZATION_NAME=${{ matrix.university.name }}
             NEXT_PUBLIC_DOCS_URL=${{ matrix.university.docs_url }}
+            NEXT_PUBLIC_DISABLE_USER=${{ matrix.university.disable_user }}
