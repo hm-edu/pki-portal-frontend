@@ -43,6 +43,10 @@ const CertificateDetails = ({ cert }: CertificateDetailsProps) => {
                     <td><b>Verfahren</b></td>
                     <td>{cert.source}</td>
                 </tr>
+                <tr>
+                    <td><b>CA</b></td>
+                    <td>{cert.ca}</td>
+                </tr>
             </tbody>
         </table>
     </Box>;

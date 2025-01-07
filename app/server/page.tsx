@@ -129,6 +129,7 @@ export default function SslCertificates() {
         },
         { field: "issued_by", headerName: "Angefordert durch", width: 150 },
         { field: "source", headerName: "Quelle", width: 150 },
+        { field: "ca", headerName: "Verwendete CA", width: 150 },
         {
             field: "created", headerName: "Erstellt", type: "dateTime", width: 150,
             valueGetter: (value, row) => {
@@ -171,7 +172,7 @@ export default function SslCertificates() {
 
                 const row = (params.row as PortalApisSslCertificateDetails);
 
-                return <Button variant="outlined" disabled={row.status == "Revoked"} onClick={(event: FormEvent<Element>) => {
+                return <Button variant="outlined" disabled={row.status == "Revoked" || row.ca == "sectigo"} onClick={(event: FormEvent<Element>) => {
                     event.preventDefault();
                     setSelected([params.id]);
                     setOpen(true);
@@ -205,6 +206,7 @@ export default function SslCertificates() {
                             columnVisibilityModel: {
                                 issued_by: false,
                                 source: false,
+                                ca: false
                             },
                         },
                         sorting: {
