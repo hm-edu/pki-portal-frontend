@@ -14,14 +14,14 @@
 
 
 import type { Configuration } from './configuration';
-import type { AxiosPromise, AxiosInstance, AxiosRequestConfig } from 'axios';
+import type { AxiosPromise, AxiosInstance, RawAxiosRequestConfig } from 'axios';
 import globalAxios from 'axios';
 // Some imports not used depending on template conditions
 // @ts-ignore
 import { DUMMY_BASE_URL, assertParamExists, setApiKeyToObject, setBasicAuthToObject, setBearerAuthToObject, setOAuthToObject, setSearchParams, serializeDataIfNeeded, toPathString, createRequestFunction } from './common';
 import type { RequestArgs } from './base';
 // @ts-ignore
-import { BASE_PATH, COLLECTION_FORMATS, BaseAPI, RequiredError } from './base';
+import { BASE_PATH, COLLECTION_FORMATS, BaseAPI, RequiredError, operationServerMap } from './base';
 
 /**
  * 
@@ -110,6 +110,12 @@ export interface PortalApisSslCertificateDetails {
      * @type {string}
      * @memberof PortalApisSslCertificateDetails
      */
+    'ca'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof PortalApisSslCertificateDetails
+     */
     'common_name'?: string;
     /**
      * 
@@ -171,6 +177,12 @@ export interface PortalApisSslCertificateDetails {
      * @memberof PortalApisSslCertificateDetails
      */
     'subject_alternative_names'?: Array<string>;
+    /**
+     * 
+     * @type {string}
+     * @memberof PortalApisSslCertificateDetails
+     */
+    'transaction_id'?: string;
 }
 /**
  * 
@@ -205,7 +217,7 @@ export const SMIMEApiAxiosParamCreator = function (configuration?: Configuration
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        smimeCsrPost: async (modelCsrRequest: ModelCsrRequest, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+        smimeCsrPost: async (modelCsrRequest: ModelCsrRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'modelCsrRequest' is not null or undefined
             assertParamExists('smimeCsrPost', 'modelCsrRequest', modelCsrRequest)
             const localVarPath = `/smime/csr`;
@@ -241,10 +253,11 @@ export const SMIMEApiAxiosParamCreator = function (configuration?: Configuration
         /**
          * 
          * @summary SMIME List Endpoint
+         * @param {string} [email] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        smimeGet: async (options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+        smimeGet: async (email?: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             const localVarPath = `/smime/`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -260,6 +273,10 @@ export const SMIMEApiAxiosParamCreator = function (configuration?: Configuration
             // authentication API required
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            if (email !== undefined) {
+                localVarQueryParameter['email'] = email;
+            }
 
 
     
@@ -279,7 +296,7 @@ export const SMIMEApiAxiosParamCreator = function (configuration?: Configuration
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        smimeRevokePost: async (modelRevokeRequest: ModelRevokeRequest, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+        smimeRevokePost: async (modelRevokeRequest: ModelRevokeRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'modelRevokeRequest' is not null or undefined
             assertParamExists('smimeRevokePost', 'modelRevokeRequest', modelRevokeRequest)
             const localVarPath = `/smime/revoke`;
@@ -329,19 +346,24 @@ export const SMIMEApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async smimeCsrPost(modelCsrRequest: ModelCsrRequest, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<string>> {
+        async smimeCsrPost(modelCsrRequest: ModelCsrRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<string>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.smimeCsrPost(modelCsrRequest, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['SMIMEApi.smimeCsrPost']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
          * 
          * @summary SMIME List Endpoint
+         * @param {string} [email] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async smimeGet(options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<PortalApisListSmimeResponseCertificateDetails>>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.smimeGet(options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        async smimeGet(email?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<PortalApisListSmimeResponseCertificateDetails>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.smimeGet(email, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['SMIMEApi.smimeGet']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
          * 
@@ -350,9 +372,11 @@ export const SMIMEApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async smimeRevokePost(modelRevokeRequest: ModelRevokeRequest, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+        async smimeRevokePost(modelRevokeRequest: ModelRevokeRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.smimeRevokePost(modelRevokeRequest, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['SMIMEApi.smimeRevokePost']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
     }
 };
@@ -371,17 +395,18 @@ export const SMIMEApiFactory = function (configuration?: Configuration, basePath
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        smimeCsrPost(modelCsrRequest: ModelCsrRequest, options?: any): AxiosPromise<string> {
+        smimeCsrPost(modelCsrRequest: ModelCsrRequest, options?: RawAxiosRequestConfig): AxiosPromise<string> {
             return localVarFp.smimeCsrPost(modelCsrRequest, options).then((request) => request(axios, basePath));
         },
         /**
          * 
          * @summary SMIME List Endpoint
+         * @param {string} [email] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        smimeGet(options?: any): AxiosPromise<Array<PortalApisListSmimeResponseCertificateDetails>> {
-            return localVarFp.smimeGet(options).then((request) => request(axios, basePath));
+        smimeGet(email?: string, options?: RawAxiosRequestConfig): AxiosPromise<Array<PortalApisListSmimeResponseCertificateDetails>> {
+            return localVarFp.smimeGet(email, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -390,7 +415,7 @@ export const SMIMEApiFactory = function (configuration?: Configuration, basePath
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        smimeRevokePost(modelRevokeRequest: ModelRevokeRequest, options?: any): AxiosPromise<void> {
+        smimeRevokePost(modelRevokeRequest: ModelRevokeRequest, options?: RawAxiosRequestConfig): AxiosPromise<void> {
             return localVarFp.smimeRevokePost(modelRevokeRequest, options).then((request) => request(axios, basePath));
         },
     };
@@ -411,19 +436,20 @@ export class SMIMEApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof SMIMEApi
      */
-    public smimeCsrPost(modelCsrRequest: ModelCsrRequest, options?: AxiosRequestConfig) {
+    public smimeCsrPost(modelCsrRequest: ModelCsrRequest, options?: RawAxiosRequestConfig) {
         return SMIMEApiFp(this.configuration).smimeCsrPost(modelCsrRequest, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
      * 
      * @summary SMIME List Endpoint
+     * @param {string} [email] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof SMIMEApi
      */
-    public smimeGet(options?: AxiosRequestConfig) {
-        return SMIMEApiFp(this.configuration).smimeGet(options).then((request) => request(this.axios, this.basePath));
+    public smimeGet(email?: string, options?: RawAxiosRequestConfig) {
+        return SMIMEApiFp(this.configuration).smimeGet(email, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -434,7 +460,7 @@ export class SMIMEApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof SMIMEApi
      */
-    public smimeRevokePost(modelRevokeRequest: ModelRevokeRequest, options?: AxiosRequestConfig) {
+    public smimeRevokePost(modelRevokeRequest: ModelRevokeRequest, options?: RawAxiosRequestConfig) {
         return SMIMEApiFp(this.configuration).smimeRevokePost(modelRevokeRequest, options).then((request) => request(this.axios, this.basePath));
     }
 }
@@ -454,7 +480,7 @@ export const SSLApiAxiosParamCreator = function (configuration?: Configuration) 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        sslActiveGet: async (domain: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+        sslActiveGet: async (domain: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'domain' is not null or undefined
             assertParamExists('sslActiveGet', 'domain', domain)
             const localVarPath = `/ssl/active`;
@@ -495,7 +521,7 @@ export const SSLApiAxiosParamCreator = function (configuration?: Configuration) 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        sslCsrPost: async (modelCsrRequest: ModelCsrRequest, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+        sslCsrPost: async (modelCsrRequest: ModelCsrRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'modelCsrRequest' is not null or undefined
             assertParamExists('sslCsrPost', 'modelCsrRequest', modelCsrRequest)
             const localVarPath = `/ssl/csr`;
@@ -534,7 +560,7 @@ export const SSLApiAxiosParamCreator = function (configuration?: Configuration) 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        sslGet: async (options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+        sslGet: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             const localVarPath = `/ssl/`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -569,7 +595,7 @@ export const SSLApiAxiosParamCreator = function (configuration?: Configuration) 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        sslRevokePost: async (modelRevokeRequest: ModelRevokeRequest, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+        sslRevokePost: async (modelRevokeRequest: ModelRevokeRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'modelRevokeRequest' is not null or undefined
             assertParamExists('sslRevokePost', 'modelRevokeRequest', modelRevokeRequest)
             const localVarPath = `/ssl/revoke`;
@@ -619,9 +645,11 @@ export const SSLApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async sslActiveGet(domain: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<PortalApisSslCertificateDetails>>> {
+        async sslActiveGet(domain: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<PortalApisSslCertificateDetails>>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.sslActiveGet(domain, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['SSLApi.sslActiveGet']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
          * This endpoint handles a provided CSR. The validity of the CSR is checked and passed to the sectigo server.
@@ -630,9 +658,11 @@ export const SSLApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async sslCsrPost(modelCsrRequest: ModelCsrRequest, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<string>> {
+        async sslCsrPost(modelCsrRequest: ModelCsrRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<string>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.sslCsrPost(modelCsrRequest, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['SSLApi.sslCsrPost']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
          * 
@@ -640,9 +670,11 @@ export const SSLApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async sslGet(options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<PortalApisSslCertificateDetails>>> {
+        async sslGet(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<PortalApisSslCertificateDetails>>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.sslGet(options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['SSLApi.sslGet']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
          * 
@@ -651,9 +683,11 @@ export const SSLApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async sslRevokePost(modelRevokeRequest: ModelRevokeRequest, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+        async sslRevokePost(modelRevokeRequest: ModelRevokeRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.sslRevokePost(modelRevokeRequest, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['SSLApi.sslRevokePost']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
     }
 };
@@ -672,7 +706,7 @@ export const SSLApiFactory = function (configuration?: Configuration, basePath?:
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        sslActiveGet(domain: string, options?: any): AxiosPromise<Array<PortalApisSslCertificateDetails>> {
+        sslActiveGet(domain: string, options?: RawAxiosRequestConfig): AxiosPromise<Array<PortalApisSslCertificateDetails>> {
             return localVarFp.sslActiveGet(domain, options).then((request) => request(axios, basePath));
         },
         /**
@@ -682,7 +716,7 @@ export const SSLApiFactory = function (configuration?: Configuration, basePath?:
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        sslCsrPost(modelCsrRequest: ModelCsrRequest, options?: any): AxiosPromise<string> {
+        sslCsrPost(modelCsrRequest: ModelCsrRequest, options?: RawAxiosRequestConfig): AxiosPromise<string> {
             return localVarFp.sslCsrPost(modelCsrRequest, options).then((request) => request(axios, basePath));
         },
         /**
@@ -691,7 +725,7 @@ export const SSLApiFactory = function (configuration?: Configuration, basePath?:
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        sslGet(options?: any): AxiosPromise<Array<PortalApisSslCertificateDetails>> {
+        sslGet(options?: RawAxiosRequestConfig): AxiosPromise<Array<PortalApisSslCertificateDetails>> {
             return localVarFp.sslGet(options).then((request) => request(axios, basePath));
         },
         /**
@@ -701,7 +735,7 @@ export const SSLApiFactory = function (configuration?: Configuration, basePath?:
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        sslRevokePost(modelRevokeRequest: ModelRevokeRequest, options?: any): AxiosPromise<void> {
+        sslRevokePost(modelRevokeRequest: ModelRevokeRequest, options?: RawAxiosRequestConfig): AxiosPromise<void> {
             return localVarFp.sslRevokePost(modelRevokeRequest, options).then((request) => request(axios, basePath));
         },
     };
@@ -722,7 +756,7 @@ export class SSLApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof SSLApi
      */
-    public sslActiveGet(domain: string, options?: AxiosRequestConfig) {
+    public sslActiveGet(domain: string, options?: RawAxiosRequestConfig) {
         return SSLApiFp(this.configuration).sslActiveGet(domain, options).then((request) => request(this.axios, this.basePath));
     }
 
@@ -734,7 +768,7 @@ export class SSLApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof SSLApi
      */
-    public sslCsrPost(modelCsrRequest: ModelCsrRequest, options?: AxiosRequestConfig) {
+    public sslCsrPost(modelCsrRequest: ModelCsrRequest, options?: RawAxiosRequestConfig) {
         return SSLApiFp(this.configuration).sslCsrPost(modelCsrRequest, options).then((request) => request(this.axios, this.basePath));
     }
 
@@ -745,7 +779,7 @@ export class SSLApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof SSLApi
      */
-    public sslGet(options?: AxiosRequestConfig) {
+    public sslGet(options?: RawAxiosRequestConfig) {
         return SSLApiFp(this.configuration).sslGet(options).then((request) => request(this.axios, this.basePath));
     }
 
@@ -757,7 +791,7 @@ export class SSLApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof SSLApi
      */
-    public sslRevokePost(modelRevokeRequest: ModelRevokeRequest, options?: AxiosRequestConfig) {
+    public sslRevokePost(modelRevokeRequest: ModelRevokeRequest, options?: RawAxiosRequestConfig) {
         return SSLApiFp(this.configuration).sslRevokePost(modelRevokeRequest, options).then((request) => request(this.axios, this.basePath));
     }
 }
@@ -776,7 +810,7 @@ export const UserApiAxiosParamCreator = function (configuration?: Configuration)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        whoamiGet: async (options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+        whoamiGet: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             const localVarPath = `/whoami`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -820,9 +854,11 @@ export const UserApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async whoamiGet(options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<string>> {
+        async whoamiGet(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<string>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.whoamiGet(options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['UserApi.whoamiGet']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
     }
 };
@@ -840,7 +876,7 @@ export const UserApiFactory = function (configuration?: Configuration, basePath?
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        whoamiGet(options?: any): AxiosPromise<string> {
+        whoamiGet(options?: RawAxiosRequestConfig): AxiosPromise<string> {
             return localVarFp.whoamiGet(options).then((request) => request(axios, basePath));
         },
     };
@@ -860,7 +896,7 @@ export class UserApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof UserApi
      */
-    public whoamiGet(options?: AxiosRequestConfig) {
+    public whoamiGet(options?: RawAxiosRequestConfig) {
         return UserApiFp(this.configuration).whoamiGet(options).then((request) => request(this.axios, this.basePath));
     }
 }
