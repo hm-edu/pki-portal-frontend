@@ -12,7 +12,7 @@ describe("new user", () => {
     it("new user loggedin", () => {
         cy.viewport(1280, 1024);
         cy.login().as("getSession");
-        cy.intercept("https://pki.api.hm.edu/smime/?email=ma%40mustermann.de", {
+        cy.intercept("https://pki.api.hm.edu/smime/?email=max%40mustermann.de", {
             statusCode: 200,
         }).as("getUser");
         cy.visit("/user/new");
