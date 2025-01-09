@@ -191,7 +191,7 @@ export default function SslCertificates() {
                 const row = (params.row as PortalApisSslCertificateDetails);
 
                 return <Box>
-                    <Button variant="outlined" disabled={row.status == "Revoked" || row.ca == "sectigo"} onClick={(event: FormEvent<Element>) => {
+                    <Button variant="outlined" disabled={row.status == "Revoked" || row.ca == CA.SECTIGO} onClick={(event: FormEvent<Element>) => {
                         event.preventDefault();
                         setSelected([params.id]);
                         setRevokeOpen(true);
