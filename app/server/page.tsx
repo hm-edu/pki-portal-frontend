@@ -8,7 +8,7 @@ import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import LinearProgress from "@mui/material/LinearProgress";
 import Typography from "@mui/material/Typography";
-import { DataGrid, GridColDef, GridPaginationModel, GridRowId, GridSlots } from "@mui/x-data-grid";
+import { DataGrid, GridColDef, GridPaginationModel, GridRenderCellParams, GridRowId, GridSlots, GridTreeNodeWithRender } from "@mui/x-data-grid";
 import { deDE } from "@mui/x-data-grid/locales";
 import * as Sentry from "@sentry/nextjs";
 import Link from "next/link";
@@ -22,11 +22,18 @@ import CertificateRevokeDialog from "@/app/server/CertificateRevokeDialog";
 import { Config } from "@/components/config";
 import { dataGridStyle } from "@/components/theme";
 import { QuickSearchToolbar } from "@/components/toolbar";
+import { Info } from "@mui/icons-material";
+
+enum CA {
+    HARICA = "HARICA",
+    SECTIGO = "Sectigo",
+}
 
 export default function SslCertificates() {
     const [pageModel, setPageModel] = useState<GridPaginationModel>({ page: 0, pageSize: 50 });
     const [loading, setLoading] = useState(true);
-    const [open, setOpen] = useState(false);
+    const [revokeOpen, setRevokeOpen] = useState(false);
+    const [detailsOpen, setDetailsOpen] = useState(false);
     const [certificates, setCertificates] = useState([] as PortalApisSslCertificateDetails[]);
     const [selected, setSelected] = useState<readonly GridRowId[]>();
     const [error, setError] = useState<undefined | boolean | string>(undefined);
@@ -34,7 +41,7 @@ export default function SslCertificates() {
 
     const handleClose = () => {
         setSelected(undefined);
-        setOpen(false);
+        setRevokeOpen(false);
     };
 
     function revoke(reason: string) {
@@ -51,7 +58,7 @@ export default function SslCertificates() {
                         await api.sslRevokePost({ serial: cert?.serial, reason: reason });
                         load();
                         setSelected(undefined);
-                        setOpen(false);
+                        setRevokeOpen(false);
                     } catch (error) {
                         Sentry.captureException(error);
                         setError(true);
@@ -63,7 +70,17 @@ export default function SslCertificates() {
         }
     }
 
-    function mapCert(cert: PortalApisSslCertificateDetails) {
+    function mapCert(cert: PortalApisSslCertificateDetails) :PortalApisSslCertificateDetails {
+        let ca = cert.ca;
+        switch (cert.ca) {
+            case "harica":
+                ca = CA.HARICA;
+                break;
+            case "sectigo":
+                ca = CA.SECTIGO;
+                break;
+        }
+
         return {
             common_name: cert.common_name,
             expires: cert.expires,
@@ -74,7 +91,7 @@ export default function SslCertificates() {
             created: cert.created,
             source: cert.source,
             issued_by: cert.issued_by,
-            ca: cert.ca,
+            ca: ca,
         };
     }
 
@@ -168,25 +185,37 @@ export default function SslCertificates() {
             filterable: false,
             hideable: false,
             flex: 1,
-            minWidth: 150,
+            minWidth: 260,
             renderCell: (params) => {
 
                 const row = (params.row as PortalApisSslCertificateDetails);
 
-                return <Button variant="outlined" disabled={row.status == "Revoked" || row.ca == "sectigo"} onClick={(event: FormEvent<Element>) => {
-                    event.preventDefault();
-                    setSelected([params.id]);
-                    setOpen(true);
-                }} sx={{ px: 1, mx: 1 }} color="warning" startIcon={<DeleteIcon />} key="revoke"> Widerrufen</Button>;
+                return <Box>
+                    <Button variant="outlined" disabled={row.status == "Revoked" || row.ca == "sectigo"} onClick={(event: FormEvent<Element>) => {
+                        event.preventDefault();
+                        setSelected([params.id]);
+                        setRevokeOpen(true);
+                    }} sx={{ px: 1, mx: 1 }} color="warning" startIcon={<DeleteIcon />} key="revoke">
+                        Widerrufen
+                    </Button>
+                    <Button variant="outlined" color="inherit" startIcon={<Info/>} onClick={(e) => openDetails(e, params)}>Details</Button>
+                </Box>;
             },
         },
     ];
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const openDetails = function(event: FormEvent<Element>, params: GridRenderCellParams<any, any, any, GridTreeNodeWithRender>) {
+        event.preventDefault();
+        setSelected([params.id]);
+        setDetailsOpen(true);
+    };
+
     const selection = function () {
-        if (selected && selected.length > 0) {
+        if (selected && selected.length > 0 && detailsOpen) {
             const cert = certificates.find((cert) => cert.serial === selected.at(0));
             if (cert) {
-                return <CertificateDetails cert={cert} />;
+                return <CertificateDetails cert={cert} open={detailsOpen} onClose={()=>(setDetailsOpen(false))} />;
             }
         }
         return <></>;
@@ -233,6 +262,6 @@ export default function SslCertificates() {
             </Box>
         </>}
         {selection()}
-        <CertificateRevokeDialog open={open} onClose={handleClose} onRevoke={revoke} certificates={certificates} selected={selected} />
+        <CertificateRevokeDialog open={revokeOpen} onClose={handleClose} onRevoke={revoke} certificates={certificates} selected={selected} />
     </Box>;
 }
