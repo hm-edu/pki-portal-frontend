@@ -16,9 +16,9 @@ const CertificateDetails = ({ cert, onClose, open }: CertificateDetailsProps) =>
     const fullScreen = useMediaQuery(theme.breakpoints.down("lg"));
     return <Dialog maxWidth="lg" sx={{ px: 1, py: 1 }} open={open} onClose={onClose}
         fullScreen={fullScreen}>
-        <DialogTitle sx={{borderBottom: "1px solid lightgray"}} >Zertifikatdetails</DialogTitle>
+        <DialogTitle sx={{ borderBottom: "1px solid lightgray" }} >Zertifikatdetails</DialogTitle>
         <DialogContent>
-            <Table sx={{my: 2}}>
+            <Table sx={{ my: 2 }}>
                 <tbody>
                     <tr>
                         <td><b>Common Name</b></td>
