@@ -54,7 +54,7 @@
     "@swc/plugin-transform-imports": "6.5.2",
     "@testing-library/cypress": "10.0.3",
     "@testing-library/react": "16.2.0",
-    "@types/node": "22.13.4",
+    "@types/node": "22.13.5",
     "@types/react": "19.0.10",
     "@types/react-dom": "19.0.4",
     "@types/unidecode": "0.1.3",
