@@ -33,12 +33,10 @@ const SMIMEGenerator = () => {
     const [issuing, setIssuing] = useState(false);
     const [success, setSuccess] = useState(false);
     const [closed, setClosed] = useState(false);
-    const [warning, setWarning] = useState(false);
     const [error, setError] = useState("");
     const [validation, setValidation] = useState<string | undefined>(undefined);
     const p12PasswordRef = useRef<TextFieldProps>(null);
     const p12PasswordConfirmRef = useRef<TextFieldProps>(null);
-    const revokeRef = useRef<HTMLInputElement>(null);
 
     const { data: session, status } = useSession();
 
@@ -66,12 +64,12 @@ const SMIMEGenerator = () => {
         setLoading(true);
         setProgress(<Typography id="modal-modal-description" sx={{ mt: "24px" }}>Generiere CSR...</Typography>);
         try {
-            const CsrBuilder = (await import("@/components/csr")).CsrBuilder;
-            const csr = new CsrBuilder();
-            const x = await csr.build("rsa", undefined, undefined, 4096);
-            setProgress(<Typography id="modal-modal-description" sx={{ mt: "24px" }}>CSR generiert...</Typography>);
-            setIssuing(true);
-            if (session && session.user.name) {
+            if (session && session.user.name && session.user.email) {
+                const CsrBuilder = (await import("@/components/csr")).CsrBuilder;
+                const csr = new CsrBuilder();
+                const x = await csr.build("rsa", undefined, session.user.email, 4096);
+                setProgress(<Typography id="modal-modal-description" sx={{ mt: "24px" }}>CSR generiert...</Typography>);
+                setIssuing(true);
                 // eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/restrict-plus-operands, @typescript-eslint/no-unsafe-member-access
                 const filename = `${unidecode(session.user.name).replace(" ", "_")}_${moment().format("DD-MM-YYYY_HH-mm-ss")}.p12`;
 
@@ -112,34 +110,6 @@ const SMIMEGenerator = () => {
 
     };
 
-    async function load() {
-        if (!session) {
-            return;
-        }
-        const cfg = new Configuration({ accessToken: session.accessToken });
-        const api = new SMIMEApi(cfg, `${Config.PkiHost}`);
-        try {
-            const response = await api.smimeGet(session.user.email!, { timeout: 60*1000 });
-            if (response && response.data != null) {
-                let active = 0;
-                for (const cert of response.data) {
-                    if (cert.status != "revoked") {
-                        active++;
-                    }
-                }
-                if (active >= 5) {
-                    setWarning(true);
-                }
-            }
-            setLoading(false);
-            validate();
-        } catch {
-            Sentry.captureException(error);
-            setLoading(false);
-            setError("Es ist ein unbekannter Fehler aufgetreten!");
-        };
-
-    }
 
     useEffect(() => {
         if (issuing) {
@@ -149,7 +119,8 @@ const SMIMEGenerator = () => {
             setProgress(<Typography id="modal-modal-description" sx={{ mt: "24px" }}>Bitte warten...</Typography>);
         if (status == "authenticated" && !issuing) {
             Sentry.setUser({ email: session?.user?.email?? "" });
-            void load();
+            setLoading(false);
+            validate();
         } else if (status == "unauthenticated") {
             setLoading(false);
             setError("Sie sind nicht angemeldet!");
@@ -163,12 +134,10 @@ const SMIMEGenerator = () => {
             setValidation("Das Passwort muss mindestens 6 Zeichen lang sein.");
         } else if (p12PasswordConfirmRef.current?.value != undefined && p12PasswordRef.current?.value != p12PasswordConfirmRef.current?.value) {
             setValidation("Die eingegebenen Passwörter stimmen nicht überein.");
-        } else if (warning && !revokeRef.current?.checked) {
-            setValidation("Sie müssen wahlweise ein Zertifikat händisch widerrufen oder das älteste Zertifikat automatisch widerrufen lassen!");
-        } else {
+        }  else {
             setValidation(undefined);
         }
-    }, [p12PasswordConfirmRef, p12PasswordRef, revokeRef, revokeRef.current]);
+    }, [p12PasswordConfirmRef, p12PasswordRef, ]);
 
     if (!error && session) {
         return <>
@@ -184,18 +153,6 @@ const SMIMEGenerator = () => {
                         <Typography sx={{ paddingBottom: "10px" }}>Bitte vergeben Sie ein individuelles PKCS12 Import-Passwort.</Typography>
                         <TextField required id="pkcs12" label="PKCS12 Passwort" sx={{ paddingBottom: "10px" }} type="password" inputRef={p12PasswordRef} fullWidth variant="standard" onChange={validate} />
                         <TextField required id="pkcs12validation" label="PKCS12 Passwort Bestätigung" type="password" fullWidth inputRef={p12PasswordConfirmRef} variant="standard" onChange={validate} />
-                    </Box>
-                    <Box>
-                        {warning && <>
-                            <Alert id="revoke" severity="warning">
-                                <AlertTitle>Warnung</AlertTitle>
-                                <Typography>Sie haben derzeit 5 aktive Nutzerzertifikate. </Typography>
-                                <Typography>Durch Ausstellung eines neuen Zertifikats wird automatisch das ältere dieser beiden Zertifikate widerrufen. </Typography>
-                                <Typography>Das Widerrufen eines Zertifikats kann nicht rückgängig gemacht werden!</Typography>
-                                <Typography>Sofern Sie dies nicht möchten widerrufen Sie bitte ein Zertifikat von Hand. </Typography>
-                            </Alert>
-                            <FormControlLabel control={<Checkbox color="secondary" onChange={validate} inputRef={revokeRef} required />} label="Ja, ich möchte das älteste aktive Zertifikat automatisch widerrufen." />
-                        </>}
                     </Box>
                     <Button id="generate" type="submit" variant="outlined" color="inherit" disabled={(loading || success) || (validation != undefined) || p12PasswordRef.current?.value == ""} sx={buttonSx}>Generiere Zertifikat {loading && (
                         <CircularProgress size={24} sx={{ color: green[500], position: "absolute", top: "50%", left: "50%", marginTop: "-12px", marginLeft: "-12px" }} />

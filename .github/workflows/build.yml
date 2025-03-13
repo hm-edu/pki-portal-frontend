@@ -93,7 +93,6 @@ jobs:
           favicon: resources/hm-edu/favicon.ico
           image_name: hm-edu/portal-frontend
           docs_url: https://collab.dvb.bayern/x/sQ0kRg
-          disable_user: true
         - name: Hochschule Hof
           eab_host: https://eab.pki.hof-university.de
           acme_host: https://acme.pki.hof-university.de

@@ -39,13 +39,13 @@ export class CsrBuilder {
         const { privateKey, publicKey } = await crypto.generateKey(algorithm.algorithm as Algorithm, true, algorithm.usages) as Required<CryptoKeyPair>;
         await pkcs10.subjectPublicKeyInfo.importKey(publicKey);
 
+        if (cn) {
+            pkcs10.subject.typesAndValues.push(new pkijs.AttributeTypeAndValue({
+                type: "2.5.4.3",
+                value: new asn1js.Utf8String({ value: cn }),
+            }));
+        }
         if (fqdns) {
-            if (cn) {
-                pkcs10.subject.typesAndValues.push(new pkijs.AttributeTypeAndValue({
-                    type: "2.5.4.3",
-                    value: new asn1js.Utf8String({ value: cn }),
-                }));
-            }
             const altNames = new pkijs.GeneralNames({
                 names: fqdns.map(fqdn => new pkijs.GeneralName({
                     type: 2,
