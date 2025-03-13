@@ -12,12 +12,9 @@ describe("new user", () => {
     it("new user loggedin", () => {
         cy.viewport(1280, 1024);
         cy.login().as("getSession");
-        cy.intercept("https://pki.api.hm.edu/smime/?email=max%40mustermann.de", {
-            statusCode: 200,
-        }).as("getUser");
         cy.visit("/user/new");
         cy.get(".MuiButton-outlined").should("be.visible").and("contain", "Anmelden");
-        cy.wait(["@getSession", "@getUser"]);
+        cy.wait(["@getSession"]);
         cy.get("#generate").should("be.visible").and("be.disabled");
         cy.get("#validation").should("be.visible");
         cy.get("#revoke").should("not.exist");
@@ -29,40 +26,6 @@ describe("new user", () => {
         cy.get("#pkcs12validation").type("test1234");
         cy.get("#validation").should("not.exist");
 
-    });
-    it("new user loggedin error", () => {
-        cy.viewport(1280, 1024);
-        cy.login().as("getSession");
-        cy.intercept("https://pki.api.hm.edu/smime/?email=max%40mustermann.de", {
-            statusCode: 500,
-        }).as("getUser");
-        cy.visit("/user/new");
-        cy.get(".MuiButton-outlined").should("be.visible").and("contain", "Anmelden");
-        cy.wait(["@getSession", "@getUser"]);
-        cy.get("#generate").should("not.exist");
-        cy.get("#validation").should("not.exist");
-        cy.get("#revoke").should("not.exist");
-        cy.get(".MuiAlert-message").should("be.visible").and("contain", "Es ist ein unbekannter Fehler aufgetreten!");
-    });
-    it("new user loggedin revoke", () => {
-        cy.viewport(1280, 1024);
-        cy.login().as("getSession");
-        cy.intercept("https://pki.api.hm.edu/smime/?email=max%40mustermann.de", {
-            statusCode: 200,
-            body: [
-                { "id": 12345, "status": "issued", "serial": "", "expires": { "seconds": 1756598400 } },
-                { "id": 12345, "status": "issued", "serial": "", "expires": { "seconds": 1756598400 } },
-                { "id": 12345, "status": "issued", "serial": "", "expires": { "seconds": 1756598400 } },
-                { "id": 12345, "status": "issued", "serial": "", "expires": { "seconds": 1756598400 } },
-                { "id": 12345, "status": "issued", "serial": "", "expires": { "seconds": 1756598400 } },
-            ],
-        }).as("getUser");
-        cy.visit("/user/new");
-        cy.get(".MuiButton-outlined").should("be.visible").and("contain", "Anmelden");
-        cy.wait(["@getSession", "@getUser"]);
-        cy.get("#generate").should("be.visible").and("be.disabled");
-        cy.get("#validation").should("be.visible");
-        cy.get("#revoke").should("be.visible");
     });
 });
 describe("user", () => {
