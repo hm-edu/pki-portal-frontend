@@ -6,10 +6,8 @@ import Alert from "@mui/material/Alert";
 import AlertTitle from "@mui/material/AlertTitle";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
-import Checkbox from "@mui/material/Checkbox";
 import CircularProgress from "@mui/material/CircularProgress";
 import { green } from "@mui/material/colors";
-import FormControlLabel from "@mui/material/FormControlLabel";
 import Modal from "@mui/material/Modal";
 import TextField, { TextFieldProps } from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
@@ -107,10 +105,7 @@ const SMIMEGenerator = () => {
             setLoading(false);
             setError("Es ist ein unbekannter Fehler aufgetreten!");
         }
-
     };
-
-
     useEffect(() => {
         if (issuing) {
             return;
@@ -134,7 +129,7 @@ const SMIMEGenerator = () => {
             setValidation("Das Passwort muss mindestens 6 Zeichen lang sein.");
         } else if (p12PasswordConfirmRef.current?.value != undefined && p12PasswordRef.current?.value != p12PasswordConfirmRef.current?.value) {
             setValidation("Die eingegebenen Passwörter stimmen nicht überein.");
-        }  else {
+        } else {
             setValidation(undefined);
         }
     }, [p12PasswordConfirmRef, p12PasswordRef]);
