@@ -137,7 +137,7 @@ const SMIMEGenerator = () => {
         }  else {
             setValidation(undefined);
         }
-    }, [p12PasswordConfirmRef, p12PasswordRef, ]);
+    }, [p12PasswordConfirmRef, p12PasswordRef]);
 
     if (!error && session) {
         return <>
