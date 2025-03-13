@@ -115,7 +115,6 @@ jobs:
           favicon: resources/uni-bamberg/favicon.ico
           image_name: hm-edu/portal-frontend-bamberg
           docs_url: https://www.uni-bamberg.de/?id=168686
-          disable_user: true
     runs-on: ubuntu-latest
     name: Docker Image for ${{ matrix.university.name }}
     needs: e2e
