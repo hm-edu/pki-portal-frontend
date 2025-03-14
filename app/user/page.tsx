@@ -138,7 +138,7 @@ const SmimeCertificates = () => {
             minWidth: 150,
             renderCell: (params) => {
                 const row = (params.row as PortalApisListSmimeResponseCertificateDetails);
-                if (row.status !== "revoked") {
+                if (row.status !== "Revoked" && row.status !== "Expired") {
                     return <Button variant="outlined" onClick={() => {
                         setSelection(row);
                         handleClickOpen();
