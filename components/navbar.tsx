@@ -6,14 +6,15 @@ import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Divider from "@mui/material/Divider";
 import Drawer from "@mui/material/Drawer";
-import Hidden from "@mui/material/Hidden";
 import IconButton from "@mui/material/IconButton";
 import List from "@mui/material/List";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemText from "@mui/material/ListItemText";
+import { useTheme } from "@mui/material/styles";
 import Toolbar from "@mui/material/Toolbar";
 import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
+import { useMediaQuery } from "@mui/system";
 import Container from "@mui/system/Container";
 import dynamic from "next/dynamic";
 import Image from "next/image";
@@ -28,9 +29,12 @@ import { SignInButton } from "@/components/signInButton";
 
 export default function ButtonAppBar() {
     const { data: session } = useSession();
+    const theme = useTheme();
     const [userFragment, setFragment] = useState(<></>);
     const [openDrawer, setDrawer] = React.useState<boolean>(false);
     const [buttons, setButtons] = useState<JSX.Element[]>([]);
+    const desktop = useMediaQuery(theme.breakpoints.up("md"));
+    const largeDesktop = useMediaQuery(theme.breakpoints.up("lg"));
 
     useEffect(() => {
         if (session) {
@@ -82,12 +86,11 @@ export default function ButtonAppBar() {
 
     return (
         <AppBar position="fixed">
-            <Hidden key="desktop" mdDown>
+            {desktop ?
                 <Container maxWidth="xl">
                     <Toolbar key="bar" >
-                        <Hidden lgDown>
-                            <Image src={logo} height={36} width={36} alt="Logo"/>
-                        </Hidden>
+                        {largeDesktop ? <Image src={logo} height={36} width={36} alt="Logo" /> : <></>}
+
                         <Typography component="div" sx={{ ml: 1, flexGrow: 1 }}>
                             <Link legacyBehavior={true} href="/">
                                 <Button color="inherit">Home</Button>
@@ -96,9 +99,7 @@ export default function ButtonAppBar() {
                         </Typography>
                         {userFragment}
                     </Toolbar>
-                </Container>
-            </Hidden>
-            <Hidden key="mobile" mdUp>
+                </Container> :
                 <Toolbar key="bar-mobile">
                     <Typography component="div" sx={{ flexGrow: 1 }}>
                         PKI-Portal
@@ -129,8 +130,7 @@ export default function ButtonAppBar() {
                     <IconButton onClick={() => setDrawer(!openDrawer)} size="large" edge="start" color="inherit" aria-label="menu" sx={{ ml: 2, display: session == null ? "none" : "" }}>
                         <MenuIcon />
                     </IconButton>
-                </Toolbar>
-            </Hidden>
+                </Toolbar>}
         </AppBar >
     );
 }
