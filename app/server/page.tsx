@@ -1,8 +1,8 @@
 "use client";
 
-import { Info } from "@mui/icons-material";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import DeleteIcon from "@mui/icons-material/Delete";
+import InfoIcon from "@mui/icons-material/Info";
 import UploadFileIcon from "@mui/icons-material/UploadFile";
 import Alert from "@mui/material/Alert";
 import Box from "@mui/material/Box";
@@ -198,7 +198,7 @@ export default function SslCertificates() {
                     }} sx={{ px: 1, mx: 1 }} color="warning" startIcon={<DeleteIcon />} key="revoke">
                         Widerrufen
                     </Button>
-                    <Button variant="outlined" color="inherit" startIcon={<Info/>} onClick={(e) => openDetails(e, params)}>Details</Button>
+                    <Button variant="outlined" color="inherit" startIcon={<InfoIcon/>} onClick={(e) => openDetails(e, params)}>Details</Button>
                 </Box>;
             },
         },
