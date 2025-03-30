@@ -74,13 +74,16 @@ const SMIMEGenerator = () => {
                 const cfg = new Configuration({ accessToken: session.accessToken });
                 const api = new SMIMEApi(cfg, `${Config.PkiHost}`);
                 setProgress(
-                    <Typography id="modal-modal-description" sx={{ mt: "24px", mb: "5px" }}>
+                    <>
+                        <Typography id="modal-modal-description" sx={{ mt: "24px", mb: "5px" }}>
                             Signiere CSR...
+                        </Typography>
                         <Alert severity="warning">Dieser Schritt kann leider bis zu 5 Minuten dauern.</Alert>
-                    </Typography>);
+                    </>);
                 const response = await api.smimeCsrPost({ csr: x.csr });
                 setProgress(<Typography id="modal-modal-description" sx={{ mt: "24px" }}>Generiere PKCS12...</Typography>);
-                const p12 = await createP12(x.privateKey, [response.data], p12PasswordRef.current?.value as string, "rsa");
+                let certs = response.data.split(/(?=-----BEGIN CERTIFICATE-----)/g);
+                const p12 = await createP12(x.privateKey, certs, p12PasswordRef.current?.value as string, "rsa");
                 const element = document.createElement("a");
                 element.setAttribute("href", "data:application/x-pkcs12;base64," + p12);
                 element.setAttribute("download", filename);
@@ -101,6 +104,7 @@ const SMIMEGenerator = () => {
                 setLoading(false);
             }
         } catch (error) {
+            console.log(error);
             Sentry.captureException(error);
             setLoading(false);
             setError("Es ist ein unbekannter Fehler aufgetreten!");
