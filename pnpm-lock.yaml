@@ -133,8 +133,8 @@ importers:
         specifier: 19.0.4
         version: 19.0.4(@types/react@19.0.12)
       '@types/unidecode':
-        specifier: 0.1.3
-        version: 0.1.3
+        specifier: 1.1.0
+        version: 1.1.0
       '@typescript-eslint/eslint-plugin':
         specifier: 7.18.0
         version: 7.18.0(@typescript-eslint/parser@7.18.0(eslint@9.23.0)(typescript@5.8.2))(eslint@9.23.0)(typescript@5.8.2)
@@ -1834,8 +1834,8 @@ packages:
   '@types/tedious@4.0.14':
     resolution: {integrity: sha512-KHPsfX/FoVbUGbyYvk1q9MMQHLPeRZhRJZdO45Q4YjvFkv4hMNghCWTvy7rdKessBsmtz4euWCWAB6/tVpI1Iw==}
 
-  '@types/unidecode@0.1.3':
-    resolution: {integrity: sha512-7R8zgAf8y1qq5Zif6UIXYR07MHvJIjcQM9Ym2am1YXaWdn9zJltLDwO8HpmIIjHiNT4VMGiNAw+UI9S7OM2foA==}
+  '@types/unidecode@1.1.0':
+    resolution: {integrity: sha512-NTIsFsTe9WRek39/8DDj7KiQ0nU33DHMrKwNHcD1rKlUvn4N0Rc4Di8q/Xavs8bsDZmBa4MMtQA8+HNgwfxC/A==}
 
   '@types/yauzl@2.10.3':
     resolution: {integrity: sha512-oJoftv0LSuaDZE3Le4DbKX+KS9G36NzOeSap90UIK0yMA/NhKJhqlSGtNDORNRaIbQfzjXDrQa0ytJ6mNRGz/Q==}
@@ -6791,7 +6791,7 @@ snapshots:
     dependencies:
       '@types/node': 22.13.14
 
-  '@types/unidecode@0.1.3': {}
+  '@types/unidecode@1.1.0': {}
 
   '@types/yauzl@2.10.3':
     dependencies:
