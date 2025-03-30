@@ -82,7 +82,7 @@ const SMIMEGenerator = () => {
                     </>);
                 const response = await api.smimeCsrPost({ csr: x.csr });
                 setProgress(<Typography id="modal-modal-description" sx={{ mt: "24px" }}>Generiere PKCS12...</Typography>);
-                let certs = response.data.split(/(?=-----BEGIN CERTIFICATE-----)/g);
+                const certs = response.data.split(/(?=-----BEGIN CERTIFICATE-----)/g);
                 const p12 = await createP12(x.privateKey, certs, p12PasswordRef.current?.value as string, "rsa");
                 const element = document.createElement("a");
                 element.setAttribute("href", "data:application/x-pkcs12;base64," + p12);
