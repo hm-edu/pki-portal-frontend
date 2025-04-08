@@ -51,7 +51,7 @@
     "@babel/core": "7.26.10",
     "@babel/preset-env": "7.26.9",
     "@popperjs/core": "2.11.8",
-    "@swc/plugin-transform-imports": "7.0.1",
+    "@swc/plugin-transform-imports": "7.0.2",
     "@testing-library/cypress": "10.0.3",
     "@testing-library/react": "16.3.0",
     "@types/node": "22.14.0",
