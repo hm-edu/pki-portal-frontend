@@ -258,8 +258,8 @@ export default function SslCertificates() {
                     pagination rows={certificates}></DataGrid>
             </div>
             <Box sx={{ display: "flex", flexDirection: "row", gap: "6px", width: "100%", justifyContent: "space-between" }}>
-                <Link href="/server/new" style={{width: "80%"}}><Button variant="contained" id="newServer" disabled={!session} color="success" startIcon={<AddCircleOutlineIcon />} sx={{mt: 1, width:1}}>Neues Zertifikat mit Assistent erstellen</Button></Link>
-                <Link href="/server/csr" style={{width: "20%"}}><Button variant="contained" id="newServerCsr" disabled={!session} color="success" startIcon={<UploadFileIcon />} sx={{ mt: 1, width:1 }} >Eigenen CSR verwenden</Button></Link>
+                <Link href="/server/new" style={{ width: "80%" }}><Button variant="contained" id="newServer" disabled={!session} color="success" startIcon={<AddCircleOutlineIcon />} sx={{ mt: 1, width:1 }}>Neues Zertifikat mit Assistent erstellen</Button></Link>
+                <Link href="/server/csr" style={{ width: "20%" }}><Button variant="contained" id="newServerCsr" disabled={!session} color="success" startIcon={<UploadFileIcon />} sx={{ mt: 1, width:1 }} >Eigenen CSR verwenden</Button></Link>
             </Box>
         </>}
         {selection()}

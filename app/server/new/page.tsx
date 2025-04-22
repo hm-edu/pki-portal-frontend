@@ -187,6 +187,7 @@ export default function SslGenerator() {
                             sx={dataGridStyle}
                             initialState={{ sorting: { sortModel: [{ field: "fqdn", sort: "asc" }] } }}
                             slots={{ toolbar: QuickSearchToolbar }}
+                            showToolbar
                             paginationModel={paginationModel}
                             rowSelectionModel={selected}
                             onRowSelectionModelChange={(event) => {

@@ -80,9 +80,9 @@ export const theme: Theme = createTheme({
                 root: {
                     "&.MuiButton": {
                         color: "black",
-                    }
-                }
-            }
+                    },
+                },
+            },
         },
     },
 }, deDE);

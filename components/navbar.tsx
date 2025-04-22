@@ -110,7 +110,7 @@ export default function ButtonAppBar() {
                                         }
                                     }
                                     return <Link key={x.key} href={x.props["href"]}>
-                                        <ListItemButton onClick={() => setDrawer(false)}    >
+                                        <ListItemButton onClick={() => setDrawer(false)} >
                                             <ListItemText primary={text} />
                                         </ListItemButton>
                                     </Link>;
