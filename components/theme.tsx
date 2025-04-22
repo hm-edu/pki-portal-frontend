@@ -75,6 +75,15 @@ export const theme: Theme = createTheme({
                 },
             },
         },
+        MuiToolbar: {
+            styleOverrides: {
+                root: {
+                    "&.MuiButton": {
+                        color: "black",
+                    }
+                }
+            }
+        },
     },
 }, deDE);
 
