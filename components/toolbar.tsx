@@ -1,5 +1,5 @@
 import Box from "@mui/system/Box";
-import { GridToolbarQuickFilter } from "@mui/x-data-grid/components";
+import { QuickFilter, QuickFilterClear, QuickFilterControl, QuickFilterTrigger } from "@mui/x-data-grid/components";
 
 export function QuickSearchToolbar() {
     return (
@@ -12,7 +12,11 @@ export function QuickSearchToolbar() {
                 textAlign: "center",
             }}
         >
-            <GridToolbarQuickFilter sx={{ minWidth: "100%", maxWidth: "100%" }} />
+            <QuickFilter defaultExpanded={true} >
+                <QuickFilterTrigger />
+                <QuickFilterControl />
+                <QuickFilterClear />
+            </QuickFilter>
         </Box>
     );
 }

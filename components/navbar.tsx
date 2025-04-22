@@ -57,25 +57,18 @@ export default function ButtonAppBar() {
                 </Tooltip>{logout}</>);
 
             const navbarButtons: React.ReactElement[] = [];
-            navbarButtons.splice(0, 0, <Link legacyBehavior={true} passHref target="_blank" key="help" href={Config.DocsUrl}>
-                <a target="_blank" style={{
-                    textDecoration: "none",
-                    color: "inherit",
-                }}>
-                    <Button key="guides" color="inherit" >Anleitungen</Button>
-                </a>
-            </Link >);
+            navbarButtons.splice(0, 0, <Link passHref target="_blank" key="help" href={Config.DocsUrl}><Button key="guides" color="inherit" >Anleitungen</Button></Link >);
             if (!Config.DisableUser) {
-                navbarButtons.splice(0, 0, <Link legacyBehavior={true} key="user" href="/user" ><Button key="user" color="inherit" >Nutzerzertifikate</Button></Link>);
+                navbarButtons.splice(0, 0, <Link key="user" href="/user" ><Button key="user" color="inherit" >Nutzerzertifikate</Button></Link>);
             }
             if (!Config.DisableAcme) {
-                navbarButtons.splice(0, 0, <Link legacyBehavior={true} key="eab" href="/eab" ><Button key="eab" color="inherit" >ACME Tokens</Button></Link>);
+                navbarButtons.splice(0, 0, <Link key="eab" href="/eab" ><Button key="eab" color="inherit" >ACME Tokens</Button></Link>);
             }
             if (!Config.DisableServer) {
-                navbarButtons.splice(0, 0, <Link legacyBehavior={true} key="server" href="/server" ><Button key="server" color="inherit">Serverzertifikate</Button></Link>);
+                navbarButtons.splice(0, 0, <Link key="server" href="/server" ><Button key="server" color="inherit">Serverzertifikate</Button></Link>);
             }
             if (!Config.DisableDomain) {
-                navbarButtons.splice(0, 0, <Link legacyBehavior={true} key="domains" href="/domains" ><Button key="domains" color="inherit" >Hostverwaltung</Button></Link>);
+                navbarButtons.splice(0, 0, <Link key="domains" href="/domains" ><Button key="domains" color="inherit" >Hostverwaltung</Button></Link>);
             }
             setButtons(navbarButtons);
         } else {
@@ -92,7 +85,7 @@ export default function ButtonAppBar() {
                         {largeDesktop ? <Image src={logo} height={36} width={36} alt="Logo" /> : <></>}
 
                         <Typography component="div" sx={{ ml: 1, flexGrow: 1 }}>
-                            <Link legacyBehavior={true} href="/">
+                            <Link href="/">
                                 <Button color="inherit">Home</Button>
                             </Link>
                             {buttons}
@@ -116,8 +109,8 @@ export default function ButtonAppBar() {
                                             text = text["props"]["children"];
                                         }
                                     }
-                                    return <Link legacyBehavior={true} key={x.key} href={x.props["href"]} passHref>
-                                        <ListItemButton onClick={() => setDrawer(false)} component="a">
+                                    return <Link key={x.key} href={x.props["href"]}>
+                                        <ListItemButton onClick={() => setDrawer(false)}    >
                                             <ListItemText primary={text} />
                                         </ListItemButton>
                                     </Link>;

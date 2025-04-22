@@ -172,7 +172,7 @@ const SmimeCertificates = () => {
                     pageSizeOptions={[5, 15, 25, 50, 100]}
                     pagination rows={certificates}></DataGrid>
             </div>
-            <Link legacyBehavior={true} href="/user/new">
+            <Link href="/user/new">
                 <Button id="new" variant="contained" color="success" startIcon={<AddCircleOutlineIcon />} sx={{ mt: 1, width: "100%" }}>Neues Zertifikat beziehen</Button>
             </Link>
         </>}

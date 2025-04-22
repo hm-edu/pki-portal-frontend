@@ -23,7 +23,7 @@ import { dataGridStyle } from "@/components/theme";
 
 const EabTokens = () => {
     const [tokens, setTokens] = useState<ModelsEAB[]>([]);
-    const [selected, setSelected] = useState<GridRowSelectionModel|undefined>(undefined);
+    const [selected, setSelected] = useState<GridRowSelectionModel>({ type: "include", ids: new Set() });
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | boolean | undefined>(undefined);
     const [toDelete, setDelete] = useState<ModelsEAB | undefined>(undefined);
@@ -98,8 +98,8 @@ const EabTokens = () => {
     ];
 
     function selection() {
-        if (selected && selected.length > 0) {
-            const token = tokens.find((token) => token.id === selected.at(0));
+        if (selected && selected.ids.size > 0) {
+            const token = tokens.find((token) => token.id && selected.ids.has(token.id));
             return <EabTokenDetails token={token} />;
         }
         return <></>;
