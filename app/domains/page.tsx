@@ -380,6 +380,7 @@ export default function Domains() {
                 slotProps={{
                     loadingOverlay: { color: "inherit" },
                 }}
+                showToolbar
                 loading={loading}
                 localeText={{ ...deDE.components.MuiDataGrid.defaultProps.localeText }}
                 onPaginationModelChange={(newPageModel) => setPageModel(newPageModel)}
