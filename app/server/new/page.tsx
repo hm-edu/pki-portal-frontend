@@ -95,7 +95,7 @@ export default function SslGenerator() {
     const [keypair, setKeyPair] = useState<KeyPair>();
     const [pkcs12, setPkcs12] = useState<boolean>(false);
     const [domains, setDomains] = useState<ModelDomain[]>([]);
-    const [selected, setSelected] = useState<GridRowSelectionModel>();
+    const [selected, setSelected] = useState<GridRowSelectionModel>({ type: "include", ids: new Set() });
     const [paginationModel, setPaginationModel] = useState<GridPaginationModel>({ page: 0, pageSize: 50 });
     const { data: session, status } = useSession();
 
@@ -124,7 +124,7 @@ export default function SslGenerator() {
 
     useEffect(() => {
         if (status == "authenticated" && !generateKey && !generatedKey) {
-            Sentry.setUser({ email: session?.user?.email?? "" });
+            Sentry.setUser({ email: session?.user?.email ?? "" });
             setProgress(<Typography>Bitte warten...</Typography>);
             const cfg = new Configuration({ accessToken: session.accessToken });
             const api = new DomainsApi(cfg, `${Config.DomainHost}`);
@@ -158,7 +158,7 @@ export default function SslGenerator() {
     let fqdns: string[] = [];
     let cn = "";
     if (selected) {
-        fqdns = domains.filter(x => selected.includes(x.id!)).sort((a, b) => a.fqdn!.localeCompare(b.fqdn!)).map((domain) => domain.fqdn!);
+        fqdns = domains.filter(x => selected.ids.has(x.id!)).sort((a, b) => a.fqdn!.localeCompare(b.fqdn!)).map((domain) => domain.fqdn!);
         // eslint-disable-next-line @typescript-eslint/no-non-null-asserted-optional-chain
         cn = domains.find(x => String(x.id) == commonName)?.fqdn!;
     }
@@ -173,7 +173,7 @@ export default function SslGenerator() {
             </Box>
         </Box>;
     } else if (keypair && keypair.public && !generateKey) {
-        publicKeyElement = <KeySegment segment={keypair.public} fileName={`${cn}_${moment().format("DD-MM-YYYY_HH-mm-ss")}.pem`} label="Öffentlicher Schlüssel"/>;
+        publicKeyElement = <KeySegment segment={keypair.public} fileName={`${cn}_${moment().format("DD-MM-YYYY_HH-mm-ss")}.pem`} label="Öffentlicher Schlüssel" />;
     }
 
     if (!generatedKey && !generateKey && !error) {
@@ -191,11 +191,11 @@ export default function SslGenerator() {
                             rowSelectionModel={selected}
                             onRowSelectionModelChange={(event) => {
                                 setSelected(event);
-                                if (commonName != "" && !event.find(x => x == commonName)) {
-                                    setCommonName(String(event.at(0)));
-                                }
-                                if (commonName == "") {
-                                    setCommonName(String(event.at(0)));
+                                const ids = Array.from(event.ids);
+                                if (commonName != "" && !event.ids.has(commonName)) {
+                                    setCommonName(String(ids.at(0)));
+                                } else if (commonName == "") {
+                                    setCommonName(String(ids.at(0)));
                                 }
                             }}
                             loading={loadingDomains} density="compact"
@@ -217,14 +217,14 @@ export default function SslGenerator() {
                             label="Common Name"
                             onChange={handleChange}
                         >
-                            {selected && selected.length > 0 && domains.filter(x => selected.includes(x.id!)).sort((a, b) => a.fqdn!.localeCompare(b.fqdn!)).map((domain) => {
+                            {selected && selected.ids.size > 0 && domains.filter(x => selected.ids.has(x.id!)).sort((a, b) => a.fqdn!.localeCompare(b.fqdn!)).map((domain) => {
                                 return <MenuItem value={domain.id} key={domain.id}> {domain.fqdn} </MenuItem>;
                             })}
                         </CustomSelect>
                     </FormControl>
                     <Typography variant="h6">Alle ausgewählten FQDNs:</Typography>
                     <List dense sx={{ flex: "auto", width: "100%", display: "flex", flexDirection: "column", alignContent: "flex-start", overflow: "auto" }}>
-                        {selected && selected.length > 0 && domains.filter(x => selected.includes(x.id!) && String(x.id) != commonName).sort((a, b) => a.fqdn!.localeCompare(b.fqdn!)).map((domain) => {
+                        {selected && selected.ids.size > 0 && domains.filter(x => selected.ids.has(x.id!) && String(x.id) != commonName).sort((a, b) => a.fqdn!.localeCompare(b.fqdn!)).map((domain) => {
                             const labelId = `checkbox-list-label-${domain.id!}`;
                             return <ListItem sx={{ display: "flex" }} key={domain.id} disablePadding> <ListItemText id={labelId} primary={domain.fqdn} /> </ListItem>;
                         })}
@@ -250,7 +250,7 @@ export default function SslGenerator() {
                 </Box>
             </Box>
             <AcmeRecommendation />
-            <Button type="submit" color="inherit" variant="outlined" disabled={!selected || selected.length == 0 || loadingDomains || generateKey || generatedKey} sx={buttonSx}>Generiere Zertifikat {loadingDomains && (
+            <Button type="submit" color="inherit" variant="outlined" disabled={!selected || selected.ids.size == 0 || loadingDomains || generateKey || generatedKey} sx={buttonSx}>Generiere Zertifikat {loadingDomains && (
                 <CircularProgress size={24} sx={{ color: green[500], position: "absolute", top: "50%", left: "50%", marginTop: "-12px", marginLeft: "-12px" }} />
             )}</Button>
         </>;
@@ -261,7 +261,7 @@ export default function SslGenerator() {
     } else if (generatedKey || generateKey && keypair?.private) {
         body = <Box sx={{ minWidth: 0, maxWidth: "100%", maxHeight: "100%", minHeight: 0, display: "flex", gap: "10px", flexDirection: "column" }}>
             <Box sx={{ minWidth: 0, maxWidth: "100%", maxHeight: "100%", minHeight: 0, display: "flex", gap: "10px", flexDirection: "row" }}>
-                <KeySegment segment={keypair!.private} fileName={`${cn}_${moment().format("DD-MM-YYYY_HH-mm-ss")}.key`} label="Privater Schlüssel"/>
+                <KeySegment segment={keypair!.private} fileName={`${cn}_${moment().format("DD-MM-YYYY_HH-mm-ss")}.key`} label="Privater Schlüssel" />
                 <Box sx={columnStyle}>
                     {publicKeyElement}
                 </Box>
@@ -322,7 +322,7 @@ export default function SslGenerator() {
             } catch (error) {
                 Sentry.captureException(error);
                 setProgress(<>
-                            Es ist ein unbekannter Fehler bei der Erstellung des Zertifikats aufgetreten. Bitte versuchen Sie es erneut oder wenden sich an den IT-Support
+                    Es ist ein unbekannter Fehler bei der Erstellung des Zertifikats aufgetreten. Bitte versuchen Sie es erneut oder wenden sich an den IT-Support
                 </>);
                 setError(true);
                 setGenerateKey(false);

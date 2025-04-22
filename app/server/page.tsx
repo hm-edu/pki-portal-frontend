@@ -9,7 +9,7 @@ import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import LinearProgress from "@mui/material/LinearProgress";
 import Typography from "@mui/material/Typography";
-import { DataGrid, GridColDef, GridPaginationModel, GridRenderCellParams, GridRowId, GridSlots, GridTreeNodeWithRender } from "@mui/x-data-grid";
+import { DataGrid, GridColDef, GridPaginationModel, GridRenderCellParams, GridRowSelectionModel, GridSlots, GridTreeNodeWithRender } from "@mui/x-data-grid";
 import { deDE } from "@mui/x-data-grid/locales";
 import * as Sentry from "@sentry/nextjs";
 import Link from "next/link";
@@ -35,7 +35,7 @@ export default function SslCertificates() {
     const [revokeOpen, setRevokeOpen] = useState(false);
     const [detailsOpen, setDetailsOpen] = useState(false);
     const [certificates, setCertificates] = useState([] as PortalApisSslCertificateDetails[]);
-    const [selected, setSelected] = useState<readonly GridRowId[]>();
+    const [selected, setSelected] = useState<GridRowSelectionModel>();
     const [error, setError] = useState<undefined | boolean | string>(undefined);
     const { data: session, status } = useSession();
 
@@ -47,7 +47,7 @@ export default function SslCertificates() {
     function revoke(reason: string) {
         const item = selected;
         if (session && item) {
-            const cert = certificates.find((cert) => cert.serial === selected.at(0));
+            const cert = certificates.find((cert) => cert.serial === Array.from(selected.ids).at(0));
             Sentry.startSpan({ name: "Revoke Certificate" }, async () => {
                 if (cert?.serial) {
                     const cfg = new Configuration({
@@ -70,7 +70,7 @@ export default function SslCertificates() {
         }
     }
 
-    function mapCert(cert: PortalApisSslCertificateDetails) :PortalApisSslCertificateDetails {
+    function mapCert(cert: PortalApisSslCertificateDetails): PortalApisSslCertificateDetails {
         let ca = cert.ca;
         switch (cert.ca) {
             case "harica":
@@ -97,7 +97,7 @@ export default function SslCertificates() {
 
     function load() {
         if (status == "authenticated") {
-            Sentry.setUser({ email: session?.user?.email?? "" });
+            Sentry.setUser({ email: session?.user?.email ?? "" });
             const cfg = new Configuration({ accessToken: session.accessToken });
             const api = new SSLApi(cfg, `${Config.PkiHost}`);
             Sentry.startSpan({ name: "Load Certificates" }, async () => {
@@ -193,29 +193,29 @@ export default function SslCertificates() {
                 return <Box>
                     <Button variant="outlined" disabled={row.status == "Revoked" || row.ca == CA.SECTIGO} onClick={(event: FormEvent<Element>) => {
                         event.preventDefault();
-                        setSelected([params.id]);
+                        setSelected({ ids: new Set([params.id]), type: "include" });
                         setRevokeOpen(true);
                     }} sx={{ px: 1, mx: 1 }} color="warning" startIcon={<DeleteIcon />} key="revoke">
                         Widerrufen
                     </Button>
-                    <Button variant="outlined" color="inherit" startIcon={<InfoIcon/>} onClick={(e) => openDetails(e, params)}>Details</Button>
+                    <Button variant="outlined" color="inherit" startIcon={<InfoIcon />} onClick={(e) => openDetails(e, params)}>Details</Button>
                 </Box>;
             },
         },
     ];
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const openDetails = function(event: FormEvent<Element>, params: GridRenderCellParams<any, any, any, GridTreeNodeWithRender>) {
+    const openDetails = function (event: FormEvent<Element>, params: GridRenderCellParams<any, any, any, GridTreeNodeWithRender>) {
         event.preventDefault();
-        setSelected([params.id]);
+        setSelected({ ids: new Set([params.id]), type: "include" });
         setDetailsOpen(true);
     };
 
     const selection = function () {
-        if (selected && selected.length > 0 && detailsOpen) {
-            const cert = certificates.find((cert) => cert.serial === selected.at(0));
+        if (selected && selected.ids.size > 0 && detailsOpen) {
+            const cert = certificates.find((cert) => cert.serial === Array.from(selected.ids).at(0));
             if (cert) {
-                return <CertificateDetails cert={cert} open={detailsOpen} onClose={()=>(setDetailsOpen(false))} />;
+                return <CertificateDetails cert={cert} open={detailsOpen} onClose={() => (setDetailsOpen(false))} />;
             }
         }
         return <></>;
@@ -245,6 +245,7 @@ export default function SslCertificates() {
                     }}
                     onRowSelectionModelChange={(event) => { setSelected(event); }}
                     rowSelectionModel={selected}
+                    showToolbar
                     slots={{
                         loadingOverlay: LinearProgress as GridSlots["loadingOverlay"],
                         toolbar: QuickSearchToolbar,
@@ -257,8 +258,8 @@ export default function SslCertificates() {
                     pagination rows={certificates}></DataGrid>
             </div>
             <Box sx={{ display: "flex", flexDirection: "row", gap: "6px", width: "100%", justifyContent: "space-between" }}>
-                <Link legacyBehavior={true} href="/server/new"><Button variant="contained" id="newServer" disabled={!session} color="success" startIcon={<AddCircleOutlineIcon />} sx={{ mt: 1, width: "80%" }} >Neues Zertifikat mit Assistent erstellen</Button></Link>
-                <Link legacyBehavior={true} href="/server/csr"><Button variant="contained" id="newServerCsr" disabled={!session} color="success" startIcon={<UploadFileIcon />} sx={{ mt: 1, width: "20%" }} >Eigenen CSR verwenden</Button></Link>
+                <Link href="/server/new" style={{width: "80%"}}><Button variant="contained" id="newServer" disabled={!session} color="success" startIcon={<AddCircleOutlineIcon />} sx={{mt: 1, width:1}}>Neues Zertifikat mit Assistent erstellen</Button></Link>
+                <Link href="/server/csr" style={{width: "20%"}}><Button variant="contained" id="newServerCsr" disabled={!session} color="success" startIcon={<UploadFileIcon />} sx={{ mt: 1, width:1 }} >Eigenen CSR verwenden</Button></Link>
             </Box>
         </>}
         {selection()}

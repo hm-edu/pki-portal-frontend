@@ -5,7 +5,7 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import TextField, { TextFieldProps } from "@mui/material/TextField";
-import { GridRowId } from "@mui/x-data-grid";
+import { GridRowSelectionModel } from "@mui/x-data-grid";
 import { useRef, useState } from "react";
 
 import { PortalApisSslCertificateDetails } from "@/api/pki/api";
@@ -14,7 +14,7 @@ interface CertificateRevokeDialogProps {
     open: boolean;
     onClose: () => void;
     onRevoke: (reason: string) => void;
-    selected: readonly GridRowId[] | undefined;
+    selected: GridRowSelectionModel|undefined;
     certificates: PortalApisSslCertificateDetails[];
 }
 
@@ -28,7 +28,7 @@ const CertificateRevokeDialog = ({ open, onClose, onRevoke, selected, certificat
         }
     };
 
-    const selectedCert = selected && certificates.find((cert) => cert.serial === selected.at(0));
+    const selectedCert = selected && certificates.find((cert) => cert.serial === Array.from(selected.ids).at(0));
 
     return <Dialog open={open} onClose={onClose}>
         <DialogTitle>SSL Zertifikat widerrufen</DialogTitle>
