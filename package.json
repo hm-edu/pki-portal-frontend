@@ -18,7 +18,7 @@
     "@emotion/react": "11.14.0",
     "@emotion/server": "11.11.0",
     "@emotion/styled": "11.14.0",
-    "@fontsource/fira-mono": "5.2.5",
+    "@fontsource/fira-mono": "5.2.6",
     "@fontsource/roboto": "5.2.5",
     "@mui/icons-material": "7.0.2",
     "@mui/material": "7.0.2",
