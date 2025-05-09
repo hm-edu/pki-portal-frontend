@@ -115,8 +115,8 @@ importers:
         specifier: 2.11.8
         version: 2.11.8
       '@swc/plugin-transform-imports':
-        specifier: 7.0.4
-        version: 7.0.4
+        specifier: 7.2.0
+        version: 7.2.0
       '@testing-library/cypress':
         specifier: 10.0.3
         version: 10.0.3(cypress@14.3.3)
@@ -1751,8 +1751,8 @@ packages:
   '@swc/helpers@0.5.15':
     resolution: {integrity: sha512-JQ5TuMi45Owi4/BIMAJBoSQoOJu12oOk/gADqlcUL9JEdHB8vyjUSsxqeNXnmXHjYKMi2WcYtezGEEhqUI/E2g==}
 
-  '@swc/plugin-transform-imports@7.0.4':
-    resolution: {integrity: sha512-l4EJg7RJW2XH4MoDH7kgF1KHnYWJp7zgokfssyNS3mQJTuflSFDJTg06yIOz7vrgRH3aFchfbCiJM5PE4Zbg/w==}
+  '@swc/plugin-transform-imports@7.2.0':
+    resolution: {integrity: sha512-MWch1L0UrmbzMQeHGTrp+Xt23+7j6AWe3Rw6/2+l4468w8EP0zCtxCytfsQdTVd/bZc6AK5hu4Dj1EAfBpgd9Q==}
 
   '@testing-library/cypress@10.0.3':
     resolution: {integrity: sha512-TeZJMCNtiS59cPWalra7LgADuufO5FtbqQBYxuAgdX6ZFAR2D9CtQwAG8VbgvFcchW3K414va/+7P4OkQ80UVg==}
@@ -6929,7 +6929,7 @@ snapshots:
     dependencies:
       tslib: 2.8.1
 
-  '@swc/plugin-transform-imports@7.0.4':
+  '@swc/plugin-transform-imports@7.2.0':
     dependencies:
       '@swc/counter': 0.1.3
 
