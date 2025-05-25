@@ -47,7 +47,7 @@ const StyledTextField = styled(TextField)<{
   
 function CustomToolbar() {
     return (
-        <Toolbar style={{ display: "block"}}>
+        <Toolbar style={{ display: "block" }}>
             <StyledQuickFilter defaultExpanded expanded={true}>
                 <QuickFilterTrigger
                     render={(triggerProps, state) => (
