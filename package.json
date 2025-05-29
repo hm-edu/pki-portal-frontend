@@ -24,7 +24,7 @@
     "@mui/material": "7.1.0",
     "@mui/material-nextjs": "7.1.0",
     "@mui/system": "7.1.0",
-    "@mui/x-data-grid": "8.4.0",
+    "@mui/x-data-grid": "8.5.0",
     "@sentry/nextjs": "9.23.0",
     "@types/node-forge": "1.3.11",
     "asn1js": "3.0.6",
