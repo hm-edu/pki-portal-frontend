@@ -104,6 +104,17 @@ jobs:
           favicon: resources/hs-hof/favicon.ico
           image_name: hm-edu/portal-frontend-hof
           docs_url: https://collab.dvb.bayern/x/sQ0kRg
+        - name: Uni Augsburg
+          eab_host: https://eab.pki.hmtest.de
+          acme_host: https://acme.pki.hmtest.de
+          pki_host: https://rest.pki.hmtest.de
+          domain_host: https://domains.pki.hmtest.de
+          auth_idp: https://auth.rz.uni-augsburg.de/realms/uaux
+          logo: resources/uni-augsburg/logo.jpg
+          logo-small: resources/uni-augsburg/logo-small.png
+          favicon: resources/uni-augsburg/favicon.ico
+          image_name: hm-edu/portal-frontend-augsburg
+          docs_url: https://collab.dvb.bayern/x/sQ0kRg
         - name: Uni Bamberg
           eab_host: https://eab.pki-service.uni-bamberg.de
           acme_host: https://acme.pki-service.uni-bamberg.de
