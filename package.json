@@ -19,7 +19,7 @@
     "@emotion/server": "11.11.0",
     "@emotion/styled": "11.14.0",
     "@fontsource/fira-mono": "5.2.6",
-    "@fontsource/roboto": "5.2.5",
+    "@fontsource/roboto": "5.2.6",
     "@mui/icons-material": "7.1.1",
     "@mui/material": "7.1.1",
     "@mui/material-nextjs": "7.1.1",
