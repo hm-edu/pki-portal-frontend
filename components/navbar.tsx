@@ -109,11 +109,9 @@ export default function ButtonAppBar() {
                                             text = text["props"]["children"];
                                         }
                                     }
-                                    return <Link key={x.key} href={x.props["href"]}>
-                                        <ListItemButton onClick={() => setDrawer(false)} >
-                                            <ListItemText primary={text} />
+                                    return <ListItemButton href={x.props["href"]} onClick={() => setDrawer(false)} >
+                                            <ListItemText sx={{ textDecoration: 'none' }}  primary={text} />
                                         </ListItemButton>
-                                    </Link>;
                                     /* eslint-enable @typescript-eslint/no-unsafe-member-access */
                                 })}
                                 <Divider />
