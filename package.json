@@ -68,7 +68,7 @@
     "eslint-config-next": "15.5.2",
     "eslint-plugin-cypress": "4.3.0",
     "eslint-plugin-react": "7.37.5",
-    "eslint-plugin-testing-library": "7.6.7",
+    "eslint-plugin-testing-library": "7.6.8",
     "patch-package": "8.0.0",
     "start-server-and-test": "2.0.13",
     "typescript": "5.8.3",
