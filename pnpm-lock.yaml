@@ -24,8 +24,8 @@ importers:
         specifier: 5.2.7
         version: 5.2.7
       '@fontsource/roboto':
-        specifier: 5.2.7
-        version: 5.2.7
+        specifier: 5.2.8
+        version: 5.2.8
       '@mui/icons-material':
         specifier: 7.3.2
         version: 7.3.2(@mui/material@7.3.2(@emotion/react@11.14.0(@types/react@19.1.13)(react@19.1.1))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.1.13)(react@19.1.1))(@types/react@19.1.13)(react@19.1.1))(@types/react@19.1.13)(react-dom@19.1.1(react@19.1.1))(react@19.1.1))(@types/react@19.1.13)(react@19.1.1)
@@ -842,8 +842,8 @@ packages:
   '@fontsource/fira-mono@5.2.7':
     resolution: {integrity: sha512-wYrAn6i3nH6luqQBZxtWUpl4UTUvs9AEbEeZxksPMwIqyjRRaxHTNW3c2VfM50gabS2IS7pT8lVWS2USB4ukYA==}
 
-  '@fontsource/roboto@5.2.7':
-    resolution: {integrity: sha512-fca6Jtyxn6kPR51+TTTMCFm0FOhnKaLEYYiAQc8P/4iFCKoKGR0aX89QR4CfP+N64RPXJus64UxhJaVENnSM6Q==}
+  '@fontsource/roboto@5.2.8':
+    resolution: {integrity: sha512-oh9g4Cg3loVMz9MWeKWfDI+ooxxG1aRVetkiKIb2ESS2rrryGecQ/y4pAj4z5A5ebyw450dYRi/c4k/I3UBhHA==}
 
   '@hapi/hoek@9.3.0':
     resolution: {integrity: sha512-/c6rf4UJlmHlC9b5BaNvzAcFv7HZ2QHaV0D4/HNlBdvFnvQq8RI4kYdhyPCl7Xj+oWvTWQ8ujhqS53LIgAe6KQ==}
@@ -5934,7 +5934,7 @@ snapshots:
 
   '@fontsource/fira-mono@5.2.7': {}
 
-  '@fontsource/roboto@5.2.7': {}
+  '@fontsource/roboto@5.2.8': {}
 
   '@hapi/hoek@9.3.0': {}
 
