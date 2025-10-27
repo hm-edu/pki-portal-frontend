@@ -62,7 +62,7 @@
     "@types/unidecode": "1.1.0",
     "@typescript-eslint/eslint-plugin": "8.46.2",
     "@typescript-eslint/parser": "8.46.2",
-    "require-in-the-middle": "7.4.0",
+    "require-in-the-middle": "7.5.2",
     "import-in-the-middle": "1.15.0",
     "babel-loader": "10.0.0",
     "babel-plugin-istanbul": "7.0.1",
