@@ -1,8 +1,8 @@
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
-/* eslint-disable @typescript-eslint/no-unsafe-argument */
+ 
+ 
 import dns from "node:dns";
 
-import { NextRequest, NextResponse } from "next/server";
+import { type NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/components/authOptions";
 
@@ -17,7 +17,7 @@ async function handler(req: NextRequest): Promise<NextResponse<DnsResponse>> {
     if (!session) {
         return NextResponse.json({ message: "You must be logged in." }, { status: 401 });
     }
-    const body = await req.json();
+    const body = await req.json() as { fqdn: string };
     const promisses = dns.promises;
     const resp = await (promisses.resolve(body.fqdn, "A").then(x => {
         if (x.length === 0) {

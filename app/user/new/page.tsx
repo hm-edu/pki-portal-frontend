@@ -1,6 +1,6 @@
 "use client";
 
-/* eslint-disable @typescript-eslint/no-explicit-any, @typescript-eslint/no-non-null-assertion */
+ 
 import FileDownload from "@mui/icons-material/FileDownload";
 import Alert from "@mui/material/Alert";
 import AlertTitle from "@mui/material/AlertTitle";
@@ -9,12 +9,12 @@ import Button from "@mui/material/Button";
 import CircularProgress from "@mui/material/CircularProgress";
 import { green } from "@mui/material/colors";
 import Modal from "@mui/material/Modal";
-import TextField, { TextFieldProps } from "@mui/material/TextField";
+import TextField, { type TextFieldProps } from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import * as Sentry from "@sentry/nextjs";
 import moment from "moment";
 import { useSession } from "next-auth/react";
-import { FormEvent, useCallback, useEffect, useRef, useState } from "react";
+import { type FormEvent, useCallback, useEffect, useRef, useState } from "react";
 import unidecode from "unidecode";
 
 import { SMIMEApi } from "@/api/pki/api";
@@ -62,13 +62,13 @@ const SMIMEGenerator = () => {
         setLoading(true);
         setProgress(<Typography id="modal-modal-description" sx={{ mt: "24px" }}>Generiere CSR...</Typography>);
         try {
-            if (session && session.user.name && session.user.email) {
+            if (session?.user.name && session.user.email) {
                 const CsrBuilder = (await import("@/components/csr")).CsrBuilder;
                 const csr = new CsrBuilder();
                 const x = await csr.build("rsa", undefined, session.user.email, 4096);
                 setProgress(<Typography id="modal-modal-description" sx={{ mt: "24px" }}>CSR generiert...</Typography>);
                 setIssuing(true);
-                // eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/restrict-plus-operands, @typescript-eslint/no-unsafe-member-access
+                 
                 const filename = `${unidecode(session.user.name).replace(" ", "_")}_${moment().format("DD-MM-YYYY_HH-mm-ss")}.p12`;
 
                 const cfg = new Configuration({ accessToken: session.accessToken });
@@ -91,7 +91,7 @@ const SMIMEGenerator = () => {
                 document.body.appendChild(element);
                 element.click();
                 document.body.removeChild(element);
-                // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
+                 
                 setDownload(<Button variant="outlined" color="inherit" startIcon={<FileDownload />} download={filename} href={"data:application/x-pkcs12;base64," + p12}>Erneuter Download</Button>);
                 setProgress(<Box sx={{ display: "flex", flexDirection: "column", gap: "15px", width: "md", alignItems: "left" }}>
                     <Typography id="modal-modal-description" sx={{ mt: "24px" }}>PKCS12 generiert.</Typography>
@@ -109,6 +109,8 @@ const SMIMEGenerator = () => {
             setError("Es ist ein unbekannter Fehler aufgetreten!");
         }
     };
+    
+    // eslint-disable-next-line react-hooks/rules-of-hooks
     useEffect(() => {
         if (issuing) {
             return;

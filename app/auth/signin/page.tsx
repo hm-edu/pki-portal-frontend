@@ -8,7 +8,7 @@ function SignIn() {
 
     const params = useSearchParams();
 
-    if (params && params.has("error")) {
+    if (params?.has("error")) {
         return <Alert sx={{ marginTop: "20px" }} severity="error">Die Anmeldung ist aufgrund eines internen Fehlers fehlgeschlagen!</Alert>;
     }
 

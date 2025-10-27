@@ -4,18 +4,18 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
-import TextField, { TextFieldProps } from "@mui/material/TextField";
-import { GridRowSelectionModel } from "@mui/x-data-grid";
+import TextField, { type TextFieldProps } from "@mui/material/TextField";
+import { type GridRowSelectionModel } from "@mui/x-data-grid";
 import { useRef, useState } from "react";
 
-import { PortalApisSslCertificateDetails } from "@/api/pki/api";
+import { type PortalApisSslCertificateDetails } from "@/api/pki/api";
 
 interface CertificateRevokeDialogProps {
     open: boolean;
     onClose: () => void;
     onRevoke: (reason: string) => void;
     selected: GridRowSelectionModel|undefined;
-    certificates: PortalApisSslCertificateDetails[];
+    certificates: Array<PortalApisSslCertificateDetails>;
 }
 
 const CertificateRevokeDialog = ({ open, onClose, onRevoke, selected, certificates }: CertificateRevokeDialogProps) => {

@@ -9,14 +9,14 @@ import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import LinearProgress from "@mui/material/LinearProgress";
 import Typography from "@mui/material/Typography";
-import { DataGrid, GridColDef, GridPaginationModel, GridRenderCellParams, GridRowSelectionModel, GridSlots, GridTreeNodeWithRender } from "@mui/x-data-grid";
+import { DataGrid, type GridColDef, type GridPaginationModel, type GridRenderCellParams, type GridRowSelectionModel, type GridSlots, type GridTreeNodeWithRender } from "@mui/x-data-grid";
 import { deDE } from "@mui/x-data-grid/locales";
 import * as Sentry from "@sentry/nextjs";
 import Link from "next/link";
 import { useSession } from "next-auth/react";
-import { FormEvent, useEffect, useState } from "react";
+import { type FormEvent, useEffect, useState } from "react";
 
-import { PortalApisSslCertificateDetails, SSLApi } from "@/api/pki/api";
+import { type PortalApisSslCertificateDetails, SSLApi } from "@/api/pki/api";
 import { Configuration } from "@/api/pki/configuration";
 import CertificateDetails from "@/app/server/CertificateDetails";
 import CertificateRevokeDialog from "@/app/server/CertificateRevokeDialog";
@@ -34,7 +34,7 @@ export default function SslCertificates() {
     const [loading, setLoading] = useState(true);
     const [revokeOpen, setRevokeOpen] = useState(false);
     const [detailsOpen, setDetailsOpen] = useState(false);
-    const [certificates, setCertificates] = useState([] as PortalApisSslCertificateDetails[]);
+    const [certificates, setCertificates] = useState([] as Array<PortalApisSslCertificateDetails>);
     const [selected, setSelected] = useState<GridRowSelectionModel>();
     const [error, setError] = useState<undefined | boolean | string>(undefined);
     const { data: session, status } = useSession();
@@ -131,7 +131,7 @@ export default function SslCertificates() {
         load();
     }, [session, session?.user, session?.user?.email, session?.user?.name]);
 
-    const columns: GridColDef[] = [
+    const columns: Array<GridColDef> = [
 
         { field: "common_name", headerName: "Common Name", width: 250 },
         { field: "serial", headerName: "Serial Number", width: 280 },
@@ -152,7 +152,7 @@ export default function SslCertificates() {
             field: "created", headerName: "Erstellt", type: "dateTime", width: 150,
             valueGetter: (value, row) => {
                 if (value) {
-                    /* eslint-disable @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-member-access  */
+                    /* eslint-disable @typescript-eslint/no-unsafe-member-access  */
                     const mili = (row.created.seconds as number) * 1000;
                     return value && new Date(mili);
                 }
@@ -162,7 +162,7 @@ export default function SslCertificates() {
         {
             field: "not_before", headerName: "Gültig ab", type: "date", width: 100,
             valueGetter: (value, row) => {
-                /* eslint-disable @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-member-access  */
+                /* eslint-disable @typescript-eslint/no-unsafe-member-access  */
                 const mili = (row.not_before.seconds as number) * 1000;
                 return value && new Date(mili);
             },
@@ -222,13 +222,13 @@ export default function SslCertificates() {
     };
 
     return <Box sx={{ display: "flex", flexDirection: "column", height: "100%" }}><Typography variant="h1">Ihre Serverzertifikate</Typography>
-        {(error && <Alert severity="error">{typeof error === "string" ? error : "Ein unerwarteter Fehler ist aufgetreten."}</Alert>) || <>
+        {(error && <Alert severity="error">{typeof error === "string" ? error : "Ein unerwarteter Fehler ist aufgetreten."}</Alert>) ?? <>
             <div style={{ flex: 1, overflow: "hidden" }}>
                 <DataGrid columns={columns}
                     paginationModel={pageModel}
                     sx={dataGridStyle}
                     getRowId={(row) =>
-                        // eslint-disable-next-line @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-member-access
+                         
                         row.serial
                     }
                     initialState={{

@@ -1,9 +1,9 @@
-/* eslint-disable @typescript-eslint/no-non-null-assertion */
+ 
 import * as Sentry from "@sentry/nextjs";
 import { jwtDecode } from "jwt-decode";
-import { NextAuthOptions } from "next-auth";
-import { JWT } from "next-auth/jwt";
-import { OAuthConfig } from "next-auth/providers";
+import { type NextAuthOptions } from "next-auth";
+import { type JWT } from "next-auth/jwt";
+import { type OAuthConfig } from "next-auth/providers/oauth";
 
 import { Config } from "@/components/config";
 
@@ -48,7 +48,7 @@ export const authOptions: NextAuthOptions =
                 if (!tokens.access_token) {
                     return { id: "", name: "", email: "" };
                 }
-                // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+                 
                 const act: { sub: string; email: string; name: string } = jwtDecode(tokens.access_token);
                 Sentry.setUser({
                     email: act.email,
@@ -69,17 +69,17 @@ export const authOptions: NextAuthOptions =
         maxAge: 10 * 60, // 10 minutes
     },
     events: {
-        signIn: async ({ user }) => {
+        signIn: ({ user }) => {
             Sentry.setUser({
                 email: user.email ?? "",
             });
         },
-        signOut: async () => {
+        signOut: () => {
             Sentry.setUser(null);
         },
     },
     callbacks: {
-        async redirect({ url, baseUrl }) {
+        redirect({ url, baseUrl }) {
             // Allows relative callback URLs
             if (url.startsWith("/")) return `${baseUrl}${url}`;
             // Allows callback URLs on the same origin
@@ -101,10 +101,10 @@ export const authOptions: NextAuthOptions =
             if (Date.now() < token.accessTokenExpiresAt - (60 * 1000 * 2.5)) {
                 return token;
             }
-            if (!token || !token.accessToken) {
+            if (!token?.accessToken) {
                 throw new Error("No token provided");
             }
-            // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+             
             const act: { sub: string; email: string; name: string } = jwtDecode(token.accessToken);
             Sentry.addBreadcrumb({
                 category: "auth",
@@ -126,7 +126,7 @@ export const authOptions: NextAuthOptions =
 
 async function refreshAccessToken(token: JWT): Promise<JWT> {
     try {
-        const cfg = (authOptions.providers[0] as OAuthConfig<unknown>);
+        const cfg = (authOptions.providers[0] as OAuthConfig<{clientId: string; clientSecret: string; token: string}>);
         const url = cfg.token as string;
 
         const response = await fetch(url, {
@@ -137,7 +137,7 @@ async function refreshAccessToken(token: JWT): Promise<JWT> {
             body: new URLSearchParams({
                 client_id: cfg.clientId!,
                 grant_type: "refresh_token",
-                refresh_token: token.refreshToken as string,
+                refresh_token: token.refreshToken!,
             }),
         });
 

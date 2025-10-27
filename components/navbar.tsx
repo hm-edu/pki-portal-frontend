@@ -20,7 +20,7 @@ import dynamic from "next/dynamic";
 import Image from "next/image";
 import Link from "next/link";
 import { signOut, useSession } from "next-auth/react";
-import React, { JSX, useEffect, useState } from "react";
+import React, { type JSX, useEffect, useState } from "react";
 
 import logo from "../public/logo-small.png";
 
@@ -32,7 +32,7 @@ export default function ButtonAppBar() {
     const theme = useTheme();
     const [userFragment, setFragment] = useState(<></>);
     const [openDrawer, setDrawer] = React.useState<boolean>(false);
-    const [buttons, setButtons] = useState<JSX.Element[]>([]);
+    const [buttons, setButtons] = useState<Array<JSX.Element>>([]);
     const desktop = useMediaQuery(theme.breakpoints.up("md"));
     const largeDesktop = useMediaQuery(theme.breakpoints.up("lg"));
 
@@ -42,7 +42,7 @@ export default function ButtonAppBar() {
 
             const logout = <Button color="inherit" key='logout'
                 onClick={() => {
-                    // eslint-disable-next-line @typescript-eslint/restrict-plus-operands, @typescript-eslint/no-unsafe-member-access
+                     
                     void signOut({ callbackUrl: (process.env.AUTH_IDP ?? process.env.NEXT_PUBLIC_AUTH_IDP ?? "https://sso-test.hm.edu") + (Config.AuthProvider == "shibboleth" ? "/idp/profile/Logout" : "/protocol/openid-connect/logout") });
                 }}
                 variant="outlined">
@@ -50,13 +50,13 @@ export default function ButtonAppBar() {
             </Button>;
             setFragment(<>
                 <Tooltip title={<Box>
-                    <Typography variant="body2">{session.user?.email ? session.user?.email : ""}</Typography>
+                    <Typography variant="body2">{session.user?.email ?? ""}</Typography>
                     <Typography variant="body2">Sitzung gültig bis: <DynamicMoment format="DD.MM.YYYY HH:mm">{new Date(session.expires)}</DynamicMoment></Typography>
                 </Box>}>
-                    <Typography sx={{ paddingRight: "10px" }}>{session.user?.name ? session.user?.name : ""}</Typography>
+                    <Typography sx={{ paddingRight: "10px" }}>{session.user?.name ?? ""}</Typography>
                 </Tooltip>{logout}</>);
 
-            const navbarButtons: React.ReactElement[] = [];
+            const navbarButtons: Array<React.ReactElement> = [];
             navbarButtons.splice(0, 0, <Link passHref target="_blank" key="help" href={Config.DocsUrl}><Button key="guides" color="inherit" >Anleitungen</Button></Link >);
             if (!Config.DisableUser) {
                 navbarButtons.splice(0, 0, <Link key="user" href="/user" ><Button key="user" color="inherit" >Nutzerzertifikate</Button></Link>);
@@ -102,17 +102,19 @@ export default function ButtonAppBar() {
                         <Box sx={{ width: 250 }}>
                             <List>
                                 {buttons.map((x) => {
-                                    /* eslint-disable @typescript-eslint/no-unsafe-member-access */
-                                    let text = (x.props["children"] as JSX.Element).props["children"];
+                                    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+                                    let text = (x.props.children as JSX.Element).props.children as string | JSX.Element;
                                     if (typeof text !== "string") {
-                                        if (text["props"] != null && text["props"]["children"] != null && typeof text["props"]["children"] === "string") {
-                                            text = text["props"]["children"];
+                                        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+                                        if (text.props?.children != null && typeof text.props.children === "string") {
+                                            // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access
+                                            text = text.props.children;
                                         }
                                     }
-                                    return <ListItemButton key={x.key} href={x.props["href"]} onClick={() => setDrawer(false)} >
+                                    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access
+                                    return <ListItemButton key={x.key} href={x.props.href} onClick={() => setDrawer(false)} >
                                         <ListItemText sx={{ textDecoration: "none" }} primary={text} />
                                     </ListItemButton>;
-                                    /* eslint-enable @typescript-eslint/no-unsafe-member-access */
                                 })}
                                 <Divider />
                             </List>

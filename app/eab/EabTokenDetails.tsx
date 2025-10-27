@@ -6,10 +6,10 @@ import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
 import TableRow from "@mui/material/TableRow";
 import Typography from "@mui/material/Typography";
-import { FormEvent, useState } from "react";
+import { type FormEvent, useState } from "react";
 import Moment from "react-moment";
 
-import { ModelsEAB } from "@/api/eab/api";
+import { type ModelsEAB } from "@/api/eab/api";
 import EabRecommendation from "@/components/EabRecommendation";
 
 interface TokenDetailsProps {

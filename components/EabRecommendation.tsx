@@ -5,7 +5,7 @@ import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import Typography from "@mui/material/Typography";
 
-import { ModelsEAB } from "../api/eab/api";
+import { type ModelsEAB } from "../api/eab/api";
 
 import { Config } from "@/components/config";
 import { modalTheme } from "@/components/theme";
@@ -17,10 +17,8 @@ interface EabRecommendationProps {
 
 const EabRecommendation = ({ token, onClose }: EabRecommendationProps) => {
 
-    // eslint-disable-next-line @typescript-eslint/ban-types
-
-    const id = token?.id ? token?.id : "";
-    const key_bytes = token?.key_bytes ? token?.key_bytes : "";
+    const id = token?.id ?? "";
+    const key_bytes = token?.key_bytes ?? "";
 
     const register_acme_sh = `acme.sh --register-account \\
     --server ${Config.AcmeHost}/acme/acme/directory \\

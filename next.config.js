@@ -37,6 +37,7 @@ module.exports = (phase, { defaultConfig }) => {
                 transform: "@mui/icons-material/{{member}}",
             },
         },
+        turbopack: {},
         webpack: (config, { webpack, isServer }) => {
             (async () => {
                 if (process.env.LOGO_LARGE) {

@@ -7,13 +7,13 @@ import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import LinearProgress from "@mui/material/LinearProgress";
 import Typography from "@mui/material/Typography";
-import { DataGrid, GridColDef, GridRowSelectionModel, GridSlots } from "@mui/x-data-grid";
+import { DataGrid, type GridColDef, type GridRowSelectionModel, type GridSlots } from "@mui/x-data-grid";
 import { deDE } from "@mui/x-data-grid/locales";
 import * as Sentry from "@sentry/nextjs";
 import { useSession } from "next-auth/react";
-import { FormEvent, useEffect, useState } from "react";
+import { type FormEvent, useEffect, useState } from "react";
 
-import { EABApi, ModelsEAB } from "@/api/eab/api";
+import { EABApi, type ModelsEAB } from "@/api/eab/api";
 import { Configuration } from "@/api/eab/configuration";
 import EabCreateForm from "@/app/eab/EabCreateForm";
 import EabDeleteDialog from "@/app/eab/EabDeleteDialog";
@@ -22,7 +22,7 @@ import { Config } from "@/components/config";
 import { dataGridStyle } from "@/components/theme";
 
 const EabTokens = () => {
-    const [tokens, setTokens] = useState<ModelsEAB[]>([]);
+    const [tokens, setTokens] = useState<Array<ModelsEAB>>([]);
     const [selected, setSelected] = useState<GridRowSelectionModel>({ type: "include", ids: new Set() });
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | boolean | undefined>(undefined);
@@ -48,7 +48,7 @@ const EabTokens = () => {
         const cfg = new Configuration({ accessToken: session?.accessToken });
         const api = new EABApi(cfg, `${Config.EabHost}`);
         try {
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-non-null-assertion
+         
             await api.eabPost({ comment });
             await loadTokens();
         } catch {
@@ -58,7 +58,7 @@ const EabTokens = () => {
 
     let deleteModal = <></>;
 
-    if (toDelete && session && session.accessToken) {
+    if (toDelete && session?.accessToken) {
         deleteModal = <EabDeleteDialog initOpen={true} accessToken={session?.accessToken} id={toDelete.id!} callback={(success) => {
             setDelete(undefined);
             if (success) {
@@ -67,7 +67,7 @@ const EabTokens = () => {
         }} />;
     }
 
-    const columns: GridColDef[] = [
+    const columns: Array<GridColDef> = [
         { field: "id", headerName: "ID", width: 280 },
         { field: "comment", headerName: "Kommentar", width: 280 },
         { field: "key_bytes", headerName: "HMAC", width: 280 },
@@ -114,6 +114,7 @@ const EabTokens = () => {
         );
     }
 
+    // eslint-disable-next-line react-hooks/rules-of-hooks
     useEffect(() => {
         if (session && status == "authenticated") {
             Sentry.setUser({ email: session?.user?.email?? "" });
@@ -126,7 +127,7 @@ const EabTokens = () => {
     }
 
     return <Box sx={{ display: "flex", flexDirection: "column", height: "100%" }}><Typography variant="h1">Ihre ACME Tokens</Typography>
-        {(error && <Alert severity="error">{typeof error === "string" ? error : "Ein unerwarteter Fehler ist aufgetreten."}</Alert>) || <>
+        {(error && <Alert severity="error">{typeof error === "string" ? error : "Ein unerwarteter Fehler ist aufgetreten."}</Alert>) ?? <>
             <div style={{ flex: 1, overflow: "hidden" }}>
                 <DataGrid columns={columns}
                     sx={dataGridStyle}

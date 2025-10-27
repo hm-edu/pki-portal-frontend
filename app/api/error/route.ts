@@ -1,13 +1,11 @@
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
-/* eslint-disable @typescript-eslint/no-unsafe-argument */
-import { NextRequest, NextResponse } from "next/server";
+import { type NextRequest, NextResponse } from "next/server";
 
 async function handler(req: NextRequest) {
     try {
         const envelope = await req.text();
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+         
         const pieces = envelope.split("\n");
-        const header = JSON.parse(pieces[0]);
+        const header = JSON.parse(pieces[0]) as { dsn: string };
         // DSNs are of the form `https://<key>@o<orgId>.ingest.sentry.io/<projectId>`
         const { host, pathname } = new URL(header.dsn);
 
@@ -21,7 +19,7 @@ async function handler(req: NextRequest) {
         const sentryIngestURL = `https://${host}/api/${projectId}/envelope/`;
         const sentryResponse = await fetch(sentryIngestURL, { method: "POST", body: envelope });
         return new NextResponse(sentryResponse.body, { status: sentryResponse.status });
-    } catch (e) {
+    } catch {
         return NextResponse.json({ status: "invalid request" }, { status: 400 });
     }
 }

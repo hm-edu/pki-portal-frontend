@@ -14,16 +14,16 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import LinearProgress from "@mui/material/LinearProgress";
-import TextField, { TextFieldProps } from "@mui/material/TextField";
+import TextField, { type TextFieldProps } from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
-import { DataGrid, GridColDef, GridPaginationModel, GridSlots } from "@mui/x-data-grid";
+import { DataGrid, type GridColDef, type GridPaginationModel, type GridSlots } from "@mui/x-data-grid";
 import { deDE } from "@mui/x-data-grid/locales";
 import * as Sentry from "@sentry/nextjs";
 import Link from "next/link";
 import { useSession } from "next-auth/react";
 import { useEffect, useRef, useState } from "react";
 
-import { PortalApisListSmimeResponseCertificateDetails, SMIMEApi } from "@/api/pki/api";
+import { type PortalApisListSmimeResponseCertificateDetails, SMIMEApi } from "@/api/pki/api";
 import { Configuration } from "@/api/pki/configuration";
 import { Config } from "@/components/config";
 import { dataGridStyle } from "@/components/theme";
@@ -36,14 +36,14 @@ const SmimeCertificates = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<undefined | boolean | string>(undefined);
     const [selection, setSelection] = useState<PortalApisListSmimeResponseCertificateDetails | undefined>(undefined);
-    const [certificates, setCertificates] = useState<PortalApisListSmimeResponseCertificateDetails[]>([]);
+    const [certificates, setCertificates] = useState<Array<PortalApisListSmimeResponseCertificateDetails>>([]);
     const { data: session, status } = useSession();
     const [revoking, setRevoking] = useState(false);
 
     async function revoke() {
         const item = selection;
         if (session) {
-            if (item && item.serial) {
+            if (item?.serial) {
                 const cfg = new Configuration({ accessToken: session.accessToken });
                 const api = new SMIMEApi(cfg, `${Config.PkiHost}`);
                 setRevoking(true);
@@ -67,7 +67,7 @@ const SmimeCertificates = () => {
             const cfg = new Configuration({ accessToken: session.accessToken });
             const api = new SMIMEApi(cfg, `${Config.PkiHost}`);
             try {
-                const response = await api.smimeGet(session.user.email!, { timeout: 60*1000 });
+                const response = await api.smimeGet(session.user.email ?? undefined, { timeout: 60*1000 });
                 if (response.data) {
                     const data = [];
                     for (const cert of response.data) {
@@ -116,7 +116,7 @@ const SmimeCertificates = () => {
         setOpen(false);
     };
 
-    const columns: GridColDef[] = [
+    const columns: Array<GridColDef> = [
         { field: "serial", headerName: "Serial Number", width: 280 },
         {
             field: "status", width: 150, type: "string", headerName: "Status",
@@ -150,13 +150,13 @@ const SmimeCertificates = () => {
     ];
 
     return <Box sx={{ display: "flex", flexDirection: "column", height: "100%" }}><Typography variant="h1">Ihre Nutzerzertifikate</Typography>
-        {(error && <Alert severity="error">{typeof error === "string" ? error : "Ein unerwarteter Fehler ist aufgetreten."}</Alert>) || <>
+        {(error && <Alert severity="error">{typeof error === "string" ? error : "Ein unerwarteter Fehler ist aufgetreten."}</Alert>) ?? <>
             <div style={{ flex: 1, overflow: "hidden" }}>
                 <DataGrid columns={columns}
                     sx={dataGridStyle}
                     paginationModel={pageModel}
                     getRowId={(row) =>
-                        // eslint-disable-next-line @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-member-access
+                         
                         row.serial
                     }
                     initialState={{

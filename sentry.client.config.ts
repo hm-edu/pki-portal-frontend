@@ -4,7 +4,7 @@
 
 import * as Sentry from "@sentry/nextjs";
 
-const SENTRY_DSN = process.env.SENTRY_DSN || process.env.NEXT_PUBLIC_SENTRY_DSN;
+const SENTRY_DSN = process.env.SENTRY_DSN ?? process.env.NEXT_PUBLIC_SENTRY_DSN;
 
 Sentry.init({
     dsn: SENTRY_DSN,
@@ -36,8 +36,8 @@ Sentry.init({
     // Setting this option to true will print useful information to the console while you're setting up Sentry.
     debug: false,
     beforeSendTransaction(e) {
-        const isKubeProbe = e.request?.headers && e.request?.headers['user-agent'] && e.request.headers['user-agent'].includes('kube-probe');
-        const isErrorRoute = e.request?.url && e.request.url.includes('/api/error');
+        const isKubeProbe = e.request?.headers?.['user-agent']?.includes('kube-probe');
+        const isErrorRoute = e.request?.url?.includes('/api/error');
         if (isKubeProbe || isErrorRoute) {
             return null;
         }

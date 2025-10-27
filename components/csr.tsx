@@ -11,12 +11,12 @@ export function fromPEM(pem: string): ArrayBuffer {
     const base64 = pem
         .replace(/-{5}(BEGIN|END) .*-{5}/gm, "")
         .replace(/\s/gm, "");
-    return Buffer.from(base64, "base64");
+    return Buffer.from(base64, "base64").buffer;
 }
 
 export class CsrBuilder {
 
-    async build(type: "ecdsa" | "rsa", fqdns?: string[], cn?: string, strength?: string | number): Promise<CSRBundle> {
+    async build(type: "ecdsa" | "rsa", fqdns?: Array<string>, cn?: string, strength?: string | number): Promise<CSRBundle> {
         const pkcs10 = new pkijs.CertificationRequest();
         const crypto = pkijs.getCrypto(true);
         pkcs10.attributes = [];

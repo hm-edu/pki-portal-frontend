@@ -2,7 +2,7 @@
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Table, useMediaQuery, useTheme } from "@mui/material";
 import Moment from "react-moment";
 
-import { PortalApisSslCertificateDetails } from "@/api/pki/api";
+import { type PortalApisSslCertificateDetails } from "@/api/pki/api";
 
 interface CertificateDetailsProps {
     cert: PortalApisSslCertificateDetails;
