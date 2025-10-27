@@ -50,8 +50,8 @@
   "devDependencies": {
     "@babel/core": "7.28.5",
     "@babel/preset-env": "7.28.5",
-    "@eslint/eslintrc": "^3.3.1",
-    "@eslint/js": "^9.38.0",
+    "@eslint/eslintrc": "3.3.1",
+    "@eslint/js": "9.38.0",
     "@popperjs/core": "2.11.8",
     "@swc/plugin-transform-imports": "9.5.0",
     "@testing-library/cypress": "10.1.0",
@@ -76,7 +76,7 @@
     "patch-package": "8.0.1",
     "start-server-and-test": "2.1.2",
     "typescript": "5.9.3",
-    "typescript-eslint": "^8.46.2",
+    "typescript-eslint": "8.46.2",
     "webpack": "5.102.1"
   },
   "pnpm": {
