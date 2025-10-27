@@ -112,10 +112,10 @@ importers:
         specifier: 7.28.5
         version: 7.28.5(@babel/core@7.28.5)
       '@eslint/eslintrc':
-        specifier: ^3.3.1
+        specifier: 3.3.1
         version: 3.3.1
       '@eslint/js':
-        specifier: ^9.38.0
+        specifier: 9.38.0
         version: 9.38.0
       '@popperjs/core':
         specifier: 2.11.8
@@ -190,7 +190,7 @@ importers:
         specifier: 5.9.3
         version: 5.9.3
       typescript-eslint:
-        specifier: ^8.46.2
+        specifier: 8.46.2
         version: 8.46.2(eslint@9.38.0)(typescript@5.9.3)
       webpack:
         specifier: 5.102.1
