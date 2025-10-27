@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 "use client";
 
 import MenuIcon from "@mui/icons-material/Menu";
@@ -22,6 +23,8 @@ import Link from "next/link";
 import { signOut, useSession } from "next-auth/react";
 import React, { type JSX, useEffect, useState } from "react";
 
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
 import logo from "../public/logo-small.png";
 
 import { Config } from "@/components/config";
@@ -107,11 +110,11 @@ export default function ButtonAppBar() {
                                     if (typeof text !== "string") {
                                         // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
                                         if (text.props?.children != null && typeof text.props.children === "string") {
-                                            // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access
+                                            // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
                                             text = text.props.children;
                                         }
                                     }
-                                    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access
+                                    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
                                     return <ListItemButton key={x.key} href={x.props.href} onClick={() => setDrawer(false)} >
                                         <ListItemText sx={{ textDecoration: "none" }} primary={text} />
                                     </ListItemButton>;
