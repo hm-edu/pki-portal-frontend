@@ -1,6 +1,6 @@
 "use client";
 
-/* eslint-disable @typescript-eslint/no-non-null-assertion */
+ 
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { AlertTitle } from "@mui/material";
@@ -16,18 +16,18 @@ import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import LinearProgress from "@mui/material/LinearProgress";
 import Stack from "@mui/material/Stack";
-import TextField, { TextFieldProps } from "@mui/material/TextField";
+import TextField, { type TextFieldProps } from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
-import { DataGrid, GridColDef, GridPaginationModel, GridSlots } from "@mui/x-data-grid";
+import { DataGrid, type GridColDef, type GridPaginationModel, type GridSlots } from "@mui/x-data-grid";
 import { deDE } from "@mui/x-data-grid/locales";
 import * as Sentry from "@sentry/nextjs";
 import isValidDomain from "is-valid-domain";
 import { useSession } from "next-auth/react";
-import { FormEvent, useEffect, useRef, useState } from "react";
+import { type FormEvent, useEffect, useRef, useState } from "react";
 
-import { DomainsApi, ModelDomain } from "@/api/domains/api";
+import { DomainsApi, type ModelDomain } from "@/api/domains/api";
 import { Configuration } from "@/api/domains/configuration";
-import { PortalApisSslCertificateDetails, SSLApi } from "@/api/pki/api";
+import { type PortalApisSslCertificateDetails, SSLApi } from "@/api/pki/api";
 import { Config } from "@/components/config";
 import DelegationModal from "@/components/DelegationModal";
 import { dataGridStyle } from "@/components/theme";
@@ -35,7 +35,7 @@ import { QuickSearchToolbar } from "@/components/toolbar";
 
 export default function Domains() {
     const [pageModel, setPageModel] = useState<GridPaginationModel>({ page: 0, pageSize: 50 });
-    const [domains, setDomains] = useState([] as ModelDomain[]);
+    const [domains, setDomains] = useState([] as Array<ModelDomain>);
     const [loading, setLoading] = useState(true);
     const [deleting, setDeleting] = useState(false);
     const [deleteOpen, setDeleteOpen] = useState(false);
@@ -45,7 +45,7 @@ export default function Domains() {
     const [error, setError] = useState<undefined | boolean | string>(undefined);
     const [createError, setCreateError] = useState<undefined | string | React.JSX.Element>(undefined);
     const [dnsRunning, setDnsRunning] = useState(false);
-    const [toBeDeleted, setToBeDeleted] = useState<PortalApisSslCertificateDetails[]>([]);
+    const [toBeDeleted, setToBeDeleted] = useState<Array<PortalApisSslCertificateDetails>>([]);
 
     const newDomain = useRef<TextFieldProps>(null);
     const target = useRef<TextFieldProps>(null);
@@ -59,10 +59,24 @@ export default function Domains() {
         setDeleteOpen(false);
     };
 
+    async function loadDomains(setDomains: (domains: Array<ModelDomain>) => void, setError: (error: boolean) => void) {
+        const cfg = new Configuration({ accessToken: session?.accessToken });
+        const api = new DomainsApi(cfg, `${Config.DomainHost}`);
+        await Sentry.startSpan({ name: "Load Domains" }, async () => {
+            try {
+                const response = await api.domainsGet();
+                setDomains(response.data);
+            } catch (error) {
+                Sentry.captureException(error);
+                setError(true);
+            }
+        });
+    }
+    
     useEffect(() => {
         if (status == "authenticated") {
             Sentry.setUser({ email: session?.user?.email?? "" });
-            void loadDomains((domains: ModelDomain[]) => {
+            void loadDomains((domains: Array<ModelDomain>) => {
                 setDomains(domains);
                 setLoading(false);
             }, () => {
@@ -108,7 +122,7 @@ export default function Domains() {
 
     const transfer = async (event: FormEvent<Element>) => {
         event.preventDefault();
-        if (session && transferDomain && transferDomain.id && target.current) {
+        if (session && transferDomain?.id && target.current) {
 
             const cfg = new Configuration({ accessToken: session?.accessToken });
             const api = new DomainsApi(cfg, `${Config.DomainHost}`);
@@ -124,7 +138,7 @@ export default function Domains() {
         }
     };
 
-    async function removeDomain(id: number, setDomains: (domains: ModelDomain[]) => void, setError: (error: boolean) => void) {
+    async function removeDomain(id: number, setDomains: (domains: Array<ModelDomain>) => void, setError: (error: boolean) => void) {
 
         const cfg = new Configuration({ accessToken: session?.accessToken });
         const api = new DomainsApi(cfg, `${Config.DomainHost}`);
@@ -138,7 +152,7 @@ export default function Domains() {
 
     }
 
-    async function approveDomain(id: number, setDomains: (domains: ModelDomain[]) => void, setError: (error: boolean) => void) {
+    async function approveDomain(id: number, setDomains: (domains: Array<ModelDomain>) => void, setError: (error: boolean) => void) {
         const cfg = new Configuration({ accessToken: session?.accessToken });
         const api = new DomainsApi(cfg, `${Config.DomainHost}`);
         try {
@@ -151,21 +165,8 @@ export default function Domains() {
         }
     }
 
-    async function loadDomains(setDomains: (domains: ModelDomain[]) => void, setError: (error: boolean) => void) {
-        const cfg = new Configuration({ accessToken: session?.accessToken });
-        const api = new DomainsApi(cfg, `${Config.DomainHost}`);
-        await Sentry.startSpan({ name: "Load Domains" }, async () => {
-            try {
-                const response = await api.domainsGet();
-                setDomains(response.data);
-            } catch (error) {
-                Sentry.captureException(error);
-                setError(true);
-            }
-        });
-    }
 
-    async function createDomain(domain: string, setDomains: (domains: ModelDomain[]) => void, setError: (error: boolean) => void) {
+    async function createDomain(domain: string, setDomains: (domains: Array<ModelDomain>) => void, setError: (error: boolean) => void) {
         const cfg = new Configuration({ accessToken: session?.accessToken });
         const api = new DomainsApi(cfg, `${Config.DomainHost}`);
 
@@ -188,7 +189,7 @@ export default function Domains() {
 
     }
 
-    const columns: GridColDef[] = [
+    const columns: Array<GridColDef> = [
         {
             field: "fqdn", headerName: "FQDN", width: 280, sortComparator: (v1, v2) => {
                 const a = v1 as string;
@@ -269,7 +270,7 @@ export default function Domains() {
     let delegationModal;
     if (delegationDomain) {
         delegationModal = <DelegationModal initDelegationDomain={delegationDomain} onClose={(domain: ModelDomain) => {
-            const updated: ModelDomain[] = [...domains];
+            const updated: Array<ModelDomain> = [...domains];
             updated[updated.findIndex((x) => x.id == delegationDomain.id)].delegations = domain.delegations;
             setDomains(updated);
             setDelegationDomain(undefined);
@@ -366,7 +367,7 @@ export default function Domains() {
     return <Box sx={{ display: "flex", flexDirection: "column", height: "100%" }}><Typography variant="h1">Ihre
         Hosts</Typography>
     {(error && <Alert
-        severity="error">{typeof error === "string" ? error : "Ein unerwarteter Fehler ist aufgetreten."}</Alert>) || <>
+        severity="error">{typeof error === "string" ? error : "Ein unerwarteter Fehler ist aufgetreten."}</Alert>) ?? <>
         <div style={{ flex: 1, overflow: "hidden" }}>
             <DataGrid
                 initialState={{ sorting: { sortModel: [{ field: "fqdn", sort: "asc" }] } }}

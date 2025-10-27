@@ -3,8 +3,8 @@
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import { Box, Button, TextField } from "@mui/material";
 import * as Sentry from "@sentry/nextjs";
-import { Session } from "next-auth";
-import { FormEvent, useState } from "react";
+import { type Session } from "next-auth";
+import { type FormEvent, useState } from "react";
 
 interface EabCreateFormProps {
     session: Session | null;

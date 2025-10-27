@@ -13,9 +13,9 @@ import {
     QuickFilterTrigger,
 } from "@mui/x-data-grid";
 
-type OwnerState = {
+interface OwnerState {
     expanded: boolean;
-};
+}
   
 const StyledQuickFilter = styled(QuickFilter)({
     display: "grid",

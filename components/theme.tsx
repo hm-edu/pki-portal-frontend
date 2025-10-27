@@ -3,7 +3,7 @@
 import createCache from "@emotion/cache";
 import { checkboxClasses } from "@mui/material/Checkbox";
 import { red } from "@mui/material/colors";
-import { createTheme, Theme } from "@mui/material/styles";
+import { createTheme, type Theme } from "@mui/material/styles";
 import { deDE } from "@mui/x-data-grid/locales";
 
 // A custom theme for this app
@@ -113,8 +113,8 @@ const isBrowser = typeof document !== "undefined";
 export function createEmotionCache() {
     let insertionPoint;
     if (isBrowser) {
-        const emotionInsertionPoint = document.querySelector("meta[name=\"emotion-insertion-point\"]") as HTMLElement;
-        insertionPoint = emotionInsertionPoint ?? undefined;
+        const emotionInsertionPoint = document.querySelector("meta[name=\"emotion-insertion-point\"]");
+        insertionPoint = emotionInsertionPoint as HTMLElement | undefined;
     }
 
     return createCache({ key: "mui-style", insertionPoint });

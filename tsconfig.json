@@ -3,11 +3,11 @@
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx",
-    ".next/types/**/*.ts"
+    ".next/types/**/*.ts",
+    ".next/dev/types/**/*.ts"
   ],
   "compilerOptions": {
     "target": "es5",
-    "module": "ESNext",
     "lib": [
       "ESNext",
       "DOM",
@@ -20,8 +20,9 @@
     "outDir": "./lib",
     // stricter type-checking for stronger correctness. Recommended by TS
     "strict": true,
-    // interop between ESM and CJS modules. Recommended by TS
     "esModuleInterop": true,
+    "module": "esnext",
+    "moduleResolution": "bundler",
     // significant perf increase by skipping checking .d.ts files, particularly those in node_modules. Recommended by TS
     "skipLibCheck": true,
     // error out if import and file system have a casing mismatch. Recommended by TS
@@ -29,7 +30,7 @@
     // prevent the use features that do not work with isolated transpilation
     "isolatedModules": true,
     // transpile JSX to React.createElement
-    "jsx": "preserve",
+    "jsx": "react-jsx",
     "allowJs": true,
     "noEmit": true,
     "resolveJsonModule": true,

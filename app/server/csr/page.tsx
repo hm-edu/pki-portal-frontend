@@ -18,7 +18,7 @@ import moment from "moment";
 import { useSession } from "next-auth/react";
 import forge from "node-forge";
 import * as pkijs from "pkijs";
-import { ChangeEvent, useState } from "react";
+import { type ChangeEvent, useState } from "react";
 
 import { SSLApi } from "@/api/pki/api";
 import { Configuration as PKIConfig } from "@/api/pki/configuration";
@@ -49,10 +49,10 @@ export default function ServerCertificatesCsr() {
     const [keyFileName, setKeyFileName] = useState("");
     const [csr, setCsr] = useState("");
     const [key, setKey] = useState("");
-    const [values, setValues] = useState<[string, string][]>([]);
+    const [values, setValues] = useState<Array<[string, string]>>([]);
 
     const sendCsr = () => {
-        if (session && session.accessToken) {
+        if (session?.accessToken) {
             setGenerateKey(true);
             const cfg = new PKIConfig({ accessToken: session.accessToken });
             const api = new SSLApi(cfg, `${Config.PkiHost}`);
@@ -97,13 +97,13 @@ export default function ServerCertificatesCsr() {
                 const content = evt.target.result.toString();
                 const buffer = fromPEM(content);
                 const csr = forge.pki.certificationRequestFromPem(content);
-                const attributes: [string, string][] = [];
+                const attributes: Array<[string, string]> = [];
                 if (buffer) {
                     const pkcs10 = pkijs.CertificationRequest.fromBER(buffer);
                     pkcs10.subject.typesAndValues.forEach((value) => {
                         const type = typemap[value.type];
                         if (type) {
-                            // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-unsafe-call
+                             
                             attributes.push([type, value.value.valueBlock.value]);
                         }
                     });
@@ -130,14 +130,14 @@ export default function ServerCertificatesCsr() {
                         }
                     }
                     if (csr) {
-                        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call
+                         
                         const extensions = csr.getAttribute({ name: "extensionRequest" })?.extensions;
                         if (extensions) {
                             extensions.forEach((ext) => {
-                                // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call
+                                // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
                                 if (ext.name == "subjectAltName") {
                                     // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-                                    const values = (ext.altNames as { type: number; value: string }[]).map((alt) => {
+                                    const values = (ext.altNames as Array<{ type: number; value: string }>).map((alt) => {
                                         return alt.value;
                                     });
                                     attributes.push(["subjectAltName", values.join(", ")]);

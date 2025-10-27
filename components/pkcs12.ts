@@ -1,4 +1,4 @@
-export async function createP12(privateKey: string, chain: string[], password: string, type: "ecdsa" | "rsa"): Promise<string> {
+export async function createP12(privateKey: string, chain: Array<string>, password: string, type: "ecdsa" | "rsa"): Promise<string> {
     const forge = (await import("node-forge")).default;
     return await new Promise((resolve, reject) => {
         const encodedChain = [];
@@ -14,7 +14,7 @@ export async function createP12(privateKey: string, chain: string[], password: s
             encodedPrivateKey = forge.pki.privateKeyFromPem(privateKey);
         }
         if (!encodedPrivateKey || !encodedChain) {
-            reject();
+            reject(new Error("Could not encode keys"));
         }
         const p12Asn1 = forge.pkcs12.toPkcs12Asn1(encodedPrivateKey, encodedChain, password, { algorithm: "3des" });
 

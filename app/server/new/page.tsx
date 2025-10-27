@@ -1,6 +1,6 @@
 "use client";
 
-/* eslint-disable @typescript-eslint/no-non-null-assertion */
+ 
 import { Buffer } from "buffer";
 
 import styled from "@emotion/styled";
@@ -19,24 +19,24 @@ import ListItem from "@mui/material/ListItem";
 import ListItemText from "@mui/material/ListItemText";
 import MenuItem from "@mui/material/MenuItem";
 import Modal from "@mui/material/Modal";
-import Select, { SelectChangeEvent } from "@mui/material/Select";
+import Select, { type SelectChangeEvent } from "@mui/material/Select";
 import Stack from "@mui/material/Stack";
 import Switch from "@mui/material/Switch";
-import TextField, { TextFieldProps } from "@mui/material/TextField";
+import TextField, { type TextFieldProps } from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
-import { DataGrid, GridColDef, GridPaginationModel, GridRowSelectionModel } from "@mui/x-data-grid";
+import { DataGrid, type GridColDef, type GridPaginationModel, type GridRowSelectionModel } from "@mui/x-data-grid";
 import * as Sentry from "@sentry/nextjs";
 import moment from "moment";
 import { useSession } from "next-auth/react";
-import React, { FormEvent, useEffect, useState, useRef, FormEventHandler } from "react";
+import React, { type FormEvent, useEffect, useState, useRef, type FormEventHandler } from "react";
 
-import { DomainsApi, ModelDomain } from "@/api/domains/api";
+import { DomainsApi, type ModelDomain } from "@/api/domains/api";
 import { Configuration } from "@/api/domains/configuration";
 import { SSLApi } from "@/api/pki/api";
 import { Configuration as PKIConfig } from "@/api/pki/configuration";
 import AcmeRecommendation from "@/components/AcmeRecommendation";
 import { Config } from "@/components/config";
-import { KeyPair } from "@/components/keypair";
+import { type KeyPair } from "@/components/keypair";
 import KeySegment from "@/components/KeySegment";
 import { createP12 } from "@/components/pkcs12";
 import { dataGridStyle, modalTheme } from "@/components/theme";
@@ -94,7 +94,7 @@ export default function SslGenerator() {
     const [generatedKey, setGeneratedKey] = useState(false);
     const [keypair, setKeyPair] = useState<KeyPair>();
     const [pkcs12, setPkcs12] = useState<boolean>(false);
-    const [domains, setDomains] = useState<ModelDomain[]>([]);
+    const [domains, setDomains] = useState<Array<ModelDomain>>([]);
     const [selected, setSelected] = useState<GridRowSelectionModel>({ type: "include", ids: new Set() });
     const [paginationModel, setPaginationModel] = useState<GridPaginationModel>({ page: 0, pageSize: 50 });
     const { data: session, status } = useSession();
@@ -143,7 +143,7 @@ export default function SslGenerator() {
         }
     }, [session, session?.user, session?.user?.email, session?.user?.name]);
 
-    const columns: GridColDef[] = [
+    const columns: Array<GridColDef> = [
         {
             field: "fqdn", headerName: "FQDN", flex: 1, sortComparator: (v1, v2) => {
                 const a = v1 as string;
@@ -155,7 +155,7 @@ export default function SslGenerator() {
 
     let body: React.ReactElement | undefined = undefined;
     let publicKeyElement: React.ReactElement = <></>;
-    let fqdns: string[] = [];
+    let fqdns: Array<string> = [];
     let cn = "";
     if (selected) {
         fqdns = domains.filter(x => selected.ids.has(x.id!)).sort((a, b) => a.fqdn!.localeCompare(b.fqdn!)).map((domain) => domain.fqdn!);
@@ -172,7 +172,7 @@ export default function SslGenerator() {
                 {progress}
             </Box>
         </Box>;
-    } else if (keypair && keypair.public && !generateKey) {
+    } else if (keypair?.public && !generateKey) {
         publicKeyElement = <KeySegment segment={keypair.public} fileName={`${cn}_${moment().format("DD-MM-YYYY_HH-mm-ss")}.pem`} label="Öffentlicher Schlüssel" />;
     }
 
@@ -331,7 +331,7 @@ export default function SslGenerator() {
             }
         }
     }
-    /* eslint-disable @typescript-eslint/no-misused-promises */
+     
     return <Box sx={{ display: "flex", flexDirection: "column", height: "100%" }}>
         <Box component="form" onSubmit={createHandler} sx={{ display: "flex", flexDirection: "column", height: "100%" }}>
             <Typography variant="h1">Erstellung eines neuen Serverzertifikats</Typography>

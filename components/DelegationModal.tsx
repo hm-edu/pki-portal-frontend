@@ -2,13 +2,13 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Modal from "@mui/material/Modal";
-import TextField, { TextFieldProps } from "@mui/material/TextField";
+import TextField, { type TextFieldProps } from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import { DataGrid } from "@mui/x-data-grid";
 import { useSession } from "next-auth/react";
-import { FormEvent, useRef, useState } from "react";
+import { type FormEvent, useRef, useState } from "react";
 
-import { ModelDomain, DomainsApi } from "@/api/domains/api";
+import { type ModelDomain, DomainsApi } from "@/api/domains/api";
 import { Configuration } from "@/api/domains/configuration";
 import { Config } from "@/components/config";
 
@@ -57,12 +57,12 @@ const DelegationModal = ({ initDelegationDomain, onClose }: DelegationProps) =>{
     }
     const delegate = (event: FormEvent<Element>) => {
         event.preventDefault();
-        if (delegationDomain && delegationDomain.id) {
+        if (delegationDomain?.id) {
             addDelegation(delegationDomain.id, newDelegation.current?.value as string, setDelegationDomain, () => { return; });
         }
     };
 
-    const rows = delegationDomain.delegations ? delegationDomain.delegations : [];
+    const rows = delegationDomain.delegations ?? [];
 
     return <Modal open={delegation} onClose={() => { setDelegation(false); onClose(delegationDomain); }} aria-labelledby="modal-modal-title" aria-describedby="modal-modal-description" >
         <Box sx={style}>
