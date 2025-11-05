@@ -14,7 +14,7 @@ import Typography from "@mui/material/Typography";
 import * as Sentry from "@sentry/nextjs";
 import moment from "moment";
 import { useSession } from "next-auth/react";
-import { type FormEvent, useCallback, useEffect, useRef, useState } from "react";
+import { type FormEvent, useCallback, useEffect,useMemo, useRef, useState } from "react";
 import unidecode from "unidecode";
 
 import { SMIMEApi } from "@/api/pki/api";
@@ -139,6 +139,32 @@ const SMIMEGenerator = () => {
         }
     }, [p12PasswordConfirmRef, p12PasswordRef]);
 
+    const showHint = useMemo(() => {
+      const pw  = (p12PasswordRef.current?.value as string) ?? "";
+      const pw2 = (p12PasswordConfirmRef.current?.value as string) ?? "";
+      return !touched && pw === "" && pw2 === "";
+    }, [touched, p12PasswordRef, p12PasswordConfirmRef]);
+
+    const validationAlert = useMemo(() => {
+      if (showHint) {
+        return (
+          <Alert variant="filled" id="validation" severity="success">
+            <AlertTitle>Hinweis</AlertTitle>
+            Bitte vergeben Sie ein individuelles Passwort für Ihre PKCS12-Datei.
+          </Alert>
+        );
+      }
+      if (touched && validation) {
+        return (
+          <Alert variant="filled" id="validation" severity="error">
+            <AlertTitle>Fehler!</AlertTitle>
+            {validation}
+          </Alert>
+        );
+      }
+      return null;
+    }, [showHint, touched, validation]);
+
     if (!error && session) {
         return <>
             <Typography variant="h1">Erstellung eines neuen Nutzerzertifikats</Typography>
@@ -157,10 +183,7 @@ const SMIMEGenerator = () => {
                     <Button id="generate" type="submit" variant="outlined" color="inherit" disabled={(loading || success) || (validation != undefined) || p12PasswordRef.current?.value == ""} sx={buttonSx}>Generiere Zertifikat {loading && (
                         <CircularProgress size={24} sx={{ color: green[500], position: "absolute", top: "50%", left: "50%", marginTop: "-12px", marginLeft: "-12px" }} />
                     )}</Button>
-                    {touched && validation && <Alert variant="filled" id="validation" severity="error">
-                        <AlertTitle>Fehler!</AlertTitle>
-                        {validation}
-                    </Alert>}
+                    {validationAlert}
                     {download}
                 </Box>
             </Box>
