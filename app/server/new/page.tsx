@@ -1,6 +1,6 @@
 "use client";
 
- 
+
 import { Buffer } from "buffer";
 
 import styled from "@emotion/styled";
@@ -24,11 +24,11 @@ import Stack from "@mui/material/Stack";
 import Switch from "@mui/material/Switch";
 import TextField, { type TextFieldProps } from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
-import { DataGrid, type GridColDef, type GridPaginationModel, type GridRowSelectionModel } from "@mui/x-data-grid";
+import { DataGrid, type GridRowId, useGridApiRef, type GridColDef, type GridPaginationModel, type GridRowSelectionModel } from "@mui/x-data-grid";
 import * as Sentry from "@sentry/nextjs";
 import moment from "moment";
 import { useSession } from "next-auth/react";
-import React, { type FormEvent, useEffect, useState, useRef, type FormEventHandler } from "react";
+import React, { type FormEvent, useEffect, useState, useRef, type FormEventHandler, useMemo } from "react";
 
 import { DomainsApi, type ModelDomain } from "@/api/domains/api";
 import { Configuration } from "@/api/domains/configuration";
@@ -95,12 +95,16 @@ export default function SslGenerator() {
     const [keypair, setKeyPair] = useState<KeyPair>();
     const [pkcs12, setPkcs12] = useState<boolean>(false);
     const [domains, setDomains] = useState<Array<ModelDomain>>([]);
+    const [newSelected, setNewSelected] = useState<GridRowSelectionModel>({ type: "include", ids: new Set() });
     const [selected, setSelected] = useState<GridRowSelectionModel>({ type: "include", ids: new Set() });
     const [paginationModel, setPaginationModel] = useState<GridPaginationModel>({ page: 0, pageSize: 50 });
+    const [userSearch, setUserSearch] = useState("");
+    const [prevUserSearch, setPrevUserSearch] = useState("");
     const { data: session, status } = useSession();
 
     const p12PasswordRef = useRef<TextFieldProps>(null);
     const pkcs12Ref = useRef<HTMLInputElement>(null);
+    const apiRef = useGridApiRef();
 
     const buttonSx = {
         ...(generatedKey && {
@@ -121,7 +125,57 @@ export default function SslGenerator() {
         event.preventDefault();
         void create();
     };
+    useEffect(() => {
+        handleSelectedChange(newSelected);
+    }, [userSearch, newSelected])
 
+    useEffect(() => {
+        setPrevUserSearch(userSearch);
+    }, [userSearch])
+
+    const visibleRows = useMemo(() => {
+        return domains.filter((row) =>
+            (row.fqdn ?? "").toLowerCase().includes(userSearch.toLowerCase())
+        );
+    }, [domains, userSearch]);
+
+    const handleSelectedChange = (newSelected: GridRowSelectionModel) => {
+        const addedIds = newSelected.ids.difference(selected.ids);
+        // Nur testen, wenn Zeilen entfernt wurden
+        if (selected.ids.size > newSelected.ids.size) {
+
+
+            const removedIds = selected.ids.difference(newSelected.ids);
+            const removedByUser = new Set<GridRowId>();
+
+            removedIds.forEach((Id) => {
+                if (visibleRows.find(r => r.id === Id) === undefined) {
+                    // wenn zeile nicht in visibleRows, dann von suchfilter entfernt
+                }
+                else {
+                    // bug-umgehung: 
+                    // wenn fqdn vorher durch suche nicht in visibleRows war, diese suche dann wieder gelöscht wurde,
+                    // dann die fqdn wieder in visibleRows enthalten war, wurde diese abgewählt
+                    // -> war wieder in visibleRows enthalten, aber nicht in newSelected
+
+                    // Bug liegt verscheinlich beim timing wegen nutzung von useEffect(), kann so aber umgangen werden
+                    // If-Statement aber auch benötigt um die Reihe im Datagrid wieder zu markieren
+                    const fqdn = domains.find(r => r.id === Id)?.fqdn
+                    if (fqdn?.toLowerCase().includes(prevUserSearch.toLowerCase())) {
+                        removedByUser.add(Id);
+                    }
+                    else {
+                        // wenn zeile wieder in Datagrid enthalten, wieder markieren
+                        apiRef.current?.selectRow(Id, true);
+                    }
+                }
+            });
+            setSelected({ type: "include", ids: selected.ids.difference(removedByUser).union(addedIds) })
+        }
+        else {
+            setSelected(newSelected);
+        }
+    }
     useEffect(() => {
         if (status == "authenticated" && !generateKey && !generatedKey) {
             Sentry.setUser({ email: session?.user?.email ?? "" });
@@ -185,13 +239,14 @@ export default function SslGenerator() {
                     <div style={{ flex: 1, overflow: "hidden" }}>
                         <DataGrid columns={columns}
                             sx={dataGridStyle}
+                            apiRef={apiRef}
                             initialState={{ sorting: { sortModel: [{ field: "fqdn", sort: "asc" }] } }}
                             slots={{ toolbar: QuickSearchToolbar }}
                             showToolbar
                             paginationModel={paginationModel}
                             rowSelectionModel={selected}
                             onRowSelectionModelChange={(event) => {
-                                setSelected(event);
+                                setNewSelected(event);
                                 const ids = Array.from(event.ids);
                                 if (commonName != "" && !event.ids.has(commonName)) {
                                     setCommonName(String(ids.at(0)));
@@ -199,10 +254,21 @@ export default function SslGenerator() {
                                     setCommonName(String(ids.at(0)));
                                 }
                             }}
-                            loading={loadingDomains} density="compact"
+
+                            filterMode="client"
+                            onFilterModelChange={(model) => {
+                                // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+                                const userSearchString = model.quickFilterValues?.[0] ?? "";
+                                // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+                                setUserSearch(userSearchString);
+                            }}
+                            loading={loadingDomains}
+                            density="compact"
                             onPaginationModelChange={(newPaginationModel) => setPaginationModel(newPaginationModel)}
                             pageSizeOptions={[5, 15, 25, 50, 100]}
-                            pagination checkboxSelection rows={domains}></DataGrid>
+                            pagination
+                            checkboxSelection
+                            rows={visibleRows}></DataGrid>
                     </div>
                 </Stack>
                 <Stack sx={{ flexGrow: 1, width: "50%", boxSizing: "border-box" }}>
@@ -331,7 +397,7 @@ export default function SslGenerator() {
             }
         }
     }
-     
+
     return <Box sx={{ display: "flex", flexDirection: "column", height: "100%" }}>
         <Box component="form" onSubmit={createHandler} sx={{ display: "flex", flexDirection: "column", height: "100%" }}>
             <Typography variant="h1">Erstellung eines neuen Serverzertifikats</Typography>
