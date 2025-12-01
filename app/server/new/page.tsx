@@ -143,14 +143,15 @@ export default function SslGenerator() {
         const addedIds = newSelected.ids.difference(selected.ids);
         // Nur testen, wenn Zeilen entfernt wurden
         if (selected.ids.size > newSelected.ids.size) {
-
-
+            console.log("User Search: ", userSearch)
+            console.log("Visible rows: ",   visibleRows)
+            console.log("Old Selected IDs: ", selected.ids)
+            console.log("New Selected IDs: ", newSelected.ids)        
             const removedIds = selected.ids.difference(newSelected.ids);
             const removedByUser = new Set<GridRowId>();
-
             removedIds.forEach((Id) => {
                 if (visibleRows.find(r => r.id === Id) === undefined) {
-                    // wenn zeile nicht in visibleRows, dann von suchfilter entfernt
+                    console.log(`${Id} Nicht von User entfernt!`)
                 }
                 else {
                     // bug-umgehung: 
@@ -162,6 +163,7 @@ export default function SslGenerator() {
                     // If-Statement aber auch benötigt um die Reihe im Datagrid wieder zu markieren
                     const fqdn = domains.find(r => r.id === Id)?.fqdn
                     if (fqdn?.toLowerCase().includes(prevUserSearch.toLowerCase())) {
+                        console.log(`${Id} Von User entfernt!`)
                         removedByUser.add(Id);
                     }
                     else {
