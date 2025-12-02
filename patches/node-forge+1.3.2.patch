@@ -579,7 +579,7 @@ index d1504eb..bdc33e0 100644
  // pkcs#9 oids
  _IN('1.2.840.113549.1.9.1', 'emailAddress');
 diff --git a/node_modules/node-forge/lib/pkcs12.js b/node_modules/node-forge/lib/pkcs12.js
-index cd06c49..b55dd3e 100644
+index dee8b36..3986ef8 100644
 --- a/node_modules/node-forge/lib/pkcs12.js
 +++ b/node_modules/node-forge/lib/pkcs12.js
 @@ -93,6 +93,7 @@
@@ -598,7 +598,7 @@ index cd06c49..b55dd3e 100644
  
  // shortcut for asn.1 & PKI API
  var asn1 = forge.asn1;
-@@ -940,7 +942,11 @@ p12.toPkcs12Asn1 = function(key, cert, password, options) {
+@@ -943,7 +945,11 @@ p12.toPkcs12Asn1 = function(key, cert, password, options) {
    var keyBag = null;
    if(key !== null) {
      // SafeBag
@@ -625,7 +625,7 @@ index 3a5d845..5a773bc 100644
        'Only wrapped ContentType Data supported.');
    }
 diff --git a/node_modules/node-forge/lib/rsa.js b/node_modules/node-forge/lib/rsa.js
-index 5c73209..3dc4900 100644
+index b207a63..99f7ab9 100644
 --- a/node_modules/node-forge/lib/rsa.js
 +++ b/node_modules/node-forge/lib/rsa.js
 @@ -70,6 +70,10 @@ require('./prime');
@@ -765,7 +765,7 @@ index 5c73209..3dc4900 100644
  
  /**
 diff --git a/node_modules/node-forge/lib/x509.js b/node_modules/node-forge/lib/x509.js
-index 2877810..7347203 100644
+index 99209ff..c038487 100644
 --- a/node_modules/node-forge/lib/x509.js
 +++ b/node_modules/node-forge/lib/x509.js
 @@ -144,8 +144,8 @@ _shortNames['E'] = oids['emailAddress'];
@@ -840,7 +840,7 @@ index 2877810..7347203 100644
 @@ -2537,18 +2541,20 @@ pki.certificateToAsn1 = function(cert) {
    // prefer cached TBSCertificate over generating one
    var tbsCertificate = cert.tbsCertificate || pki.getTBSCertificate(cert);
-   
+ 
 +  var val = asn1.create(asn1.Class.UNIVERSAL, asn1.Type.SEQUENCE, true,
 +    [asn1.create(asn1.Class.UNIVERSAL, asn1.Type.OID, false,
 +      asn1.oidToDer(cert.signatureOid).getBytes())]

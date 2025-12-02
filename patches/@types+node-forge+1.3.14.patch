@@ -1,0 +1,13 @@
+diff --git a/node_modules/@types/node-forge/index.d.ts b/node_modules/@types/node-forge/index.d.ts
+index 6fec0f9..9142c6d 100644
+--- a/node_modules/@types/node-forge/index.d.ts
++++ b/node_modules/@types/node-forge/index.d.ts
+@@ -996,7 +996,7 @@ declare module "node-forge" {
+         function pkcs12FromAsn1(obj: any, password?: string): Pkcs12Pfx;
+ 
+         function toPkcs12Asn1(
+-            key: pki.rsa.PrivateKey | null,
++            key: pki.rsa.PrivateKey | pki.ecdsa.PrivateKey | null,
+             cert: pki.Certificate | pki.Certificate[],
+             password: string | null,
+             options?: {
