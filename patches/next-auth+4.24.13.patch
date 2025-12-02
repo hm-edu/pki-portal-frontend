@@ -1,5 +1,5 @@
 diff --git a/node_modules/next-auth/core/routes/session.js b/node_modules/next-auth/core/routes/session.js
-index 95f2e2a..52e5bb3 100644
+index d23383d..d4634ec 100644
 --- a/node_modules/next-auth/core/routes/session.js
 +++ b/node_modules/next-auth/core/routes/session.js
 @@ -5,6 +5,7 @@ Object.defineProperty(exports, "__esModule", {
@@ -10,7 +10,7 @@ index 95f2e2a..52e5bb3 100644
  async function session(params) {
    const {
      options,
-@@ -66,9 +67,7 @@ async function session(params) {
+@@ -75,9 +76,7 @@ async function session(params) {
          token,
          maxAge: options.session.maxAge
        });
@@ -21,7 +21,7 @@ index 95f2e2a..52e5bb3 100644
        (_response$cookies = response.cookies) === null || _response$cookies === void 0 || _response$cookies.push(...sessionCookies);
        await ((_events$session = events.session) === null || _events$session === void 0 ? void 0 : _events$session.call(events, {
          session: updatedSession,
-@@ -76,7 +75,7 @@ async function session(params) {
+@@ -85,7 +84,7 @@ async function session(params) {
        }));
      } catch (error) {
        var _response$cookies2;
@@ -63,7 +63,7 @@ index d043a15..a80671f 100644
      return {
        data: session,
 diff --git a/node_modules/next-auth/react/types.d.ts b/node_modules/next-auth/react/types.d.ts
-index 62207fd..254d034 100644
+index 62207fd..cc04f7c 100644
 --- a/node_modules/next-auth/react/types.d.ts
 +++ b/node_modules/next-auth/react/types.d.ts
 @@ -68,5 +68,6 @@ export interface SessionProviderProps {
@@ -73,3 +73,4 @@ index 62207fd..254d034 100644
 +    refetchInBackground?: boolean;
  }
  //# sourceMappingURL=types.d.ts.map
+\ No newline at end of file
