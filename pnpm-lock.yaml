@@ -48,8 +48,8 @@ importers:
         specifier: 1.3.13
         version: 1.3.13
       asn1js:
-        specifier: 3.0.6
-        version: 3.0.6
+        specifier: 3.0.7
+        version: 3.0.7
       axios:
         specifier: 1.13.2
         version: 1.13.2(debug@4.4.3)
@@ -2245,8 +2245,8 @@ packages:
   asn1@0.2.6:
     resolution: {integrity: sha512-ix/FxPn0MDjeyJ7i/yoHGFt/EX6LyNbxSEhPPXODPL+KB0VPk86UYfL0lMdy+KCnv+fmvIzySwaK5COwqVbWTQ==}
 
-  asn1js@3.0.6:
-    resolution: {integrity: sha512-UOCGPYbl0tv8+006qks/dTgV9ajs97X2p0FAbyS2iyCRrmLSRolDaHdp+v/CLgnzHc3fVB+CwYiUmei7ndFcgA==}
+  asn1js@3.0.7:
+    resolution: {integrity: sha512-uLvq6KJu04qoQM6gvBfKFjlh6Gl0vOKQuR5cJMDHQkmwfMOQeN3F3SHCv9SNYSL+CRoHvOGFfllDlVz03GQjvQ==}
     engines: {node: '>=12.0.0'}
 
   assert-plus@1.0.0:
@@ -7483,7 +7483,7 @@ snapshots:
     dependencies:
       safer-buffer: 2.1.2
 
-  asn1js@3.0.6:
+  asn1js@3.0.7:
     dependencies:
       pvtsutils: 1.3.6
       pvutils: 1.1.3
@@ -9831,7 +9831,7 @@ snapshots:
   pkijs@3.3.3:
     dependencies:
       '@noble/hashes': 1.4.0
-      asn1js: 3.0.6
+      asn1js: 3.0.7
       bytestreamjs: 2.0.1
       pvtsutils: 1.3.6
       pvutils: 1.1.3
