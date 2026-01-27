@@ -53,7 +53,7 @@
     "@eslint/eslintrc": "3.3.3",
     "@eslint/js": "9.39.2",
     "@popperjs/core": "2.11.8",
-    "@swc/plugin-transform-imports": "12.4.0",
+    "@swc/plugin-transform-imports": "12.5.0",
     "@testing-library/cypress": "10.1.0",
     "@testing-library/react": "16.3.2",
     "@types/node": "24.10.9",
