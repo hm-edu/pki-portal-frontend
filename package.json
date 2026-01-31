@@ -42,7 +42,7 @@
     "prop-types": "15.8.1",
     "react": "19.2.4",
     "react-dom": "19.2.4",
-    "react-moment": "1.2.0",
+    "react-moment": "1.2.1",
     "sass": "1.97.3",
     "sharp": "0.34.5",
     "unidecode": "1.1.0"
