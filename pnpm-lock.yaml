@@ -93,8 +93,8 @@ importers:
         specifier: 19.2.4
         version: 19.2.4(react@19.2.4)
       react-moment:
-        specifier: 1.2.1
-        version: 1.2.1(moment@2.30.1)(prop-types@15.8.1)(react@19.2.4)
+        specifier: 1.2.2
+        version: 1.2.2(moment@2.30.1)(prop-types@15.8.1)(react@19.2.4)
       sass:
         specifier: 1.97.3
         version: 1.97.3
@@ -4391,8 +4391,8 @@ packages:
   react-is@19.2.3:
     resolution: {integrity: sha512-qJNJfu81ByyabuG7hPFEbXqNcWSU3+eVus+KJs+0ncpGfMyYdvSmxiJxbWR65lYi1I+/0HBcliO029gc4F+PnA==}
 
-  react-moment@1.2.1:
-    resolution: {integrity: sha512-2WayhDjmgdeEt/AlNkd0/0wl6xWX59VjyrLHq0KNgTY0PPf4kY5wON9+xN89ZBxWjFOVBjTlcQ7Of2RKW+CLNg==}
+  react-moment@1.2.2:
+    resolution: {integrity: sha512-F5/YLsygduvR5+mpYdHMD9HzyljQFudcoAfL5XmJhGBkZVzJANIx/5PN+kvWO5KELifXXtndXeMCUxH4eB+E9Q==}
     peerDependencies:
       moment: ^2.29.0
       prop-types: ^15.7.0
@@ -10032,7 +10032,7 @@ snapshots:
 
   react-is@19.2.3: {}
 
-  react-moment@1.2.1(moment@2.30.1)(prop-types@15.8.1)(react@19.2.4):
+  react-moment@1.2.2(moment@2.30.1)(prop-types@15.8.1)(react@19.2.4):
     dependencies:
       moment: 2.30.1
       prop-types: 15.8.1
