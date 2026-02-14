@@ -11,10 +11,10 @@ Sentry.init({
 
     tunnel: "/api/error",
     tracePropagationTargets: [
-        process.env.DOMAIN_HOST ?? process.env.NEXT_PUBLIC_DOMAIN_HOST ?? '',
-        process.env.PKI_HOST ?? process.env.NEXT_PUBLIC_PKI_HOST ?? '',
-        process.env.EAB_HOST ?? process.env.NEXT_PUBLIC_EAB_HOST ?? '',
-        process.env.ACME_HOST ?? process.env.NEXT_PUBLIC_ACME_HOST ?? '',
+        process.env.DOMAIN_HOST ?? process.env.NEXT_PUBLIC_DOMAIN_HOST ?? "",
+        process.env.PKI_HOST ?? process.env.NEXT_PUBLIC_PKI_HOST ?? "",
+        process.env.EAB_HOST ?? process.env.NEXT_PUBLIC_EAB_HOST ?? "",
+        process.env.ACME_HOST ?? process.env.NEXT_PUBLIC_ACME_HOST ?? "",
     ],
     // Add optional integrations for additional features
     integrations: [
@@ -36,13 +36,22 @@ Sentry.init({
     // Setting this option to true will print useful information to the console while you're setting up Sentry.
     debug: false,
     beforeSendTransaction(e) {
-        const isKubeProbe = e.request?.headers?.['user-agent']?.includes('kube-probe');
+        const isKubeProbe =
+            e.request?.headers?.["user-agent"]?.includes("kube-probe");
         // check if the user agent contains "blackbox-exporter" or "blackbox exporter" regardless of case
-        const isBlackboxExporter = e.request?.headers?.['user-agent']?.toLowerCase().includes('blackbox-exporter') ?? e.request?.headers?.['user-agent']?.toLowerCase().includes('blackbox exporter');
-        const isErrorRoute = e.request?.url?.includes('/api/error');
-        if (isKubeProbe || isErrorRoute || isBlackboxExporter) {
+        const ua =
+            e.request?.headers?.["user-agent"] ??
+            e.request?.headers?.["User-Agent"];
+        if (
+            ua &&
+            (ua.match(/Blackbox Exporter/i) || ua.match(/Blackbox-Exporter/i))
+        ) {
+            return null;
+        }
+        const isErrorRoute = e.request?.url?.includes("/api/error");
+        if (isKubeProbe || isErrorRoute) {
             return null;
         }
         return e;
-    }
+    },
 });
