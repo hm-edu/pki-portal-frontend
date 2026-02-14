@@ -15,11 +15,19 @@ Sentry.init({
     // Setting this option to true will print useful information to the console while you're setting up Sentry.
     debug: false,
     beforeSendTransaction(e) {
-        const isKubeProbe = e.request?.headers?.['user-agent']?.includes('kube-probe');
+        const isKubeProbe = e.request?.headers?.['user-agent']?.includes('kube-probe');        
         // check if the user agent contains "blackbox-exporter" or "blackbox exporter" regardless of case
-        const isBlackboxExporter = e.request?.headers?.['user-agent']?.toLowerCase().includes('blackbox-exporter') ?? e.request?.headers?.['user-agent']?.toLowerCase().includes('blackbox exporter');
+        const ua =
+            e.request?.headers?.["user-agent"] ??
+            e.request?.headers?.["User-Agent"];
+        if (
+            ua &&
+            (ua.match(/Blackbox Exporter/i) || ua.match(/Blackbox-Exporter/i))
+        ) {
+            return null;
+        }
         const isErrorRoute = e.request?.url?.includes('/api/error');
-        if (isKubeProbe || isErrorRoute || isBlackboxExporter) {
+        if (isKubeProbe || isErrorRoute) {
             return null;
         }
         return e;
