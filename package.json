@@ -67,7 +67,7 @@
     "babel-loader": "10.0.0",
     "babel-plugin-istanbul": "7.0.1",
     "cross-env": "10.1.0",
-    "cypress": "15.10.0",
+    "cypress": "15.11.0",
     "eslint": "9.39.3",
     "eslint-config-next": "16.1.6",
     "eslint-plugin-cypress": "6.1.0",
