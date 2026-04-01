@@ -81,8 +81,8 @@ importers:
         specifier: 1.4.0
         version: 1.4.0
       pkijs:
-        specifier: 3.3.3
-        version: 3.3.3
+        specifier: 3.4.0
+        version: 3.4.0
       prop-types:
         specifier: 15.8.1
         version: 15.8.1
@@ -4246,8 +4246,8 @@ packages:
     resolution: {integrity: sha512-MnUuEycAemtSaeFSjXKW/aroV7akBbY+Sv+RkyqFjgAe73F+MR0TBWKBRDkmfWq/HiFmdavfZ1G7h4SPZXaCSg==}
     engines: {node: '>=0.10.0'}
 
-  pkijs@3.3.3:
-    resolution: {integrity: sha512-+KD8hJtqQMYoTuL1bbGOqxb4z+nZkTAwVdNtWwe8Tc2xNbEmdJYIYoc6Qt0uF55e6YW6KuTHw1DjQ18gMhzepw==}
+  pkijs@3.4.0:
+    resolution: {integrity: sha512-emEcLuomt2j03vxD54giVB4SxTjnsqkU692xZOZXHDVoYyypEm+b3jpiTcc+Cf+myooc+/Ly0z01jqeNHVgJGw==}
     engines: {node: '>=16.0.0'}
 
   possible-typed-array-names@1.0.0:
@@ -9823,7 +9823,7 @@ snapshots:
 
   pinkie@2.0.4: {}
 
-  pkijs@3.3.3:
+  pkijs@3.4.0:
     dependencies:
       '@noble/hashes': 1.4.0
       asn1js: 3.0.7
