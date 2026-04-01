@@ -9,7 +9,7 @@ jobs:
     name: Build Next.JS Webapp
     steps:
       - uses: actions/checkout@v6
-      - uses: pnpm/action-setup@v4
+      - uses: pnpm/action-setup@v5
       - name: Use Node.js 22
         uses: actions/setup-node@v6
         with:
@@ -40,7 +40,7 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v6
-      - uses: pnpm/action-setup@v4
+      - uses: pnpm/action-setup@v5
       - name: Use Node.js 22
         uses: actions/setup-node@v6
         with:
