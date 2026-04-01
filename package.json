@@ -64,7 +64,7 @@
     "@typescript-eslint/parser": "8.56.1",
     "require-in-the-middle": "8.0.1",
     "import-in-the-middle": "3.0.0",
-    "babel-loader": "10.0.0",
+    "babel-loader": "10.1.1",
     "babel-plugin-istanbul": "7.0.1",
     "cross-env": "10.1.0",
     "cypress": "15.11.0",
