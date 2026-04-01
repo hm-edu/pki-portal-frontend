@@ -1,121 +1,119 @@
 {
-    "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-    "enabled": true,
-    "semanticCommits": "enabled",
-    "dependencyDashboard": true,
-    "dependencyDashboardTitle": "Renovate Dashboard 🤖",
-    "suppressNotifications": [
-        "prIgnoreNotification"
+    $schema: 'https://docs.renovatebot.com/renovate-schema.json',
+    enabled: true,
+    semanticCommits: 'enabled',
+    dependencyDashboard: true,
+    dependencyDashboardTitle: 'Renovate Dashboard 🤖',
+    suppressNotifications: [
+        'prIgnoreNotification',
     ],
-    "extends": [
-        "config:base"
+    extends: [
+        'config:recommended',
     ],
-    "rebaseWhen": "auto",
-    "packageRules": [
-        // global docker datasource settings
+    rebaseWhen: 'auto',
+    packageRules: [
         {
-            "matchDatasources": [
-                "docker"
+            matchDatasources: [
+                'docker',
             ],
-            "enabled": true,
-            "commitMessageTopic": "container image {{depName}}",
-            "commitMessageExtra": "to {{#if isSingleVersion}}v{{{newVersion}}}{{else}}{{{newValue}}}{{/if}}",
-            "matchUpdateTypes": [
-                "major",
-                "minor",
-                "patch"
-            ]
-        },
-        // add labels according to package and update types
-        {
-            "matchDatasources": [
-                "docker"
+            enabled: true,
+            commitMessageTopic: 'container image {{depName}}',
+            commitMessageExtra: 'to {{#if isSingleVersion}}v{{{newVersion}}}{{else}}{{{newValue}}}{{/if}}',
+            matchUpdateTypes: [
+                'major',
+                'minor',
+                'patch',
             ],
-            "matchUpdateTypes": [
-                "major"
-            ],
-            "labels": [
-                "renovate/docker",
-                "renovate/major"
-            ]
         },
         {
-            "matchDatasources": [
-                "docker"
+            matchDatasources: [
+                'docker',
             ],
-            "matchUpdateTypes": [
-                "minor"
+            matchUpdateTypes: [
+                'major',
             ],
-            "labels": [
-                "renovate/docker",
-                "renovate/minor"
+            labels: [
+                'renovate/docker',
+                'renovate/major',
             ],
-            "automerge": true,
-            "automergeType": "pr",
-            "platformAutomerge": true
         },
         {
-            "matchDatasources": [
-                "docker"
+            matchDatasources: [
+                'docker',
             ],
-            "matchUpdateTypes": [
-                "patch"
+            matchUpdateTypes: [
+                'minor',
             ],
-            "labels": [
-                "renovate/docker",
-                "renovate/patch"
+            labels: [
+                'renovate/docker',
+                'renovate/minor',
             ],
-            "automerge": true,
-            "automergeType": "pr",
-            "platformAutomerge": true
+            automerge: true,
+            automergeType: 'pr',
+            platformAutomerge: true,
         },
         {
-            "matchDatasources": [
-                "npm"
+            matchDatasources: [
+                'docker',
             ],
-            "rangeStrategy": "pin",
+            matchUpdateTypes: [
+                'patch',
+            ],
+            labels: [
+                'renovate/docker',
+                'renovate/patch',
+            ],
+            automerge: true,
+            automergeType: 'pr',
+            platformAutomerge: true,
         },
         {
-            "matchDatasources": [
-                "npm"
+            matchDatasources: [
+                'npm',
             ],
-            "matchUpdateTypes": [
-                "major"
-            ],
-            "labels": [
-                "renovate/npm",
-                "renovate/major"
-            ]
+            rangeStrategy: 'pin',
         },
         {
-            "matchDatasources": [
-                "npm"
+            matchDatasources: [
+                'npm',
             ],
-            "matchUpdateTypes": [
-                "minor"
+            matchUpdateTypes: [
+                'major',
             ],
-            "labels": [
-                "renovate/npm",
-                "renovate/minor"
+            labels: [
+                'renovate/npm',
+                'renovate/major',
             ],
-            "automerge": true,
-            "automergeType": "pr",
-            "platformAutomerge": true
         },
         {
-            "matchDatasources": [
-                "npm"
+            matchDatasources: [
+                'npm',
             ],
-            "matchUpdateTypes": [
-                "patch"
+            matchUpdateTypes: [
+                'minor',
             ],
-            "labels": [
-                "renovate/npm",
-                "renovate/patch"
+            labels: [
+                'renovate/npm',
+                'renovate/minor',
             ],
-            "automerge": true,
-            "automergeType": "pr",
-            "platformAutomerge": true
-        }
-    ]
+            automerge: true,
+            automergeType: 'pr',
+            platformAutomerge: true,
+        },
+        {
+            matchDatasources: [
+                'npm',
+            ],
+            matchUpdateTypes: [
+                'patch',
+            ],
+            labels: [
+                'renovate/npm',
+                'renovate/patch',
+            ],
+            automerge: true,
+            automergeType: 'pr',
+            platformAutomerge: true,
+        },
+    ],
 }
