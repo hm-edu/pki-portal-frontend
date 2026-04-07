@@ -63,7 +63,7 @@
     "@typescript-eslint/eslint-plugin": "8.58.0",
     "@typescript-eslint/parser": "8.58.0",
     "require-in-the-middle": "8.0.1",
-    "import-in-the-middle": "3.0.0",
+    "import-in-the-middle": "3.0.1",
     "babel-loader": "10.1.1",
     "babel-plugin-istanbul": "7.0.1",
     "cross-env": "10.1.0",
