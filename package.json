@@ -65,7 +65,7 @@
     "require-in-the-middle": "8.0.1",
     "import-in-the-middle": "3.0.1",
     "babel-loader": "10.1.1",
-    "babel-plugin-istanbul": "7.0.1",
+    "babel-plugin-istanbul": "8.0.0",
     "cross-env": "10.1.0",
     "cypress": "15.14.2",
     "eslint": "9.39.4",
