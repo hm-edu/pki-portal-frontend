@@ -1,0 +1,4 @@
+allowBuilds:
+  '@sentry/cli': true
+  cypress: true
+  sharp: true
