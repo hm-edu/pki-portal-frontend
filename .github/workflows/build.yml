@@ -10,7 +10,7 @@ jobs:
     steps:
       - uses: actions/checkout@v6
       - uses: pnpm/action-setup@v6
-      - name: Use Node.js 22
+      - name: Use Node.js 24
         uses: actions/setup-node@v6
         with:
           node-version: 24
@@ -35,13 +35,13 @@ jobs:
     runs-on: ubuntu-24.04
     name: Run E2E Cypress tests
     container:
-     image: cypress/browsers:node-20.9.0-chrome-118.0.5993.88-1-ff-118.0.2-edge-118.0.2088.46-1
+     image: cypress/browsers:24.15.0
      options: --user 1001
     steps:
       - name: Checkout
         uses: actions/checkout@v6
       - uses: pnpm/action-setup@v6
-      - name: Use Node.js 22
+      - name: Use Node.js 24
         uses: actions/setup-node@v6
         with:
           node-version: 24
