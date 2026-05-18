@@ -2,7 +2,7 @@
   "name": "portal-frontend-next",
   "version": "0.1.0",
   "private": true,
-  "packageManager": "pnpm@11.1.2",
+  "packageManager": "pnpm@11.1.3",
   "scripts": {
     "postinstall": "patch-package",
     "dev": "next dev",
