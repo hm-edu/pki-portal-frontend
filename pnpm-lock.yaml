@@ -93,8 +93,8 @@ importers:
         specifier: 19.2.7
         version: 19.2.7(react@19.2.7)
       react-moment:
-        specifier: 1.2.3
-        version: 1.2.3(moment@2.30.1)(prop-types@15.8.1)(react@19.2.7)
+        specifier: 2.0.2
+        version: 2.0.2(moment@2.30.1)(react@19.2.7)
       sass:
         specifier: 1.101.0
         version: 1.101.0
@@ -4459,12 +4459,16 @@ packages:
   react-is@19.2.3:
     resolution: {integrity: sha512-qJNJfu81ByyabuG7hPFEbXqNcWSU3+eVus+KJs+0ncpGfMyYdvSmxiJxbWR65lYi1I+/0HBcliO029gc4F+PnA==}
 
-  react-moment@1.2.3:
-    resolution: {integrity: sha512-1Rj+eT31OMJbBQx07IGEJSfJbONpuiROub7LxNd4Z9y0yWNqkHItspfQBRsEE0ndIfYXdugYXKRWAavkhkEs4A==}
+  react-moment@2.0.2:
+    resolution: {integrity: sha512-aogeei/erGX9iL7kAwQceaxdW2JR0/XbITYBEN1mFHG0Z02y8G0Wrl2PgbfIPs5EbVFhUB2F2+FopW9UPuP1qg==}
+    engines: {node: '>=18'}
     peerDependencies:
       moment: ^2.29.0
-      prop-types: ^15.7.0
-      react: ^16.0 || ^17.0.0 || ^18.0.0
+      moment-duration-format: ^2.2.2
+      react: ^18.0.0 || ^19.0.0
+    peerDependenciesMeta:
+      moment-duration-format:
+        optional: true
 
   react-transition-group@4.4.5:
     resolution: {integrity: sha512-pZcd1MCJoiKiBR2NRxeCRg13uCXbydPnmB4EOeRrY7480qNWO8IIgQG6zlDkm6uRMsURXPuKq0GWtiM59a5Q6g==}
@@ -10101,10 +10105,9 @@ snapshots:
 
   react-is@19.2.3: {}
 
-  react-moment@1.2.3(moment@2.30.1)(prop-types@15.8.1)(react@19.2.7):
+  react-moment@2.0.2(moment@2.30.1)(react@19.2.7):
     dependencies:
       moment: 2.30.1
-      prop-types: 15.8.1
       react: 19.2.7
 
   react-transition-group@4.4.5(react-dom@19.2.7(react@19.2.7))(react@19.2.7):
