@@ -35,7 +35,7 @@ jobs:
     runs-on: ubuntu-24.04
     name: Run E2E Cypress tests
     container:
-     image: cypress/browsers:24.17.0
+     image: cypress/browsers:26.0.0
      options: --user 1001
     steps:
       - name: Checkout
