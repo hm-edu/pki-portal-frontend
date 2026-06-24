@@ -51,8 +51,8 @@ importers:
         specifier: 3.0.10
         version: 3.0.10
       axios:
-        specifier: 1.18.0
-        version: 1.18.0
+        specifier: 1.18.1
+        version: 1.18.1
       download:
         specifier: 8.0.0
         version: 8.0.0
@@ -2437,11 +2437,11 @@ packages:
     resolution: {integrity: sha512-Mr2ZakwQ7XUAjp7pAwQWRhhK8mQQ6JAaNWSjmjxil0R8BPioMtQsTLOolGYkji1rcL++3dCqZA3zWqpT+9Ew6g==}
     engines: {node: '>=4'}
 
-  axios@1.16.1:
-    resolution: {integrity: sha512-caYkukvroVPO8KrzuJEb50Hm07KwfBZPEC3VeFHTsqWHvKTsy54hjJz9BS/cdaypROE2rH6xvm9mHX4fgWkr3A==}
-
   axios@1.18.0:
     resolution: {integrity: sha512-E32NzpYKp++W7XRe52rHiXV2ehxmh3wbdgO7MHeFM+vqxLBYHzt0ElkiImtOBxtOmyp0yoC8C6uESVV84Y2/hw==}
+
+  axios@1.18.1:
+    resolution: {integrity: sha512-3nTvFlvpn9Zu/RkHUqtc7/+al4UpRW5az71ap5zccp6e8RAYEzhMTecX8Dz1wWDYrPpUoB1HAQEGEAEvUr7S9g==}
 
   axobject-query@4.1.0:
     resolution: {integrity: sha512-qIj0G9wZbMGNLjLmg1PT6v2mE9AH2zlnADJD/2tC6E00hgmhUOfEB6greHPAfLRSufHqROIUTkw6E+M3lH0PTQ==}
@@ -7687,7 +7687,7 @@ snapshots:
 
   axe-core@4.10.0: {}
 
-  axios@1.16.1(debug@4.4.3(supports-color@8.1.1)):
+  axios@1.18.0(debug@4.4.3(supports-color@8.1.1)):
     dependencies:
       follow-redirects: 1.16.0(debug@4.4.3(supports-color@8.1.1))
       form-data: 4.0.5
@@ -7697,7 +7697,7 @@ snapshots:
       - debug
       - supports-color
 
-  axios@1.18.0:
+  axios@1.18.1:
     dependencies:
       follow-redirects: 1.16.0(debug@4.4.3(supports-color@8.1.1))
       form-data: 4.0.5
@@ -10931,7 +10931,7 @@ snapshots:
 
   wait-on@9.0.4(debug@4.4.3(supports-color@8.1.1)):
     dependencies:
-      axios: 1.16.1(debug@4.4.3(supports-color@8.1.1))
+      axios: 1.18.0(debug@4.4.3(supports-color@8.1.1))
       joi: 18.0.2
       lodash: 4.17.23
       minimist: 1.2.8
