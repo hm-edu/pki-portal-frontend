@@ -1,6 +1,6 @@
 "use client";
 
-import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
+import AddCircleOutlinedIcon from "@mui/icons-material/AddCircleOutlined";
 import { Box, Button, TextField } from "@mui/material";
 import * as Sentry from "@sentry/nextjs";
 import { type Session } from "next-auth";
@@ -33,7 +33,7 @@ const EabCreateForm = ({ session, createEABToken }: EabCreateFormProps) => {
             required
             onChange={(e) => setNewComment(e.target.value)}
         />
-        <Button type="submit" id="new" variant="contained" disabled={!session} color="success" startIcon={<AddCircleOutlineIcon />} sx={{ mt: 1 }}>
+        <Button type="submit" id="new" variant="contained" disabled={!session} color="success" startIcon={<AddCircleOutlinedIcon />} sx={{ mt: 1 }}>
             Erstelle neuen Token
         </Button>
     </Box>;
