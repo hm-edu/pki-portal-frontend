@@ -7,6 +7,9 @@
     suppressNotifications: ["prIgnoreNotification"],
     extends: ["config:recommended"],
     rebaseWhen: "auto",
+    postUpdateOptions: [
+        'pnpmDedupe',
+    ],
     packageRules: [
         {
             matchDatasources: ["docker"],
