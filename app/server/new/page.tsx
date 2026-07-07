@@ -72,10 +72,6 @@ const CustomTextField = styled(TextField)(() => ({
 
 export default function SslGenerator() {
 
-    interface SwitchProps {
-        checked: boolean;
-    }
-
     const columnStyle = {
         flex: "auto",
         minWidth: "49%",
@@ -114,7 +110,7 @@ export default function SslGenerator() {
             },
         }), mt: 1, mb: 2,
     };
-    const switchRef = useRef<SwitchProps>(null);
+    const switchRef = useRef<HTMLInputElement>(null);
     const [commonName, setCommonName] = React.useState("");
 
     const handleChange = (event: SelectChangeEvent<unknown>) => {
@@ -304,16 +300,16 @@ export default function SslGenerator() {
                 <Box sx={{ flex: "auto", minWidth: "50%", maxWidth: "100%", display: "flex", flexDirection: "column", alignContent: "flex-start", overflow: "auto" }}>
 
                     <Typography variant="h6">Schlüsslart:</Typography>
-                    <Stack direction="row" spacing={1} alignItems="center">
+                    <Stack direction="row" spacing={1} sx={{ alignItems: "center" }}>
                         <Typography>RSA</Typography>
-                        <Switch defaultChecked color="secondary" inputRef={switchRef} />
+                        <Switch defaultChecked color="secondary" slotProps={{ input: { ref: switchRef } }} />
                         <Typography>ECDSA</Typography>
                     </Stack>
                 </Box>
                 <Box sx={{ flex: "auto", minWidth: "50%", maxWidth: "100%", display: "flex", flexDirection: "column", alignContent: "flex-start", overflow: "auto" }}>
 
                     <Stack direction="column">
-                        <FormControlLabel control={<Checkbox color="secondary" inputRef={pkcs12Ref} onChange={() => setPkcs12(pkcs12Ref.current!.checked)} />} label="Zusätzliche PKCS12 Datei generieren" />
+                        <FormControlLabel control={<Checkbox color="secondary" slotProps={{ input: { ref: pkcs12Ref } }} onChange={() => setPkcs12(pkcs12Ref.current!.checked)} />} label="Zusätzliche PKCS12 Datei generieren" />
                         <CustomTextField size="small" label="PKCS12 Passwort" type="password" inputRef={p12PasswordRef} fullWidth variant="outlined" disabled={!pkcs12} />
                     </Stack>
                 </Box>

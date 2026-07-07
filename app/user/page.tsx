@@ -1,6 +1,6 @@
 "use client";
 
-import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
+import AddCircleOutlinedIcon from "@mui/icons-material/AddCircleOutlined";
 import DeleteIcon from "@mui/icons-material/Delete";
 import Alert from "@mui/material/Alert";
 import AlertTitle from "@mui/material/AlertTitle";
@@ -173,7 +173,7 @@ const SmimeCertificates = () => {
                     pagination rows={certificates}></DataGrid>
             </div>
             <Link href="/user/new">
-                <Button id="new" variant="contained" color="success" startIcon={<AddCircleOutlineIcon />} sx={{ mt: 1, width: "100%" }}>Neues Zertifikat beziehen</Button>
+                <Button id="new" variant="contained" color="success" startIcon={<AddCircleOutlinedIcon />} sx={{ mt: 1, width: "100%" }}>Neues Zertifikat beziehen</Button>
             </Link>
         </>}
         <Dialog open={open} onClose={handleClose}>

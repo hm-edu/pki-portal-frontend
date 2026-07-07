@@ -1,7 +1,7 @@
 "use client";
 
  
-import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
+import AddCircleOutlinedIcon from "@mui/icons-material/AddCircleOutlined";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { AlertTitle } from "@mui/material";
 import Alert from "@mui/material/Alert";
@@ -103,7 +103,7 @@ export default function Domains() {
         setDnsRunning(false);
         if (!response.ok) {
             setCreateError(<Stack>Die angegebene Domain existiert nicht im DNS.
-                <Button color="warning" variant="contained" startIcon={<AddCircleOutlineIcon/>} sx={{ mt: 1 }}
+                <Button color="warning" variant="contained" startIcon={<AddCircleOutlinedIcon/>} sx={{ mt: 1 }}
                     onClick={ () =>
                         void (async () => {
                             await createDomain(newDomain.current!.value as string, setDomains, setError);
@@ -415,7 +415,7 @@ export default function Domains() {
             {createError && <Alert severity="error" sx={{ mt: 1 }}>{createError}</Alert>}
             <Button type="submit" id="new" variant="contained"
                 disabled={!session || dnsRunning || createError != undefined} color="success"
-                startIcon={<AddCircleOutlineIcon/>} sx={{ mt: 1 }}>Erstelle Host {
+                startIcon={<AddCircleOutlinedIcon/>} sx={{ mt: 1 }}>Erstelle Host {
                     dnsRunning && <CircularProgress size={24} sx={{
                         color: green[500],
                         position: "absolute",
