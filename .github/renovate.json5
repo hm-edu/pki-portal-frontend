@@ -1,119 +1,69 @@
 {
-    $schema: 'https://docs.renovatebot.com/renovate-schema.json',
+    $schema: "https://docs.renovatebot.com/renovate-schema.json",
     enabled: true,
-    semanticCommits: 'enabled',
+    semanticCommits: "enabled",
     dependencyDashboard: true,
-    dependencyDashboardTitle: 'Renovate Dashboard 🤖',
-    suppressNotifications: [
-        'prIgnoreNotification',
-    ],
-    extends: [
-        'config:recommended',
-    ],
-    rebaseWhen: 'auto',
+    dependencyDashboardTitle: "Renovate Dashboard 🤖",
+    suppressNotifications: ["prIgnoreNotification"],
+    extends: ["config:recommended"],
+    rebaseWhen: "auto",
     packageRules: [
         {
-            matchDatasources: [
-                'docker',
-            ],
+            matchDatasources: ["docker"],
             enabled: true,
-            commitMessageTopic: 'container image {{depName}}',
-            commitMessageExtra: 'to {{#if isSingleVersion}}v{{{newVersion}}}{{else}}{{{newValue}}}{{/if}}',
-            matchUpdateTypes: [
-                'major',
-                'minor',
-                'patch',
-            ],
+            commitMessageTopic: "container image {{depName}}",
+            commitMessageExtra: "to {{#if isSingleVersion}}v{{{newVersion}}}{{else}}{{{newValue}}}{{/if}}",
+            matchUpdateTypes: ["major", "minor", "patch"],
         },
         {
-            matchDatasources: [
-                'docker',
-            ],
-            matchUpdateTypes: [
-                'major',
-            ],
-            labels: [
-                'renovate/docker',
-                'renovate/major',
-            ],
+            matchDatasources: ["docker"],
+            matchUpdateTypes: ["major"],
+            labels: ["renovate/docker", "renovate/major"],
         },
         {
-            matchDatasources: [
-                'docker',
-            ],
-            matchUpdateTypes: [
-                'minor',
-            ],
-            labels: [
-                'renovate/docker',
-                'renovate/minor',
-            ],
+            matchDatasources: ["docker"],
+            matchUpdateTypes: ["minor"],
+            labels: ["renovate/docker", "renovate/minor"],
             automerge: true,
-            automergeType: 'pr',
+            automergeType: "pr",
             platformAutomerge: true,
         },
         {
-            matchDatasources: [
-                'docker',
-            ],
-            matchUpdateTypes: [
-                'patch',
-            ],
-            labels: [
-                'renovate/docker',
-                'renovate/patch',
-            ],
+            matchDatasources: ["docker"],
+            matchUpdateTypes: ["patch"],
+            labels: ["renovate/docker", "renovate/patch"],
             automerge: true,
-            automergeType: 'pr',
+            automergeType: "pr",
             platformAutomerge: true,
         },
         {
-            matchDatasources: [
-                'npm',
-            ],
-            rangeStrategy: 'pin',
+            matchDatasources: ["npm"],
+            rangeStrategy: "pin",
         },
         {
-            matchDatasources: [
-                'npm',
-            ],
-            matchUpdateTypes: [
-                'major',
-            ],
-            labels: [
-                'renovate/npm',
-                'renovate/major',
-            ],
+            matchDatasources: ["npm"],
+            matchUpdateTypes: ["major"],
+            labels: ["renovate/npm", "renovate/major"],
         },
         {
-            matchDatasources: [
-                'npm',
-            ],
-            matchUpdateTypes: [
-                'minor',
-            ],
-            labels: [
-                'renovate/npm',
-                'renovate/minor',
-            ],
+            matchDatasources: ["npm"],
+            matchUpdateTypes: ["minor"],
+            labels: ["renovate/npm", "renovate/minor"],
             automerge: true,
-            automergeType: 'pr',
+            automergeType: "pr",
             platformAutomerge: true,
         },
         {
-            matchDatasources: [
-                'npm',
-            ],
-            matchUpdateTypes: [
-                'patch',
-            ],
-            labels: [
-                'renovate/npm',
-                'renovate/patch',
-            ],
+            matchDatasources: ["npm"],
+            matchUpdateTypes: ["patch"],
+            labels: ["renovate/npm", "renovate/patch"],
             automerge: true,
-            automergeType: 'pr',
+            automergeType: "pr",
             platformAutomerge: true,
+        },
+        {
+            matchDatasources: ["npm"],
+            minimumReleaseAge: "1 day",
         },
     ],
 }
