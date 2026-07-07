@@ -12,12 +12,8 @@ import { Config } from "@/components/config";
 const Home = () => {
     return (
         <Box
-            sx={{ height: "100%" }}
-            display="flex"
-            justifyContent="center"
-            alignItems="center"
-            flexDirection="column"
-        >            
+            sx={{ height: "100%", display: "flex", justifyContent: "center", alignItems: "center", flexDirection: "column" }}
+        >
             <Image
                 src={logo}
                 height={200}
