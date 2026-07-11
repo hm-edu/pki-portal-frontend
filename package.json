@@ -50,7 +50,7 @@
   "devDependencies": {
     "@babel/core": "7.29.7",
     "@babel/preset-env": "7.29.7",
-    "@eslint/eslintrc": "3.3.5",
+    "@eslint/eslintrc": "3.3.6",
     "@eslint/js": "9.39.4",
     "@popperjs/core": "2.11.8",
     "@swc/plugin-transform-imports": "12.15.0",
