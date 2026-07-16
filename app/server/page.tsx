@@ -22,7 +22,6 @@ import CertificateDetails from "@/app/server/CertificateDetails";
 import CertificateRevokeDialog from "@/app/server/CertificateRevokeDialog";
 import { Config } from "@/components/config";
 import { dataGridStyle } from "@/components/theme";
-import { QuickSearchToolbar } from "@/components/toolbar";
 
 enum CA {
     HARICA = "HARICA",
@@ -248,7 +247,6 @@ export default function SslCertificates() {
                     showToolbar
                     slots={{
                         loadingOverlay: LinearProgress as GridSlots["loadingOverlay"],
-                        toolbar: QuickSearchToolbar,
                     }}
                     localeText={{ ...deDE.components.MuiDataGrid.defaultProps.localeText }}
                     slotProps={{ loadingOverlay: { color: "inherit" } }}
