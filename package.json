@@ -41,7 +41,7 @@
     "pkijs": "3.4.0",
     "prop-types": "15.8.1",
     "react": "19.2.8",
-    "react-dom": "19.2.7",
+    "react-dom": "19.2.8",
     "react-moment": "2.0.2",
     "sass": "1.101.3",
     "sharp": "0.35.3",
