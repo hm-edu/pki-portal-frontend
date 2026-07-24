@@ -43,7 +43,7 @@
     "react": "19.2.8",
     "react-dom": "19.2.8",
     "react-moment": "2.0.2",
-    "sass": "1.101.4",
+    "sass": "1.101.6",
     "sharp": "0.35.3",
     "unidecode": "1.1.0"
   },
