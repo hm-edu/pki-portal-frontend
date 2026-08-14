@@ -70,7 +70,7 @@
     "cypress": "15.20.1",
     "eslint": "9.39.5",
     "eslint-config-next": "16.2.12",
-    "eslint-plugin-cypress": "6.4.4",
+    "eslint-plugin-cypress": "7.0.0",
     "eslint-plugin-react": "7.37.5",
     "eslint-plugin-testing-library": "7.16.2",
     "patch-package": "8.0.1",
