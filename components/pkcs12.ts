@@ -8,7 +8,7 @@ export async function createP12(privateKey: string, chain: Array<string>, passwo
         };
     };
     return await new Promise((resolve, reject) => {
-        const encodedChain: ReturnType<typeof forge.pki.certificateFromPem>[] = [];
+        const encodedChain: Array<ReturnType<typeof forge.pki.certificateFromPem>> = [];
         for (const cert of chain) {
             encodedChain.push(forge.pki.certificateFromPem(cert));
         }
