@@ -7,7 +7,7 @@
     ".next/dev/types/**/*.ts"
   ],
   "compilerOptions": {
-    "target": "es5",
+    "target": "ES6",
     "lib": [
       "ESNext",
       "DOM",
