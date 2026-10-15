@@ -32,7 +32,7 @@ jobs:
           NEXT_PUBLIC_DOCS_URL: 'https://collab.dvb.bayern/x/sQ0kRg'
 
   e2e:
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-26.04
     name: Run E2E Cypress tests
     container:
      image: cypress/browsers:26.0.0
