@@ -35,7 +35,6 @@ const SMIMEGenerator = () => {
     const [validation, setValidation] = useState<string | undefined>(undefined);
     const [touched, setTouched] = useState(false);
     const [p12Password, setP12Password] = useState("");
-    const [p12PasswordConfirm, setP12PasswordConfirm] = useState("");
     const p12PasswordRef = useRef<TextFieldProps>(null);
     const p12PasswordConfirmRef = useRef<TextFieldProps>(null);
 
@@ -141,7 +140,8 @@ const SMIMEGenerator = () => {
         }
     }, [p12PasswordConfirmRef, p12PasswordRef]);
 
-    const showHint = !touched && p12Password === "" && p12PasswordConfirm === "";
+    // The hint stays visible until a field has been blurred for the first time.
+    const showHint = !touched;
 
     const validationAlert = useMemo(() => {
       if (showHint) {
@@ -176,7 +176,7 @@ const SMIMEGenerator = () => {
                     <Box >
                         <Typography sx={{ paddingBottom: "10px" }}>Bitte vergeben Sie ein individuelles PKCS12 Import-Passwort.</Typography>
                         <TextField required id="pkcs12" label="PKCS12 Passwort" sx={{ paddingBottom: "10px" }} type="password" inputRef={p12PasswordRef} fullWidth variant="standard" onChange={(event) => { setP12Password(event.target.value); validate(); }} onBlur={() => { setTouched(true); validate(); }} />
-                        <TextField required id="pkcs12validation" label="PKCS12 Passwort Bestätigung" type="password" fullWidth inputRef={p12PasswordConfirmRef} variant="standard" onChange={(event) => { setP12PasswordConfirm(event.target.value); validate(); }} onBlur={() => { setTouched(true); validate(); }} />
+                        <TextField required id="pkcs12validation" label="PKCS12 Passwort Bestätigung" type="password" fullWidth inputRef={p12PasswordConfirmRef} variant="standard" onChange={validate} onBlur={() => { setTouched(true); validate(); }} />
                     </Box>
                     <Button id="generate" type="submit" variant="outlined" color="inherit" disabled={(loading || success) || (validation != undefined) || p12Password == ""} sx={buttonSx}>Generiere Zertifikat {loading && (
                         <CircularProgress size={24} sx={{ color: green[500], position: "absolute", top: "50%", left: "50%", marginTop: "-12px", marginLeft: "-12px" }} />
