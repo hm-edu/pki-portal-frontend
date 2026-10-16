@@ -1,5 +1,5 @@
 diff --git a/node_modules/@types/node-forge/index.d.ts b/node_modules/@types/node-forge/index.d.ts
-index 4f50ff5..5df5f31 100644
+index 04e1aa1..9142c6d 100644
 --- a/node_modules/@types/node-forge/index.d.ts
 +++ b/node_modules/@types/node-forge/index.d.ts
 @@ -226,11 +226,17 @@ declare module "node-forge" {
@@ -22,3 +22,12 @@ index 4f50ff5..5df5f31 100644
          type EncryptionOptions = {
              algorithm?: "aes128" | "aes192" | "aes256" | "3des" | undefined;
              count?: number | undefined;
+@@ -990,7 +996,7 @@ declare module "node-forge" {
+         function pkcs12FromAsn1(obj: any, password?: string): Pkcs12Pfx;
+ 
+         function toPkcs12Asn1(
+-            key: pki.rsa.PrivateKey | null,
++            key: pki.rsa.PrivateKey | pki.ecdsa.PrivateKey | null,
+             cert: pki.Certificate | pki.Certificate[],
+             password: string | null,
+             options?: {
