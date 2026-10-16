@@ -33,7 +33,8 @@ const SMIMEGenerator = () => {
     const [closed, setClosed] = useState(false);
     const [error, setError] = useState("");
     const [validation, setValidation] = useState<string | undefined>(undefined);
-    const [touched, setTouched] = useState(false)
+    const [touched, setTouched] = useState(false);
+    const [p12Password, setP12Password] = useState("");
     const p12PasswordRef = useRef<TextFieldProps>(null);
     const p12PasswordConfirmRef = useRef<TextFieldProps>(null);
 
@@ -139,11 +140,8 @@ const SMIMEGenerator = () => {
         }
     }, [p12PasswordConfirmRef, p12PasswordRef]);
 
-    const showHint = useMemo(() => {
-      const pw  = (p12PasswordRef.current?.value as string) ?? "";
-      const pw2 = (p12PasswordConfirmRef.current?.value as string) ?? "";
-      return !touched && pw === "" && pw2 === "";
-    }, [touched, p12PasswordRef, p12PasswordConfirmRef]);
+    // The hint stays visible until a field has been blurred for the first time.
+    const showHint = !touched;
 
     const validationAlert = useMemo(() => {
       if (showHint) {
@@ -177,10 +175,10 @@ const SMIMEGenerator = () => {
                 <Box component="form" onSubmit={(event) => { void create(event); }} sx={{ display: "flex", width: "100%", flexDirection: "column", alignItems: "left", gap: "15px", alignSelf: "center" }}>
                     <Box >
                         <Typography sx={{ paddingBottom: "10px" }}>Bitte vergeben Sie ein individuelles PKCS12 Import-Passwort.</Typography>
-                        <TextField required id="pkcs12" label="PKCS12 Passwort" sx={{ paddingBottom: "10px" }} type="password" inputRef={p12PasswordRef} fullWidth variant="standard" onChange={validate} onBlur={() => { setTouched(true); validate(); }} />
-                        <TextField required id="pkcs12validation" label="PKCS12 Passwort Bestätigung" type="password" fullWidth inputRef={p12PasswordConfirmRef} variant="standard" onChange={validate}  onBlur={() => { setTouched(true); validate(); }} />
+                        <TextField required id="pkcs12" label="PKCS12 Passwort" sx={{ paddingBottom: "10px" }} type="password" inputRef={p12PasswordRef} fullWidth variant="standard" onChange={(event) => { setP12Password(event.target.value); validate(); }} onBlur={() => { setTouched(true); validate(); }} />
+                        <TextField required id="pkcs12validation" label="PKCS12 Passwort Bestätigung" type="password" fullWidth inputRef={p12PasswordConfirmRef} variant="standard" onChange={validate} onBlur={() => { setTouched(true); validate(); }} />
                     </Box>
-                    <Button id="generate" type="submit" variant="outlined" color="inherit" disabled={(loading || success) || (validation != undefined) || p12PasswordRef.current?.value == ""} sx={buttonSx}>Generiere Zertifikat {loading && (
+                    <Button id="generate" type="submit" variant="outlined" color="inherit" disabled={(loading || success) || (validation != undefined) || p12Password == ""} sx={buttonSx}>Generiere Zertifikat {loading && (
                         <CircularProgress size={24} sx={{ color: green[500], position: "absolute", top: "50%", left: "50%", marginTop: "-12px", marginLeft: "-12px" }} />
                     )}</Button>
                     {validationAlert}

@@ -2,7 +2,7 @@
 
 const fs = require("fs");
 
-const { withSentryConfig } = require("@sentry/nextjs");
+const { withSentryConfig } = require("@sentry/nextjs/config");
 const download = require("download");
 
 const sentryWebpackPluginOptions = {
@@ -17,7 +17,6 @@ const sentryWebpackPluginOptions = {
     reactComponentAnnotation: {
         enabled: true,
     },
-    hideSourceMaps: true,
     widenClientFileUpload: true,
     silent: true, // Suppresses all logs
     // For all available options, see:

@@ -121,14 +121,6 @@ export default function SslGenerator() {
         event.preventDefault();
         void create();
     };
-    useEffect(() => {
-        handleSelectedChange(newSelected);
-    }, [userSearch, newSelected])
-
-    useEffect(() => {
-        setPrevUserSearch(userSearch);
-    }, [userSearch])
-
     const visibleRows = useMemo(() => {
         return domains.filter((row) =>
             (row.fqdn ?? "").toLowerCase().includes(userSearch.toLowerCase())
@@ -174,6 +166,15 @@ export default function SslGenerator() {
             setSelected(newSelected);
         }
     }
+
+    useEffect(() => {
+        handleSelectedChange(newSelected);
+    }, [userSearch, newSelected])
+
+    useEffect(() => {
+        setPrevUserSearch(userSearch);
+    }, [userSearch])
+
     useEffect(() => {
         if (status == "authenticated" && !generateKey && !generatedKey) {
             Sentry.setUser({ email: session?.user?.email ?? "" });
