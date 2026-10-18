@@ -159,7 +159,9 @@ jobs:
             type=ref,event=branch
             type=ref,event=tag
             type=ref,event=pr
-            type=raw,value={{branch}}-{{sha}}-{{date 'X'}},enable=${{ github.event_name != 'pull_request' }}
+            type=semver,pattern={{version}}
+            type=semver,pattern={{major}}.{{minor}}
+            type=raw,value={{branch}}-{{sha}}-{{date 'X'}},enable=${{ github.event_name != 'pull_request' && github.ref_type != 'tag' }}
       - name: Replace images
         run: |
           cp ${{ matrix.university.logo }} public/logo.png
@@ -169,7 +171,8 @@ jobs:
         uses: docker/build-push-action@v7
         with:
           context: .
-          push: ${{ github.event_name != 'pull_request' && github.ref_name == github.event.repository.default_branch }}
+          # push from the default branch (continuous :main) and from release tags (semver)
+          push: ${{ github.event_name != 'pull_request' && (github.ref_name == github.event.repository.default_branch || github.ref_type == 'tag') }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha,scope=${{ github.workflow }}
