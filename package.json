@@ -37,7 +37,7 @@
     "moment": "2.31.0",
     "next": "16.4.3",
     "next-auth": "4.24.15",
-    "node-forge": "1.4.0",
+    "node-forge": "1.4.1",
     "pkijs": "4.0.1",
     "prop-types": "15.8.1",
     "react": "19.3.1",
