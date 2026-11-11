@@ -35,7 +35,7 @@ jobs:
     runs-on: ubuntu-26.04
     name: Run E2E Cypress tests
     container:
-     image: cypress/browsers:26.13.0@sha256:77cf8ff9c1ab3b2238ed3c8bc57034756046161978fdbc254fc9a1fe2ae69d15
+     image: cypress/browsers:26.13.0@sha256:0fdaeee6d0f2a54876bc0e5fdc8c9c9fb5892ae85bbf2764c9b0f0ead3093d11
      options: --user 1001
     steps:
       - name: Checkout
