@@ -60,8 +60,8 @@
     "@types/react": "19.3.0",
     "@types/react-dom": "19.3.0",
     "@types/unidecode": "1.1.0",
-    "@typescript-eslint/eslint-plugin": "8.72.1",
-    "@typescript-eslint/parser": "8.72.1",
+    "@typescript-eslint/eslint-plugin": "8.72.2",
+    "@typescript-eslint/parser": "8.72.2",
     "require-in-the-middle": "8.0.1",
     "import-in-the-middle": "3.5.3",
     "babel-loader": "10.1.1",
@@ -69,14 +69,14 @@
     "cross-env": "10.1.0",
     "cypress": "16.2.1",
     "eslint": "10.14.0",
-    "eslint-config-next": "16.4.5",
-    "eslint-plugin-cypress": "7.0.3",
+    "eslint-config-next": "16.4.6",
+    "eslint-plugin-cypress": "7.0.4",
     "eslint-plugin-react": "7.37.5",
     "eslint-plugin-testing-library": "7.16.2",
     "patch-package": "8.0.1",
     "start-server-and-test": "3.0.13",
     "typescript": "6.0.3",
-    "typescript-eslint": "8.72.1",
+    "typescript-eslint": "8.72.2",
     "webpack": "5.112.2"
   }
 }
