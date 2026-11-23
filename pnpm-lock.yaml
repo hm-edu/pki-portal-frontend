@@ -215,8 +215,8 @@ importers:
         specifier: 1.3.14
         version: 1.3.14
       asn1js:
-        specifier: 4.0.0
-        version: 4.0.0
+        specifier: 4.1.0
+        version: 4.1.0
       axios:
         specifier: 1.21.1
         version: 1.21.1(debug@4.4.3(supports-color@8.1.1))(supports-color@8.1.1)
@@ -249,7 +249,7 @@ importers:
         version: 1.4.3
       pkijs:
         specifier: 4.0.1
-        version: 4.0.1(asn1js@4.0.0)
+        version: 4.0.1(asn1js@4.1.0)
       prop-types:
         specifier: 15.8.1
         version: 15.8.1
@@ -2501,8 +2501,8 @@ packages:
   asn1@0.2.6:
     resolution: {integrity: sha512-ix/FxPn0MDjeyJ7i/yoHGFt/EX6LyNbxSEhPPXODPL+KB0VPk86UYfL0lMdy+KCnv+fmvIzySwaK5COwqVbWTQ==}
 
-  asn1js@4.0.0:
-    resolution: {integrity: sha512-81NlooYbXCbBWL2+p1/ivGyT4AR2+bnfKYlPq/3rCoIPJSuLbdS8G70XYt561wOJnbaYfBS2HQDMENaX5hM2vA==}
+  asn1js@4.1.0:
+    resolution: {integrity: sha512-kcL7adqQpfp+n+18Hh43X5bmN97JSULs26OpJSycfQA6pWXxxPUgMZc+SqfmB3im32zno+u2qxCd7fTJxVai+A==}
     engines: {node: ^20.19.0 || >=22.12.0}
 
   assert-plus@1.0.0:
@@ -7342,7 +7342,7 @@ snapshots:
     dependencies:
       safer-buffer: 2.1.2
 
-  asn1js@4.0.0:
+  asn1js@4.1.0:
     dependencies:
       '@peculiar/utils': 4.1.1
 
@@ -9409,11 +9409,11 @@ snapshots:
 
   pinkie@2.0.4: {}
 
-  pkijs@4.0.1(asn1js@4.0.0):
+  pkijs@4.0.1(asn1js@4.1.0):
     dependencies:
       '@noble/hashes': 2.4.0
       '@peculiar/utils': 4.1.1
-      asn1js: 4.0.0
+      asn1js: 4.1.0
       bytestreamjs: 3.0.0
 
   possible-typed-array-names@1.1.0: {}
